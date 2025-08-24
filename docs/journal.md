@@ -2,11 +2,74 @@
 
 ## August 24, 2025
 
+### Real Authentication Implementation
+- **Backend Authentication API**: Created comprehensive authentication endpoints in `/backend/src/routes/auth.js`
+  - Login endpoint with bcryptjs password verification
+  - Logout endpoint with token invalidation
+  - Session validation endpoint
+  - User profile retrieval endpoint
+  - JWT token generation and validation
+  - Input validation using Joi
+
+- **Database Connection Fix (8:45 PM)**:
+  - **RESOLVED**: Fixed "getDbConnection is not a function" error in authentication endpoints
+  - **Issue**: auth.js was importing non-existent `getDbConnection` function
+  - **Solution**: 
+    - Updated auth.js to import `dbManager` from database utils
+    - Changed all `getDbConnection()` calls to `dbManager.getConnection()`
+    - Added `dbManager` to module.exports in database.js
+  - **Result**: Authentication API now working correctly with proper database connections
+
+- **Admin User Creation**: Successfully created admin user in `chat_Users` table
+  - Username: `mti.admin`
+  - Email: `mti.admin@merdekabattery.com`
+  - Password: Securely hashed using bcryptjs
+  - Role: `admin`
+
+- **Frontend Authentication Integration**:
+  - Created `AuthContext` for centralized authentication state management
+  - Implemented `ProtectedRoute` component for route protection
+  - Updated `Login.tsx` to integrate with real authentication API
+  - Added user profile dropdown with logout functionality in `ChatMain.tsx`
+  - Integrated JWT token management in API service
+
+- **Session Management**: 
+  - JWT token storage in localStorage
+  - Automatic session validation on app load
+  - Protected routes redirect to login when unauthenticated
+  - User profile display with avatar and role information
+
+- **Dependencies Added**:
+  - Backend: `bcryptjs`, `jsonwebtoken`, `express-session`
+  - Frontend: `@radix-ui/react-dropdown-menu`
+
 ### Database Schema Implementation
 - Successfully executed database schema on SQL Server (10.60.10.47)
 - Created sessions and messages tables with proper indexes and triggers
 - Fixed SQL batch separation issues by adding GO statements
 - Backend server now connects successfully to real database
+
+### Password Reset Implementation (8:52 PM)
+- **Password Reset API**: Added `/api/auth/reset-password` endpoint to backend
+  - Validates email and new password using Joi schema
+  - Finds user by email in chat_Users table
+  - Hashes new password with bcryptjs (12 salt rounds)
+  - Updates user's passwordHash in database
+  - Returns success confirmation
+
+- **Admin Password Reset Utility**: Created `reset-admin-password.js` script
+  - Automated script to reset admin user password via API
+  - Uses axios to make HTTP requests to reset endpoint
+  - Successfully reset admin password to: `P@ssw0rd.123`
+  - Provides clear success/error feedback
+
+- **Authentication Testing**: Verified login functionality
+  - **RESOLVED**: Login authentication now working correctly
+  - Admin user can successfully authenticate with new credentials
+  - JWT token generation and validation working properly
+  - Login API returns status 200 with valid JWT token
+  - Email: `mti.admin@merdekabattery.com`
+  - Password: `P@ssw0rd.123`
 - Removed mock database implementation and restored original database connections
 - Both frontend (http://localhost:8080/) and backend (port 3001) servers running successfully
 
@@ -497,3 +560,39 @@ The backend server has been restarted with the corrected URL construction logic.
 - `src/components/ChatMain.tsx` - Updated header layout and toggle button styling
 
 **Result**: The sidebar now has a clean hamburger menu icon positioned on the left side of the header, providing a more intuitive and standard UI pattern for sidebar navigation.
+
+## August 25, 2025
+
+### Complete Training System Implementation
+- **Objective**: Implement comprehensive file management and training system with n8n integration
+- **Database Changes**:
+  - Created `ProcessedFiles` table with columns: id, filename, file_path, metadata, processed, created_at, updated_at
+  - Added unique constraint on filename and indexes for performance
+  - Successfully migrated database schema
+- **Backend Implementation**:
+  - Created `processedFilesManager.js` utility for database operations
+  - Implemented REST API endpoints in `routes/files.js` (GET, POST, DELETE)
+  - Added n8n webhook integration at `/api/webhooks/upload`
+  - Integrated file validation and duplicate protection
+- **Frontend Implementation**:
+  - Completely refactored `Training.tsx` component
+  - Added real-time file list display with processing status indicators
+  - Implemented file upload with duplicate detection and confirmation dialog
+  - Added visual status indicators (processed/pending) with color coding
+  - Enhanced UI with loading states and proper error handling
+- **Features Implemented**:
+  - ✅ File existence validation and duplicate protection
+  - ✅ Confirmation dialog for replacing existing files
+  - ✅ Integration with n8n webhook for file processing
+  - ✅ Real-time status updates (processed/pending)
+  - ✅ File metadata tracking (size, type, upload date)
+  - ✅ Training model validation (only allows training with processed files)
+- **Files Modified**:
+  - `database/schema.sql` - Added ProcessedFiles table
+  - `backend/src/utils/processedFilesManager.js` - New file management utility
+  - `backend/src/routes/files.js` - New API endpoints
+  - `backend/src/routes/webhooks.js` - Added upload webhook
+  - `backend/src/server.js` - Registered new routes
+  - `src/pages/Training.tsx` - Complete UI overhaul
+- **Status**: ✅ Completed - Full training system operational
+- **Testing**: All components tested and working correctly at http://localhost:8080/training

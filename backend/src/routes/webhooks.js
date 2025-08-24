@@ -2,6 +2,7 @@ const express = require('express');
 const Joi = require('joi');
 const axios = require('axios');
 const { sessionManager, messageManager } = require('../utils/database');
+const { processedFilesManager } = require('../utils/processedFilesManager');
 
 const router = express.Router();
 
@@ -355,6 +356,87 @@ router.post('/test', async (req, res, next) => {
   }
 });
 
+// POST /api/webhooks/upload - Handle file upload from n8n
+router.post('/upload', async (req, res) => {
+  try {
+    const uploadSchema = Joi.object({
+      filename: Joi.string().min(1).max(255).required(),
+      file_path: Joi.string().max(500).optional(),
+      metadata: Joi.object().optional(),
+      success: Joi.boolean().required(),
+      error: Joi.string().optional()
+    });
 
+    const { error, value } = uploadSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        error: 'Validation error',
+        details: error.details
+      });
+    }
+
+    const { filename, file_path, metadata, success: uploadSuccess, error: uploadError } = value;
+
+    if (!uploadSuccess) {
+      console.error('File upload failed from n8n:', uploadError);
+      return res.status(400).json({
+        success: false,
+        error: 'File upload failed',
+        message: uploadError || 'Unknown upload error'
+      });
+    }
+
+    // Check if file record already exists
+    let file = await processedFilesManager.getFileByName(filename);
+    
+    if (file) {
+      // Update existing file record
+      const updatedFile = await processedFilesManager.updateProcessedStatus(
+        file.id, 
+        true, 
+        { ...file.metadata, ...metadata, upload_success: true, file_path }
+      );
+      
+      console.log(`File processing completed for: ${filename}`);
+      
+      return res.json({
+        success: true,
+        data: updatedFile,
+        message: 'File processing completed successfully'
+      });
+    } else {
+      // Create new file record with processed = true
+      const newFile = await processedFilesManager.createFile(
+        filename, 
+        file_path, 
+        { ...metadata, upload_success: true }
+      );
+      
+      // Update to processed = true
+      const processedFile = await processedFilesManager.updateProcessedStatus(
+        newFile.id, 
+        true, 
+        { ...metadata, upload_success: true, file_path }
+      );
+      
+      console.log(`New file processed: ${filename}`);
+      
+      return res.json({
+        success: true,
+        data: processedFile,
+        message: 'File uploaded and processed successfully'
+      });
+    }
+
+  } catch (error) {
+    console.error('Error handling file upload webhook:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to process file upload',
+      message: error.message
+    });
+  }
+});
 
 module.exports = router;

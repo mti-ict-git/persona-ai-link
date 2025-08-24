@@ -320,6 +320,7 @@ module.exports = {
   DatabaseManager,
   SessionManager,
   MessageManager,
+  dbManager,
   sessionManager,
   messageManager,
   initializeDatabase,

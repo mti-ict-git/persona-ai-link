@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { getDbConnection } = require('../utils/database');
+const { dbManager } = require('../utils/database');
 const Joi = require('joi');
 
 const router = express.Router();
@@ -14,6 +14,11 @@ const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h';
 const loginSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(6).required()
+});
+
+const resetPasswordSchema = Joi.object({
+  email: Joi.string().email().required(),
+  newPassword: Joi.string().min(6).required()
 });
 
 // Middleware to verify JWT token
@@ -44,27 +49,35 @@ router.post('/login', async (req, res) => {
     }
 
     const { email, password } = value;
-    const pool = await getDbConnection();
+    console.log('Login attempt for email:', email);
+    const pool = await dbManager.getConnection();
 
     // Find user by email
     const result = await pool.request()
       .input('email', email)
       .query('SELECT id, username, email, passwordHash, firstName, lastName, role, active FROM chat_Users WHERE email = @email');
 
+    console.log('User query result:', result.recordset.length, 'users found');
     if (result.recordset.length === 0) {
+      console.log('No user found with email:', email);
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
     const user = result.recordset[0];
+    console.log('Found user:', { id: user.id, email: user.email, active: user.active });
 
     // Check if user is active
     if (!user.active) {
+      console.log('User account is deactivated');
       return res.status(401).json({ error: 'Account is deactivated' });
     }
 
     // Verify password
+    console.log('Comparing password...');
     const isValidPassword = await bcrypt.compare(password, user.passwordHash);
+    console.log('Password valid:', isValidPassword);
     if (!isValidPassword) {
+      console.log('Password comparison failed');
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
@@ -112,7 +125,7 @@ router.post('/logout', authenticateToken, (req, res) => {
 // Validate session endpoint
 router.get('/validate', authenticateToken, async (req, res) => {
   try {
-    const pool = await getDbConnection();
+    const pool = await dbManager.getConnection();
     
     // Get fresh user data from database
     const result = await pool.request()
@@ -145,7 +158,7 @@ router.get('/validate', authenticateToken, async (req, res) => {
 // Get current user profile
 router.get('/profile', authenticateToken, async (req, res) => {
   try {
-    const pool = await getDbConnection();
+    const pool = await dbManager.getConnection();
     
     const result = await pool.request()
       .input('id', req.user.id)
@@ -159,6 +172,57 @@ router.get('/profile', authenticateToken, async (req, res) => {
 
   } catch (error) {
     console.error('Profile fetch error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Reset password endpoint
+router.post('/reset-password', async (req, res) => {
+  try {
+    // Validate request body
+    const { error, value } = resetPasswordSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
+
+    const { email, newPassword } = value;
+    console.log('Password reset attempt for email:', email);
+    const pool = await dbManager.getConnection();
+
+    // Find user by email
+    const userResult = await pool.request()
+      .input('email', email)
+      .query('SELECT id, email, active FROM chat_Users WHERE email = @email');
+
+    if (userResult.recordset.length === 0) {
+      console.log('No user found with email:', email);
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const user = userResult.recordset[0];
+    console.log('Found user for password reset:', { id: user.id, email: user.email });
+
+    // Hash the new password
+    const saltRounds = 12;
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+    console.log('New password hashed successfully');
+
+    // Update the user's password
+    const updateResult = await pool.request()
+      .input('id', user.id)
+      .input('passwordHash', hashedPassword)
+      .input('updatedAt', new Date())
+      .query('UPDATE chat_Users SET passwordHash = @passwordHash, updatedAt = @updatedAt WHERE id = @id');
+
+    console.log('Password updated for user:', user.id);
+
+    res.json({
+      message: 'Password reset successful',
+      email: user.email
+    });
+
+  } catch (error) {
+    console.error('Password reset error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

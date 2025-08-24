@@ -234,21 +234,7 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
         </div>
       </div>
 
-      {/* User Profile */}
-      <div className="p-4 border-t border-border">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center">
-            <span className="text-sm font-semibold text-primary-foreground">U</span>
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-foreground">User</p>
-            <p className="text-xs text-muted-foreground">AI Assistant User</p>
-          </div>
-          <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive hover:bg-destructive/10">
-            <LogOut className="w-4 h-4" />
-          </Button>
-        </div>
-      </div>
+
 
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>

@@ -4,8 +4,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Eye, EyeOff, ArrowLeft, AlertCircle } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { apiService, ApiError } from "@/services/api";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { ApiError } from "@/services/api";
 import { useToast } from "@/hooks/use-toast";
 
 const Login = () => {
@@ -17,7 +18,12 @@ const Login = () => {
     password: ""
   });
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login } = useAuth();
   const { toast } = useToast();
+  
+  // Get the intended destination from location state
+  const from = location.state?.from?.pathname || '/';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,27 +31,27 @@ const Login = () => {
     setError(null);
 
     try {
-      const response = await apiService.login(formData.email, formData.password);
+      await login(formData.email, formData.password);
       
-      toast({
-        title: "Login Successful",
-        description: `Welcome back, ${response.user.firstName || response.user.username}!`,
-      });
-
-      // Redirect to main chat page
-      navigate('/');
+      // Redirect to intended destination or home page
+      navigate(from, { replace: true });
     } catch (err) {
       if (err instanceof ApiError) {
         setError(err.message);
+        toast({
+          variant: "destructive",
+          title: "Login Failed",
+          description: err.message,
+        });
       } else {
-        setError('An unexpected error occurred. Please try again.');
+        const errorMessage = "An unexpected error occurred. Please try again.";
+        setError(errorMessage);
+        toast({
+          variant: "destructive",
+          title: "Login Failed",
+          description: errorMessage,
+        });
       }
-      
-      toast({
-        title: "Login Failed",
-        description: err instanceof ApiError ? err.message : 'An unexpected error occurred.',
-        variant: "destructive",
-      });
     } finally {
       setIsLoading(false);
     }

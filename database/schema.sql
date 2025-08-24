@@ -1,6 +1,27 @@
 -- Persona AI Link Database Schema
 -- MS SQL Server Database Schema
 
+-- Users table for authentication
+CREATE TABLE chat_Users (
+    id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    username NVARCHAR(50) NOT NULL UNIQUE,
+    email NVARCHAR(255) NOT NULL UNIQUE,
+    passwordHash NVARCHAR(255) NOT NULL,
+    firstName NVARCHAR(100) NULL,
+    lastName NVARCHAR(100) NULL,
+    role NVARCHAR(20) NOT NULL DEFAULT 'user',
+    active BIT NOT NULL DEFAULT 1,
+    createdAt DATETIME2 DEFAULT GETDATE(),
+    updatedAt DATETIME2 DEFAULT GETDATE()
+);
+
+-- Indexes for users table
+CREATE INDEX IX_chat_Users_email ON chat_Users(email);
+CREATE INDEX IX_chat_Users_username ON chat_Users(username);
+CREATE INDEX IX_chat_Users_role ON chat_Users(role);
+
+GO
+
 -- Sessions table to store chat sessions
 CREATE TABLE sessions (
     id NVARCHAR(50) PRIMARY KEY,
@@ -47,6 +68,11 @@ BEGIN
     INNER JOIN inserted i ON s.id = i.id;
 END;
 
+-- Create admin user
+-- Password: P@ssw0rd.123 (hashed with bcrypt)
+INSERT INTO chat_Users (username, email, passwordHash, firstName, lastName, role, active) VALUES 
+('admin', 'mti.admin@merdekabattery.com', '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Admin', 'User', 'admin', 1);
+
 -- Sample data for testing (optional)
 -- INSERT INTO sessions (id, title, session_name) VALUES 
 -- ('test-session-1', 'Test Chat Session', 'AI Assistant Conversation'),
@@ -55,3 +81,24 @@ END;
 -- INSERT INTO messages (id, session_id, content, role, message_order) VALUES
 -- ('msg-1', 'test-session-1', 'Hello, how can you help me?', 'user', 1),
 -- ('msg-2', 'test-session-1', 'I can help you with various tasks. What would you like to know?', 'assistant', 2);
+
+GO
+
+-- ProcessedFiles table for training data management
+CREATE TABLE ProcessedFiles (
+    id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    filename NVARCHAR(255) NOT NULL,
+    file_path NVARCHAR(500) NULL,
+    metadata NVARCHAR(MAX) NULL, -- JSON field for additional file data
+    processed BIT NOT NULL DEFAULT 0, -- Boolean flag for processing status
+    created_at DATETIME2 DEFAULT GETDATE(),
+    updated_at DATETIME2 DEFAULT GETDATE()
+);
+
+-- Indexes for ProcessedFiles table
+CREATE INDEX IX_ProcessedFiles_filename ON ProcessedFiles(filename);
+CREATE INDEX IX_ProcessedFiles_processed ON ProcessedFiles(processed);
+CREATE INDEX IX_ProcessedFiles_created_at ON ProcessedFiles(created_at);
+
+-- Unique constraint to prevent duplicate filenames
+CREATE UNIQUE INDEX IX_ProcessedFiles_filename_unique ON ProcessedFiles(filename) WHERE processed = 1;
