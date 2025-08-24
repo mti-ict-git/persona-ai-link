@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Send, Paperclip, RefreshCw, PanelRightOpen, PanelRightClose, Menu, X, Settings } from "lucide-react";
+import { Send, Paperclip, RefreshCw, PanelRightOpen, PanelRightClose, Menu, X, Settings, Brain } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
@@ -141,6 +141,15 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
             )}
             <Button variant="outline" size="sm">
               Start Tour
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => navigate('/training')}
+              className="flex items-center gap-2"
+            >
+              <Brain className="w-4 h-4" />
+              Training
             </Button>
             <Button 
               variant="outline" 
