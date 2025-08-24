@@ -28,6 +28,7 @@ const Index = () => {
   // const [isConfigOpen, setIsConfigOpen] = useState(false); // Removed - WebhookConfig hidden
   const [isTyping, setIsTyping] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(true);
+  const [showSidebar, setShowSidebar] = useState(true);
 
   const {
     sessions: dbSessions,
@@ -189,14 +190,19 @@ const Index = () => {
 
   return (
     <div className="h-screen flex bg-background">
-      <ChatSidebar
-        sessions={sessions}
-        onSessionSelect={selectSession}
-        onNewChat={handleCreateNewSession}
-        onDeleteSession={deleteSession}
-        onRenameSession={renameSession}
-        activeSessionId={activeSessionId || undefined}
-      />
+      {/* Sidebar with conditional rendering and animations */}
+      <div className={`transition-all duration-300 ease-in-out ${
+        showSidebar ? 'w-80 opacity-100' : 'w-0 opacity-0 overflow-hidden'
+      }`}>
+        <ChatSidebar
+          sessions={sessions}
+          onSessionSelect={selectSession}
+          onNewChat={handleCreateNewSession}
+          onDeleteSession={deleteSession}
+          onRenameSession={renameSession}
+          activeSessionId={activeSessionId || undefined}
+        />
+      </div>
       
       <ChatMain
         messages={currentMessages}
@@ -206,6 +212,8 @@ const Index = () => {
         sessionId={activeSessionId}
         showSuggestions={showSuggestions}
         onToggleSuggestions={() => setShowSuggestions(!showSuggestions)}
+        showSidebar={showSidebar}
+        onToggleSidebar={() => setShowSidebar(!showSidebar)}
       />
       
       <div className={`transition-all duration-300 ease-in-out overflow-hidden ${

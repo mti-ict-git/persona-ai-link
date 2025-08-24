@@ -407,6 +407,31 @@ The backend server has been restarted with the corrected URL construction logic.
 ✅ Cleaner user interface focused on core chat functionality  
 ✅ Reduced complexity in component state management
 
+## August 24, 2025 - Sidebar Toggle Feature
+
+**Problem**: Users needed the ability to hide/show the chat sidebar to maximize screen space and improve focus during conversations.
+
+**Root Cause**: The sidebar was always visible with no option to toggle its visibility, taking up valuable screen real estate especially on smaller screens.
+
+**Solution**: Implemented a toggle feature that allows users to show/hide the chat sidebar with smooth animations and responsive behavior.
+
+**Changes Made**:
+1. **State Management**: Added `showSidebar` state in `Index.tsx` with default value `true`
+2. **UI Components**: Added toggle button in chat header (`ChatMain.tsx`) with menu/close icons
+3. **Conditional Rendering**: Wrapped `ChatSidebar` in animated container with width and opacity transitions
+4. **Animations**: Added smooth transition animations using TailwindCSS classes (300ms duration)
+5. **Responsive Design**: Button text hidden on small screens, icons remain visible
+6. **Props Integration**: Added `showSidebar` and `onToggleSidebar` props to `ChatMain` component
+
+**Files Modified**:
+- `src/pages/Index.tsx` - Added sidebar visibility state and conditional rendering wrapper
+- `src/components/ChatMain.tsx` - Added toggle button and updated props interface
+- `docs/journal.md` - Updated documentation
+
+**Result**: Users can now toggle the sidebar on/off using the button in the chat header, providing better control over screen space and improved user experience across different screen sizes.
+
+---
+
 ## August 24, 2025 - Session Renaming Feature
 
 **Problem**: Users needed the ability to rename chat sessions to better organize and identify their conversations.
@@ -452,3 +477,23 @@ The backend server has been restarted with the corrected URL construction logic.
 **Result:** Users can now toggle prompt suggestions visibility with smooth animations, improving UI flexibility and user experience
 
 **Status**: All N8N integration issues resolved and typing animation successfully implemented. Users now see a smooth typing indicator while waiting for AI responses, improving the overall chat experience.
+
+---
+
+## August 24, 2025 7:57 PM - Hamburger Menu Implementation
+
+**Problem**: User requested to replace the "Hide Sidebar" button with a hamburger menu icon and move it to the left side of the header.
+
+**Solution**: Updated the sidebar toggle to use a clean hamburger menu design positioned on the left side.
+
+**Changes Made**:
+- **UI Design**: Replaced the outlined button with a simple hamburger menu icon
+- **Positioning**: Moved the toggle from the right side to the left side of the header
+- **Styling**: Used a clean button design with hover effects and proper accessibility
+- **Icon**: Always shows the Menu icon (hamburger) regardless of sidebar state
+- **Accessibility**: Added proper aria-label for screen readers
+
+**Files Modified**:
+- `src/components/ChatMain.tsx` - Updated header layout and toggle button styling
+
+**Result**: The sidebar now has a clean hamburger menu icon positioned on the left side of the header, providing a more intuitive and standard UI pattern for sidebar navigation.

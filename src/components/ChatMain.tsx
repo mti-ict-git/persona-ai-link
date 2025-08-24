@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Send, Paperclip, RefreshCw, PanelRightOpen, PanelRightClose } from "lucide-react";
+import { Send, Paperclip, RefreshCw, PanelRightOpen, PanelRightClose, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import ReactMarkdown from "react-markdown";
@@ -23,9 +23,11 @@ interface ChatMainProps {
   sessionId?: string;
   showSuggestions?: boolean;
   onToggleSuggestions?: () => void;
+  showSidebar?: boolean;
+  onToggleSidebar?: () => void;
 }
 
-const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false, sessionId, showSuggestions = true, onToggleSuggestions }: ChatMainProps) => {
+const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false, sessionId, showSuggestions = true, onToggleSuggestions, showSidebar = true, onToggleSidebar }: ChatMainProps) => {
   const [inputMessage, setInputMessage] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -102,6 +104,15 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
       <div className="p-4 border-b border-border bg-gradient-subtle">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
+            {onToggleSidebar && (
+              <button 
+                onClick={onToggleSidebar}
+                className="p-2 hover:bg-accent rounded-md transition-colors"
+                aria-label={showSidebar ? "Hide Sidebar" : "Show Sidebar"}
+              >
+                <Menu className="w-5 h-5 text-foreground" />
+              </button>
+            )}
             <RefreshCw className="w-5 h-5 text-primary" />
             <h2 className="font-semibold text-lg text-foreground">AI Insight</h2>
           </div>
