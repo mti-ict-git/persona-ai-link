@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Send, Paperclip, RefreshCw, PanelRightOpen, PanelRightClose, Menu, X } from "lucide-react";
+import { Send, Paperclip, RefreshCw, PanelRightOpen, PanelRightClose, Menu, X, Settings } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import ReactMarkdown from "react-markdown";
@@ -32,6 +33,7 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -139,6 +141,14 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
             )}
             <Button variant="outline" size="sm">
               Start Tour
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => navigate('/login')}
+              className="flex items-center gap-2"
+            >
+              <Settings className="w-4 h-4" />
             </Button>
           </div>
         </div>
