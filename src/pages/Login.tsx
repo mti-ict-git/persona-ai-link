@@ -3,21 +3,52 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Eye, EyeOff, ArrowLeft } from "lucide-react";
+import { Eye, EyeOff, ArrowLeft, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { apiService, ApiError } from "@/services/api";
+import { useToast } from "@/hooks/use-toast";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     email: "",
     password: ""
   });
   const navigate = useNavigate();
+  const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Add login logic here
-    console.log("Login attempt:", formData);
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await apiService.login(formData.email, formData.password);
+      
+      toast({
+        title: "Login Successful",
+        description: `Welcome back, ${response.user.firstName || response.user.username}!`,
+      });
+
+      // Redirect to main chat page
+      navigate('/');
+    } catch (err) {
+      if (err instanceof ApiError) {
+        setError(err.message);
+      } else {
+        setError('An unexpected error occurred. Please try again.');
+      }
+      
+      toast({
+        title: "Login Failed",
+        description: err instanceof ApiError ? err.message : 'An unexpected error occurred.',
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,6 +95,13 @@ const Login = () => {
           </CardHeader>
 
           <CardContent className="space-y-6">
+            {error && (
+              <div className="flex items-center gap-2 p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">
+                <AlertCircle className="w-4 h-4" />
+                <span>{error}</span>
+              </div>
+            )}
+            
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-foreground font-medium">
@@ -114,9 +152,10 @@ const Login = () => {
 
               <Button 
                 type="submit" 
-                className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300"
+                disabled={isLoading}
+                className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Sign In
+                {isLoading ? "Signing In..." : "Sign In"}
               </Button>
             </form>
 

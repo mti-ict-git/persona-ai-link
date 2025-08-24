@@ -2,6 +2,27 @@ import { Message, Session } from '../utils/database';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api';
 
+// Authentication types
+export interface User {
+  id: number;
+  username: string;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  role: string;
+}
+
+export interface LoginResponse {
+  message: string;
+  token: string;
+  user: User;
+}
+
+export interface AuthValidationResponse {
+  valid: boolean;
+  user: User;
+}
+
 class ApiError extends Error {
   constructor(public status: number, message: string) {
     super(message);
@@ -10,14 +31,34 @@ class ApiError extends Error {
 }
 
 class ApiService {
+  private getAuthToken(): string | null {
+    return localStorage.getItem('auth_token');
+  }
+
+  private setAuthToken(token: string): void {
+    localStorage.setItem('auth_token', token);
+  }
+
+  private removeAuthToken(): void {
+    localStorage.removeItem('auth_token');
+  }
+
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const url = `${API_BASE_URL}${endpoint}`;
     
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      ...options.headers as Record<string, string>,
+    };
+
+    // Add auth token if available
+    const token = this.getAuthToken();
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
     const config: RequestInit = {
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
+      headers,
       ...options,
     };
 
@@ -36,6 +77,41 @@ class ApiService {
       }
       throw new ApiError(0, `Network error: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
+  }
+
+  // Authentication
+  async login(email: string, password: string): Promise<LoginResponse> {
+    const response = await this.request<LoginResponse>('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+    });
+    
+    // Store the token
+    this.setAuthToken(response.token);
+    return response;
+  }
+
+  async logout(): Promise<void> {
+    try {
+      await this.request('/auth/logout', {
+        method: 'POST',
+      });
+    } finally {
+      // Always remove token, even if request fails
+      this.removeAuthToken();
+    }
+  }
+
+  async validateSession(): Promise<AuthValidationResponse> {
+    return await this.request<AuthValidationResponse>('/auth/validate');
+  }
+
+  async getCurrentUser(): Promise<{ user: User }> {
+    return await this.request<{ user: User }>('/auth/profile');
+  }
+
+  isAuthenticated(): boolean {
+    return this.getAuthToken() !== null;
   }
 
   // Session Management
