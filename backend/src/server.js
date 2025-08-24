@@ -8,6 +8,7 @@ require('dotenv').config();
 const sessionRoutes = require('./routes/sessions');
 const messageRoutes = require('./routes/messages');
 const webhookRoutes = require('./routes/webhooks');
+const { router: authRoutes } = require('./routes/auth');
 const { initializeDatabase } = require('./utils/database');
 
 const app = express();
@@ -50,6 +51,7 @@ app.get('/health', (req, res) => {
 });
 
 // Routes
+app.use('/api/auth', authRoutes);
 app.use('/api/sessions', sessionRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/webhooks', webhookRoutes);
