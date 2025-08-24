@@ -9,6 +9,7 @@ const addMessageSchema = Joi.object({
   session_id: Joi.string().uuid().required(),
   content: Joi.string().required(),
   role: Joi.string().valid('user', 'assistant').required(),
+  message_order: Joi.number().integer().min(1).required(),
   metadata: Joi.object().optional()
 });
 
@@ -74,6 +75,7 @@ router.post('/', async (req, res, next) => {
       value.session_id,
       value.content,
       value.role,
+      value.message_order,
       value.metadata
     );
 

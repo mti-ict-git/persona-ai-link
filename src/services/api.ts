@@ -52,14 +52,16 @@ class ApiService {
   }
 
   async getSession(sessionId: string): Promise<Session> {
-    return this.request<Session>(`/sessions/${sessionId}`);
+    const response = await this.request<{success: boolean, data: Session}>(`/sessions/${sessionId}`);
+    return response.data;
   }
 
   async updateSession(sessionId: string, updates: Partial<Session>): Promise<Session> {
-    return this.request<Session>(`/sessions/${sessionId}`, {
+    const response = await this.request<{success: boolean, data: Session}>(`/sessions/${sessionId}`, {
       method: 'PUT',
       body: JSON.stringify(updates),
     });
+    return response.data;
   }
 
   async deleteSession(sessionId: string): Promise<void> {
@@ -75,13 +77,14 @@ class ApiService {
   }
 
   async addMessage(sessionId: string, message: Omit<Message, 'id' | 'session_id' | 'created_at'>): Promise<Message> {
-    return this.request<Message>('/messages', {
+    const response = await this.request<{success: boolean, data: Message}>('/messages', {
       method: 'POST',
       body: JSON.stringify({
         session_id: sessionId,
         ...message,
       }),
     });
+    return response.data;
   }
 
   async deleteMessage(messageId: string): Promise<void> {
@@ -131,14 +134,13 @@ class ApiService {
     });
   }
 
-  async testWebhook(webhookUrl: string): Promise<{
+  async testWebhook(): Promise<{
     success: boolean;
     response?: any;
     error?: string;
   }> {
     return this.request('/webhooks/test', {
       method: 'POST',
-      body: JSON.stringify({ webhook_url: webhookUrl }),
     });
   }
 
@@ -150,9 +152,11 @@ class ApiService {
       role: string;
     };
   }> {
+    const payload = { session_id: sessionId };
+    
     return this.request('/webhooks/session-init', {
       method: 'POST',
-      body: JSON.stringify({ session_id: sessionId }),
+      body: JSON.stringify(payload),
     });
   }
 }

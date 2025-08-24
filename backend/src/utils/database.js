@@ -209,7 +209,7 @@ class MessageManager {
     this.db = dbManager;
   }
 
-  async addMessage(sessionId, content, role, metadata = null) {
+  async addMessage(sessionId, content, role, messageOrder, metadata = null) {
     try {
       const pool = await this.db.getConnection();
       const messageId = uuidv4();
@@ -220,12 +220,13 @@ class MessageManager {
       request.input('session_id', sql.UniqueIdentifier, sessionId);
       request.input('content', sql.NVarChar(sql.MAX), content);
       request.input('role', sql.NVarChar(20), role);
+      request.input('message_order', sql.Int, messageOrder);
       request.input('metadata', sql.NVarChar(sql.MAX), metadata ? JSON.stringify(metadata) : null);
       request.input('created_at', sql.DateTime2, now);
 
       await request.query(`
-        INSERT INTO messages (id, session_id, content, role, metadata, created_at)
-        VALUES (@id, @session_id, @content, @role, @metadata, @created_at)
+        INSERT INTO messages (id, session_id, content, role, message_order, metadata, created_at)
+        VALUES (@id, @session_id, @content, @role, @message_order, @metadata, @created_at)
       `);
 
       // Update session timestamp
@@ -241,6 +242,7 @@ class MessageManager {
         session_id: sessionId,
         content,
         role,
+        message_order: messageOrder,
         metadata,
         created_at: now
       };

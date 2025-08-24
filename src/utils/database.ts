@@ -70,7 +70,7 @@ export interface Message {
   content: string;
   role: 'user' | 'assistant';
   created_at: Date;
-  message_order: number;
+  message_order?: number;
   metadata?: any;
 }
 

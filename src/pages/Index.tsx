@@ -25,7 +25,6 @@ interface ChatSession {
 const Index = () => {
   const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [currentMessages, setCurrentMessages] = useState<Message[]>([]);
-  const [webhookUrl, setWebhookUrl] = useState("");
   const [isConfigOpen, setIsConfigOpen] = useState(false);
 
   const {
@@ -40,27 +39,7 @@ const Index = () => {
     isLoading: sessionLoading
   } = useSessionManager();
 
-  // Load configuration from localStorage and environment
-  useEffect(() => {
-    // First try to load from environment variable
-    const envWebhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL;
-    const savedWebhookUrl = localStorage.getItem("n8n_webhook_url");
-    
-    if (envWebhookUrl) {
-      setWebhookUrl(envWebhookUrl);
-      // Save to localStorage for consistency
-      localStorage.setItem("n8n_webhook_url", envWebhookUrl);
-    } else if (savedWebhookUrl) {
-      setWebhookUrl(savedWebhookUrl);
-    }
-  }, []);
 
-  // Save configuration to localStorage
-  useEffect(() => {
-    if (webhookUrl) {
-      localStorage.setItem("n8n_webhook_url", webhookUrl);
-    }
-  }, [webhookUrl]);
 
   // Convert database sessions to UI format
   useEffect(() => {
@@ -124,8 +103,8 @@ const Index = () => {
       // Add user message to database
       await addMessage(activeSessionId, {
         content,
-        role: "user",
-        message_order: Date.now()
+        role: "user"
+        // message_order will be automatically set by addMessage
       });
       
       // Add to UI immediately
@@ -137,16 +116,15 @@ const Index = () => {
       };
       setCurrentMessages(prev => [...prev, userMessage]);
 
-      // Send to N8N webhook if configured
-      if (webhookUrl) {
-        const response = await apiService.sendToN8N({
-          event_type: 'message_sent',
-          session_id: activeSessionId,
-          message: {
-            content,
-            role: 'user',
-            timestamp: new Date().toISOString()
-          },
+      // Send to N8N webhook
+      const response = await apiService.sendToN8N({
+        event_type: 'message_sent',
+        session_id: activeSessionId,
+        message: {
+          content,
+          role: 'user',
+          timestamp: new Date().toISOString()
+        },
           context: {
             session_history: currentMessages.map(msg => ({
               content: msg.content,
@@ -181,22 +159,6 @@ const Index = () => {
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         };
         setCurrentMessages(prev => [...prev, assistantMessage]);
-      } else {
-        // Show configuration prompt if webhook is not set
-        const assistantMessage: Message = {
-          id: (Date.now() + 1).toString(),
-          content: "Please configure your N8N webhook URL in the settings to enable AI processing. Click the 'Configure N8N' button to get started.",
-          role: "assistant",
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        };
-
-        await addMessage(activeSessionId, {
-          content: assistantMessage.content,
-          role: "assistant",
-          message_order: Date.now() + 1
-        });
-        setCurrentMessages(prev => [...prev, assistantMessage]);
-      }
     } catch (error) {
       console.error('Failed to send message:', error);
     }
@@ -233,8 +195,6 @@ const Index = () => {
       />
 
       <WebhookConfig
-        webhookUrl={webhookUrl}
-        onWebhookUrlChange={setWebhookUrl}
         isConfigOpen={isConfigOpen}
         onConfigToggle={() => setIsConfigOpen(!isConfigOpen)}
       />

@@ -94,8 +94,8 @@ export function useSessionManager(): UseSessionManagerReturn {
         if (response?.ai_message) {
           await addMessage(newSession.id, {
             content: response.ai_message.content,
-            role: response.ai_message.role as 'user' | 'assistant',
-            message_order: Date.now()
+            role: response.ai_message.role as 'user' | 'assistant'
+            // message_order will be automatically set by addMessage
           });
         }
         
@@ -141,13 +141,30 @@ export function useSessionManager(): UseSessionManagerReturn {
     }
   }, []);
 
+  // Helper function to get next message order for a session
+  const getNextMessageOrder = useCallback(async (sessionId: string): Promise<number> => {
+    try {
+      const messages = await apiService.getMessages(sessionId);
+      return messages.length + 1;
+    } catch (err) {
+      console.error('Failed to get message count:', err);
+      return 1; // Default to 1 if we can't get the count
+    }
+  }, []);
+
   // Add message to session
   const addMessage = useCallback(async (
     sessionId: string, 
     message: Omit<Message, 'id' | 'session_id' | 'created_at'>
   ): Promise<Message> => {
     try {
-      const newMessage = await apiService.addMessage(sessionId, message);
+      // Ensure message_order is set if not provided
+      const messageWithOrder = {
+        ...message,
+        message_order: message.message_order || await getNextMessageOrder(sessionId)
+      };
+      
+      const newMessage = await apiService.addMessage(sessionId, messageWithOrder);
       
       // Update session's updated_at timestamp in local state
       setSessions(prev => prev.map(session => 

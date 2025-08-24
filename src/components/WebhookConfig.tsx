@@ -1,21 +1,15 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Settings, TestTube, Check, X } from "lucide-react";
+import { Settings, TestTube, Check, X, Wifi } from "lucide-react";
 import { useN8NWebhook } from "@/hooks/useN8NWebhook";
 
 interface WebhookConfigProps {
-  webhookUrl: string;
-  onWebhookUrlChange: (url: string) => void;
   isConfigOpen: boolean;
   onConfigToggle: () => void;
 }
 
 const WebhookConfig = ({ 
-  webhookUrl, 
-  onWebhookUrlChange, 
   isConfigOpen, 
   onConfigToggle 
 }: WebhookConfigProps) => {
@@ -23,10 +17,8 @@ const WebhookConfig = ({
   const { testWebhook, isLoading } = useN8NWebhook();
 
   const handleTest = async () => {
-    if (!webhookUrl.trim()) return;
-    
     setTestResult(null);
-    const result = await testWebhook(webhookUrl);
+    const result = await testWebhook();
     setTestResult({ success: result.success, error: result.error });
   };
 
@@ -49,30 +41,28 @@ const WebhookConfig = ({
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Settings className="w-5 h-5" />
-            N8N Webhook Configuration
+            <Wifi className="w-5 h-5" />
+            N8N Server Connection
           </CardTitle>
           <CardDescription>
-            Configure your N8N webhook URL to enable chat processing
+            Test connection to the N8N server for chat processing
           </CardDescription>
         </CardHeader>
         
         <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="webhook-url">Webhook URL</Label>
-            <Input
-              id="webhook-url"
-              type="url"
-              placeholder="https://your-n8n-instance.com/webhook/your-webhook-id"
-              value={webhookUrl}
-              onChange={(e) => onWebhookUrlChange(e.target.value)}
-            />
+          <div className="bg-muted p-3 rounded-md text-sm">
+            <p className="font-medium mb-2">Server Information:</p>
+            <div className="space-y-1 text-muted-foreground">
+              <p><span className="font-medium">Server:</span> n8nprod.merdekabattery.com:5679</p>
+              <p><span className="font-medium">Protocol:</span> HTTPS</p>
+              <p><span className="font-medium">Status:</span> {testResult?.success ? "Connected" : "Not tested"}</p>
+            </div>
           </div>
           
           <div className="flex gap-2">
             <Button
               onClick={handleTest}
-              disabled={!webhookUrl.trim() || isLoading}
+              disabled={isLoading}
               variant="outline"
               className="flex-1"
             >
@@ -89,26 +79,24 @@ const WebhookConfig = ({
             )}
           </div>
           
-          <div className="bg-muted p-3 rounded-md text-sm">
-            <p className="font-medium mb-2">Setup Instructions:</p>
-            <ol className="list-decimal list-inside space-y-1 text-muted-foreground">
-              <li>Create a webhook trigger in your N8N workflow</li>
-              <li>Copy the webhook URL from N8N</li>
-              <li>Paste it above and test the connection</li>
-              <li>Your chat sessions will include sessionId for context</li>
-            </ol>
-          </div>
+          {testResult && (
+            <div className={`p-3 rounded-md text-sm ${
+              testResult.success ? "bg-green-50 border border-green-200" : "bg-red-50 border border-red-200"
+            }`}>
+              <p className={`font-medium ${
+                testResult.success ? "text-green-800" : "text-red-800"
+              }`}>
+                {testResult.success ? "✓ Connection Successful" : "✗ Connection Failed"}
+              </p>
+              {testResult.error && (
+                <p className="text-red-600 mt-1">{testResult.error}</p>
+              )}
+            </div>
+          )}
           
           <div className="flex gap-2">
-            <Button onClick={onConfigToggle} variant="outline" className="flex-1">
-              Cancel
-            </Button>
-            <Button 
-              onClick={onConfigToggle} 
-              disabled={!webhookUrl.trim()}
-              className="flex-1"
-            >
-              Save Configuration
+            <Button onClick={onConfigToggle} className="flex-1">
+              Close
             </Button>
           </div>
         </CardContent>

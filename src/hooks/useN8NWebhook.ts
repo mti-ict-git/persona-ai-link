@@ -9,12 +9,6 @@ interface WebhookResponse {
   session_name_update?: string;
 }
 
-interface N8NWebhookConfig {
-  webhookUrl: string;
-  sessionId: string;
-  onSessionNameUpdate?: (sessionId: string, sessionName: string) => void;
-}
-
 export const useN8NWebhook = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -70,7 +64,7 @@ export const useN8NWebhook = () => {
     }
   }, []);
 
-  const testWebhook = useCallback(async (webhookUrl: string): Promise<{
+  const testWebhook = useCallback(async (): Promise<{
     success: boolean;
     response?: any;
     error?: string;
@@ -79,24 +73,24 @@ export const useN8NWebhook = () => {
     setError(null);
 
     try {
-      console.log('Testing webhook via API:', webhookUrl);
+      console.log('Testing N8N server connection via API');
       
-      const result = await apiService.testWebhook(webhookUrl);
+      const result = await apiService.testWebhook();
       
-      console.log('Webhook test response via API:', result);
+      console.log('N8N server test response via API:', result);
       
       if (result.success) {
-        toast.success('Webhook connection successful!');
+        toast.success('N8N server connection successful!');
       } else {
-        toast.error(`Webhook test failed: ${result.error}`);
+        toast.error(`N8N server test failed: ${result.error}`);
       }
       
       return result;
     } catch (err) {
       const errorMessage = err instanceof ApiError ? err.message : 'Unknown error occurred';
-      console.error('Webhook test error:', errorMessage);
+      console.error('N8N server test error:', errorMessage);
       setError(errorMessage);
-      toast.error(`Webhook test failed: ${errorMessage}`);
+      toast.error(`N8N server test failed: ${errorMessage}`);
       
       return {
         success: false,

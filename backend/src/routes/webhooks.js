@@ -7,7 +7,6 @@ const router = express.Router();
 
 // Validation schemas
 const sendToN8NSchema = Joi.object({
-  webhook_url: Joi.string().uri().required(),
   session_id: Joi.string().uuid().required(),
   message: Joi.string().required(),
   message_history: Joi.array().items(
@@ -35,7 +34,42 @@ router.post('/send-to-n8n', async (req, res, next) => {
       });
     }
 
-    const { webhook_url, session_id, message, message_history } = value;
+    const { session_id, message, message_history } = value;
+
+    // Get N8N chat webhook URL with priority order:
+    // 1. Specific chat URL
+    // 2. Primary webhook URL + /chatbot path
+    let webhookUrl = process.env.N8N_CHAT_URL;
+    
+    if (!webhookUrl && process.env.N8N_WEBHOOK_URL) {
+      try {
+        const url = new URL(process.env.N8N_WEBHOOK_URL);
+        url.pathname = '/chatbot';
+        webhookUrl = url.toString();
+      } catch (urlError) {
+        return res.status(400).json({
+          success: false,
+          error: 'Invalid N8N_WEBHOOK_URL format',
+          details: urlError.message
+        });
+      }
+    }
+    
+    if (!webhookUrl) {
+      return res.status(400).json({
+        success: false,
+        error: 'N8N webhook URL not configured',
+        message: 'Please set N8N_CHAT_URL or N8N_WEBHOOK_URL environment variable'
+      });
+    }
+    
+    if (!webhookUrl) {
+      return res.status(400).json({
+        success: false,
+        error: 'N8N webhook URL not configured',
+        message: 'Please set N8N_CHAT_URL or N8N_WEBHOOK_URL environment variable'
+      });
+    }
 
     // Check if session exists
     const session = await sessionManager.getSession(session_id);
@@ -65,12 +99,15 @@ router.post('/send-to-n8n', async (req, res, next) => {
 
     try {
       // Send to N8N webhook
-      const response = await axios.post(webhook_url, payload, {
+      const response = await axios.post(webhookUrl, payload, {
         timeout: 30000,
         headers: {
           'Content-Type': 'application/json',
           'User-Agent': 'PersonaAI-Link/1.0'
-        }
+        },
+        httpsAgent: new (require('https').Agent)({
+          rejectUnauthorized: false
+        })
       });
 
       let responseData = response.data;
@@ -161,50 +198,79 @@ router.post('/send-to-n8n', async (req, res, next) => {
 // POST /api/webhooks/test - Test webhook connectivity
 router.post('/test', async (req, res, next) => {
   try {
-    const { error, value } = testWebhookSchema.validate(req.body);
-    if (error) {
+    // Get N8N health check URL with priority order:
+    // 1. Specific health URL
+    // 2. Primary webhook URL + /health path
+    let healthCheckUrl = process.env.N8N_HEALTH_URL;
+    
+    if (!healthCheckUrl) {
+      const baseUrl = process.env.N8N_WEBHOOK_URL;
+      if (baseUrl) {
+        try {
+          const url = new URL(baseUrl);
+          url.pathname = '/health';
+          healthCheckUrl = url.toString();
+        } catch (urlError) {
+          return res.status(400).json({
+            success: false,
+            error: 'Invalid N8N_WEBHOOK_URL format',
+            details: urlError.message
+          });
+        }
+      }
+    }
+    
+    if (!healthCheckUrl) {
       return res.status(400).json({
         success: false,
-        error: 'Validation Error',
-        details: error.details
-      });
-    }
-
-    const { webhook_url } = value;
-
-    const testPayload = {
-      event_type: 'test_connection',
-      timestamp: new Date().toISOString(),
-      message: 'Test connection from PersonaAI-Link'
-    };
-
-    try {
-      const response = await axios.post(webhook_url, testPayload, {
-        timeout: 10000,
-        headers: {
-          'Content-Type': 'application/json',
-          'User-Agent': 'PersonaAI-Link/1.0'
+        message: 'N8N configuration missing',
+        error: 'Please set N8N_HEALTH_URL or N8N_WEBHOOK_URL environment variable',
+        config_help: {
+          specific: 'N8N_HEALTH_URL=https://your-n8n-server.com:5679/health',
+          fallback: 'N8N_WEBHOOK_URL=https://your-n8n-server.com:5679 (will use /health path)'
         }
       });
-
+    }
+    
+    try {
+      const response = await axios.get(healthCheckUrl, {
+        timeout: 10000,
+        headers: {
+          'User-Agent': 'PersonaAI-Link/1.0'
+        },
+        httpsAgent: new (require('https').Agent)({
+          rejectUnauthorized: false
+        })
+      });
+      
       res.json({
         success: true,
-        message: 'Webhook test successful',
+        message: 'N8N server connection test successful',
         status: response.status,
         response_data: response.data
       });
 
     } catch (webhookError) {
-      res.status(400).json({
-        success: false,
-        message: 'Webhook test failed',
-        error: webhookError.message,
-        details: {
-          code: webhookError.code,
-          status: webhookError.response?.status,
-          statusText: webhookError.response?.statusText
-        }
-      });
+      // Even a 404 response means we can connect to the server
+      if (webhookError.response && webhookError.response.status === 404) {
+        res.json({
+          success: true,
+          message: 'N8N server is reachable (health endpoint returned 404 as expected)',
+          status: webhookError.response.status,
+          response_data: webhookError.response.data
+        });
+      } else {
+        res.status(400).json({
+          success: false,
+          message: 'N8N server connection test failed',
+          error: webhookError.message,
+          details: {
+            code: webhookError.code,
+            status: webhookError.response?.status,
+            statusText: webhookError.response?.statusText
+          }
+        });
+      }
     }
 
   } catch (error) {
@@ -216,7 +282,6 @@ router.post('/test', async (req, res, next) => {
 router.post('/session-init', async (req, res, next) => {
   try {
     const initSchema = Joi.object({
-      webhook_url: Joi.string().uri().required(),
       session_id: Joi.string().uuid().required(),
       initial_message: Joi.string().optional()
     });
@@ -230,7 +295,7 @@ router.post('/session-init', async (req, res, next) => {
       });
     }
 
-    const { webhook_url, session_id, initial_message } = value;
+    const { session_id, initial_message } = value;
 
     // Check if session exists
     const session = await sessionManager.getSession(session_id);
@@ -241,25 +306,67 @@ router.post('/session-init', async (req, res, next) => {
       });
     }
 
+    // Get N8N session webhook URL with priority order:
+    // 1. Specific session URL
+    // 2. Primary webhook URL + /session path
+    let webhookUrl = process.env.N8N_SESSION_URL;
+    
+    if (!webhookUrl) {
+      const baseUrl = process.env.N8N_WEBHOOK_URL;
+      if (baseUrl) {
+        try {
+          const url = new URL(baseUrl);
+          url.pathname = '/session';
+          webhookUrl = url.toString();
+        } catch (urlError) {
+          return res.status(400).json({
+            success: false,
+            error: 'Invalid N8N_WEBHOOK_URL format',
+            details: urlError.message
+          });
+        }
+      }
+    }
+    
+    // If no webhook URL configured, return success without webhook call
+    if (!webhookUrl) {
+      return res.json({
+        success: true,
+        data: {
+          session_name: null,
+          initial_message: null,
+          raw_response: null
+        }
+      });
+    }
+
     // Prepare session initialization payload
     const payload = {
-      event_type: 'session_init',
+      event_type: 'session_created',
       session_id: session_id,
-      session_data: {
-        title: session.title,
-        created_at: session.created_at
+      timestamp: new Date().toISOString(),
+      user_context: {
+        user_agent: req.headers['user-agent'] || 'PersonaAI-Link/1.0',
+        ip_address: req.ip || req.connection.remoteAddress || '127.0.0.1',
+        referrer: req.headers.referer || 'direct'
       },
-      initial_message: initial_message || null,
-      timestamp: new Date().toISOString()
+      session_data: {
+        initial_message: initial_message || null,
+        language: 'en',
+        platform: 'web'
+      }
     };
 
     try {
-      const response = await axios.post(webhook_url, payload, {
+      const response = await axios.post(webhookUrl, payload, {
         timeout: 30000,
         headers: {
           'Content-Type': 'application/json',
           'User-Agent': 'PersonaAI-Link/1.0'
-        }
+        },
+        httpsAgent: new (require('https').Agent)({
+          rejectUnauthorized: false
+        })
       });
 
       let responseData = response.data;
