@@ -407,6 +407,32 @@ The backend server has been restarted with the corrected URL construction logic.
 ✅ Cleaner user interface focused on core chat functionality  
 ✅ Reduced complexity in component state management
 
+## August 24, 2025 - Session Renaming Feature
+
+**Problem**: Users needed the ability to rename chat sessions to better organize and identify their conversations.
+
+**Root Cause**: Sessions could only be created and deleted, but not renamed, making it difficult for users to organize multiple conversations.
+
+**Solution**: Implemented inline session renaming functionality with proper validation and error handling.
+
+**Changes Made**:
+1. **UI Components**: Added inline editing to `ChatSidebar.tsx` with edit, save, and cancel icons
+2. **State Management**: Added `editingSessionId` and `editingName` states for managing edit mode
+3. **Validation**: Implemented client-side validation for session name length (1-255 chars) and invalid characters
+4. **Backend Integration**: Leveraged existing `PUT /sessions/:id` endpoint and `updateSession` method
+5. **Hook Updates**: Added `renameSession` alias to `useSessionManager` for better naming consistency
+6. **Event Handling**: Added keyboard support (Enter to save, Escape to cancel)
+
+**Files Modified**:
+- `src/components/ChatSidebar.tsx` - Added inline editing functionality and validation
+- `src/hooks/useSessionManager.ts` - Added `renameSession` alias
+- `src/pages/Index.tsx` - Connected renameSession function to ChatSidebar
+- `docs/journal.md` - Updated documentation
+
+**Result**: Users can now rename sessions by clicking the rename option in the dropdown menu, with proper validation to ensure data integrity and user-friendly error messages.
+
+---
+
 ## August 24, 2025 - Prompt Suggestions Toggle Feature
 
 **Problem:** Users needed ability to show or hide prompt suggestions panel for better UI control
