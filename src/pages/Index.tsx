@@ -3,7 +3,9 @@ import ChatSidebar from "@/components/ChatSidebar";
 import ChatMain from "@/components/ChatMain";
 import SuggestionsPanel from "@/components/SuggestionsPanel";
 import WebhookConfig from "@/components/WebhookConfig";
-import { useN8NWebhook } from "@/hooks/useN8NWebhook";
+import { useSessionManager } from "@/hooks/useSessionManager";
+import { apiService } from "@/services/api";
+import { Message as DBMessage } from "@/utils/database";
 
 interface Message {
   id: string;
@@ -15,27 +17,41 @@ interface Message {
 interface ChatSession {
   id: string;
   title: string;
+  session_name?: string;
   timestamp: string;
   messages: Message[];
 }
 
 const Index = () => {
   const [sessions, setSessions] = useState<ChatSession[]>([]);
-  const [activeSessionId, setActiveSessionId] = useState<string | undefined>();
+  const [currentMessages, setCurrentMessages] = useState<Message[]>([]);
   const [webhookUrl, setWebhookUrl] = useState("");
   const [isConfigOpen, setIsConfigOpen] = useState(false);
-  const { sendToN8N, isLoading } = useN8NWebhook();
 
-  // Load configuration from localStorage
+  const {
+    sessions: dbSessions,
+    activeSession,
+    activeSessionId,
+    createNewSession,
+    selectSession,
+    updateSessionName,
+    addMessage,
+    getSessionMessages,
+    isLoading: sessionLoading
+  } = useSessionManager();
+
+  // Load configuration from localStorage and environment
   useEffect(() => {
+    // First try to load from environment variable
+    const envWebhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL;
     const savedWebhookUrl = localStorage.getItem("n8n_webhook_url");
-    if (savedWebhookUrl) {
+    
+    if (envWebhookUrl) {
+      setWebhookUrl(envWebhookUrl);
+      // Save to localStorage for consistency
+      localStorage.setItem("n8n_webhook_url", envWebhookUrl);
+    } else if (savedWebhookUrl) {
       setWebhookUrl(savedWebhookUrl);
-    }
-
-    const savedSessions = localStorage.getItem("chat_sessions");
-    if (savedSessions) {
-      setSessions(JSON.parse(savedSessions));
     }
   }, []);
 
@@ -46,104 +62,136 @@ const Index = () => {
     }
   }, [webhookUrl]);
 
-  // Save sessions to localStorage
+  // Convert database sessions to UI format
   useEffect(() => {
-    if (sessions.length > 0) {
-      localStorage.setItem("chat_sessions", JSON.stringify(sessions));
-    }
-  }, [sessions]);
+    const uiSessions: ChatSession[] = dbSessions.map(session => ({
+      id: session.id,
+      title: session.session_name || session.title,
+      session_name: session.session_name,
+      timestamp: new Date(session.updated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      messages: [] // Messages loaded separately
+    }));
+    setSessions(uiSessions);
+  }, [dbSessions]);
 
-  const createNewSession = () => {
-    const newSession: ChatSession = {
-      id: Date.now().toString(),
-      title: "New Conversation",
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      messages: []
-    };
-    
-    setSessions(prev => [newSession, ...prev]);
-    setActiveSessionId(newSession.id);
+  // Load messages for active session
+  useEffect(() => {
+    if (activeSessionId) {
+      loadSessionMessages(activeSessionId);
+    } else {
+      setCurrentMessages([]);
+    }
+  }, [activeSessionId]);
+
+  const loadSessionMessages = async (sessionId: string) => {
+    try {
+      const dbMessages = await getSessionMessages(sessionId);
+      const uiMessages: Message[] = dbMessages.map(msg => ({
+        id: msg.id,
+        content: msg.content,
+        role: msg.role,
+        timestamp: new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      }));
+      setCurrentMessages(uiMessages);
+    } catch (error) {
+      console.error('Failed to load session messages:', error);
+      setCurrentMessages([]);
+    }
+  };
+
+  const handleCreateNewSession = async (initialMessage?: string) => {
+    await createNewSession(initialMessage);
   };
 
   const getCurrentSession = () => {
-    return sessions.find(session => session.id === activeSessionId);
+    return activeSession;
   };
 
-  const updateSessionTitle = (sessionId: string, firstMessage: string) => {
-    setSessions(prev => prev.map(session => 
-      session.id === sessionId 
-        ? { ...session, title: firstMessage.slice(0, 50) + (firstMessage.length > 50 ? "..." : "") }
-        : session
-    ));
-  };
-
-  const addMessageToSession = (sessionId: string, message: Message) => {
-    setSessions(prev => prev.map(session => 
-      session.id === sessionId 
-        ? { ...session, messages: [...session.messages, message] }
-        : session
-    ));
+  const handleSessionNameUpdate = async (sessionId: string, sessionName: string) => {
+    await updateSessionName(sessionId, sessionName);
   };
 
   const handleSendMessage = async (content: string) => {
     if (!activeSessionId) {
-      createNewSession();
+      await handleCreateNewSession(content);
       return;
     }
 
     const currentSession = getCurrentSession();
     if (!currentSession) return;
 
-    // Add user message
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      content,
-      role: "user",
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    };
-
-    addMessageToSession(activeSessionId, userMessage);
-
-    // Update session title if it's the first message
-    if (currentSession.messages.length === 0) {
-      updateSessionTitle(activeSessionId, content);
-    }
-
-    // Send to N8N webhook if configured
-    if (webhookUrl) {
-      const response = await sendToN8N(
-        { webhookUrl, sessionId: activeSessionId },
+    try {
+      // Add user message to database
+      await addMessage(activeSessionId, content, "user");
+      
+      // Add to UI immediately
+      const userMessage: Message = {
+        id: Date.now().toString(),
         content,
-        currentSession.messages
-      );
-
-      // Add AI response (mock response for now - replace with actual N8N response)
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        content: response.success 
-          ? (response.data?.response || "I've received your message and processed it through N8N. How can I help you further?")
-          : "I apologize, but I'm having trouble connecting to the processing service. Please check your N8N configuration.",
-        role: "assistant",
+        role: "user",
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
+      setCurrentMessages(prev => [...prev, userMessage]);
 
-      addMessageToSession(activeSessionId, assistantMessage);
-    } else {
-      // Show configuration prompt if webhook is not set
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        content: "Please configure your N8N webhook URL in the settings to enable AI processing. Click the 'Configure N8N' button to get started.",
-        role: "assistant",
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      };
+      // Send to N8N webhook if configured
+      if (webhookUrl) {
+        const response = await apiService.sendToN8N({
+          event_type: 'message_sent',
+          session_id: activeSessionId,
+          message: {
+            content,
+            role: 'user',
+            timestamp: new Date().toISOString()
+          },
+          context: {
+            session_history: currentMessages.map(msg => ({
+              content: msg.content,
+              role: msg.role,
+              timestamp: msg.timestamp
+            })),
+            session_name: currentSession?.session_name || undefined
+          }
+        });
 
-      addMessageToSession(activeSessionId, assistantMessage);
+        // Handle session name update from N8N response
+        if (response?.session_name_update) {
+          await handleSessionNameUpdate(activeSessionId, response.session_name_update);
+        }
+
+        // Extract AI response content
+        const aiContent = response?.ai_message?.content || "I've processed your message successfully.";
+
+        // Add AI response to database
+        await addMessage(activeSessionId, aiContent, "assistant", response?.metadata);
+        
+        // Add to UI immediately
+        const assistantMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          content: aiContent,
+          role: "assistant",
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        };
+        setCurrentMessages(prev => [...prev, assistantMessage]);
+      } else {
+        // Show configuration prompt if webhook is not set
+        const assistantMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          content: "Please configure your N8N webhook URL in the settings to enable AI processing. Click the 'Configure N8N' button to get started.",
+          role: "assistant",
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        };
+
+        await addMessage(activeSessionId, assistantMessage.content, "assistant");
+        setCurrentMessages(prev => [...prev, assistantMessage]);
+      }
+    } catch (error) {
+      console.error('Failed to send message:', error);
     }
   };
 
   const handleSuggestionSelect = (prompt: string) => {
     if (!activeSessionId) {
-      createNewSession();
+      handleCreateNewSession(prompt);
       // Wait for next render to send message
       setTimeout(() => handleSendMessage(prompt), 100);
     } else {
@@ -151,21 +199,19 @@ const Index = () => {
     }
   };
 
-  const currentMessages = getCurrentSession()?.messages || [];
-
   return (
     <div className="h-screen flex bg-background">
       <ChatSidebar
         sessions={sessions}
-        onSessionSelect={setActiveSessionId}
-        onNewChat={createNewSession}
-        activeSessionId={activeSessionId}
+        onSessionSelect={selectSession}
+        onNewChat={handleCreateNewSession}
+        activeSessionId={activeSessionId || undefined}
       />
       
       <ChatMain
         messages={currentMessages}
         onSendMessage={handleSendMessage}
-        isLoading={isLoading}
+        isLoading={sessionLoading}
         sessionId={activeSessionId}
       />
       

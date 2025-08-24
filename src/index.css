@@ -53,6 +53,10 @@ All colors MUST be HSL.
     /* Gradients */
     --gradient-primary: linear-gradient(135deg, hsl(217 91% 50%), hsl(217 91% 65%));
     --gradient-subtle: linear-gradient(180deg, hsl(0 0% 100%), hsl(210 40% 98%));
+
+    /* Markdown Content Styling */
+    --markdown-code-bg: 210 40% 94%;
+    --markdown-code-border: 214 32% 91%;
     --gradient-hero: linear-gradient(135deg, hsl(217 91% 50%) 0%, hsl(217 91% 65%) 100%);
 
     /* Shadows */
@@ -129,5 +133,52 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Custom Markdown Styling */
+@layer components {
+  .markdown-content {
+    @apply text-foreground;
+  }
+  
+  .markdown-content h1,
+  .markdown-content h2,
+  .markdown-content h3,
+  .markdown-content h4,
+  .markdown-content h5,
+  .markdown-content h6 {
+    @apply text-foreground font-semibold;
+  }
+  
+  .markdown-content code {
+    @apply bg-muted text-foreground;
+  }
+  
+  .markdown-content pre {
+    @apply bg-muted border border-border;
+  }
+  
+  .markdown-content blockquote {
+    @apply border-l-primary text-muted-foreground;
+  }
+  
+  .markdown-content table {
+    @apply border-border;
+  }
+  
+  .markdown-content th,
+  .markdown-content td {
+    @apply border-border;
+  }
+  
+  .markdown-content th {
+    @apply bg-muted;
   }
 }

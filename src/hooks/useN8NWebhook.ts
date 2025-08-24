@@ -1,139 +1,116 @@
-import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
+import { useState, useCallback } from 'react';
+import { toast } from 'sonner';
+import { apiService, ApiError } from '../services/api';
 
 interface WebhookResponse {
   success: boolean;
   data?: any;
   error?: string;
+  session_name_update?: string;
 }
 
 interface N8NWebhookConfig {
   webhookUrl: string;
   sessionId: string;
+  onSessionNameUpdate?: (sessionId: string, sessionName: string) => void;
 }
 
 export const useN8NWebhook = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
+  const [error, setError] = useState<string | null>(null);
 
-  const sendToN8N = async (
-    config: N8NWebhookConfig,
-    message: string,
-    messageHistory: any[] = []
-  ): Promise<WebhookResponse> => {
-    if (!config.webhookUrl) {
-      toast({
-        title: "Configuration Error",
-        description: "N8N webhook URL is not configured",
-        variant: "destructive",
-      });
-      return { success: false, error: "Webhook URL not configured" };
-    }
-
+  const sendToN8N = useCallback(async (payload: {
+    event_type: string;
+    session_id: string;
+    message_id?: string;
+    message?: {
+      content: string;
+      role: string;
+      timestamp: string;
+    };
+    context?: {
+      session_history: Array<{
+        content: string;
+        role: string;
+        timestamp: string;
+      }>;
+      session_name?: string;
+    };
+  }): Promise<{
+    success: boolean;
+    response?: any;
+    session_name_update?: string;
+    ai_message?: {
+      content: string;
+      role: string;
+    };
+  }> => {
     setIsLoading(true);
-    
+    setError(null);
+
     try {
-      const payload = {
-        sessionId: config.sessionId,
-        message: message,
-        timestamp: new Date().toISOString(),
-        messageHistory: messageHistory,
-        context: {
-          userAgent: navigator.userAgent,
-          url: window.location.href,
-          conversationLength: messageHistory.length
-        }
+      console.log('Sending to N8N via API:', payload);
+      
+      const result = await apiService.sendToN8N(payload);
+      
+      console.log('N8N Response via API:', result);
+      
+      return result;
+    } catch (err) {
+      const errorMessage = err instanceof ApiError ? err.message : 'Unknown error occurred';
+      console.error('N8N webhook error:', errorMessage);
+      setError(errorMessage);
+      
+      return {
+        success: false,
+        response: { error: errorMessage }
       };
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
-      console.log("Sending to N8N webhook:", config.webhookUrl);
-      console.log("Payload:", payload);
+  const testWebhook = useCallback(async (webhookUrl: string): Promise<{
+    success: boolean;
+    response?: any;
+    error?: string;
+  }> => {
+    setIsLoading(true);
+    setError(null);
 
-      const response = await fetch(config.webhookUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    try {
+      console.log('Testing webhook via API:', webhookUrl);
+      
+      const result = await apiService.testWebhook(webhookUrl);
+      
+      console.log('Webhook test response via API:', result);
+      
+      if (result.success) {
+        toast.success('Webhook connection successful!');
+      } else {
+        toast.error(`Webhook test failed: ${result.error}`);
       }
-
-      const data = await response.json();
       
-      toast({
-        title: "Message Sent",
-        description: "Your message has been processed successfully",
-      });
-
-      return { success: true, data };
+      return result;
+    } catch (err) {
+      const errorMessage = err instanceof ApiError ? err.message : 'Unknown error occurred';
+      console.error('Webhook test error:', errorMessage);
+      setError(errorMessage);
+      toast.error(`Webhook test failed: ${errorMessage}`);
       
-    } catch (error) {
-      console.error("Error sending to N8N webhook:", error);
-      
-      const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-      
-      toast({
-        title: "Connection Error",
-        description: `Failed to send message: ${errorMessage}`,
-        variant: "destructive",
-      });
-
-      return { success: false, error: errorMessage };
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const testWebhook = async (webhookUrl: string): Promise<boolean> => {
-    setIsLoading(true);
-    
-    try {
-      const testPayload = {
-        test: true,
-        timestamp: new Date().toISOString(),
-        message: "Connection test from AI Chatbot"
+      return {
+        success: false,
+        error: errorMessage
       };
-
-      const response = await fetch(webhookUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(testPayload),
-      });
-
-      const success = response.ok;
-      
-      toast({
-        title: success ? "Connection Successful" : "Connection Failed",
-        description: success 
-          ? "N8N webhook is working correctly" 
-          : `Failed to connect: ${response.status} ${response.statusText}`,
-        variant: success ? "default" : "destructive",
-      });
-
-      return success;
-      
-    } catch (error) {
-      console.error("Webhook test failed:", error);
-      
-      toast({
-        title: "Test Failed",
-        description: "Could not reach the N8N webhook endpoint",
-        variant: "destructive",
-      });
-      
-      return false;
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   return {
     sendToN8N,
     testWebhook,
-    isLoading
+    isLoading,
+    error
   };
 };

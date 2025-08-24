@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  # Backend API (Development with hot reload)
+  backend-dev:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: persona-ai-backend-dev
+    env_file:
+      - ./backend/.env
+    environment:
+      - NODE_ENV=development
+      - FRONTEND_URL=http://localhost:5173
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./backend/src:/app/src:ro
+      - ./backend/package.json:/app/package.json:ro
+    networks:
+      - persona-network-dev
+    restart: unless-stopped
+    command: npm run dev
+
+networks:
+  persona-network-dev:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16

@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 interface ChatSession {
   id: string;
   title: string;
+  session_name?: string;
   timestamp: string;
   isActive?: boolean;
 }
@@ -21,9 +22,10 @@ interface ChatSidebarProps {
 const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, activeSessionId }: ChatSidebarProps) => {
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredSessions = sessions.filter(session =>
-    session.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredSessions = sessions.filter(session => {
+    const displayName = session.session_name || session.title;
+    return displayName.toLowerCase().includes(searchQuery.toLowerCase());
+  });
 
   return (
     <div className="w-80 bg-chat-sidebar border-r border-border flex flex-col h-full">
@@ -82,7 +84,7 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, activeSessionId }: 
                 <div className="flex items-center justify-between">
                   <div className="flex-1 min-w-0">
                     <h4 className="text-sm font-medium text-foreground truncate">
-                      {session.title}
+                      {session.session_name || session.title}
                     </h4>
                     <p className="text-xs text-muted-foreground mt-1">
                       {session.timestamp}

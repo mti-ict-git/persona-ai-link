@@ -1,0 +1,30 @@
+# Development Dockerfile for backend with hot reload
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install all dependencies (including dev dependencies)
+RUN npm ci
+
+# Copy source code
+COPY src/ ./src/
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S backend -u 1001
+
+# Change ownership
+RUN chown -R backend:nodejs /app
+
+# Switch to non-root user
+USER backend
+
+# Expose port
+EXPOSE 3001
+
+# Start with nodemon for hot reload
+CMD ["npm", "run", "dev"]

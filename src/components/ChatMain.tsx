@@ -4,6 +4,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Send, Paperclip, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface Message {
   id: string;
@@ -146,7 +148,41 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, sessionId }: Cha
                   ? "bg-chat-message-user text-chat-message-user-foreground"
                   : "bg-chat-message-assistant text-chat-message-assistant-foreground border border-border"
               )}>
-                <p className="whitespace-pre-wrap">{message.content}</p>
+                {message.role === "assistant" ? (
+                  <div className="markdown-content">
+                    <ReactMarkdown 
+                      remarkPlugins={[remarkGfm]}
+                      components={{
+                        // Customize markdown components for better styling
+                        p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+                        h1: ({ children }) => <h1 className="text-lg font-bold mb-2">{children}</h1>,
+                        h2: ({ children }) => <h2 className="text-base font-bold mb-2">{children}</h2>,
+                        h3: ({ children }) => <h3 className="text-sm font-bold mb-1">{children}</h3>,
+                        ul: ({ children }) => <ul className="list-disc list-inside mb-2">{children}</ul>,
+                        ol: ({ children }) => <ol className="list-decimal list-inside mb-2">{children}</ol>,
+                        li: ({ children }) => <li className="mb-1">{children}</li>,
+                        code: ({ children, className }) => {
+                          const isInline = !className;
+                          return isInline ? (
+                            <code className="bg-muted px-1 py-0.5 rounded text-sm font-mono">{children}</code>
+                          ) : (
+                            <code className="block bg-muted p-2 rounded text-sm font-mono overflow-x-auto">{children}</code>
+                          );
+                        },
+                        pre: ({ children }) => <pre className="bg-muted p-3 rounded-lg overflow-x-auto mb-2">{children}</pre>,
+                        blockquote: ({ children }) => <blockquote className="border-l-4 border-primary pl-4 italic mb-2">{children}</blockquote>,
+                        a: ({ children, href }) => <a href={href} className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">{children}</a>,
+                        table: ({ children }) => <table className="border-collapse border border-border mb-2">{children}</table>,
+                        th: ({ children }) => <th className="border border-border px-2 py-1 bg-muted font-semibold">{children}</th>,
+                        td: ({ children }) => <td className="border border-border px-2 py-1">{children}</td>,
+                      }}
+                    >
+                      {message.content}
+                    </ReactMarkdown>
+                  </div>
+                ) : (
+                  <p className="whitespace-pre-wrap">{message.content}</p>
+                )}
                 <p className="text-xs opacity-70 mt-2">{message.timestamp}</p>
               </div>
             </div>

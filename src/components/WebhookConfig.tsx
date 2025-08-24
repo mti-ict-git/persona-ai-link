@@ -19,7 +19,7 @@ const WebhookConfig = ({
   isConfigOpen, 
   onConfigToggle 
 }: WebhookConfigProps) => {
-  const [testResult, setTestResult] = useState<boolean | null>(null);
+  const [testResult, setTestResult] = useState<{ success: boolean; error?: string } | null>(null);
   const { testWebhook, isLoading } = useN8NWebhook();
 
   const handleTest = async () => {
@@ -27,7 +27,7 @@ const WebhookConfig = ({
     
     setTestResult(null);
     const result = await testWebhook(webhookUrl);
-    setTestResult(result);
+    setTestResult({ success: result.success, error: result.error });
   };
 
   if (!isConfigOpen) {
@@ -82,9 +82,9 @@ const WebhookConfig = ({
             
             {testResult !== null && (
               <div className={`p-2 rounded-md ${
-                testResult ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+                testResult.success ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
               }`}>
-                {testResult ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
+                {testResult.success ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
               </div>
             )}
           </div>
