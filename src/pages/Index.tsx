@@ -5,7 +5,7 @@ import SuggestionsPanel from "@/components/SuggestionsPanel";
 import WebhookConfig from "@/components/WebhookConfig";
 import { useSessionManager } from "@/hooks/useSessionManager";
 import { apiService } from "@/services/api";
-import { Message as DBMessage } from "@/utils/database";
+import { Message as DatabaseMessage } from "@/utils/database";
 
 interface Message {
   id: string;
@@ -122,7 +122,11 @@ const Index = () => {
 
     try {
       // Add user message to database
-      await addMessage(activeSessionId, content, "user");
+      await addMessage(activeSessionId, {
+        content,
+        role: "user",
+        message_order: Date.now()
+      });
       
       // Add to UI immediately
       const userMessage: Message = {
@@ -162,7 +166,12 @@ const Index = () => {
         const aiContent = response?.ai_message?.content || "I've processed your message successfully.";
 
         // Add AI response to database
-        await addMessage(activeSessionId, aiContent, "assistant", response?.metadata);
+        await addMessage(activeSessionId, {
+          content: aiContent,
+          role: "assistant",
+          message_order: Date.now() + 1,
+          metadata: response?.metadata
+        });
         
         // Add to UI immediately
         const assistantMessage: Message = {
@@ -181,7 +190,11 @@ const Index = () => {
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         };
 
-        await addMessage(activeSessionId, assistantMessage.content, "assistant");
+        await addMessage(activeSessionId, {
+          content: assistantMessage.content,
+          role: "assistant",
+          message_order: Date.now() + 1
+        });
         setCurrentMessages(prev => [...prev, assistantMessage]);
       }
     } catch (error) {

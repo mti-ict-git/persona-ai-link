@@ -120,6 +120,7 @@ class ApiService {
       content: string;
       role: string;
     };
+    metadata?: any;
   }> {
     return this.request('/webhooks/send-to-n8n', {
       method: 'POST',

@@ -20,7 +20,7 @@ interface UseSessionManagerReturn {
   activeSessionId: string | null;
   isLoading: boolean;
   error: string | null;
-  createNewSession: () => Promise<string>;
+  createNewSession: (initialMessage?: string) => Promise<string>;
   selectSession: (sessionId: string) => void;
   updateSessionName: (sessionId: string, sessionName: string) => Promise<void>;
   addMessage: (sessionId: string, message: Omit<Message, 'id' | 'session_id' | 'created_at'>) => Promise<Message>;
@@ -30,7 +30,7 @@ interface UseSessionManagerReturn {
 }
 
 export function useSessionManager(): UseSessionManagerReturn {
-  const [sessions, setSessions] = useState<DBSession[]>([]);
+  const [sessions, setSessions] = useState<Session[]>([]);
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -62,7 +62,7 @@ export function useSessionManager(): UseSessionManagerReturn {
   }, []);
 
   // Create new session with N8N integration
-  const createNewSession = useCallback(async (): Promise<string> => {
+  const createNewSession = useCallback(async (initialMessage?: string): Promise<string> => {
     try {
       setIsLoading(true);
       setError(null);
@@ -71,6 +71,15 @@ export function useSessionManager(): UseSessionManagerReturn {
       
       setSessions(prev => [newSession, ...prev]);
       setActiveSessionId(newSession.id);
+      
+      // Add initial message if provided
+      if (initialMessage) {
+        await addMessage(newSession.id, {
+          content: initialMessage,
+          role: 'user',
+          message_order: 1
+        });
+      }
       
       // Initialize session with N8N
       try {
@@ -85,8 +94,8 @@ export function useSessionManager(): UseSessionManagerReturn {
         if (response?.ai_message) {
           await addMessage(newSession.id, {
             content: response.ai_message.content,
-            role: response.ai_message.role,
-            message_type: 'text'
+            role: response.ai_message.role as 'user' | 'assistant',
+            message_order: Date.now()
           });
         }
         
@@ -135,8 +144,8 @@ export function useSessionManager(): UseSessionManagerReturn {
   // Add message to session
   const addMessage = useCallback(async (
     sessionId: string, 
-    message: Omit<DBMessage, 'id' | 'session_id' | 'created_at'>
-  ): Promise<DBMessage> => {
+    message: Omit<Message, 'id' | 'session_id' | 'created_at'>
+  ): Promise<Message> => {
     try {
       const newMessage = await apiService.addMessage(sessionId, message);
       
@@ -158,7 +167,7 @@ export function useSessionManager(): UseSessionManagerReturn {
   }, []);
 
   // Get session messages
-  const getSessionMessages = useCallback(async (sessionId: string): Promise<DBMessage[]> => {
+  const getSessionMessages = useCallback(async (sessionId: string): Promise<Message[]> => {
     try {
       return await apiService.getMessages(sessionId);
     } catch (err) {
