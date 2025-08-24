@@ -40,13 +40,15 @@ class ApiService {
 
   // Session Management
   async getSessions(): Promise<Session[]> {
-    return this.request<Session[]>('/sessions');
+    const response = await this.request<{success: boolean, data: Session[], count: number}>('/sessions');
+    return response.data;
   }
 
   async createSession(): Promise<Session> {
-    return this.request<Session>('/sessions', {
+    const response = await this.request<{success: boolean, data: Session}>('/sessions', {
       method: 'POST',
     });
+    return response.data;
   }
 
   async getSession(sessionId: string): Promise<Session> {
@@ -68,7 +70,8 @@ class ApiService {
 
   // Message Management
   async getMessages(sessionId: string): Promise<Message[]> {
-    return this.request<Message[]>(`/messages/session/${sessionId}`);
+    const response = await this.request<{success: boolean, data: Message[], count: number, session_id: string}>(`/messages/session/${sessionId}`);
+    return response.data;
   }
 
   async addMessage(sessionId: string, message: Omit<Message, 'id' | 'session_id' | 'created_at'>): Promise<Message> {

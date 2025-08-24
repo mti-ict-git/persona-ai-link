@@ -32,6 +32,7 @@ CREATE INDEX IX_sessions_status ON sessions(status);
 CREATE INDEX IX_messages_session_id ON messages(session_id);
 CREATE INDEX IX_messages_created_at ON messages(created_at);
 CREATE INDEX IX_messages_order ON messages(session_id, message_order);
+GO
 
 -- Trigger to update updated_at timestamp
 CREATE TRIGGER tr_sessions_updated_at
