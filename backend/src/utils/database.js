@@ -209,11 +209,21 @@ class MessageManager {
     this.db = dbManager;
   }
 
-  async addMessage(sessionId, content, role, messageOrder, metadata = null) {
+  async addMessage(sessionId, content, role, metadata = null) {
     try {
       const pool = await this.db.getConnection();
       const messageId = uuidv4();
       const now = new Date();
+
+      // Get the next message order for this session
+      const orderRequest = pool.request();
+      orderRequest.input('sessionId', sql.UniqueIdentifier, sessionId);
+      const orderResult = await orderRequest.query(`
+        SELECT ISNULL(MAX(message_order), 0) + 1 as next_order 
+        FROM messages 
+        WHERE session_id = @sessionId
+      `);
+      const messageOrder = orderResult.recordset[0].next_order;
 
       const request = pool.request();
       request.input('id', sql.UniqueIdentifier, messageId);

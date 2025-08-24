@@ -12,7 +12,7 @@ When a new chat session is created, the frontend sends this payload to N8N:
 ```json
 {
   "event_type": "session_created",
-  "session_id": "uuid-v4-string",
+  "sessionId": "uuid-v4-string",
   "timestamp": "2024-01-15T10:30:00.000Z",
   "user_context": {
     "user_agent": "Mozilla/5.0...",
@@ -32,19 +32,16 @@ When a new chat session is created, the frontend sends this payload to N8N:
 N8N should respond with this JSON structure:
 
 ```json
-{
-  "success": true,
-  "session_id": "uuid-v4-string",
-  "session_name": "AI Assistant: Data Analysis Help",
-  "message": "Hello! I'm your AI assistant. I can see you need help with data analysis. How can I assist you today?",
-  "metadata": {
-    "workflow_id": "n8n-workflow-123",
-    "execution_id": "exec-456",
-    "processing_time_ms": 250,
-    "ai_model": "gpt-4",
-    "session_type": "general_assistance"
+[
+  {
+    "output": {
+      "success": true,
+      "sessionId": "uuid-v4-string",
+      "session_name": "AI Assistant: Data Analysis Help",
+      "message": "Hello! I'm your AI assistant. I can see you need help with data analysis. How can I assist you today?"
+    }
   }
-}
+]
 ```
 
 ## Chat Message Webhook
@@ -56,7 +53,7 @@ For ongoing chat messages:
 ```json
 {
   "event_type": "chat_message",
-  "session_id": "uuid-v4-string",
+  "sessionId": "uuid-v4-string",
   "message_id": "msg-uuid-v4-string",
   "timestamp": "2024-01-15T10:35:00.000Z",
   "message": {
@@ -85,21 +82,17 @@ For ongoing chat messages:
 ### Response Format (N8N → Frontend)
 
 ```json
-{
-  "success": true,
-  "session_id": "uuid-v4-string",
-  "message_id": "msg-uuid-v4-string",
-  "message": "I'd be happy to help you analyze your data! Please share the dataset or describe what specific analysis you need.",
-  "session_name_update": "Data Analysis: Customer Insights",
-  "metadata": {
-    "workflow_id": "n8n-workflow-123",
-    "execution_id": "exec-789",
-    "processing_time_ms": 180,
-    "ai_model": "gpt-4",
-    "confidence_score": 0.95,
-    "suggested_actions": ["upload_file", "describe_data"]
+[
+  {
+    "output": {
+      "success": true,
+      "sessionId": "uuid-v4-string",
+      "message_id": "msg-uuid-v4-string",
+      "message": "I'd be happy to help you analyze your data! Please share the dataset or describe what specific analysis you need.",
+      "session_name_update": "Data Analysis: Customer Insights"
+    }
   }
-}
+]
 ```
 
 ## Error Response Format
@@ -107,28 +100,27 @@ For ongoing chat messages:
 When N8N encounters an error:
 
 ```json
-{
-  "success": false,
-  "error": {
-    "code": "PROCESSING_ERROR",
-    "message": "Unable to process the request due to AI service timeout",
-    "details": "The AI model took longer than 30 seconds to respond"
-  },
-  "session_id": "uuid-v4-string",
-  "fallback_message": "I'm experiencing some technical difficulties. Please try again in a moment.",
-  "metadata": {
-    "workflow_id": "n8n-workflow-123",
-    "execution_id": "exec-error-456",
-    "error_timestamp": "2024-01-15T10:35:30.000Z"
+[
+  {
+    "output": {
+      "success": false,
+      "error": {
+        "code": "PROCESSING_ERROR",
+        "message": "Unable to process the request due to AI service timeout",
+        "details": "The AI model took longer than 30 seconds to respond"
+      },
+      "sessionId": "uuid-v4-string",
+      "fallback_message": "I'm experiencing some technical difficulties. Please try again in a moment."
+    }
   }
-}
+]
 ```
 
 ## Field Descriptions
 
 ### Core Fields
 - `success`: Boolean indicating if the request was processed successfully
-- `session_id`: Unique identifier for the chat session
+- `sessionId`: Unique identifier for the chat session
 - `session_name`: Human-readable name for the session (can be updated during conversation)
 - `message`: The AI response message content (supports Markdown)
 - `message_id`: Unique identifier for individual messages

@@ -238,6 +238,49 @@ Implemented a simplified health check endpoint that uses a fixed N8N health chec
   - Optional override URLs for specific endpoints when needed
 - **Enhanced Documentation**: Updated environment example files with clear comments explaining the URL configuration system
 
+## August 24, 2025 2:37:58 PM
+
+### Session Initialization Flow Fixes and N8N Integration
+
+**Completed Session Flow Improvements:**
+
+1. **Fixed Session Initialization Flow:**
+   - Removed automatic N8N initialization during session creation
+   - Sessions are now system-initiated and N8N receives session data only when messages are sent
+   - Eliminated the `/api/webhooks/session-init` endpoint that was causing 404 errors
+   - Removed `initializeSession` method from frontend API service
+
+2. **N8N Integration with Session ID:**
+   - Session ID is properly passed to N8N in the message payload as `session_id`
+   - N8N can access this using `{{ $json.sessionId }}` in workflows
+   - System receives meaningful session names and other data from N8N responses
+   - Implemented proper handling of `session_name_update` from N8N responses
+
+3. **Fallback Mechanism Implementation:**
+   - Added automatic fallback session name generation when N8N doesn't provide one
+   - Uses first 30 characters of user's initial message as session name
+   - Ensures sessions always have meaningful names even without N8N response
+
+4. **Session Flow Summary:**
+   - System creates session internally
+   - User sends first message
+   - Message + session_id sent to N8N webhook
+   - N8N processes and returns session_name + AI response
+   - System updates session with meaningful name from N8N
+   - Fallback generates name from user message if N8N fails
+
+**Files Modified:**
+- `backend/src/routes/webhooks.js` - Removed session-init endpoint
+- `src/services/api.ts` - Removed initializeSession method
+- `src/hooks/useSessionManager.ts` - Removed automatic N8N initialization
+- `src/pages/Index.tsx` - Added fallback session naming mechanism
+
+**Result:**
+- Clean session initialization flow without 404 errors
+- Proper N8N integration with session ID access
+- Robust fallback mechanism for session names
+- System-initiated sessions with passive N8N integration
+
 The system now supports both test and production N8N instances with flexible URL configuration while maintaining backward compatibility.
 
 ## August 24, 2025 2:18:29 PM
@@ -250,3 +293,136 @@ The system now supports both test and production N8N instances with flexible URL
 - **Consistency**: Both backend and frontend environment example files now follow the same base URL pattern
 
 Environment files now properly demonstrate the webhook-test base URL structure that matches the production configuration.
+
+## August 24, 2025 2:23:03 PM
+
+### Fixed N8N URL Construction Bug
+
+- **Root Cause**: URL construction logic was incorrectly using `url.pathname = '/endpoint'` which overwrote the entire path
+- **Impact**: Base URL `https://n8nprod.merdekabattery.com:5679/webhook-test/` became `https://n8nprod.merdekabattery.com:5679/endpoint` (losing `/webhook-test/`)
+- **Fixed Routes**:
+  - `/api/webhooks/session-init` - Now correctly constructs `https://n8nprod.merdekabattery.com:5679/webhook-test/session`
+  - `/api/webhooks/send-to-n8n` - Now correctly constructs `https://n8nprod.merdekabattery.com:5679/webhook-test/chatbot`
+  - `/api/webhooks/test` - Now correctly constructs `https://n8nprod.merdekabattery.com:5679/webhook-test/health`
+- **Solution**: Changed from `url.pathname = '/endpoint'` to `baseUrl + 'endpoint'` with proper slash handling
+- **Result**: Session initialization 404 errors should now be resolved
+
+The backend server has been restarted with the corrected URL construction logic.
+
+## August 24, 2025 2:29:44 PM - Validation Schema and Database Message Order Fix
+
+**Issue**: 400 Bad Request errors persisted after URL fix due to validation schema mismatch and database constraint violation.
+
+**Root Causes**:
+1. **Validation Schema Mismatch**: Backend expected `message` as string and `message_history` array, but frontend sent `message` as object and `session_history` in `context`
+2. **Database Constraint**: `message_order` column required but not provided during message insertion
+
+**Frontend Payload Structure**:
+```json
+{
+  "event_type": "message_sent",
+  "session_id": "uuid",
+  "message": {
+    "content": "text",
+    "role": "user",
+    "timestamp": "ISO string"
+  },
+  "context": {
+    "session_history": [...],
+    "session_name": "name"
+  }
+}
+```
+
+**Solutions**:
+1. **Updated Validation Schema**: Modified `sendToN8NSchema` to match frontend payload structure
+2. **Auto-Calculate Message Order**: Modified `addMessage()` method to automatically calculate `message_order` using `MAX(message_order) + 1`
+
+**Files Modified**:
+- `backend/src/routes/webhooks.js` - Updated validation schema and payload handling
+- `backend/src/utils/database.js` - Added auto-calculation for message_order
+
+**Status**: Fixed - Backend validation now matches frontend payload, database constraints satisfied.
+
+## August 24, 2025
+
+### N8N Integration Bug Fixes
+- **Fixed Frontend Response Parsing**: Corrected the message extraction path in `src/pages/Index.tsx` from `response?.ai_message?.content` to `response?.data?.message` to align with backend response structure
+- **Fixed Session Name Updates**: Updated session name extraction from `response?.session_name_update` to `response?.data?.session_name_update`
+- **Fixed Metadata Extraction**: Corrected metadata path from `response?.metadata` to `response?.data?.raw_response`
+- **Updated TypeScript Interface**: Modified `sendToN8N` response type in `src/services/api.ts` to include `data` property wrapper, resolving TypeScript errors
+- **Verified N8N Response Structure**: Confirmed backend correctly handles both `session_name_update` and `session_name` from N8N with proper fallback logic
+
+### Typing Animation Implementation
+- **Created TypingAnimation Component**: Built `src/components/TypingAnimation.tsx` with animated dots and "AI is typing..." text using Tailwind CSS animations
+- **Integrated Loading State**: Added `isTyping` state to `src/pages/Index.tsx` that activates during N8N API calls
+- **Updated ChatMain Interface**: Modified `src/components/ChatMain.tsx` to accept `isTyping` prop and display typing animation during message processing
+- **Enhanced UX**: Replaced basic loading animation with professional typing indicator that shows when waiting for AI responses
+
+### Session Deletion Feature
+- **Added DELETE Backend Endpoint**: Created `/api/sessions/:sessionId` endpoint with cascade delete for messages
+- **Updated Frontend API Service**: Modified API service to use correct session endpoint for deletion
+- **Implemented Delete UI**: Added delete button with dropdown menu in ChatSidebar using Shadcn UI components
+- **Added Confirmation Dialog**: Implemented AlertDialog component for safe session deletion with user confirmation
+- **Integrated State Management**: Connected session deletion with useSessionManager hook for proper state updates
+- **Enhanced UX**: Added hover effects and destructive styling for delete actions with automatic session switching
+- **Bug Fix - API Endpoint Correction**: Fixed frontend calling incorrect endpoint `/api/webhooks/sessions/{id}` causing 404 errors by updating to correct `/api/sessions/{id}` endpoint
+
+## August 24, 2025 - Session Deletion API Endpoint Fix
+
+**Problem:** Frontend session deletion was failing with 404 errors because it was calling the wrong API endpoint.
+
+**Root Cause:** The `deleteSession` method in `src/services/api.ts` was calling `/webhooks/sessions/${sessionId}` instead of the correct `/sessions/${sessionId}` endpoint.
+
+**Solution:** Updated the API endpoint in the frontend to match the backend route.
+
+**Changes Made:**
+- Fixed `deleteSession` method in `src/services/api.ts` to use `/sessions/${sessionId}` endpoint
+- Verified session deletion now works correctly through the UI
+
+### Result
+✅ Session deletion functionality now works properly  
+✅ Users can successfully delete sessions from the sidebar  
+✅ Proper error handling and confirmation dialogs in place  
+✅ Database cleanup occurs correctly when sessions are deleted
+
+## August 24, 2025 - Hide Configure N8N Button
+
+**Change:** Removed the "Configure N8N" button from the UI since N8N configuration is now handled via environment variables.
+
+**Rationale:** With N8N webhook URL and other settings configured through environment variables, the manual configuration UI is no longer needed and can be simplified.
+
+**Changes Made:**
+- Commented out `WebhookConfig` component import in `src/pages/Index.tsx`
+- Removed `isConfigOpen` state variable (no longer needed)
+- Replaced `WebhookConfig` component rendering with explanatory comment
+- Maintained clean code structure with comments explaining the change
+
+### Files Modified
+- `src/pages/Index.tsx` - Removed WebhookConfig component and related state
+
+### Result
+✅ Simplified UI without unnecessary configuration button  
+✅ N8N configuration handled entirely through environment variables  
+✅ Cleaner user interface focused on core chat functionality  
+✅ Reduced complexity in component state management
+
+## August 24, 2025 - Prompt Suggestions Toggle Feature
+
+**Problem:** Users needed ability to show or hide prompt suggestions panel for better UI control
+
+**Root Cause:** SuggestionsPanel was always visible with no toggle mechanism
+
+**Solution:** Implemented toggle functionality with smooth animations using Shadcn UI patterns
+
+**Changes Made:**
+- Added `showSuggestions` state management in `src/pages/Index.tsx` (default: true)
+- Updated `ChatMainProps` interface in `src/components/ChatMain.tsx` to include toggle props
+- Added toggle button in chat header with PanelRightOpen/PanelRightClose icons
+- Implemented conditional rendering of SuggestionsPanel based on toggle state
+- Added smooth transition animations using TailwindCSS classes (opacity, transform, duration-300)
+- Used responsive design patterns with proper overflow handling
+
+**Result:** Users can now toggle prompt suggestions visibility with smooth animations, improving UI flexibility and user experience
+
+**Status**: All N8N integration issues resolved and typing animation successfully implemented. Users now see a smooth typing indicator while waiting for AI responses, improving the overall chat experience.

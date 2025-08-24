@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import ChatSidebar from "@/components/ChatSidebar";
 import ChatMain from "@/components/ChatMain";
 import SuggestionsPanel from "@/components/SuggestionsPanel";
-import WebhookConfig from "@/components/WebhookConfig";
+// import WebhookConfig from "@/components/WebhookConfig"; // Hidden - N8N configured via env vars
 import { useSessionManager } from "@/hooks/useSessionManager";
 import { apiService } from "@/services/api";
 import { Message as DatabaseMessage } from "@/utils/database";
@@ -25,7 +25,9 @@ interface ChatSession {
 const Index = () => {
   const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [currentMessages, setCurrentMessages] = useState<Message[]>([]);
-  const [isConfigOpen, setIsConfigOpen] = useState(false);
+  // const [isConfigOpen, setIsConfigOpen] = useState(false); // Removed - WebhookConfig hidden
+  const [isTyping, setIsTyping] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(true);
 
   const {
     sessions: dbSessions,
@@ -34,8 +36,10 @@ const Index = () => {
     createNewSession,
     selectSession,
     updateSessionName,
+    renameSession,
     addMessage,
     getSessionMessages,
+    deleteSession,
     isLoading: sessionLoading
   } = useSessionManager();
 
@@ -99,6 +103,7 @@ const Index = () => {
     const currentSession = getCurrentSession();
     if (!currentSession) return;
 
+    setIsTyping(true);
     try {
       // Add user message to database
       await addMessage(activeSessionId, {
@@ -119,7 +124,7 @@ const Index = () => {
       // Send to N8N webhook
       const response = await apiService.sendToN8N({
         event_type: 'message_sent',
-        session_id: activeSessionId,
+        sessionId: activeSessionId,
         message: {
           content,
           role: 'user',
@@ -135,20 +140,26 @@ const Index = () => {
           }
         });
 
-        // Handle session name update from N8N response
-        if (response?.session_name_update) {
-          await handleSessionNameUpdate(activeSessionId, response.session_name_update);
+        // Handle session name update from N8N response or generate fallback
+        if (response?.data?.session_name_update) {
+          await handleSessionNameUpdate(activeSessionId, response.data.session_name_update);
+        } else if (!currentSession?.session_name) {
+          // Fallback: Generate session name from first user message
+          const fallbackName = content.length > 30 
+            ? content.substring(0, 30) + '...' 
+            : content;
+          await handleSessionNameUpdate(activeSessionId, fallbackName);
         }
 
-        // Extract AI response content
-        const aiContent = response?.ai_message?.content || "I've processed your message successfully.";
+        // Extract AI response content from the correct path
+        const aiContent = response?.data?.message || "I've processed your message successfully.";
 
         // Add AI response to database
         await addMessage(activeSessionId, {
           content: aiContent,
           role: "assistant",
           message_order: Date.now() + 1,
-          metadata: response?.metadata
+          metadata: response?.data?.raw_response
         });
         
         // Add to UI immediately
@@ -161,6 +172,8 @@ const Index = () => {
         setCurrentMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
       console.error('Failed to send message:', error);
+    } finally {
+      setIsTyping(false);
     }
   };
 
@@ -180,6 +193,8 @@ const Index = () => {
         sessions={sessions}
         onSessionSelect={selectSession}
         onNewChat={handleCreateNewSession}
+        onDeleteSession={deleteSession}
+        onRenameSession={renameSession}
         activeSessionId={activeSessionId || undefined}
       />
       
@@ -187,17 +202,23 @@ const Index = () => {
         messages={currentMessages}
         onSendMessage={handleSendMessage}
         isLoading={sessionLoading}
+        isTyping={isTyping}
         sessionId={activeSessionId}
+        showSuggestions={showSuggestions}
+        onToggleSuggestions={() => setShowSuggestions(!showSuggestions)}
       />
       
-      <SuggestionsPanel
-        onSuggestionSelect={handleSuggestionSelect}
-      />
+      <div className={`transition-all duration-300 ease-in-out overflow-hidden ${
+        showSuggestions 
+          ? 'opacity-100 max-w-full translate-x-0' 
+          : 'opacity-0 max-w-0 translate-x-full'
+      }`}>
+        <SuggestionsPanel
+          onSuggestionSelect={handleSuggestionSelect}
+        />
+      </div>
 
-      <WebhookConfig
-        isConfigOpen={isConfigOpen}
-        onConfigToggle={() => setIsConfigOpen(!isConfigOpen)}
-      />
+      {/* WebhookConfig hidden - N8N is now configured via environment variables */}
     </div>
   );
 };

@@ -15,7 +15,7 @@ export const useN8NWebhook = () => {
 
   const sendToN8N = useCallback(async (payload: {
     event_type: string;
-    session_id: string;
+    sessionId: string;
     message_id?: string;
     message?: {
       content: string;

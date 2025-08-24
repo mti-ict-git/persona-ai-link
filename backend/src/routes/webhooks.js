@@ -7,19 +7,63 @@ const router = express.Router();
 
 // Validation schemas
 const sendToN8NSchema = Joi.object({
-  session_id: Joi.string().uuid().required(),
-  message: Joi.string().required(),
-  message_history: Joi.array().items(
-    Joi.object({
-      role: Joi.string().valid('user', 'assistant').required(),
-      content: Joi.string().required(),
-      timestamp: Joi.string().optional()
-    })
-  ).optional().default([])
+  event_type: Joi.string().required(),
+  sessionId: Joi.string().uuid().required(),
+  message: Joi.object({
+    content: Joi.string().required(),
+    role: Joi.string().valid('user', 'assistant').required(),
+    timestamp: Joi.string().required()
+  }).required(),
+  context: Joi.object({
+    session_history: Joi.array().items(
+      Joi.object({
+        role: Joi.string().valid('user', 'assistant').required(),
+        content: Joi.string().required(),
+        timestamp: Joi.string().optional()
+      })
+    ).optional().default([]),
+    session_name: Joi.string().optional()
+  }).optional()
 });
 
 const testWebhookSchema = Joi.object({
   webhook_url: Joi.string().uri().required()
+});
+
+// DELETE /api/webhooks/sessions/:sessionId - Delete a session and its messages
+router.delete('/sessions/:sessionId', async (req, res, next) => {
+  try {
+    const { sessionId } = req.params;
+    
+    // Validate sessionId format (UUID)
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(sessionId)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid session ID format'
+      });
+    }
+
+    // Check if session exists
+    const session = await sessionManager.getSession(sessionId);
+    if (!session) {
+      return res.status(404).json({
+        success: false,
+        error: 'Session not found'
+      });
+    }
+
+    // Delete the session
+    await sessionManager.deleteSession(sessionId);
+    
+    res.json({
+      success: true,
+      message: 'Session deleted successfully'
+    });
+  } catch (error) {
+    console.error('Error deleting session:', error);
+    next(error);
+  }
 });
 
 // POST /api/webhooks/send-to-n8n - Send message to N8N webhook
@@ -34,18 +78,19 @@ router.post('/send-to-n8n', async (req, res, next) => {
       });
     }
 
-    const { session_id, message, message_history } = value;
+    const { event_type, sessionId, message, context } = value;
+    const session_history = context?.session_history || [];
 
     // Get N8N chat webhook URL with priority order:
     // 1. Specific chat URL
-    // 2. Primary webhook URL + /chatbot path
+    // 2. Primary webhook URL + chatbot path
     let webhookUrl = process.env.N8N_CHAT_URL;
     
     if (!webhookUrl && process.env.N8N_WEBHOOK_URL) {
       try {
-        const url = new URL(process.env.N8N_WEBHOOK_URL);
-        url.pathname = '/chatbot';
-        webhookUrl = url.toString();
+        // Append 'chatbot' to the base URL path
+        const baseUrl = process.env.N8N_WEBHOOK_URL;
+        webhookUrl = baseUrl.endsWith('/') ? baseUrl + 'chatbot' : baseUrl + '/chatbot';
       } catch (urlError) {
         return res.status(400).json({
           success: false,
@@ -63,16 +108,10 @@ router.post('/send-to-n8n', async (req, res, next) => {
       });
     }
     
-    if (!webhookUrl) {
-      return res.status(400).json({
-        success: false,
-        error: 'N8N webhook URL not configured',
-        message: 'Please set N8N_CHAT_URL or N8N_WEBHOOK_URL environment variable'
-      });
-    }
+    console.log('Send to N8N: Using webhook URL:', webhookUrl);
 
     // Check if session exists
-    const session = await sessionManager.getSession(session_id);
+    const session = await sessionManager.getSession(sessionId);
     if (!session) {
       return res.status(404).json({
         success: false,
@@ -82,22 +121,22 @@ router.post('/send-to-n8n', async (req, res, next) => {
 
     // Prepare payload for N8N
     const payload = {
-      event_type: 'chat_message',
-      session_id: session_id,
+      event_type: event_type,
+      sessionId: sessionId,
       message_id: require('uuid').v4(),
-      message: {
-        content: message,
-        role: 'user',
-        timestamp: new Date().toISOString()
-      },
+      message: message,
       context: {
-        session_name: session.session_name,
+        session_name: context?.session_name || session.session_name,
         session_title: session.title,
-        message_history: message_history
+        session_history: session_history
       }
     };
+    
+    console.log('Send to N8N: Payload:', JSON.stringify(payload, null, 2));
 
     try {
+      console.log('Sending request to N8N...');
+      
       // Send to N8N webhook
       const response = await axios.post(webhookUrl, payload, {
         timeout: 30000,
@@ -109,6 +148,9 @@ router.post('/send-to-n8n', async (req, res, next) => {
           rejectUnauthorized: false
         })
       });
+      
+      console.log('N8N Response Status:', response.status);
+      console.log('N8N Response Data:', JSON.stringify(response.data, null, 2));
 
       let responseData = response.data;
       let sessionNameUpdate = null;
@@ -124,7 +166,38 @@ router.post('/send-to-n8n', async (req, res, next) => {
         }
       }
 
+      // Handle N8N array response format: [{ output: {...} }]
+      if (Array.isArray(responseData) && responseData.length > 0 && responseData[0].output) {
+        responseData = responseData[0].output;
+      }
+
       if (typeof responseData === 'object' && responseData !== null) {
+        // Check if N8N response indicates success
+        if (responseData.success === false) {
+          // Handle error response from N8N
+          const errorMessage = responseData.fallback_message || 
+                              responseData.error?.message || 
+                              'N8N processing failed';
+          
+          // Add user message to database
+          await messageManager.addMessage(sessionId, message.content, 'user');
+          
+          // Add error response to database
+          await messageManager.addMessage(
+            sessionId, 
+            errorMessage, 
+            'assistant',
+            { n8n_error: responseData.error }
+          );
+          
+          return res.status(500).json({
+            success: false,
+            error: 'N8N processing failed',
+            message: errorMessage,
+            details: responseData.error
+          });
+        }
+        
         // Extract session name update
         sessionNameUpdate = responseData.session_name_update || responseData.session_name;
         
@@ -137,18 +210,18 @@ router.post('/send-to-n8n', async (req, res, next) => {
 
       // Update session name if provided
       if (sessionNameUpdate && sessionNameUpdate !== session.session_name) {
-        await sessionManager.updateSession(session_id, {
+        await sessionManager.updateSession(sessionId, {
           session_name: sessionNameUpdate
         });
       }
 
       // Add user message to database
-      await messageManager.addMessage(session_id, message, 'user');
+      await messageManager.addMessage(sessionId, message.content, 'user');
 
       // Add AI response to database if available
       if (aiMessage) {
         await messageManager.addMessage(
-          session_id, 
+          sessionId, 
           aiMessage, 
           'assistant',
           { n8n_response: responseData }
@@ -166,15 +239,20 @@ router.post('/send-to-n8n', async (req, res, next) => {
       });
 
     } catch (webhookError) {
-      console.error('N8N webhook error:', webhookError.message);
+      console.error('N8N webhook error details:');
+      console.error('- Error message:', webhookError.message);
+      console.error('- Error code:', webhookError.code);
+      console.error('- Response status:', webhookError.response?.status);
+      console.error('- Response data:', webhookError.response?.data);
+      console.error('- Full error:', webhookError);
       
       // Still add user message to database even if webhook fails
-      await messageManager.addMessage(session_id, message, 'user');
+      await messageManager.addMessage(sessionId, message.content, 'user');
       
       // Add error response
       const errorMessage = 'I apologize, but I\'m having trouble connecting to the processing service. Please check your N8N configuration.';
       await messageManager.addMessage(
-        session_id, 
+        sessionId, 
         errorMessage, 
         'assistant',
         { error: webhookError.message }
@@ -200,16 +278,15 @@ router.post('/test', async (req, res, next) => {
   try {
     // Get N8N health check URL with priority order:
     // 1. Specific health URL
-    // 2. Primary webhook URL + /health path
+    // 2. Primary webhook URL + health path
     let healthCheckUrl = process.env.N8N_HEALTH_URL;
     
     if (!healthCheckUrl) {
       const baseUrl = process.env.N8N_WEBHOOK_URL;
       if (baseUrl) {
         try {
-          const url = new URL(baseUrl);
-          url.pathname = '/health';
-          healthCheckUrl = url.toString();
+          // Append 'health' to the base URL path
+          healthCheckUrl = baseUrl.endsWith('/') ? baseUrl + 'health' : baseUrl + '/health';
         } catch (urlError) {
           return res.status(400).json({
             success: false,
@@ -278,148 +355,6 @@ router.post('/test', async (req, res, next) => {
   }
 });
 
-// POST /api/webhooks/session-init - Initialize session with N8N
-router.post('/session-init', async (req, res, next) => {
-  try {
-    const initSchema = Joi.object({
-      session_id: Joi.string().uuid().required(),
-      initial_message: Joi.string().optional()
-    });
 
-    const { error, value } = initSchema.validate(req.body);
-    if (error) {
-      return res.status(400).json({
-        success: false,
-        error: 'Validation Error',
-        details: error.details
-      });
-    }
-
-    const { session_id, initial_message } = value;
-
-    // Check if session exists
-    const session = await sessionManager.getSession(session_id);
-    if (!session) {
-      return res.status(404).json({
-        success: false,
-        error: 'Session not found'
-      });
-    }
-
-    // Get N8N session webhook URL with priority order:
-    // 1. Specific session URL
-    // 2. Primary webhook URL + /session path
-    let webhookUrl = process.env.N8N_SESSION_URL;
-    
-    if (!webhookUrl) {
-      const baseUrl = process.env.N8N_WEBHOOK_URL;
-      if (baseUrl) {
-        try {
-          const url = new URL(baseUrl);
-          url.pathname = '/session';
-          webhookUrl = url.toString();
-        } catch (urlError) {
-          return res.status(400).json({
-            success: false,
-            error: 'Invalid N8N_WEBHOOK_URL format',
-            details: urlError.message
-          });
-        }
-      }
-    }
-    
-    // If no webhook URL configured, return success without webhook call
-    if (!webhookUrl) {
-      return res.json({
-        success: true,
-        data: {
-          session_name: null,
-          initial_message: null,
-          raw_response: null
-        }
-      });
-    }
-
-    // Prepare session initialization payload
-    const payload = {
-      event_type: 'session_created',
-      session_id: session_id,
-      timestamp: new Date().toISOString(),
-      user_context: {
-        user_agent: req.headers['user-agent'] || 'PersonaAI-Link/1.0',
-        ip_address: req.ip || req.connection.remoteAddress || '127.0.0.1',
-        referrer: req.headers.referer || 'direct'
-      },
-      session_data: {
-        initial_message: initial_message || null,
-        language: 'en',
-        platform: 'web'
-      }
-    };
-
-    try {
-      const response = await axios.post(webhookUrl, payload, {
-        timeout: 30000,
-        headers: {
-          'Content-Type': 'application/json',
-          'User-Agent': 'PersonaAI-Link/1.0'
-        },
-        httpsAgent: new (require('https').Agent)({
-          rejectUnauthorized: false
-        })
-      });
-
-      let responseData = response.data;
-      
-      if (typeof responseData === 'string') {
-        try {
-          responseData = JSON.parse(responseData);
-        } catch {
-          responseData = { message: responseData };
-        }
-      }
-
-      // Extract session name from response
-      const sessionName = responseData.session_name || responseData.session_title;
-      if (sessionName) {
-        await sessionManager.updateSession(session_id, {
-          session_name: sessionName
-        });
-      }
-
-      // Extract initial AI message
-      const initialAiMessage = responseData.message || responseData.welcome_message;
-      if (initialAiMessage) {
-        await messageManager.addMessage(
-          session_id,
-          initialAiMessage,
-          'assistant',
-          { session_init: true, n8n_response: responseData }
-        );
-      }
-
-      res.json({
-        success: true,
-        data: {
-          session_name: sessionName,
-          initial_message: initialAiMessage,
-          raw_response: responseData
-        }
-      });
-
-    } catch (webhookError) {
-      console.error('Session init webhook error:', webhookError.message);
-      
-      res.status(400).json({
-        success: false,
-        message: 'Session initialization failed',
-        error: webhookError.message
-      });
-    }
-
-  } catch (error) {
-    next(error);
-  }
-});
 
 module.exports = router;

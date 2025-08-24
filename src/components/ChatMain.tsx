@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Send, Paperclip, RefreshCw } from "lucide-react";
+import { Send, Paperclip, RefreshCw, PanelRightOpen, PanelRightClose } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import TypingAnimation from "@/components/TypingAnimation";
 
 interface Message {
   id: string;
@@ -18,10 +19,13 @@ interface ChatMainProps {
   messages: Message[];
   onSendMessage: (message: string) => void;
   isLoading?: boolean;
+  isTyping?: boolean;
   sessionId?: string;
+  showSuggestions?: boolean;
+  onToggleSuggestions?: () => void;
 }
 
-const ChatMain = ({ messages, onSendMessage, isLoading = false, sessionId }: ChatMainProps) => {
+const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false, sessionId, showSuggestions = true, onToggleSuggestions }: ChatMainProps) => {
   const [inputMessage, setInputMessage] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -101,9 +105,31 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, sessionId }: Cha
             <RefreshCw className="w-5 h-5 text-primary" />
             <h2 className="font-semibold text-lg text-foreground">AI Insight</h2>
           </div>
-          <Button variant="outline" size="sm">
-            Start Tour
-          </Button>
+          <div className="flex items-center gap-2">
+            {onToggleSuggestions && (
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={onToggleSuggestions}
+                className="flex items-center gap-2"
+              >
+                {showSuggestions ? (
+                  <>
+                    <PanelRightClose className="w-4 h-4" />
+                    Hide Suggestions
+                  </>
+                ) : (
+                  <>
+                    <PanelRightOpen className="w-4 h-4" />
+                    Show Suggestions
+                  </>
+                )}
+              </Button>
+            )}
+            <Button variant="outline" size="sm">
+              Start Tour
+            </Button>
+          </div>
         </div>
         
         {/* Search in chat */}
@@ -188,17 +214,13 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, sessionId }: Cha
             </div>
           ))}
           
-          {isLoading && (
+          {(isLoading || isTyping) && (
             <div className="flex gap-4 max-w-4xl mr-auto">
               <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
                 <span className="text-sm font-semibold">AI</span>
               </div>
-              <div className="bg-chat-message-assistant p-4 rounded-2xl border border-border">
-                <div className="flex gap-1">
-                  <div className="w-2 h-2 bg-primary/60 rounded-full animate-pulse"></div>
-                  <div className="w-2 h-2 bg-primary/60 rounded-full animate-pulse" style={{ animationDelay: "0.1s" }}></div>
-                  <div className="w-2 h-2 bg-primary/60 rounded-full animate-pulse" style={{ animationDelay: "0.2s" }}></div>
-                </div>
+              <div className="bg-chat-message-assistant rounded-2xl border border-border">
+                <TypingAnimation />
               </div>
             </div>
           )}

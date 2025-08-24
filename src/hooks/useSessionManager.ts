@@ -23,6 +23,7 @@ interface UseSessionManagerReturn {
   createNewSession: (initialMessage?: string) => Promise<string>;
   selectSession: (sessionId: string) => void;
   updateSessionName: (sessionId: string, sessionName: string) => Promise<void>;
+  renameSession: (sessionId: string, newName: string) => Promise<void>;
   addMessage: (sessionId: string, message: Omit<Message, 'id' | 'session_id' | 'created_at'>) => Promise<Message>;
   getSessionMessages: (sessionId: string) => Promise<Message[]>;
   deleteSession: (sessionId: string) => Promise<void>;
@@ -81,29 +82,8 @@ export function useSessionManager(): UseSessionManagerReturn {
         });
       }
       
-      // Initialize session with N8N
-      try {
-        const response = await apiService.initializeSession(newSession.id);
-        
-        // Handle session name update from N8N response
-        if (response?.session_name_update) {
-          await updateSessionName(newSession.id, response.session_name_update);
-        }
-        
-        // Handle initial AI message from N8N response
-        if (response?.ai_message) {
-          await addMessage(newSession.id, {
-            content: response.ai_message.content,
-            role: response.ai_message.role as 'user' | 'assistant'
-            // message_order will be automatically set by addMessage
-          });
-        }
-        
-        toast.success('Session created and connected to AI assistant');
-      } catch (webhookError) {
-        console.warn('N8N webhook failed during session creation:', webhookError);
-        toast.warning('Session created but AI assistant connection failed');
-      }
+      // Session created successfully - N8N integration will happen when messages are sent
+      toast.success('New session created');
       
       return newSession.id;
     } catch (err) {
@@ -227,6 +207,7 @@ export function useSessionManager(): UseSessionManagerReturn {
     createNewSession,
     selectSession,
     updateSessionName,
+    renameSession: updateSessionName, // Alias for better naming consistency
     addMessage,
     getSessionMessages,
     deleteSession,

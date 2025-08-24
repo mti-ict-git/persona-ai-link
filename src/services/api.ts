@@ -103,7 +103,7 @@ class ApiService {
   // Webhook Management
   async sendToN8N(payload: {
     event_type: string;
-    session_id: string;
+    sessionId: string;
     message_id?: string;
     message?: {
       content: string;
@@ -120,6 +120,11 @@ class ApiService {
     };
   }): Promise<{
     success: boolean;
+    data?: {
+      message?: string;
+      session_name_update?: string;
+      raw_response?: any;
+    };
     response?: any;
     session_name_update?: string;
     ai_message?: {
@@ -144,21 +149,7 @@ class ApiService {
     });
   }
 
-  async initializeSession(sessionId: string): Promise<{
-    success: boolean;
-    session_name_update?: string;
-    ai_message?: {
-      content: string;
-      role: string;
-    };
-  }> {
-    const payload = { session_id: sessionId };
-    
-    return this.request('/webhooks/session-init', {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    });
-  }
+
 }
 
 export const apiService = new ApiService();

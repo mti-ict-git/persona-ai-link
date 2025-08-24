@@ -1,7 +1,23 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Plus, MessageCircle, MoreHorizontal, LogOut } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Search, Plus, MessageCircle, MoreHorizontal, LogOut, Trash2, Edit2, Check, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ChatSession {
@@ -16,16 +32,73 @@ interface ChatSidebarProps {
   sessions: ChatSession[];
   onSessionSelect: (sessionId: string) => void;
   onNewChat: () => void;
+  onDeleteSession: (sessionId: string) => void;
+  onRenameSession: (sessionId: string, newName: string) => void;
   activeSessionId?: string;
 }
 
-const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, activeSessionId }: ChatSidebarProps) => {
+const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, onRenameSession, activeSessionId }: ChatSidebarProps) => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [sessionToDelete, setSessionToDelete] = useState<string | null>(null);
+  const [editingSessionId, setEditingSessionId] = useState<string | null>(null);
+  const [editingName, setEditingName] = useState("");
 
   const filteredSessions = sessions.filter(session => {
     const displayName = session.session_name || session.title;
     return displayName.toLowerCase().includes(searchQuery.toLowerCase());
   });
+
+  const handleDeleteSession = () => {
+    if (sessionToDelete) {
+      onDeleteSession(sessionToDelete);
+      setDeleteDialogOpen(false);
+      setSessionToDelete(null);
+    }
+  };
+
+  const handleStartRename = (sessionId: string, currentName: string) => {
+    setEditingSessionId(sessionId);
+    setEditingName(currentName);
+  };
+
+  const handleSaveRename = () => {
+    if (!editingSessionId || !editingName.trim()) {
+      return;
+    }
+
+    const trimmedName = editingName.trim();
+    
+    // Validation: Check length (1-255 characters)
+    if (trimmedName.length < 1 || trimmedName.length > 255) {
+      alert('Session name must be between 1 and 255 characters.');
+      return;
+    }
+
+    // Validation: Check for invalid characters (basic validation)
+    const invalidChars = /[<>:"/\\|?*]/;
+    if (invalidChars.test(trimmedName)) {
+      alert('Session name contains invalid characters. Please avoid: < > : " / \\ | ? *');
+      return;
+    }
+
+    onRenameSession(editingSessionId, trimmedName);
+    setEditingSessionId(null);
+    setEditingName("");
+  };
+
+  const handleCancelRename = () => {
+    setEditingSessionId(null);
+    setEditingName("");
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSaveRename();
+    } else if (e.key === 'Escape') {
+      handleCancelRename();
+    }
+  };
 
   return (
     <div className="w-80 bg-chat-sidebar border-r border-border flex flex-col h-full">
@@ -73,26 +146,89 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, activeSessionId }: 
             </div>
           ) : (
             filteredSessions.map((session) => (
-              <button
+              <div
                 key={session.id}
-                onClick={() => onSessionSelect(session.id)}
                 className={cn(
-                  "w-full p-3 text-left rounded-lg mb-1 group hover:bg-chat-sidebar-hover transition-all duration-200",
+                  "w-full p-3 rounded-lg mb-1 group hover:bg-chat-sidebar-hover transition-all duration-200 relative",
                   activeSessionId === session.id && "bg-chat-sidebar-active border border-primary/20"
                 )}
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex-1 min-w-0">
-                    <h4 className="text-sm font-medium text-foreground truncate">
-                      {session.session_name || session.title}
-                    </h4>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {session.timestamp}
-                    </p>
-                  </div>
-                  <MoreHorizontal className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                  {editingSessionId === session.id ? (
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <Input
+                          value={editingName}
+                          onChange={(e) => setEditingName(e.target.value)}
+                          onKeyDown={handleKeyPress}
+                          className="text-sm h-8 flex-1"
+                          autoFocus
+                        />
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={handleSaveRename}
+                          className="h-8 w-8 p-0 text-green-600 hover:text-green-700"
+                        >
+                          <Check className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={handleCancelRename}
+                          className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
+                        >
+                          <X className="w-4 h-4" />
+                        </Button>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {session.timestamp}
+                      </p>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => onSessionSelect(session.id)}
+                      className="flex-1 min-w-0 text-left"
+                    >
+                      <h4 className="text-sm font-medium text-foreground truncate">
+                        {session.session_name || session.title}
+                      </h4>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {session.timestamp}
+                      </p>
+                    </button>
+                  )}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="opacity-0 group-hover:opacity-100 transition-opacity h-8 w-8 p-0"
+                      >
+                        <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem
+                        onClick={() => handleStartRename(session.id, session.session_name || session.title)}
+                      >
+                        <Edit2 className="w-4 h-4 mr-2" />
+                        Rename
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => {
+                          setSessionToDelete(session.id);
+                          setDeleteDialogOpen(true);
+                        }}
+                        className="text-destructive focus:text-destructive"
+                      >
+                        <Trash2 className="w-4 h-4 mr-2" />
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
-              </button>
+              </div>
             ))
           )}
         </div>
@@ -113,6 +249,32 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, activeSessionId }: 
           </Button>
         </div>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Session</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this chat session? This action cannot be undone and will permanently remove all messages in this conversation.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => {
+              setDeleteDialogOpen(false);
+              setSessionToDelete(null);
+            }}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteSession}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
