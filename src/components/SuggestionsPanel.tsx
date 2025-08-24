@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { RefreshCw, Lightbulb, AlertTriangle, List, Code } from "lucide-react";
+import { RefreshCw, Users, FileText, Gift, Shield, UserCheck, Calendar } from "lucide-react";
 
 interface Suggestion {
   id: string;
@@ -17,31 +17,45 @@ const SuggestionsPanel = ({ onSuggestionSelect }: SuggestionsPanelProps) => {
   const suggestions: Suggestion[] = [
     {
       id: "1",
-      title: "Inspection",
-      description: "Berikan poin inspeksi rutin dari mesin rotary kiln",
-      icon: <Lightbulb className="w-5 h-5" />,
-      prompt: "Can you provide routine inspection points for rotary kiln machines?"
+      title: "Kebijakan Golongan & Jabatan",
+      description: "Berikan informasi tentang struktur golongan dan kebijakan jabatan di perusahaan",
+      icon: <Users className="w-5 h-5" />,
+      prompt: "Can you provide information about employee grade structure and position policies in the company?"
     },
     {
       id: "2", 
-      title: "Troubleshooting",
-      description: "Bagaimana cara troubleshoot alarm yang ada di mesin ball mill",
-      icon: <AlertTriangle className="w-5 h-5" />,
-      prompt: "How to troubleshoot alarms that occur in ball mill machines?"
+      title: "Peraturan Perusahaan",
+      description: "Bagaimana aturan dan regulasi yang berlaku di perusahaan ini",
+      icon: <FileText className="w-5 h-5" />,
+      prompt: "What are the company rules and regulations that apply to all employees?"
     },
     {
       id: "3",
-      title: "Sparepart List",
-      description: "Berikan saya list sparepart dari mesin Ball mill",
-      icon: <List className="w-5 h-5" />,
-      prompt: "Can you provide a spare parts list for ball mill machines?"
+      title: "Employee Benefits",
+      description: "Informasi lengkap mengenai benefit dan tunjangan karyawan",
+      icon: <Gift className="w-5 h-5" />,
+      prompt: "Can you provide complete information about employee benefits and allowances?"
     },
     {
       id: "4",
-      title: "Alarm Code",
-      description: "Ada apa saja jenis alarm tahh",
-      icon: <Code className="w-5 h-5" />,
-      prompt: "What are the different types of alarm codes and their meanings?"
+      title: "IT Policy",
+      description: "Kebijakan penggunaan teknologi informasi dan keamanan data",
+      icon: <Shield className="w-5 h-5" />,
+      prompt: "What are the IT policies regarding technology usage and data security?"
+    },
+    {
+      id: "5",
+      title: "Leave Policy",
+      description: "Aturan cuti dan prosedur pengajuan izin kerja",
+      icon: <Calendar className="w-5 h-5" />,
+      prompt: "What are the leave policies and procedures for requesting time off?"
+    },
+    {
+      id: "6",
+      title: "Performance Review",
+      description: "Sistem evaluasi kinerja dan penilaian karyawan",
+      icon: <UserCheck className="w-5 h-5" />,
+      prompt: "How does the performance review and employee evaluation system work?"
     }
   ];
 
