@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { DBSession, DBMessage } from '../utils/database';
+import { Session, Message } from '../utils/database';
 import { apiService, ApiError } from '../services/api';
 import { useN8NWebhook } from './useN8NWebhook';
 import { toast } from 'sonner';
@@ -15,16 +15,16 @@ interface SessionCreationResponse {
 }
 
 interface UseSessionManagerReturn {
-  sessions: DBSession[];
-  activeSession: DBSession | null;
+  sessions: Session[];
+  activeSession: Session | null;
   activeSessionId: string | null;
   isLoading: boolean;
   error: string | null;
   createNewSession: () => Promise<string>;
   selectSession: (sessionId: string) => void;
   updateSessionName: (sessionId: string, sessionName: string) => Promise<void>;
-  addMessage: (sessionId: string, message: Omit<DBMessage, 'id' | 'session_id' | 'created_at'>) => Promise<DBMessage>;
-  getSessionMessages: (sessionId: string) => Promise<DBMessage[]>;
+  addMessage: (sessionId: string, message: Omit<Message, 'id' | 'session_id' | 'created_at'>) => Promise<Message>;
+  getSessionMessages: (sessionId: string) => Promise<Message[]>;
   deleteSession: (sessionId: string) => Promise<void>;
   refreshSessions: () => Promise<void>;
 }
