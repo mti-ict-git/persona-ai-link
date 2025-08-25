@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Upload, FileText, Trash2, Brain, ArrowLeft, AlertTriangle } from 'lucide-react';
+import { Upload, FileText, Trash2, Brain, ArrowLeft, AlertTriangle, Play, PlayCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
 import {
@@ -222,12 +222,47 @@ const Training = () => {
     setDeleteDialogOpen(false);
   };
 
-  const handleTrainModel = async () => {
-    const processedFiles = files.filter(f => f.processed);
-    if (processedFiles.length === 0) {
+  const handleProcessFile = async (fileId: string) => {
+    try {
+      const response = await fetch(`/api/processing/process/${fileId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        toast({
+          title: "File processed successfully",
+          description: `${data.data.filename} has been processed and analyzed.`,
+        });
+        // Refresh file list
+        fetchFiles();
+      } else {
+        const errorData = await response.json();
+        toast({
+          title: "Processing failed",
+          description: errorData.message || "Failed to process file.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Processing error:', error);
       toast({
-        title: "No processed files",
-        description: "Please wait for files to be processed before training.",
+        title: "Processing failed",
+        description: "Failed to process file. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleBatchProcess = async () => {
+    const unprocessedFiles = files.filter(f => !f.processed);
+    if (unprocessedFiles.length === 0) {
+      toast({
+        title: "No files to process",
+        description: "All files have already been processed.",
         variant: "destructive",
       });
       return;
@@ -235,7 +270,57 @@ const Training = () => {
 
     setIsTraining(true);
     try {
-      // Simulate training process - replace with actual training API call
+      const fileIds = unprocessedFiles.map(f => f.id);
+      const response = await fetch('/api/processing/batch', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ fileIds }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        toast({
+          title: "Batch processing completed",
+          description: data.message,
+        });
+        // Refresh file list
+        fetchFiles();
+      } else {
+        const errorData = await response.json();
+        toast({
+          title: "Batch processing failed",
+          description: errorData.message || "Failed to process files.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Batch processing error:', error);
+      toast({
+        title: "Batch processing failed",
+        description: "Failed to process files. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsTraining(false);
+    }
+  };
+
+  const handleTrainModel = async () => {
+    const processedFiles = files.filter(f => f.processed);
+    if (processedFiles.length === 0) {
+      toast({
+        title: "No processed files",
+        description: "Please process files before training the model.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsTraining(true);
+    try {
+      // TODO: Implement actual training API call
       await new Promise(resolve => setTimeout(resolve, 3000));
       
       toast({
@@ -256,7 +341,12 @@ const Training = () => {
 
   const getFileSize = (metadata: any) => {
     if (metadata?.size) {
-      return `${(metadata.size / 1024 / 1024).toFixed(1)} MB`;
+      const sizeInKB = metadata.size / 1024;
+      if (sizeInKB < 1024) {
+        return `${sizeInKB.toFixed(1)} KB`;
+      } else {
+        return `${(sizeInKB / 1024).toFixed(1)} MB`;
+      }
     }
     return 'Unknown size';
   };
@@ -350,13 +440,38 @@ const Training = () => {
           {/* Files List Section */}
           <Card className="lg:col-span-2 border-primary/20 bg-card/50 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <FileText className="h-5 w-5 text-primary" />
-                Training Files ({files.length})
-              </CardTitle>
-              <CardDescription>
-                Manage your training data files • {processedFilesCount} processed, {files.length - processedFilesCount} pending
-              </CardDescription>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="flex items-center gap-2">
+                    <FileText className="h-5 w-5 text-primary" />
+                    Training Files ({files.length})
+                  </CardTitle>
+                  <CardDescription>
+                    Manage your training data files • {processedFilesCount} processed, {files.length - processedFilesCount} pending
+                  </CardDescription>
+                </div>
+                {files.filter(f => !f.processed).length > 0 && (
+                  <Button
+                    onClick={handleBatchProcess}
+                    disabled={isTraining}
+                    variant="outline"
+                    size="sm"
+                    className="bg-primary/10 hover:bg-primary/20"
+                  >
+                    {isTraining ? (
+                      <>
+                        <Brain className="mr-2 h-4 w-4 animate-spin" />
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <PlayCircle className="mr-2 h-4 w-4" />
+                        Process All ({files.filter(f => !f.processed).length})
+                      </>
+                    )}
+                  </Button>
+                )}
+              </div>
             </CardHeader>
             <CardContent>
               {loading ? (
@@ -377,7 +492,7 @@ const Training = () => {
                       key={file.id}
                       className="flex items-center justify-between p-4 rounded-lg border border-border hover:bg-accent/50 transition-colors"
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-3 flex-1">
                         <div className={`p-2 rounded-md ${
                           file.processed ? 'bg-green-100 dark:bg-green-900' : 'bg-yellow-100 dark:bg-yellow-900'
                         }`}>
@@ -385,7 +500,7 @@ const Training = () => {
                             file.processed ? 'text-green-600 dark:text-green-400' : 'text-yellow-600 dark:text-yellow-400'
                           }`} />
                         </div>
-                        <div>
+                        <div className="flex-1">
                           <div className="flex items-center gap-2">
                             <p className="font-medium text-sm">{file.filename}</p>
                             <span className={`px-2 py-1 rounded-full text-xs font-medium ${
@@ -401,14 +516,27 @@ const Training = () => {
                           </p>
                         </div>
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleDeleteFile(file)}
-                        className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      <div className="flex items-center gap-2">
+                        {!file.processed && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleProcessFile(file.id)}
+                            disabled={isTraining}
+                            className="bg-primary/10 hover:bg-primary/20"
+                          >
+                            <Play className="h-4 w-4" />
+                          </Button>
+                        )}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDeleteFile(file)}
+                          className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </div>
                   ))}
                 </div>

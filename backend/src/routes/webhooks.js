@@ -391,41 +391,34 @@ router.post('/upload', async (req, res) => {
     let file = await processedFilesManager.getFileByName(filename);
     
     if (file) {
-      // Update existing file record
+      // Update existing file record but keep processed = false until actual processing
       const updatedFile = await processedFilesManager.updateProcessedStatus(
         file.id, 
-        true, 
-        { ...file.metadata, ...metadata, upload_success: true, file_path }
+        false, 
+        { ...file.metadata, ...metadata, upload_success: true, file_path, status: 'uploaded' }
       );
       
-      console.log(`File processing completed for: ${filename}`);
+      console.log(`File uploaded successfully: ${filename}`);
       
       return res.json({
         success: true,
         data: updatedFile,
-        message: 'File processing completed successfully'
+        message: 'File uploaded successfully, ready for processing'
       });
     } else {
-      // Create new file record with processed = true
+      // Create new file record with processed = false (default)
       const newFile = await processedFilesManager.createFile(
         filename, 
         file_path, 
-        { ...metadata, upload_success: true }
+        { ...metadata, upload_success: true, status: 'uploaded' }
       );
       
-      // Update to processed = true
-      const processedFile = await processedFilesManager.updateProcessedStatus(
-        newFile.id, 
-        true, 
-        { ...metadata, upload_success: true, file_path }
-      );
-      
-      console.log(`New file processed: ${filename}`);
+      console.log(`New file uploaded: ${filename}`);
       
       return res.json({
         success: true,
-        data: processedFile,
-        message: 'File uploaded and processed successfully'
+        data: newFile,
+        message: 'File uploaded successfully, ready for processing'
       });
     }
 

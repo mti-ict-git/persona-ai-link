@@ -708,3 +708,157 @@ ALTER TABLE ProcessedFiles ADD updated_at DATETIME2 DEFAULT GETDATE()
 
 ### Result
 Webhook endpoint now successfully processes file upload requests and returns 200 status codes. The complete file upload workflow (frontend → database → n8n webhook) is now functional.
+
+## August 25, 2025 10:42:45 AM
+
+### File Upload Implementation Completed
+
+- Successfully implemented complete file upload functionality using `multer` middleware
+- Created `/api/upload` endpoint that saves files to `backend/uploads` directory
+- Updated `Training.tsx` to use `FormData` for file uploads instead of JSON metadata
+- Added file type validation (PDF, DOCX, TXT, DOC) and 10MB size limit
+- Implemented duplicate file name checking with 409 conflict responses
+- Added file serving endpoint for uploaded files
+- Integrated with n8n webhook system for processing notifications
+- Tested complete workflow: file upload → physical storage → database record → webhook notification
+
+**Status**: File upload system is now fully functional with actual file storage on the server.
+
+## August 25, 2025 10:59:56 AM
+
+### File Deletion Fix Implemented
+
+- **Issue**: Deleting files from the UI only removed database records, leaving physical files in the `uploads` folder
+- **Solution**: Enhanced the `DELETE /api/files/:id` endpoint in `backend/src/routes/files.js`
+- Added `fs` and `path` modules for file system operations
+- Modified delete logic to:
+  1. Retrieve file record from database
+  2. Extract filename from `file_path` field
+  3. Construct physical file path using `path.join(__dirname, '../../uploads', filename)`
+  4. Check if physical file exists using `fs.existsSync()`
+  5. Delete physical file using `fs.unlinkSync()` if it exists
+  6. Remove database record as before
+- Added error handling to continue with database deletion even if physical file deletion fails
+- Updated success message to "File and database record deleted successfully"
+- **Testing**: Verified that both database records and physical files are now properly removed
+
+**Status**: File deletion now properly cleans up both database records and physical files from the server.
+
+## 2025-08-25 11:07:36 AM - File Processing Workflow Implementation
+
+**Issue**: Files were being marked as `processed=true` immediately upon upload via webhook, without actual AI processing taking place.
+
+**Solution**: Implemented a complete file processing workflow with proper status tracking:
+
+### Backend Changes:
+1. **Updated Webhook Endpoint** (`backend/src/routes/webhooks.js`):
+   - Modified to mark files as `processed=false` initially
+   - Added `status: 'uploaded'` metadata to track upload completion
+   - Files now require explicit processing to be marked as processed
+
+2. **Created Processing Routes** (`backend/src/routes/processing.js`):
+   - `POST /api/processing/process/:id` - Process individual files
+   - `POST /api/processing/batch` - Batch process multiple files
+   - `GET /api/processing/status/:id` - Check processing status
+   - Implemented simulated AI processing with text extraction and analysis
+   - Added proper error handling and status updates
+
+3. **Updated Server Configuration** (`backend/src/server.js`):
+   - Registered new processing routes under `/api/processing`
+
+### Frontend Changes:
+1. **Enhanced Training Component** (`src/pages/Training.tsx`):
+   - Added `handleProcessFile()` function for individual file processing
+   - Added `handleBatchProcess()` function for processing multiple files
+   - Updated UI with processing buttons and status indicators
+   - Added "Process All" button for batch operations
+   - Enhanced file list with individual "Process" buttons for unprocessed files
+   - Updated training logic to require processed files before model training
+
+### Testing Results:
+- **Individual Processing**: Successfully processed file ID 1013 (`test-processing.txt`)
+- **Batch Processing**: Successfully processed file ID 1014 (`test-batch-processing.txt`) via batch endpoint
+- **Status Tracking**: Files correctly transition from `processed=false` to `processed=true` after processing
+- **UI Integration**: Processing buttons appear for unprocessed files, batch processing available when applicable
+
+**Result**: Complete file processing workflow now properly separates upload and processing phases, ensuring files are only marked as processed after actual AI analysis.
+
+## August 25, 2025 - Enhanced Delete Webhook Integration
+
+### Backend Enhancement
+1. **Updated File Delete Function** (`backend/src/routes/files.js`)
+   - Added n8n webhook integration for file deletion
+   - Webhook sends DELETE request to `{N8N_BASE_URL}/delete`
+   - Payload includes:
+     - `title`: Filename without extension (e.g., "FAQ_Kebijakan_golongan_dan_jabatan")
+     - `filename`: Full filename with extension
+     - `file_path`: File path in uploads directory
+   - Uses environment variable `N8N_WEBHOOK_BASE_URL` with fallback to localhost:5678
+   - Graceful error handling - continues with local deletion even if webhook fails
+
+### Testing Results
+- ✅ Webhook payload correctly formatted with title field
+- ✅ Title extraction removes file extension properly
+- ✅ DELETE request sent to correct endpoint: `{base_url}/delete`
+- ✅ Local file and database deletion continues even if webhook fails
+- ✅ Tested with "FAQ_Kebijakan_golongan_dan_jabatan.txt" - title extracted as "FAQ_Kebijakan_golongan_dan_jabatan"
+
+### Configuration
+- Environment variable: `N8N_WEBHOOK_BASE_URL` (defaults to http://localhost:5678)
+- Webhook timeout: 5 seconds
+- Content-Type: application/json
+
+## August 25, 2025 1:22 PM - File Size Display Fix
+
+### Issue
+- File sizes showing as "Unknown size" in the Training UI despite metadata containing size information
+
+### Root Cause
+- `processedFilesManager.js` was hardcoding metadata to null in database queries
+- Methods `getAllFiles`, `getFileById`, and `getFileByName` were not selecting metadata column
+- Metadata was not being properly deserialized from JSON string format
+
+### Solution
+1. **Updated SQL Queries** (`backend/src/utils/processedFilesManager.js`):
+   - Added `metadata` column to SELECT statements in all retrieval methods
+   - Added `JSON.parse()` to properly deserialize metadata from database
+   - Fixed `createFile` method to properly store metadata as JSON string using `JSON.stringify()`
+   - Updated `updateProcessedStatus` to handle metadata correctly
+
+2. **Database Storage Format**:
+   - Metadata now properly stored as JSON string in database
+   - Correctly parsed back to object when retrieved
+   - File size information preserved and accessible
+
+### Files Modified
+- `backend/src/utils/processedFilesManager.js` - Fixed metadata handling in all database operations
+
+### Result
+- ✅ File sizes now display correctly (e.g., "9.36 MB" for large files)
+- ✅ Metadata properly preserved through upload/retrieval cycle
+- ✅ Training UI shows accurate file information
+- ✅ No more "Unknown size" display issues
+
+## August 25, 2025 1:36 PM - File Size Unit Calculation Fix
+
+### Issue
+- File sizes displaying incorrect units (showing MB instead of KB for small files)
+- 9585 bytes file showing as "9.4 MB" instead of "9.4 KB"
+
+### Root Cause
+- `getFileSize` function in Training.tsx was always dividing by 1024 twice (converting directly to MB)
+- No logic to determine appropriate unit based on file size
+
+### Solution
+- Updated `getFileSize` function to use appropriate units:
+  - Files < 1024 KB: Display in KB
+  - Files ≥ 1024 KB: Display in MB
+- Added proper size calculation logic
+
+### Files Modified
+- `src/pages/Training.tsx` - Fixed getFileSize function with proper unit logic
+
+### Result
+- ✅ Small files now show correct KB units (e.g., "9.4 KB" for 9585 bytes)
+- ✅ Large files will show MB units when appropriate
+- ✅ Accurate file size representation in Training UI

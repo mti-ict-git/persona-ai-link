@@ -1,5 +1,8 @@
 const express = require('express');
 const Joi = require('joi');
+const fs = require('fs');
+const path = require('path');
+const axios = require('axios');
 const { processedFilesManager } = require('../utils/processedFilesManager');
 const router = express.Router();
 
@@ -189,7 +192,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// DELETE /api/files/:id - Delete a file record
+// DELETE /api/files/:id - Delete a file record and physical file
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -203,17 +206,66 @@ router.delete('/:id', async (req, res) => {
       });
     }
 
+    // Delete physical file if it exists
+    if (existingFile.file_path) {
+      try {
+        // Extract filename from file_path (remove /uploads/ prefix)
+        const filename = existingFile.file_path.replace('/uploads/', '');
+        const physicalFilePath = path.join(__dirname, '../../uploads', filename);
+        
+        if (fs.existsSync(physicalFilePath)) {
+          fs.unlinkSync(physicalFilePath);
+          console.log(`Physical file deleted: ${physicalFilePath}`);
+        } else {
+          console.warn(`Physical file not found: ${physicalFilePath}`);
+        }
+      } catch (fileError) {
+        console.error('Error deleting physical file:', fileError);
+        // Continue with database deletion even if physical file deletion fails
+      }
+    }
+
+    // Send webhook to n8n for Supabase record deletion
+    try {
+      const n8nBaseUrl = process.env.N8N_WEBHOOK_BASE_URL || 'http://localhost:5678';
+      const n8nWebhookUrl = `${n8nBaseUrl}/delete`;
+      
+      // Extract title from filename (remove extension)
+      const title = existingFile.filename.replace(/\.[^/.]+$/, '');
+      
+      const webhookPayload = {
+        title: title,
+        filename: existingFile.filename,
+        file_path: existingFile.file_path
+      };
+      
+      console.log('Sending delete webhook to n8n:', webhookPayload);
+      
+      await axios.post(n8nWebhookUrl, webhookPayload, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        timeout: 5000 // 5 second timeout
+      });
+      
+      console.log('Successfully notified n8n about file deletion');
+    } catch (webhookError) {
+      console.error('Error sending delete webhook to n8n:', webhookError.message);
+      // Continue with local deletion even if webhook fails
+    }
+
+    // Delete database record
     const deleted = await processedFilesManager.deleteFile(id);
     
     if (deleted) {
       res.json({
         success: true,
-        message: 'File deleted successfully'
+        message: 'File and database record deleted successfully'
       });
     } else {
       res.status(500).json({
         success: false,
-        error: 'Failed to delete file'
+        error: 'Failed to delete file from database'
       });
     }
   } catch (error) {

@@ -18,11 +18,12 @@ class ProcessedFilesManager {
       request.input('file_path', sql.NVarChar(500), filePath);
       request.input('processed', sql.Bit, false);
       request.input('created_at', sql.DateTime2, now);
+      request.input('metadata', sql.NVarChar(sql.MAX), metadata ? JSON.stringify(metadata) : null);
 
       const result = await request.query(`
-        INSERT INTO ProcessedFiles (FileName, FilePath, ProcessedDate, processed)
+        INSERT INTO ProcessedFiles (FileName, FilePath, metadata, ProcessedDate, processed)
         OUTPUT INSERTED.Id
-        VALUES (@filename, @file_path, @created_at, @processed)
+        VALUES (@filename, @file_path, @metadata, @created_at, @processed)
       `);
 
       const insertedId = result.recordset[0].Id;
@@ -31,6 +32,7 @@ class ProcessedFilesManager {
         id: insertedId,
         filename,
         file_path: filePath,
+        metadata: metadata,
         processed: false,
         created_at: now
       };
@@ -48,14 +50,14 @@ class ProcessedFilesManager {
       request.input('limit', sql.Int, limit);
 
       const result = await request.query(`
-        SELECT TOP(@limit) Id as id, FileName as filename, FilePath as file_path, processed, ProcessedDate as created_at
+        SELECT TOP(@limit) Id as id, FileName as filename, FilePath as file_path, metadata, processed, ProcessedDate as created_at
         FROM ProcessedFiles
         ORDER BY ProcessedDate DESC
       `);
 
       return result.recordset.map(file => ({
         ...file,
-        metadata: null
+        metadata: file.metadata ? JSON.parse(file.metadata) : null
       }));
     } catch (error) {
       console.error('Error getting processed files:', error);
@@ -71,7 +73,7 @@ class ProcessedFilesManager {
       request.input('fileId', sql.Int, fileId);
 
       const result = await request.query(`
-        SELECT Id as id, FileName as filename, FilePath as file_path, processed, ProcessedDate as created_at
+        SELECT Id as id, FileName as filename, FilePath as file_path, metadata, processed, ProcessedDate as created_at
         FROM ProcessedFiles
         WHERE Id = @fileId
       `);
@@ -83,7 +85,7 @@ class ProcessedFilesManager {
       const file = result.recordset[0];
       return {
         ...file,
-        metadata: null
+        metadata: file.metadata ? JSON.parse(file.metadata) : null
       };
     } catch (error) {
       console.error('Error getting processed file by ID:', error);
@@ -99,7 +101,7 @@ class ProcessedFilesManager {
       request.input('filename', sql.NVarChar(255), filename);
 
       const result = await request.query(`
-        SELECT Id as id, FileName as filename, FilePath as file_path, processed, ProcessedDate as created_at
+        SELECT Id as id, FileName as filename, FilePath as file_path, metadata, processed, ProcessedDate as created_at
         FROM ProcessedFiles
         WHERE FileName = @filename
       `);
@@ -111,7 +113,7 @@ class ProcessedFilesManager {
       const file = result.recordset[0];
       return {
         ...file,
-        metadata: null
+        metadata: file.metadata ? JSON.parse(file.metadata) : null
       };
     } catch (error) {
       console.error('Error getting processed file by name:', error);
