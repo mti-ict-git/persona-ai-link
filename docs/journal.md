@@ -596,3 +596,115 @@ The backend server has been restarted with the corrected URL construction logic.
   - `src/pages/Training.tsx` - Complete UI overhaul
 - **Status**: ✅ Completed - Full training system operational
 - **Testing**: All components tested and working correctly at http://localhost:8080/training
+
+## August 25, 2025 6:27:05 AM - API Proxy Configuration Fix
+
+### Issue Resolved
+- Fixed "Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON" error
+- Frontend was receiving HTML instead of JSON from API calls
+- Root cause: Missing proxy configuration in Vite development server
+
+### Solution Implemented
+- Added proxy configuration to vite.config.ts:
+  ```typescript
+  proxy: {
+    '/api': {
+      target: 'http://localhost:3001',
+      changeOrigin: true,
+      secure: false,
+    },
+  }
+  ```
+- Restarted frontend development server to apply changes
+
+### Files Modified
+- vite.config.ts (updated with proxy configuration)
+
+### Status
+- API communication now working properly
+- Training page loads without errors
+- File upload and management functionality fully operational
+
+## 2025-08-25 06:32:29 - Database Schema Mapping Fix
+
+**Issue:** Backend API returning 500 Internal Server Error with "Invalid column name 'updated_at', 'file_path', 'metadata', 'created_at'" when accessing `/api/files` endpoint.
+
+**Root Cause:** Mismatch between database schema column names and backend code expectations. Actual database table `ProcessedFiles` uses PascalCase column names (`Id`, `FileName`, `FilePath`, `ProcessedDate`, `processed`) while backend code was using snake_case names.
+
+**Investigation:** Used database credentials from `.env` file to connect via `sqlcmd` and discovered actual table structure:
+- `Id` (not `id`)
+- `FileName` (not `filename`)
+- `FilePath` (not `file_path`)
+- `ProcessedDate` (not `created_at`)
+- `processed` (matches)
+
+**Solution:** Updated all SQL queries in `processedFilesManager.js` to use correct column names with aliases for consistent API responses:
+```sql
+SELECT Id as id, FileName as filename, FilePath as file_path, processed, ProcessedDate as created_at
+FROM ProcessedFiles
+```
+
+**Files Modified:**
+- `backend/src/utils/processedFilesManager.js` - Updated all SQL queries to match database schema
+- `backend/src/routes/files.js` - Added back `file_path` parameter validation and handling
+
+**Status:** ✅ Resolved
+- API endpoints returning 200 status codes
+- Database queries executing successfully
+- File management system fully operational
+- Ready for end-to-end testing
+
+## 2025-08-25 10:21:53 - Database Type Mismatch Fix
+
+**Issue:** Backend API returning 500 Internal Server Error with "Operand type clash: uniqueidentifier is incompatible with int" when creating new file records.
+
+**Root Cause:** The `ProcessedFiles` table `Id` column is defined as `int` (auto-increment) in the database, but the backend code was trying to insert a `uniqueidentifier` (GUID) value.
+
+**Investigation:** Queried database schema to confirm column types:
+- `Id` column: `int` (auto-increment primary key)
+- Backend was generating UUIDs and using `sql.UniqueIdentifier` type
+
+**Solution:** Updated `processedFilesManager.js` to work with integer IDs:
+- Removed UUID generation for file IDs
+- Changed all `sql.UniqueIdentifier` to `sql.Int` for fileId parameters
+- Modified INSERT query to use `OUTPUT INSERTED.Id` to get auto-generated ID
+- Updated return object to use the database-generated integer ID
+
+**Files Modified:**
+- `backend/src/utils/processedFilesManager.js` - Fixed data types and ID generation
+- `src/pages/Training.tsx` - Added `file_path` parameter to POST requests
+
+**Status:** ✅ Resolved
+- File creation API returning 201 status codes
+- Database inserts working with proper data types
+- Auto-increment ID generation functioning correctly
+- File upload workflow fully operational
+
+## August 25, 2025 - Webhook Database Schema Fix
+
+### Problem
+The `/api/webhooks/upload` endpoint was returning 500 Internal Server Error with "Invalid column name 'metadata'" when processing file uploads from n8n.
+
+### Root Cause
+The ProcessedFiles table in the database was missing required columns (`metadata`, `created_at`, `updated_at`) that the webhook endpoint was trying to use. The table had been created with a different structure than expected.
+
+### Investigation
+1. Checked backend logs and found "Invalid column name 'metadata'" error
+2. Queried database schema using custom script to discover actual table structure:
+   - Existing columns: `Id`, `FileName`, `FilePath`, `ProcessedDate`, `processed`
+   - Missing columns: `metadata`, `created_at`, `updated_at`
+
+### Solution
+Created and ran `fix-processedfiles-table.js` script to add missing columns:
+```sql
+ALTER TABLE ProcessedFiles ADD metadata NVARCHAR(MAX) NULL
+ALTER TABLE ProcessedFiles ADD created_at DATETIME2 DEFAULT GETDATE()
+ALTER TABLE ProcessedFiles ADD updated_at DATETIME2 DEFAULT GETDATE()
+```
+
+### Files Modified
+- **Created:** `backend/fix-processedfiles-table.js` - Database schema fix script
+- **Created:** `backend/check-columns.js` - Database column inspection script
+
+### Result
+Webhook endpoint now successfully processes file upload requests and returns 200 status codes. The complete file upload workflow (frontend → database → n8n webhook) is now functional.

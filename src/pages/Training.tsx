@@ -87,20 +87,14 @@ const Training = () => {
   const uploadFile = async (file: File) => {
     setIsUploading(true);
     try {
-      // Create file record in database
-      const response = await fetch('/api/files', {
+      // Create FormData for file upload
+      const formData = new FormData();
+      formData.append('file', file);
+
+      // Upload file to server with actual file storage
+      const response = await fetch('/api/upload', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          filename: file.name,
-          metadata: {
-            size: file.size,
-            type: file.type,
-            lastModified: file.lastModified
-          }
-        })
+        body: formData // Don't set Content-Type header, let browser set it with boundary
       });
 
       if (response.ok) {
@@ -115,10 +109,12 @@ const Training = () => {
             },
             body: JSON.stringify({
               filename: file.name,
+              file_path: data.data.file_path,
               metadata: {
                 size: file.size,
                 type: file.type,
-                lastModified: file.lastModified
+                lastModified: file.lastModified,
+                storedFilename: data.data.storedFilename
               },
               success: true
             })
@@ -127,7 +123,7 @@ const Training = () => {
           if (webhookResponse.ok) {
             toast({
               title: "File uploaded successfully",
-              description: `${file.name} has been uploaded and is being processed.`,
+              description: `${file.name} has been uploaded and saved to the server.`,
             });
           } else {
             toast({
@@ -149,9 +145,19 @@ const Training = () => {
         await fetchFiles();
       } else {
         const errorData = await response.json();
+        
+        if (response.status === 409) {
+          // File already exists - show duplicate dialog
+          const existingFile = errorData.existingFile;
+          setDuplicateFile(file);
+          setFileToDelete(existingFile);
+          setDeleteDialogOpen(true);
+          return;
+        }
+        
         toast({
           title: "Upload failed",
-          description: errorData.error || "Failed to upload file.",
+          description: errorData.message || errorData.error || "Failed to upload file.",
           variant: "destructive",
         });
       }

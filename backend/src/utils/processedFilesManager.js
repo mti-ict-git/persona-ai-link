@@ -11,31 +11,28 @@ class ProcessedFilesManager {
   async createFile(filename, filePath = null, metadata = null) {
     try {
       const pool = await this.db.getConnection();
-      const fileId = uuidv4();
       const now = new Date();
 
       const request = pool.request();
-      request.input('id', sql.UniqueIdentifier, fileId);
       request.input('filename', sql.NVarChar(255), filename);
       request.input('file_path', sql.NVarChar(500), filePath);
-      request.input('metadata', sql.NVarChar(sql.MAX), metadata ? JSON.stringify(metadata) : null);
       request.input('processed', sql.Bit, false);
       request.input('created_at', sql.DateTime2, now);
-      request.input('updated_at', sql.DateTime2, now);
 
-      await request.query(`
-        INSERT INTO ProcessedFiles (id, filename, file_path, metadata, processed, created_at, updated_at)
-        VALUES (@id, @filename, @file_path, @metadata, @processed, @created_at, @updated_at)
+      const result = await request.query(`
+        INSERT INTO ProcessedFiles (FileName, FilePath, ProcessedDate, processed)
+        OUTPUT INSERTED.Id
+        VALUES (@filename, @file_path, @created_at, @processed)
       `);
 
+      const insertedId = result.recordset[0].Id;
+      
       return {
-        id: fileId,
+        id: insertedId,
         filename,
         file_path: filePath,
-        metadata,
         processed: false,
-        created_at: now,
-        updated_at: now
+        created_at: now
       };
     } catch (error) {
       console.error('Error creating processed file:', error);
@@ -51,14 +48,14 @@ class ProcessedFilesManager {
       request.input('limit', sql.Int, limit);
 
       const result = await request.query(`
-        SELECT TOP(@limit) id, filename, file_path, metadata, processed, created_at, updated_at
+        SELECT TOP(@limit) Id as id, FileName as filename, FilePath as file_path, processed, ProcessedDate as created_at
         FROM ProcessedFiles
-        ORDER BY created_at DESC
+        ORDER BY ProcessedDate DESC
       `);
 
       return result.recordset.map(file => ({
         ...file,
-        metadata: file.metadata ? JSON.parse(file.metadata) : null
+        metadata: null
       }));
     } catch (error) {
       console.error('Error getting processed files:', error);
@@ -71,12 +68,12 @@ class ProcessedFilesManager {
     try {
       const pool = await this.db.getConnection();
       const request = pool.request();
-      request.input('fileId', sql.UniqueIdentifier, fileId);
+      request.input('fileId', sql.Int, fileId);
 
       const result = await request.query(`
-        SELECT id, filename, file_path, metadata, processed, created_at, updated_at
+        SELECT Id as id, FileName as filename, FilePath as file_path, processed, ProcessedDate as created_at
         FROM ProcessedFiles
-        WHERE id = @fileId
+        WHERE Id = @fileId
       `);
 
       if (result.recordset.length === 0) {
@@ -86,7 +83,7 @@ class ProcessedFilesManager {
       const file = result.recordset[0];
       return {
         ...file,
-        metadata: file.metadata ? JSON.parse(file.metadata) : null
+        metadata: null
       };
     } catch (error) {
       console.error('Error getting processed file by ID:', error);
@@ -102,9 +99,9 @@ class ProcessedFilesManager {
       request.input('filename', sql.NVarChar(255), filename);
 
       const result = await request.query(`
-        SELECT id, filename, file_path, metadata, processed, created_at, updated_at
+        SELECT Id as id, FileName as filename, FilePath as file_path, processed, ProcessedDate as created_at
         FROM ProcessedFiles
-        WHERE filename = @filename
+        WHERE FileName = @filename
       `);
 
       if (result.recordset.length === 0) {
@@ -114,7 +111,7 @@ class ProcessedFilesManager {
       const file = result.recordset[0];
       return {
         ...file,
-        metadata: file.metadata ? JSON.parse(file.metadata) : null
+        metadata: null
       };
     } catch (error) {
       console.error('Error getting processed file by name:', error);
@@ -126,16 +123,13 @@ class ProcessedFilesManager {
   async updateProcessedStatus(fileId, processed = true, metadata = null) {
     try {
       const pool = await this.db.getConnection();
-      const now = new Date();
-
       const request = pool.request();
-      request.input('fileId', sql.UniqueIdentifier, fileId);
+      request.input('fileId', sql.Int, fileId);
       request.input('processed', sql.Bit, processed);
-      request.input('updated_at', sql.DateTime2, now);
 
       let query = `
         UPDATE ProcessedFiles 
-        SET processed = @processed, updated_at = @updated_at
+        SET processed = @processed
       `;
 
       if (metadata !== null) {
@@ -143,7 +137,7 @@ class ProcessedFilesManager {
         query += `, metadata = @metadata`;
       }
 
-      query += ` WHERE id = @fileId`;
+      query += ` WHERE Id = @fileId`;
 
       await request.query(query);
 
@@ -159,11 +153,11 @@ class ProcessedFilesManager {
     try {
       const pool = await this.db.getConnection();
       const request = pool.request();
-      request.input('fileId', sql.UniqueIdentifier, fileId);
+      request.input('fileId', sql.Int, fileId);
 
       const result = await request.query(`
         DELETE FROM ProcessedFiles
-        WHERE id = @fileId
+        WHERE Id = @fileId
       `);
 
       return result.rowsAffected[0] > 0;

@@ -9,6 +9,7 @@ const sessionRoutes = require('./routes/sessions');
 const messageRoutes = require('./routes/messages');
 const webhookRoutes = require('./routes/webhooks');
 const filesRoutes = require('./routes/files');
+const uploadRoutes = require('./routes/upload');
 const { router: authRoutes } = require('./routes/auth');
 const { initializeDatabase } = require('./utils/database');
 
@@ -56,6 +57,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/sessions', sessionRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/files', filesRoutes);
+app.use('/api/upload', uploadRoutes);
 app.use('/api/webhooks', webhookRoutes);
 
 // Error handling middleware

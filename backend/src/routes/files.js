@@ -6,7 +6,7 @@ const router = express.Router();
 // Validation schemas
 const createFileSchema = Joi.object({
   filename: Joi.string().min(1).max(255).required(),
-  file_path: Joi.string().max(500).optional().allow(null),
+  file_path: Joi.string().min(1).max(500).required(),
   metadata: Joi.object().optional().allow(null)
 });
 
