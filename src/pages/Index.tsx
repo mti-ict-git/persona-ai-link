@@ -27,7 +27,7 @@ const Index = () => {
   const [currentMessages, setCurrentMessages] = useState<Message[]>([]);
   // const [isConfigOpen, setIsConfigOpen] = useState(false); // Removed - WebhookConfig hidden
   const [isTyping, setIsTyping] = useState(false);
-  const [showSuggestions, setShowSuggestions] = useState(true);
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [showSidebar, setShowSidebar] = useState(true);
 
   const {
@@ -84,7 +84,7 @@ const Index = () => {
   };
 
   const handleCreateNewSession = async (initialMessage?: string) => {
-    await createNewSession(initialMessage);
+    return await createNewSession(initialMessage);
   };
 
   const getCurrentSession = () => {
@@ -96,18 +96,23 @@ const Index = () => {
   };
 
   const handleSendMessage = async (content: string) => {
-    if (!activeSessionId) {
-      await handleCreateNewSession(content);
-      return;
+    let sessionId = activeSessionId;
+    
+    // Create new session if none exists
+    if (!sessionId) {
+      sessionId = await handleCreateNewSession();
     }
 
     const currentSession = getCurrentSession();
-    if (!currentSession) return;
+    if (!currentSession && sessionId !== activeSessionId) {
+      // If we just created a new session, we need to wait for state update
+      // Use the sessionId we just created
+    }
 
     setIsTyping(true);
     try {
       // Add user message to database
-      await addMessage(activeSessionId, {
+      await addMessage(sessionId, {
         content,
         role: "user"
         // message_order will be automatically set by addMessage
@@ -125,7 +130,7 @@ const Index = () => {
       // Send to N8N webhook
       const response = await apiService.sendToN8N({
         event_type: 'message_sent',
-        sessionId: activeSessionId,
+        sessionId: sessionId,
         message: {
           content,
           role: 'user',
@@ -143,20 +148,20 @@ const Index = () => {
 
         // Handle session name update from N8N response or generate fallback
         if (response?.data?.session_name_update) {
-          await handleSessionNameUpdate(activeSessionId, response.data.session_name_update);
+          await handleSessionNameUpdate(sessionId, response.data.session_name_update);
         } else if (!currentSession?.session_name) {
           // Fallback: Generate session name from first user message
           const fallbackName = content.length > 30 
             ? content.substring(0, 30) + '...' 
             : content;
-          await handleSessionNameUpdate(activeSessionId, fallbackName);
+          await handleSessionNameUpdate(sessionId, fallbackName);
         }
 
         // Extract AI response content from the correct path
         const aiContent = response?.data?.message || "I've processed your message successfully.";
 
         // Add AI response to database
-        await addMessage(activeSessionId, {
+        await addMessage(sessionId, {
           content: aiContent,
           role: "assistant",
           message_order: Date.now() + 1,
@@ -179,13 +184,7 @@ const Index = () => {
   };
 
   const handleSuggestionSelect = (prompt: string) => {
-    if (!activeSessionId) {
-      handleCreateNewSession(prompt);
-      // Wait for next render to send message
-      setTimeout(() => handleSendMessage(prompt), 100);
-    } else {
-      handleSendMessage(prompt);
-    }
+    handleSendMessage(prompt);
   };
 
   return (

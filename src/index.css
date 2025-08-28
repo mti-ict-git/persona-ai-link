@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* AI Chatbot Design System - Inspired by Merdeka AI Insight
+/* AI Chatbot Design System - Tsindeka AI
 All colors MUST be HSL.
 */
 
@@ -17,20 +17,20 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 220 26% 14%;
 
-    /* AI Blue Theme Colors */
-    --primary: 217 91% 50%;
+    /* AI Orange Theme Colors */
+    --primary: 24 95% 53%;
     --primary-foreground: 0 0% 100%;
-    --primary-light: 217 91% 65%;
-    --primary-dark: 217 91% 35%;
+    --primary-light: 24 95% 65%;
+    --primary-dark: 24 95% 35%;
 
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 220 26% 14%;
+    --secondary: 33 100% 96%;
+    --secondary-foreground: 24 95% 15%;
 
-    --muted: 210 40% 94%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 33 100% 94%;
+    --muted-foreground: 30 25% 47%;
 
-    --accent: 217 91% 95%;
-    --accent-foreground: 217 91% 35%;
+    --accent: 33 100% 90%;
+    --accent-foreground: 24 95% 15%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
@@ -40,18 +40,20 @@ All colors MUST be HSL.
     --ring: 217 91% 50%;
 
     /* Chat Interface Colors */
-    --chat-sidebar: 210 40% 96%;
-    --chat-sidebar-hover: 210 40% 92%;
-    --chat-sidebar-active: 217 91% 95%;
+    --chat-sidebar: 33 100% 98%;
+    --chat-sidebar-hover: 33 100% 95%;
+    --chat-sidebar-active: 24 95% 95%;
     --chat-main: 0 0% 100%;
     --chat-suggestions: 0 0% 100%;
-    --message-user: 217 91% 50%;
+    --message-user: 24 95% 95%;
     --message-user-foreground: 0 0% 100%;
-    --message-assistant: 0 0% 98%;
+    --message-assistant: 33 100% 97%;
     --message-assistant-foreground: 220 26% 14%;
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(217 91% 50%), hsl(217 91% 65%));
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.8) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(var(--secondary)) 0%, hsl(var(--secondary) / 0.8) 100%);
+    --gradient-chat-bg: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--muted) / 0.3) 100%);
     --gradient-subtle: linear-gradient(180deg, hsl(0 0% 100%), hsl(210 40% 98%));
 
     /* Markdown Content Styling */
@@ -60,7 +62,10 @@ All colors MUST be HSL.
     --gradient-hero: linear-gradient(135deg, hsl(217 91% 50%) 0%, hsl(217 91% 65%) 100%);
 
     /* Shadows */
-    --shadow-elegant: 0 4px 20px -2px hsl(217 91% 50% / 0.1);
+    --shadow-elegant: 0 8px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --shadow-soft: 0 2px 8px 0 rgb(0 0 0 / 0.06), 0 1px 3px -1px rgb(0 0 0 / 0.1);
+    --shadow-message: 0 2px 12px -2px rgb(0 0 0 / 0.08), 0 1px 4px -1px rgb(0 0 0 / 0.06);
+    --shadow-input: 0 4px 16px -4px rgb(0 0 0 / 0.1), 0 2px 6px -2px rgb(0 0 0 / 0.05);
     --shadow-card: 0 2px 8px -2px hsl(220 26% 14% / 0.1);
     --shadow-glow: 0 0 20px hsl(217 91% 50% / 0.3);
 
@@ -97,17 +102,19 @@ All colors MUST be HSL.
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 24 95% 60%;
+    --primary-foreground: 222.2 84% 4.9%;
+    --primary-light: 24 95% 70%;
+    --primary-dark: 24 95% 45%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 30 50% 20%;
+    --secondary-foreground: 33 100% 90%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 30 50% 20%;
+    --muted-foreground: 33 50% 65%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 30 50% 25%;
+    --accent-foreground: 33 100% 90%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
@@ -115,6 +122,19 @@ All colors MUST be HSL.
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+
+    /* Chat Interface Dark Colors */
+    --chat-sidebar: 240 5.9% 10%;
+    --chat-sidebar-hover: 240 3.7% 15.9%;
+    --chat-sidebar-active: 30 50% 25%;
+    --chat-main: 222.2 84% 4.9%;
+    --chat-suggestions: 222.2 84% 4.9%;
+    --message-user: 24 95% 15%;
+    --message-user-foreground: 210 40% 98%;
+    --message-assistant: 240 3.7% 15.9%;
+    --message-assistant-foreground: 210 40% 98%;
+
+    /* Sidebar Colors */
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -123,6 +143,21 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Dark Mode Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.8) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(var(--secondary)) 0%, hsl(var(--secondary) / 0.8) 100%);
+    --gradient-chat-bg: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--muted) / 0.3) 100%);
+    --gradient-subtle: linear-gradient(180deg, hsl(222.2 84% 4.9%), hsl(240 3.7% 15.9%));
+    --gradient-hero: linear-gradient(135deg, hsl(217 91% 40%) 0%, hsl(217 91% 55%) 100%);
+
+    /* Dark Mode Shadows */
+    --shadow-elegant: 0 8px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.2);
+    --shadow-soft: 0 2px 8px 0 rgb(0 0 0 / 0.2), 0 1px 3px -1px rgb(0 0 0 / 0.15);
+    --shadow-message: 0 2px 12px -2px rgb(0 0 0 / 0.25), 0 1px 4px -1px rgb(0 0 0 / 0.15);
+    --shadow-input: 0 4px 16px -4px rgb(0 0 0 / 0.3), 0 2px 6px -2px rgb(0 0 0 / 0.2);
+    --shadow-card: 0 2px 8px -2px rgb(0 0 0 / 0.3);
+    --shadow-glow: 0 0 20px hsl(217 91% 50% / 0.4);
   }
 }
 

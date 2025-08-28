@@ -99,29 +99,69 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
     }
   };
 
+  const suggestions = [
+    {
+      id: "1",
+      title: "Kebijakan Golongan & Jabatan",
+      description: "Berikan informasi tentang struktur golongan dan kebijakan jabatan di perusahaan",
+      prompt: "Can you provide information about employee grade structure and position policies in the company?"
+    },
+    {
+      id: "2", 
+      title: "Peraturan Perusahaan",
+      description: "Bagaimana aturan dan regulasi yang berlaku di perusahaan ini",
+      prompt: "What are the company rules and regulations that apply to all employees?"
+    },
+    {
+      id: "3",
+      title: "Employee Benefits",
+      description: "Informasi lengkap mengenai benefit dan tunjangan karyawan",
+      prompt: "Can you provide complete information about employee benefits and allowances?"
+    },
+    {
+      id: "4",
+      title: "IT Policy",
+      description: "Kebijakan penggunaan teknologi informasi dan keamanan data",
+      prompt: "What are the IT policies regarding technology usage and data security?"
+    }
+  ];
+
   const WelcomeScreen = () => (
     <div className="flex-1 flex flex-col items-center justify-center p-8">
-      <div className="text-center max-w-2xl">
+      <div className="text-center max-w-4xl w-full">
         <h1 className="text-4xl font-bold mb-2">
           Welcome To
         </h1>
         <h2 className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-4">
-          AI Insight
+          Tsindeka AI
         </h2>
-        <p className="text-muted-foreground mb-8">
+        <p className="text-muted-foreground mb-12">
           Get started by scripting a task, and Chat can do the rest. Not sure where to begin?
         </p>
         
-        <div className="bg-card border border-border rounded-xl p-6 shadow-card">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center">
-              <RefreshCw className="w-5 h-5 text-primary-foreground" />
-            </div>
-            <h3 className="font-semibold text-lg">Prompt Suggestion</h3>
-          </div>
-          <p className="text-muted-foreground text-left">
-            Try asking about data analysis, content creation, or technical questions to get started.
-          </p>
+        {/* Suggestion Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
+          {suggestions.map((suggestion) => (
+            <button
+              key={suggestion.id}
+              onClick={() => onSendMessage(suggestion.prompt)}
+              className="p-4 text-left bg-card border border-border rounded-xl hover:shadow-lg hover:border-primary/20 transition-all duration-300 group"
+            >
+              <div className="flex items-start gap-3">
+                <span className="text-sm font-medium bg-primary/10 text-primary px-2 py-1 rounded-md flex-shrink-0">
+                  {suggestion.id}
+                </span>
+                <div className="flex-1 min-w-0">
+                  <h4 className="font-semibold text-foreground group-hover:text-primary transition-colors mb-2">
+                    {suggestion.title}
+                  </h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {suggestion.description}
+                  </p>
+                </div>
+              </div>
+            </button>
+          ))}
         </div>
       </div>
     </div>
@@ -130,103 +170,83 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
   return (
     <div className="flex-1 flex flex-col bg-chat-main">
       {/* Header */}
-      <div className="p-4 border-b border-border bg-gradient-subtle">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            {onToggleSidebar && (
-              <button 
-                onClick={onToggleSidebar}
-                className="p-2 hover:bg-accent rounded-md transition-colors"
-                aria-label={showSidebar ? "Hide Sidebar" : "Show Sidebar"}
-              >
-                <Menu className="w-5 h-5 text-foreground" />
-              </button>
-            )}
-            <RefreshCw className="w-5 h-5 text-primary" />
-            <h2 className="font-semibold text-lg text-foreground">AI Insight</h2>
-          </div>
-          <div className="flex items-center gap-2">
-            {onToggleSuggestions && (
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={onToggleSuggestions}
-                className="flex items-center gap-2"
-              >
-                {showSuggestions ? (
-                  <>
-                    <PanelRightClose className="w-4 h-4" />
-                    Hide Suggestions
-                  </>
-                ) : (
-                  <>
-                    <PanelRightOpen className="w-4 h-4" />
-                    Show Suggestions
-                  </>
-                )}
-              </Button>
-            )}
-            <Button variant="outline" size="sm">
-              Start Tour
+      <div className="flex items-center justify-between p-5 border-b border-border/50 bg-gradient-to-r from-background/95 to-background backdrop-blur-sm">
+        <div className="flex items-center gap-4">
+          {onToggleSidebar && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onToggleSidebar}
+              className="lg:hidden h-9 w-9 rounded-xl hover:bg-muted/80 transition-all duration-200"
+            >
+              {showSidebar ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
             </Button>
-            
-            {/* User Profile Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src="" alt={user?.username || 'User'} />
-                    <AvatarFallback className="bg-primary text-primary-foreground">
-                      {getUserInitials(user)}
-                    </AvatarFallback>
-                  </Avatar>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align="end" forceMount>
-                <DropdownMenuLabel className="font-normal">
-                  <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">
-                      {user?.firstName && user?.lastName 
-                        ? `${user.firstName} ${user.lastName}` 
-                        : user?.username || 'User'
-                      }
-                    </p>
-                    <p className="text-xs leading-none text-muted-foreground">
-                      {user?.email || ''}
-                    </p>
-                    <p className="text-xs leading-none text-muted-foreground capitalize">
-                      Role: {user?.role || 'user'}
-                    </p>
-                  </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => navigate('/training')}>
-                  <Brain className="mr-2 h-4 w-4" />
-                  <span>Training</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>Settings</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout}>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+          )}
+          
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-sm">
+              <Brain className="w-5 h-5 text-primary-foreground" />
+            </div>
+            <div>
+              <h1 className="font-bold text-foreground text-lg">Tsindeka AI</h1>
+              <p className="text-xs text-muted-foreground/80 font-medium">Session {sessionId || 'New'}</p>
+            </div>
           </div>
         </div>
         
-        {/* Search in chat */}
-        <div className="mt-4">
-          <div className="relative max-w-md">
-            <input
-              type="text"
-              placeholder="Search chat history..."
-              className="w-full px-4 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-            />
-          </div>
+        <div className="flex items-center gap-2">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={() => window.location.reload()}
+            className="h-9 w-9 rounded-xl hover:bg-muted/80 transition-all duration-200"
+          >
+            <RefreshCw className="w-4 h-4" />
+          </Button>
+          
+          {onToggleSuggestions && (
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={onToggleSuggestions}
+              className="h-9 w-9 rounded-xl hover:bg-muted/80 transition-all duration-200"
+            >
+              {showSuggestions ? <PanelRightClose className="w-4 h-4" /> : <PanelRightOpen className="w-4 h-4" />}
+            </Button>
+          )}
+          
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm" className="relative h-10 w-10 rounded-xl hover:bg-muted/80 transition-all duration-200">
+                <Avatar className="h-9 w-9">
+                  <AvatarImage src="" alt="User" />
+                  <AvatarFallback className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground">
+                    <User className="w-4 h-4" />
+                  </AvatarFallback>
+                </Avatar>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="end" forceMount>
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">{user?.email || 'User'}</p>
+                  <p className="text-xs leading-none text-muted-foreground">
+                    {user?.email || 'user@example.com'}
+                  </p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => navigate('/settings')}>
+                <Settings className="mr-2 h-4 w-4" />
+                <span>Settings</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleLogout}>
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Log out</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
@@ -236,29 +256,26 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
       ) : (
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           {messages.map((message) => (
-            <div
-              key={message.id}
-              className={cn(
-                "flex gap-4 max-w-4xl",
-                message.role === "user" ? "ml-auto flex-row-reverse" : "mr-auto"
-              )}
-            >
+            <div key={message.id} className={cn(
+              "flex gap-4 max-w-4xl",
+              message.role === "user" ? "ml-auto flex-row-reverse" : "mr-auto"
+            )}>
               <div className={cn(
-                "w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0",
-                message.role === "user" 
-                  ? "bg-gradient-primary" 
-                  : "bg-muted"
+                "w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm",
+                message.role === "user"
+                  ? "bg-gradient-to-br from-primary to-primary/80 text-primary-foreground"
+                  : "bg-gradient-to-br from-muted to-muted/80 text-muted-foreground border border-border/50"
               )}>
-                <span className="text-sm font-semibold">
+                <span className="text-sm font-bold">
                   {message.role === "user" ? "U" : "AI"}
                 </span>
               </div>
               
               <div className={cn(
-                "p-4 rounded-2xl max-w-[80%]",
+                "p-5 rounded-2xl max-w-[85%] shadow-sm",
                 message.role === "user"
-                  ? "bg-chat-message-user text-chat-message-user-foreground"
-                  : "bg-chat-message-assistant text-chat-message-assistant-foreground border border-border"
+                  ? "bg-gradient-to-br from-primary to-primary/90 text-primary-foreground"
+                  : "bg-gradient-to-br from-background to-muted/30 text-foreground border border-border/50 backdrop-blur-sm"
               )}>
                 {message.role === "assistant" ? (
                   <div className="markdown-content">
@@ -266,46 +283,46 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
                       remarkPlugins={[remarkGfm]}
                       components={{
                         // Customize markdown components for better styling
-                        p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
-                        h1: ({ children }) => <h1 className="text-lg font-bold mb-2">{children}</h1>,
-                        h2: ({ children }) => <h2 className="text-base font-bold mb-2">{children}</h2>,
-                        h3: ({ children }) => <h3 className="text-sm font-bold mb-1">{children}</h3>,
-                        ul: ({ children }) => <ul className="list-disc list-inside mb-2">{children}</ul>,
-                        ol: ({ children }) => <ol className="list-decimal list-inside mb-2">{children}</ol>,
-                        li: ({ children }) => <li className="mb-1">{children}</li>,
+                        p: ({ children }) => <p className="mb-3 last:mb-0 leading-relaxed">{children}</p>,
+                        h1: ({ children }) => <h1 className="text-xl font-bold mb-3 text-foreground">{children}</h1>,
+                        h2: ({ children }) => <h2 className="text-lg font-bold mb-3 text-foreground">{children}</h2>,
+                        h3: ({ children }) => <h3 className="text-base font-bold mb-2 text-foreground">{children}</h3>,
+                        ul: ({ children }) => <ul className="list-disc list-inside mb-3 space-y-1">{children}</ul>,
+                        ol: ({ children }) => <ol className="list-decimal list-inside mb-3 space-y-1">{children}</ol>,
+                        li: ({ children }) => <li className="leading-relaxed">{children}</li>,
                         code: ({ children, className }) => {
                           const isInline = !className;
                           return isInline ? (
-                            <code className="bg-muted px-1 py-0.5 rounded text-sm font-mono">{children}</code>
+                            <code className="bg-muted/80 px-2 py-1 rounded-md text-sm font-mono border border-border/30">{children}</code>
                           ) : (
-                            <code className="block bg-muted p-2 rounded text-sm font-mono overflow-x-auto">{children}</code>
+                            <code className="block bg-muted/80 p-4 rounded-xl text-sm font-mono overflow-x-auto border border-border/30">{children}</code>
                           );
                         },
-                        pre: ({ children }) => <pre className="bg-muted p-3 rounded-lg overflow-x-auto mb-2">{children}</pre>,
-                        blockquote: ({ children }) => <blockquote className="border-l-4 border-primary pl-4 italic mb-2">{children}</blockquote>,
-                        a: ({ children, href }) => <a href={href} className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">{children}</a>,
-                        table: ({ children }) => <table className="border-collapse border border-border mb-2">{children}</table>,
-                        th: ({ children }) => <th className="border border-border px-2 py-1 bg-muted font-semibold">{children}</th>,
-                        td: ({ children }) => <td className="border border-border px-2 py-1">{children}</td>,
+                        pre: ({ children }) => <pre className="bg-muted/80 p-4 rounded-xl overflow-x-auto mb-3 border border-border/30">{children}</pre>,
+                        blockquote: ({ children }) => <blockquote className="border-l-4 border-primary/60 pl-4 italic mb-3 text-muted-foreground bg-muted/30 py-2 rounded-r-lg">{children}</blockquote>,
+                        a: ({ children, href }) => <a href={href} className="text-primary hover:text-primary/80 underline decoration-primary/30 hover:decoration-primary/60 transition-colors" target="_blank" rel="noopener noreferrer">{children}</a>,
+                        table: ({ children }) => <table className="border-collapse border border-border/50 mb-3 rounded-lg overflow-hidden">{children}</table>,
+                        th: ({ children }) => <th className="border border-border/50 px-3 py-2 bg-muted/60 font-semibold text-left">{children}</th>,
+                        td: ({ children }) => <td className="border border-border/50 px-3 py-2">{children}</td>,
                       }}
                     >
                       {message.content}
                     </ReactMarkdown>
                   </div>
                 ) : (
-                  <p className="whitespace-pre-wrap">{message.content}</p>
+                  <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
                 )}
-                <p className="text-xs opacity-70 mt-2">{message.timestamp}</p>
+                <p className="text-xs opacity-60 mt-3 font-medium">{message.timestamp}</p>
               </div>
             </div>
           ))}
           
           {(isLoading || isTyping) && (
             <div className="flex gap-4 max-w-4xl mr-auto">
-              <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-                <span className="text-sm font-semibold">AI</span>
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-muted to-muted/80 flex items-center justify-center shadow-sm border border-border/50">
+                <span className="text-sm font-bold text-muted-foreground">AI</span>
               </div>
-              <div className="bg-chat-message-assistant rounded-2xl border border-border">
+              <div className="bg-gradient-to-br from-background to-muted/30 rounded-2xl border border-border/50 shadow-sm backdrop-blur-sm">
                 <TypingAnimation />
               </div>
             </div>
@@ -316,38 +333,44 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
       )}
 
       {/* Input Area */}
-      <div className="p-6 border-t border-border bg-gradient-subtle">
+      <div className="p-6 border-t border-border/50 bg-gradient-to-b from-background/80 to-background backdrop-blur-sm">
         <div className="max-w-4xl mx-auto">
-          <div className="relative bg-background border border-border rounded-xl shadow-card">
+          <div className="relative bg-background/90 border border-border/60 rounded-2xl shadow-lg backdrop-blur-sm hover:shadow-xl transition-all duration-300">
             <Textarea
               ref={textareaRef}
               value={inputMessage}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
-              placeholder="Ask the assistant for help or insights..."
-              className="resize-none border-0 focus:ring-0 focus:outline-none bg-transparent p-4 pr-20 min-h-[60px] max-h-[120px]"
+              placeholder="Ask me anything..."
+              className="resize-none border-0 focus:ring-0 focus:outline-none bg-transparent p-5 pr-24 min-h-[64px] max-h-[120px] text-base placeholder:text-muted-foreground/70"
               rows={1}
             />
             
-            <div className="absolute right-2 bottom-2 flex items-center gap-2">
-              <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                <Paperclip className="w-4 h-4" />
+            <div className="absolute right-3 bottom-3 flex items-center gap-2">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="h-9 w-9 p-0 rounded-xl hover:bg-muted/80 transition-all duration-200"
+              >
+                <Paperclip className="w-4 h-4 text-muted-foreground" />
               </Button>
               
               <Button
                 onClick={handleSend}
                 disabled={!inputMessage.trim() || isLoading}
                 size="sm"
-                className="h-8 w-8 p-0 bg-gradient-primary hover:shadow-glow transition-all duration-300"
+                className="h-9 w-9 p-0 rounded-xl bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary hover:shadow-lg hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
                 <Send className="w-4 h-4" />
               </Button>
             </div>
           </div>
           
-          <p className="text-xs text-muted-foreground text-center mt-2">
-            AI-generated, for reference only
-          </p>
+          <div className="text-xs text-muted-foreground/70 text-center mt-3 space-y-1">
+            <p className="font-medium">AI can make mistakes. Check important info.</p>
+            <p>© 2024 PT. Merdeka Tsingshan Indonesia. All rights reserved.</p>
+            <p>Support: <a href="mailto:mti.icthelpdesk@merdekabattery.com" className="text-primary hover:underline">mti.icthelpdesk@merdekabattery.com</a></p>
+          </div>
         </div>
       </div>
     </div>

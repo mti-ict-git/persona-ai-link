@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Eye, EyeOff, ArrowLeft, AlertCircle } from "lucide-react";
+import { Eye, EyeOff, AlertCircle } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { ApiError } from "@/services/api";
@@ -67,16 +67,7 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-primary/5 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Back Button */}
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => navigate('/')}
-          className="mb-6 flex items-center gap-2 text-muted-foreground hover:text-foreground"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Chat
-        </Button>
+
 
         <Card className="border border-border shadow-elegant bg-card/80 backdrop-blur-sm">
           <CardHeader className="text-center space-y-4">
@@ -90,10 +81,13 @@ const Login = () => {
             </div>
             
             <CardTitle className="text-2xl font-bold text-foreground">
-              MTI AI Chatbot
+              Tsindeka AI
             </CardTitle>
+            <CardDescription className="text-sm text-muted-foreground font-medium">
+              PT. Merdeka Tsingshan Indonesia
+            </CardDescription>
             <CardDescription className="text-lg text-primary font-medium">
-              (Beta Training)
+              (Beta Release)
             </CardDescription>
             <CardDescription className="text-muted-foreground">
               Sign in to access your personalized AI assistant
