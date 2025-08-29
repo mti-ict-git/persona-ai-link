@@ -29,6 +29,17 @@ const Index = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showSidebar, setShowSidebar] = useState(true);
+  const [newMessageIds, setNewMessageIds] = useState<Set<string>>(new Set()); // Track messages that should have typewriter animation
+
+  // Handle typewriter animation completion
+  const handleTypewriterComplete = (messageId: string) => {
+    setNewMessageIds(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(messageId);
+      console.log(`Typewriter animation completed for message ${messageId}, removed from tracking`);
+      return newSet;
+    });
+  };
 
   const {
     sessions: dbSessions,
@@ -61,10 +72,14 @@ const Index = () => {
   // Load messages for active session
   useEffect(() => {
     if (activeSessionId) {
-      // Only load messages if we don't already have messages (to preserve optimistic UI)
-      if (currentMessages.length === 0) {
+      // Check if we have optimistic messages (temp IDs) that should be preserved
+      const hasOptimisticMessages = currentMessages.some(msg => msg.id.startsWith('temp-'));
+      
+      if (!hasOptimisticMessages) {
+        // Only load from database if we don't have optimistic messages
         loadSessionMessages(activeSessionId);
       }
+      // If we have optimistic messages, let the handleSendMessage flow handle the reload
     } else {
       setCurrentMessages([]);
     }
@@ -103,6 +118,8 @@ const Index = () => {
       
       console.log(`Setting ${uiMessages.length} UI messages`);
       setCurrentMessages(uiMessages);
+      // Clear new message IDs when loading existing messages (no animation for existing messages)
+      setNewMessageIds(new Set());
     } catch (error) {
       console.error('Failed to load session messages:', error);
       setCurrentMessages([]);
@@ -133,15 +150,6 @@ const Index = () => {
     let sessionId = activeSessionId;
     let isNewSession = false;
     
-    // Lazy session creation - create new session only when first message is sent
-    if (!sessionId) {
-      sessionId = await handleCreateNewSession();
-      isNewSession = true;
-      // Update local state immediately
-      selectSession(sessionId);
-      setShowSuggestions(false); // Hide suggestions once chat starts
-    }
-
     // Create optimistic user message for immediate display
     const optimisticUserMessage: Message = {
       id: `temp-${Date.now()}`,
@@ -153,8 +161,16 @@ const Index = () => {
     // Immediately show user message for better UX
     setCurrentMessages(prev => [...prev, optimisticUserMessage]);
     console.log(`User message displayed immediately: "${content.substring(0, 50)}..."`); 
-
     setIsTyping(true);
+    
+    // Lazy session creation - create new session only when first message is sent
+    if (!sessionId) {
+      sessionId = await handleCreateNewSession();
+      isNewSession = true;
+      // Update local state immediately but after optimistic message is set
+      selectSession(sessionId);
+      setShowSuggestions(false); // Hide suggestions once chat starts
+    }
     try {
       console.log(`Sending message to N8N webhook for session ${sessionId}: "${content.substring(0, 50)}..."`); 
       
@@ -191,9 +207,24 @@ const Index = () => {
           await handleSessionNameUpdate(sessionId, fallbackName);
         }
         
+        // Store current message count to identify new messages
+        const currentMessageCount = currentMessages.length;
+        
         // Reload messages from database to show both user message and AI response
         // (backend adds both messages, this will replace optimistic message with real ones)
         await loadSessionMessages(sessionId);
+        
+        // After loading, identify new assistant messages for typewriter animation
+        const updatedMessages = await getSessionMessages(sessionId);
+        const newAssistantMessages = updatedMessages
+          .filter(msg => msg.role === 'assistant')
+          .slice(Math.max(0, currentMessageCount - 1)); // Get messages added after the user message
+        
+        if (newAssistantMessages.length > 0) {
+          const newIds = new Set(newAssistantMessages.map(msg => msg.id));
+          setNewMessageIds(newIds);
+          console.log(`Marked ${newIds.size} new assistant messages for typewriter animation:`, Array.from(newIds));
+        }
     } catch (error) {
       console.error('Failed to send message:', error);
       // Keep optimistic message visible on N8N error - don't reload from database
@@ -254,8 +285,23 @@ const Index = () => {
         await handleSessionNameUpdate(sessionId, fallbackName);
       }
       
+      // Store current message count to identify new messages (should be 1 for the optimistic message)
+      const currentMessageCount = currentMessages.length;
+      
       // Reload messages from database to show both user message and AI response
       await loadSessionMessages(sessionId);
+      
+      // After loading, identify new assistant messages for typewriter animation
+      const updatedMessages = await getSessionMessages(sessionId);
+      const newAssistantMessages = updatedMessages
+        .filter(msg => msg.role === 'assistant')
+        .slice(Math.max(0, currentMessageCount - 1)); // Get messages added after the user message
+      
+      if (newAssistantMessages.length > 0) {
+        const newIds = new Set(newAssistantMessages.map(msg => msg.id));
+        setNewMessageIds(newIds);
+        console.log(`Marked ${newIds.size} new assistant messages for typewriter animation:`, Array.from(newIds));
+      }
     } catch (error) {
       console.error('Failed to send prompt template message:', error);
       // Keep optimistic message visible on N8N error
@@ -291,6 +337,8 @@ const Index = () => {
         onToggleSuggestions={() => setShowSuggestions(!showSuggestions)}
         showSidebar={showSidebar}
         onToggleSidebar={() => setShowSidebar(!showSidebar)}
+        newMessageIds={newMessageIds}
+        onTypewriterComplete={handleTypewriterComplete}
       />
       
       <div className={`transition-all duration-300 ease-in-out overflow-hidden ${

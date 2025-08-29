@@ -11,6 +11,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import TypingAnimation from "@/components/TypingAnimation";
+import TypewriterText from "@/components/TypewriterText";
+import MessageFeedback from "@/components/MessageFeedback";
 
 interface Message {
   id: string;
@@ -29,9 +31,11 @@ interface ChatMainProps {
   onToggleSuggestions?: () => void;
   showSidebar?: boolean;
   onToggleSidebar?: () => void;
+  newMessageIds?: Set<string>; // Track which messages should have typewriter animation
+  onTypewriterComplete?: (messageId: string) => void; // Callback when typewriter animation completes
 }
 
-const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false, sessionId, showSuggestions = true, onToggleSuggestions, showSidebar = true, onToggleSidebar }: ChatMainProps) => {
+const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false, sessionId, showSuggestions = true, onToggleSuggestions, showSidebar = true, onToggleSidebar, newMessageIds = new Set(), onTypewriterComplete }: ChatMainProps) => {
   const [inputMessage, setInputMessage] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -279,38 +283,96 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
               )}>
                 {message.role === "assistant" ? (
                   <div className="markdown-content">
-                    <ReactMarkdown 
-                      remarkPlugins={[remarkGfm]}
-                      components={{
-                        // Customize markdown components for better styling
-                        p: ({ children }) => <p className="mb-3 last:mb-0 leading-relaxed">{children}</p>,
-                        h1: ({ children }) => <h1 className="text-xl font-bold mb-3 text-foreground">{children}</h1>,
-                        h2: ({ children }) => <h2 className="text-lg font-bold mb-3 text-foreground">{children}</h2>,
-                        h3: ({ children }) => <h3 className="text-base font-bold mb-2 text-foreground">{children}</h3>,
-                        ul: ({ children }) => <ul className="list-disc list-inside mb-3 space-y-1">{children}</ul>,
-                        ol: ({ children }) => <ol className="list-decimal list-inside mb-3 space-y-1">{children}</ol>,
-                        li: ({ children }) => <li className="leading-relaxed">{children}</li>,
-                        code: ({ children, className }) => {
-                          const isInline = !className;
-                          return isInline ? (
-                            <code className="bg-muted/80 px-2 py-1 rounded-md text-sm font-mono border border-border/30">{children}</code>
-                          ) : (
-                            <code className="block bg-muted/80 p-4 rounded-xl text-sm font-mono overflow-x-auto border border-border/30">{children}</code>
-                          );
-                        },
-                        pre: ({ children }) => <pre className="bg-muted/80 p-4 rounded-xl overflow-x-auto mb-3 border border-border/30">{children}</pre>,
-                        blockquote: ({ children }) => <blockquote className="border-l-4 border-primary/60 pl-4 italic mb-3 text-muted-foreground bg-muted/30 py-2 rounded-r-lg">{children}</blockquote>,
-                        a: ({ children, href }) => <a href={href} className="text-primary hover:text-primary/80 underline decoration-primary/30 hover:decoration-primary/60 transition-colors" target="_blank" rel="noopener noreferrer">{children}</a>,
-                        table: ({ children }) => <table className="border-collapse border border-border/50 mb-3 rounded-lg overflow-hidden">{children}</table>,
-                        th: ({ children }) => <th className="border border-border/50 px-3 py-2 bg-muted/60 font-semibold text-left">{children}</th>,
-                        td: ({ children }) => <td className="border border-border/50 px-3 py-2">{children}</td>,
-                      }}
-                    >
-                      {message.content}
-                    </ReactMarkdown>
+                    {newMessageIds.has(message.id) ? (
+                      <TypewriterText 
+                        text={message.content}
+                        speed={30}
+                        isMarkdown={true}
+                        className=""
+                        onComplete={() => onTypewriterComplete?.(message.id)}
+                      />
+                    ) : (
+                      <ReactMarkdown 
+                        remarkPlugins={[remarkGfm]}
+                        components={{
+                          p: ({ children }) => <p className="mb-3 last:mb-0 leading-relaxed">{children}</p>,
+                          h1: ({ children }) => <h1 className="text-2xl font-bold mb-4 text-foreground">{children}</h1>,
+                          h2: ({ children }) => <h2 className="text-xl font-semibold mb-3 text-foreground">{children}</h2>,
+                          h3: ({ children }) => <h3 className="text-lg font-medium mb-2 text-foreground">{children}</h3>,
+                          ul: ({ children }) => <ul className="list-disc list-inside mb-3 space-y-1">{children}</ul>,
+                          ol: ({ children }) => <ol className="list-decimal list-inside mb-3 space-y-1">{children}</ol>,
+                          li: ({ children }) => <li className="leading-relaxed">{children}</li>,
+                          blockquote: ({ children }) => (
+                            <blockquote className="border-l-4 border-primary/30 pl-4 py-2 mb-3 bg-muted/30 rounded-r-lg italic">
+                              {children}
+                            </blockquote>
+                          ),
+                          code: ({ children, className }) => {
+                            const isInline = !className;
+                            return isInline ? (
+                              <code className="bg-muted/60 px-1.5 py-0.5 rounded text-sm font-mono text-foreground">
+                                {children}
+                              </code>
+                            ) : (
+                              <code className={`block bg-muted/80 p-3 rounded-lg text-sm font-mono overflow-x-auto whitespace-pre ${className}`}>
+                                {children}
+                              </code>
+                            );
+                          },
+                          pre: ({ children }) => <pre className="mb-3 overflow-x-auto">{children}</pre>,
+                          strong: ({ children }) => <strong className="font-semibold text-foreground">{children}</strong>,
+                          em: ({ children }) => <em className="italic">{children}</em>,
+                          a: ({ children, href }) => (
+                            <a 
+                              href={href} 
+                              className="text-primary hover:text-primary/80 underline decoration-primary/30 hover:decoration-primary/60 transition-colors" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                            >
+                              {children}
+                            </a>
+                          ),
+                          table: ({ children }) => (
+                            <table className="border-collapse border border-border/50 mb-3 rounded-lg overflow-hidden">
+                              {children}
+                            </table>
+                          ),
+                          th: ({ children }) => (
+                            <th className="border border-border/50 px-3 py-2 bg-muted/60 font-semibold text-left">
+                              {children}
+                            </th>
+                          ),
+                          td: ({ children }) => (
+                            <td className="border border-border/50 px-3 py-2">
+                              {children}
+                            </td>
+                          ),
+                        }}
+                      >
+                        {message.content}
+                      </ReactMarkdown>
+                    )}
+                    <MessageFeedback
+                      messageId={message.id}
+                      messageContent={message.content}
+                      sessionId={sessionId || 'default'}
+                      className="mt-2"
+                    />
                   </div>
                 ) : (
-                  <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
+                  newMessageIds.has(message.id) ? (
+                    <TypewriterText 
+                      text={message.content}
+                      speed={20}
+                      isMarkdown={false}
+                      className="whitespace-pre-wrap leading-relaxed"
+                      onComplete={() => onTypewriterComplete?.(message.id)}
+                    />
+                  ) : (
+                    <p className="whitespace-pre-wrap leading-relaxed">
+                      {message.content}
+                    </p>
+                  )
                 )}
                 <p className="text-xs opacity-60 mt-3 font-medium">{message.timestamp}</p>
               </div>

@@ -249,6 +249,38 @@ if (!sessionId) {
 event_type: isNewSession ? 'session_created' : 'chat_message'
 ```
 
+### Result
+**Status**: ✅ **RESOLVED**  
+**Impact**: Session switching now works correctly across all past sessions.
+
+---
+
+## Processing Service Connection Investigation
+**Date**: Friday, August 29, 2025 1:49:33 PM  
+**Issue**: User reported connection issues with the processing service - messages not being sent successfully.
+
+### Investigation Results
+**Root Cause**: The processing service is actually working correctly, but returning empty responses.
+
+**Technical Analysis**:
+1. **Service Connectivity**: ✅ Processing service at `https://n8nprod.merdekabattery.com:5679/webhook/chatbot` is responding with HTTP 200
+2. **Backend Integration**: ✅ Backend webhook handler is correctly forwarding requests
+3. **Request Format**: ✅ Payload structure and validation are working properly
+4. **Response Handling**: ⚠️ Processing service returns empty response body (`""`)
+
+**Backend Logs Show**:
+```
+N8N Response Status: 200
+N8N Response Data: ""
+```
+
+### Current Status
+**Processing Service**: Operational but returning empty responses  
+**User Experience**: May appear as "not responding" due to empty AI responses  
+**Recommendation**: Check processing service configuration to ensure it returns proper AI responses
+
+---
+
 **Result**: ✅ First messages in new sessions now properly send `'session_created'` event_type to N8N and receive appropriate responses.
 
 ## August 24, 2025 - SSL Certificate Fix for N8N Webhook Connections
@@ -993,6 +1025,54 @@ await loadSessionMessages(sessionId); // Reload from database
 
 **Result**: Application now features a vibrant orange theme with MTI branding as "MTI AI Chatbot"
 
+## August 29, 2025 - Tsindeka AI Logo Implementation
+
+**Enhancement**: Replaced the original MTI PNG logo with a new flattened SVG version for "Tsindeka AI"
+
+**Problem**: User requested to use the existing logo as "Tsindeka AI logo" but in a "flattened" version for better scalability and modern design.
+
+**Solution**: Created a new SVG logo with flattened design elements and updated the application to use it.
+
+**Changes Made**:
+1. **Logo Creation**: Designed a new flattened SVG logo (`tsindeka-ai-logo.svg`) with:
+   - Clean, modern flat design aesthetic
+   - Scalable vector format for crisp display at any size
+   - Orange and blue color scheme matching the application theme
+   - "Tsindeka AI" text integrated into the design
+
+2. **Application Updates**: 
+   - Updated Login page to use the new SVG logo
+   - Changed alt text from "MTI Logo" to "Tsindeka AI Logo"
+   - Maintained existing responsive sizing and positioning
+
+**Files Modified**:
+- `public/tsindeka-ai-logo.svg` - New flattened SVG logo file
+- `src/pages/Login.tsx` - Updated logo source and alt text
+- `docs/journal.md` - Documented logo implementation
+
+**Technical Benefits**:
+- **Scalability**: SVG format ensures crisp display at any resolution
+- **Performance**: Smaller file size compared to PNG
+- **Maintainability**: Vector format allows easy color and design modifications
+- **Accessibility**: Proper alt text for screen readers
+
+**Result**: Application now uses a modern, flattened SVG logo that represents "Tsindeka AI" branding with improved scalability and visual appeal.
+
+## August 29, 2025 11:22 AM - Logo Reversion
+
+**Change**: Reverted back to the original MTI PNG logo as requested by user.
+
+**Action Taken**:
+- Restored `src/pages/Login.tsx` to use `/MTI-removebg-preview.png`
+- Changed alt text back to "MTI Logo"
+- User preferred the original logo design over the flattened SVG version
+
+**Files Modified**:
+- `src/pages/Login.tsx` - Reverted logo source and alt text
+- `docs/journal.md` - Documented reversion
+
+**Result**: Application now displays the original MTI logo as preferred by the user.
+
 ## 2025-01-14 - Chat Session Text Update
 
 **Enhancement**: Updated chat session display text from "MTI AI Chatbot" to "Smart Solutions, Instant Answers"
@@ -1565,6 +1645,131 @@ await loadSessionMessages(sessionId); // Reload from database
 
 **Result**: ✅ Eliminates duplicate messages by ensuring only the backend webhook handler writes to the database, while frontend only reads via `loadSessionMessages()`.
 
+## August 29, 2025 - 1:14 PM
+
+### Typewriter Animation Implementation
+
+**Problem**: User requested to add typing animation to text before showing, to create a more engaging and dynamic user experience.
+
+**Solution**: Created a comprehensive TypewriterText component that displays text character by character with customizable speed and markdown support.
+
+**Implementation Details**:
+- **TypewriterText Component**: Built `src/components/TypewriterText.tsx` with character-by-character animation
+- **Markdown Support**: Integrated ReactMarkdown with custom styling for AI responses
+- **Configurable Speed**: Different speeds for user messages (20ms) vs AI responses (30ms)
+- **Visual Cursor**: Added animated cursor indicator during typing
+- **Complete Callback**: Optional callback when animation finishes
+
+**Code Changes**:
+```typescript
+// New TypewriterText component features:
+- Character-by-character text reveal
+- Markdown rendering with typing animation
+- Customizable typing speed
+- Animated cursor indicator
+- Auto-reset on text changes
+
+// ChatMain.tsx integration:
+{message.role === "assistant" ? (
+  <TypewriterText 
+    text={message.content}
+    speed={30}
+    isMarkdown={true}
+  />
+) : (
+  <TypewriterText 
+    text={message.content}
+    speed={20}
+    isMarkdown={false}
+  />
+)}
+```
+
+**Files Modified**:
+- `src/components/TypewriterText.tsx` - New component with typing animation logic
+- `src/components/ChatMain.tsx` - Updated to use TypewriterText for all messages
+- `docs/journal.md` - Documented implementation
+
+**Technical Features**:
+- **React Hooks**: Uses useState and useEffect for animation state management
+- **Performance**: Efficient character-by-character rendering with setTimeout
+- **Accessibility**: Maintains proper text structure and readability
+- **Responsive**: Works with existing responsive design patterns
+- **Markdown**: Full markdown support with custom component styling
+
+**Result**: ✅ All text messages now display with smooth typewriter animation, creating a more engaging and professional chat experience.
+
+### Message Feedback System Implementation
+
+**Problem**: User requested feedback mechanism for beta testing with thumbs up/down reactions and detailed feedback collection for negative responses.
+
+**Solution**: Implemented a comprehensive feedback system with frontend components, backend API, and data export capabilities.
+
+**Implementation Details**:
+- **MessageFeedback Component**: Created `src/components/MessageFeedback.tsx` with thumbs up/down buttons
+- **Feedback Modal**: Added modal for detailed negative feedback collection with textarea
+- **Backend API**: Implemented complete CRUD operations for feedback data
+- **Database Storage**: PostgreSQL table with proper indexing and relationships
+- **Export Functionality**: CSV and JSON export capabilities for admin analysis
+
+**Code Changes**:
+```typescript
+// MessageFeedback component features:
+- Thumbs up/down buttons with icons
+- Modal dialog for negative feedback details
+- Toast notifications for user confirmation
+- API integration for feedback submission
+- Duplicate feedback prevention (updates existing)
+
+// Backend API endpoints:
+POST /api/feedback/message     - Submit feedback
+GET  /api/feedback/export      - Get feedback data (JSON)
+GET  /api/feedback/export/csv  - Download feedback as CSV
+GET  /api/feedback/stats       - Get feedback statistics
+```
+
+**Database Schema**:
+```sql
+CREATE TABLE message_feedback (
+  id SERIAL PRIMARY KEY,
+  message_id VARCHAR(255) NOT NULL,
+  session_id VARCHAR(255) NOT NULL,
+  user_id INTEGER,
+  feedback_type VARCHAR(20) CHECK (feedback_type IN ('positive', 'negative')),
+  comment TEXT,
+  message_content TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+**Files Modified**:
+- `src/components/MessageFeedback.tsx` - New feedback component
+- `src/services/api.ts` - Added feedback API methods
+- `backend/src/routes/feedback.js` - New backend route with CRUD operations
+- `backend/src/server.js` - Registered feedback routes
+- `src/components/ChatMain.tsx` - Integrated feedback buttons for AI messages
+- `docs/journal.md` - Documented implementation
+
+**Technical Features**:
+- **Shadcn UI Components**: Button, Dialog, Textarea, Label with consistent styling
+- **Toast Notifications**: User feedback confirmation with react-hot-toast
+- **Authentication**: All endpoints require valid JWT tokens
+- **Data Validation**: Joi schema validation for API inputs
+- **Export Options**: Multiple formats (JSON, CSV) with filtering capabilities
+- **Performance**: Database indexing on session_id, feedback_type, created_at
+- **Error Handling**: Comprehensive error handling and user feedback
+
+**Feedback Data Export Options**:
+1. **JSON Export**: Structured data with user information and filtering
+2. **CSV Download**: Spreadsheet-compatible format for analysis
+3. **Statistics**: Aggregated metrics (positive/negative counts, comments)
+4. **Filtering**: By date range, feedback type, session ID, user
+
+**Integration**: Feedback buttons appear on all AI assistant messages in the chat interface, allowing users to provide immediate feedback on response quality.
+
+**Result**: ✅ Complete feedback system enabling beta testers to provide thumbs up/down reactions with detailed comments for negative feedback. Admins can export all feedback data for analysis and product improvement.
+
 ## August 29, 2025 - 11:06 AM
 
 ### Fixed Prompt Template Flow Issue
@@ -1632,3 +1837,106 @@ if (activeSessionId && currentMessages.length === 0) {
 - Optimistic UI now persists properly during session creation
 - Smooth transition from prompt template to chat interface
 - No more brief display of wrong chat content
+
+---
+
+## August 29, 2025 1:44 PM - Session Switching Bug Fix
+
+### Issue Identified
+**Problem**: Users could only open the first session they clicked on. Subsequent session clicks would not switch to different sessions.
+
+**Root Cause**: The `useEffect` hook that loads messages for the active session had a condition `if (currentMessages.length === 0)` that prevented loading messages when switching between sessions that already had messages loaded.
+
+**Code Issue**:
+```typescript
+// Problematic logic - only loads if no messages exist
+if (activeSessionId) {
+  if (currentMessages.length === 0) {
+    loadSessionMessages(activeSessionId);
+  }
+}
+```
+
+### Solution Applied
+**Fix**: Removed the `currentMessages.length === 0` condition to always load messages when `activeSessionId` changes.
+
+**Updated Code**:
+```typescript
+// Fixed logic - always loads messages for active session
+if (activeSessionId) {
+  loadSessionMessages(activeSessionId);
+}
+```
+
+### Files Modified
+- `src/pages/Index.tsx`: Updated useEffect dependency logic for session message loading
+
+### Result
+✅ **Session switching now works correctly** - users can click on any session and it will properly load and display the messages for that session.
+
+**Status**: Session switching functionality fully restored.
+
+---
+
+## August 29, 2025 3:02 PM - First Message Chat Redirection Fix
+
+### Issue Identified
+**Problem**: After sending the first message in a new chat, the interface would revert back to the welcome screen instead of staying in the chat view.
+
+**Root Cause**: Race condition during new session creation where:
+1. User sends first message → optimistic message displayed
+2. New session created → `selectSession(sessionId)` called
+3. `useEffect` triggered by `activeSessionId` change → `loadSessionMessages()` called
+4. Since new session has no messages in database yet → `setCurrentMessages([])` called
+5. Interface reverts to welcome screen due to `messages.length === 0`
+
+**Code Issue**:
+```typescript
+// Problematic sequence in handleSendMessage
+if (!sessionId) {
+  sessionId = await handleCreateNewSession();
+  selectSession(sessionId); // This triggers useEffect immediately
+}
+
+// useEffect loads messages, clearing optimistic UI
+useEffect(() => {
+  if (activeSessionId) {
+    loadSessionMessages(activeSessionId); // Clears optimistic messages
+  }
+}, [activeSessionId]);
+```
+
+### Solution Applied
+**Fix**: Modified the `useEffect` to preserve optimistic messages (with temp IDs) during new session creation.
+
+**Updated Code**:
+```typescript
+// Fixed logic - preserve optimistic messages during new session creation
+useEffect(() => {
+  if (activeSessionId) {
+    // Check if we have optimistic messages (temp IDs) that should be preserved
+    const hasOptimisticMessages = currentMessages.some(msg => msg.id.startsWith('temp-'));
+    
+    if (!hasOptimisticMessages) {
+      // Only load from database if we don't have optimistic messages
+      loadSessionMessages(activeSessionId);
+    }
+    // If we have optimistic messages, let the handleSendMessage flow handle the reload
+  } else {
+    setCurrentMessages([]);
+  }
+}, [activeSessionId]);
+```
+
+**Additional Changes**:
+- Moved optimistic message creation before session creation in `handleSendMessage`
+- Ensured proper sequencing of UI updates during new session flow
+
+### Files Modified
+- `src/pages/Index.tsx`: Updated `useEffect` for session message loading and `handleSendMessage` sequence
+- `docs/journal.md`: Documented the fix
+
+### Result
+✅ **First message chat redirection now works correctly** - after sending the first message, users stay in the chat interface and see their message immediately, followed by the AI response.
+
+**Status**: Chat redirection functionality fully restored.

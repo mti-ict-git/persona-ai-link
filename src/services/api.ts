@@ -255,6 +255,66 @@ class ApiService {
     });
   }
 
+  // Message feedback methods
+  async submitMessageFeedback(feedback: {
+    messageId: string;
+    sessionId: string;
+    feedbackType: 'positive' | 'negative';
+    comment: string;
+    messageContent: string;
+    timestamp: string;
+  }): Promise<{ success: boolean; id?: string }> {
+    return this.request('/feedback/message', {
+      method: 'POST',
+      body: JSON.stringify(feedback),
+    });
+  }
+
+  async getFeedbackData(filters?: {
+    startDate?: string;
+    endDate?: string;
+    feedbackType?: 'positive' | 'negative';
+    sessionId?: string;
+  }): Promise<any[]> {
+    const queryParams = new URLSearchParams();
+    if (filters?.startDate) queryParams.append('startDate', filters.startDate);
+    if (filters?.endDate) queryParams.append('endDate', filters.endDate);
+    if (filters?.feedbackType) queryParams.append('feedbackType', filters.feedbackType);
+    if (filters?.sessionId) queryParams.append('sessionId', filters.sessionId);
+    
+    const endpoint = `/feedback/export${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
+    return this.request(endpoint, {
+      method: 'GET',
+    });
+  }
+
+  async downloadFeedbackCSV(filters?: {
+    startDate?: string;
+    endDate?: string;
+    feedbackType?: 'positive' | 'negative';
+    sessionId?: string;
+  }): Promise<Blob> {
+    const queryParams = new URLSearchParams();
+    if (filters?.startDate) queryParams.append('startDate', filters.startDate);
+    if (filters?.endDate) queryParams.append('endDate', filters.endDate);
+    if (filters?.feedbackType) queryParams.append('feedbackType', filters.feedbackType);
+    if (filters?.sessionId) queryParams.append('sessionId', filters.sessionId);
+    
+    const endpoint = `/feedback/export/csv${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${this.getAuthToken()}`,
+      },
+    });
+    
+    if (!response.ok) {
+      throw new ApiError(response.status, 'Failed to download feedback CSV');
+    }
+    
+    return response.blob();
+  }
+
 }
 
 export const apiService = new ApiService();
