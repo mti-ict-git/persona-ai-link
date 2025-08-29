@@ -35,15 +35,11 @@ export function useSessionManager(): UseSessionManagerReturn {
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [hasInitiallySelected, setHasInitiallySelected] = useState(false);
   const { sendToN8N } = useN8NWebhook();
 
   // Get active session
   const activeSession = sessions.find(session => session.id === activeSessionId) || null;
-
-  // Load sessions on mount
-  useEffect(() => {
-    refreshSessions();
-  }, []);
 
   // Refresh sessions from API
   const refreshSessions = useCallback(async () => {
@@ -61,6 +57,20 @@ export function useSessionManager(): UseSessionManagerReturn {
       setIsLoading(false);
     }
   }, []);
+
+  // Load sessions on mount
+  useEffect(() => {
+    refreshSessions();
+  }, [refreshSessions]);
+
+  // Mark as initially selected without auto-selecting any session (start with blank new session)
+  useEffect(() => {
+    if (!hasInitiallySelected && sessions.length > 0) {
+      setHasInitiallySelected(true);
+    }
+  }, [sessions, hasInitiallySelected]); // Only auto-select once on initial load
+
+
 
   // Create new session with N8N integration
   const createNewSession = useCallback(async (initialMessage?: string): Promise<string> => {
@@ -99,7 +109,8 @@ export function useSessionManager(): UseSessionManagerReturn {
 
   // Select a session
   const selectSession = (sessionId: string) => {
-    setActiveSessionId(sessionId);
+    // Convert empty string to null for "New Chat" state
+    setActiveSessionId(sessionId === '' ? null : sessionId);
   };
 
   // Update session name
@@ -180,12 +191,13 @@ export function useSessionManager(): UseSessionManagerReturn {
   const deleteSession = useCallback(async (sessionId: string): Promise<void> => {
     try {
       await apiService.deleteSession(sessionId);
+      
+      // Update sessions list first
       setSessions(prev => prev.filter(session => session.id !== sessionId));
       
-      // If we're deleting the active session, switch to another one
+      // If we're deleting the active session, clear it
       if (activeSessionId === sessionId) {
-        const remainingSessions = sessions.filter(session => session.id !== sessionId);
-        setActiveSessionId(remainingSessions.length > 0 ? remainingSessions[0].id : null);
+        setActiveSessionId(null);
       }
       
       toast.success('Session deleted');
@@ -196,7 +208,9 @@ export function useSessionManager(): UseSessionManagerReturn {
       toast.error(errorMessage);
       throw err;
     }
-  }, [activeSessionId, sessions]);
+  }, [activeSessionId]);
+
+
 
   return {
     sessions,

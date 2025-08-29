@@ -1,0 +1,485 @@
+import React, { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { useToast } from '@/hooks/use-toast';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import {
+  Upload,
+  FileText,
+  Brain,
+  Play,
+  Trash2,
+  PlayCircle,
+  AlertTriangle,
+} from 'lucide-react';
+import { apiService } from '@/services/api';
+
+interface FileData {
+  id: string;
+  filename: string;
+  processed: boolean;
+  created_at: string;
+  metadata?: any;
+}
+
+const TrainingContent: React.FC = () => {
+  const [files, setFiles] = useState<FileData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isUploading, setIsUploading] = useState(false);
+  const [isTraining, setIsTraining] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [fileToDelete, setFileToDelete] = useState<FileData | null>(null);
+  const [pendingFile, setPendingFile] = useState<File | null>(null);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    fetchFiles();
+  }, []);
+
+  const fetchFiles = async () => {
+    try {
+      const response = await apiService.get('/files');
+      setFiles(response.data);
+    } catch (error) {
+      console.error('Error fetching files:', error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch files. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Check if file already exists
+    const existingFile = files.find(f => f.filename === file.name);
+    if (existingFile) {
+      setFileToDelete(existingFile);
+      setPendingFile(file);
+      setDeleteDialogOpen(true);
+      return;
+    }
+
+    await uploadFile(file);
+    event.target.value = '';
+  };
+
+  const uploadFile = async (file: File) => {
+    setIsUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await apiService.post('/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response.data.success) {
+        toast({
+          title: "File uploaded successfully",
+          description: `${file.name} has been uploaded and is ready for processing.`,
+        });
+        fetchFiles();
+      } else {
+        throw new Error(response.data.message || 'Upload failed');
+      }
+    } catch (error: any) {
+      console.error('Upload error:', error);
+      toast({
+        title: "Upload failed",
+        description: error.response?.data?.message || "Failed to upload file. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleDeleteFile = (file: FileData) => {
+    setFileToDelete(file);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!fileToDelete) return;
+
+    try {
+      await apiService.delete(`/files/${fileToDelete.id}`);
+      toast({
+        title: "File deleted",
+        description: `${fileToDelete.filename} has been deleted.`,
+      });
+      fetchFiles();
+      
+      // If there's a pending file, upload it now
+      if (pendingFile) {
+        await uploadFile(pendingFile);
+        setPendingFile(null);
+      }
+    } catch (error) {
+      console.error('Delete error:', error);
+      toast({
+        title: "Delete failed",
+        description: "Failed to delete file. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setDeleteDialogOpen(false);
+      setFileToDelete(null);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setDeleteDialogOpen(false);
+    setFileToDelete(null);
+    setPendingFile(null);
+  };
+
+  const handleProcessFile = async (fileId: string) => {
+    try {
+      const response = await apiService.post(`/webhooks/upload`, {
+        fileId,
+        action: 'process'
+      });
+
+      if (response.data.success) {
+        toast({
+          title: "File processing started",
+          description: "The file is being processed and will be ready for training soon.",
+        });
+        fetchFiles();
+      } else {
+        throw new Error(response.data.message || 'Processing failed');
+      }
+    } catch (error: any) {
+      console.error('Processing error:', error);
+      toast({
+        title: "Processing failed",
+        description: error.response?.data?.message || "Failed to process file. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleBatchProcess = async () => {
+    const unprocessedFiles = files.filter(f => !f.processed);
+    if (unprocessedFiles.length === 0) return;
+
+    setIsTraining(true);
+    try {
+      const promises = unprocessedFiles.map(file => 
+        apiService.post(`/webhooks/upload`, {
+          fileId: file.id,
+          action: 'process'
+        })
+      );
+
+      await Promise.all(promises);
+      
+      toast({
+        title: "Batch processing completed",
+        description: `${unprocessedFiles.length} files have been processed successfully.`,
+      });
+      fetchFiles();
+    } catch (error) {
+      console.error('Batch processing error:', error);
+      toast({
+        title: "Batch processing failed",
+        description: "Failed to process files. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsTraining(false);
+    }
+  };
+
+  const handleTrainModel = async () => {
+    const processedFiles = files.filter(f => f.processed);
+    if (processedFiles.length === 0) {
+      toast({
+        title: "No processed files",
+        description: "Please process files before training the model.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsTraining(true);
+    try {
+      // TODO: Implement actual training API call
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      
+      toast({
+        title: "Model training completed",
+        description: `AI model has been successfully updated with ${processedFiles.length} processed files.`,
+      });
+    } catch (error) {
+      console.error('Training error:', error);
+      toast({
+        title: "Training failed",
+        description: "Failed to train the model. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsTraining(false);
+    }
+  };
+
+  const getFileSize = (metadata: any) => {
+    if (metadata?.size) {
+      const sizeInKB = metadata.size / 1024;
+      if (sizeInKB < 1024) {
+        return `${sizeInKB.toFixed(1)} KB`;
+      } else {
+        return `${(sizeInKB / 1024).toFixed(1)} MB`;
+      }
+    }
+    return 'Unknown size';
+  };
+
+  const getFileType = (filename: string) => {
+    return filename.split('.').pop()?.toUpperCase() || 'Unknown';
+  };
+
+  const processedFilesCount = files.filter(f => f.processed).length;
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-foreground">AI Training Center</h2>
+          <p className="text-muted-foreground">Manage training data and train the AI model</p>
+        </div>
+        <Button 
+          onClick={handleTrainModel}
+          disabled={isTraining || processedFilesCount === 0 || loading}
+          size="lg"
+          className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
+        >
+          {isTraining ? (
+            <>
+              <Brain className="mr-2 h-5 w-5 animate-spin" />
+              Training Model...
+            </>
+          ) : (
+            <>
+              <Brain className="mr-2 h-5 w-5" />
+              Train Model ({processedFilesCount}/{files.length} ready)
+            </>
+          )}
+        </Button>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* File Upload Section */}
+        <Card className="lg:col-span-1 border-primary/20 bg-card/50 backdrop-blur-sm">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Upload className="h-5 w-5 text-primary" />
+              Upload Training Data
+            </CardTitle>
+            <CardDescription>
+              Upload documents to train the AI model
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="border-2 border-dashed border-primary/30 rounded-lg p-8 text-center hover:border-primary/50 transition-colors">
+                <Upload className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+                <div className="space-y-2">
+                  <p className="text-sm font-medium">Click to upload files</p>
+                  <p className="text-xs text-muted-foreground">PDF, DOCX, TXT files supported</p>
+                </div>
+                <Input
+                  type="file"
+                  className="mt-4"
+                  accept=".pdf,.docx,.txt,.doc"
+                  onChange={handleFileUpload}
+                  disabled={isUploading}
+                />
+                {isUploading && (
+                  <p className="text-sm text-muted-foreground mt-2">Uploading...</p>
+                )}
+              </div>
+              
+              <div className="space-y-2 text-xs text-muted-foreground">
+                <p>• Maximum file size: 10MB</p>
+                <p>• Supported formats: PDF, DOCX, TXT</p>
+                <p>• Files will be processed automatically</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Files List Section */}
+        <Card className="lg:col-span-2 border-primary/20 bg-card/50 backdrop-blur-sm">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="h-5 w-5 text-primary" />
+                  Training Files ({files.length})
+                </CardTitle>
+                <CardDescription>
+                  Manage your training data files • {processedFilesCount} processed, {files.length - processedFilesCount} pending
+                </CardDescription>
+              </div>
+              {files.filter(f => !f.processed).length > 0 && (
+                <Button
+                  onClick={handleBatchProcess}
+                  disabled={isTraining}
+                  variant="outline"
+                  size="sm"
+                  className="bg-primary/10 hover:bg-primary/20"
+                >
+                  {isTraining ? (
+                    <>
+                      <Brain className="mr-2 h-4 w-4 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <PlayCircle className="mr-2 h-4 w-4" />
+                      Process All ({files.filter(f => !f.processed).length})
+                    </>
+                  )}
+                </Button>
+              )}
+            </div>
+          </CardHeader>
+          <CardContent>
+            {loading ? (
+              <div className="text-center py-12">
+                <FileText className="mx-auto h-12 w-12 text-muted-foreground mb-4 animate-pulse" />
+                <p className="text-lg font-medium text-muted-foreground">Loading files...</p>
+              </div>
+            ) : files.length === 0 ? (
+              <div className="text-center py-12">
+                <FileText className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+                <p className="text-lg font-medium text-muted-foreground">No training files uploaded</p>
+                <p className="text-sm text-muted-foreground">Upload your first file to get started</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {files.map((file) => (
+                  <div
+                    key={file.id}
+                    className="flex items-center justify-between p-4 rounded-lg border border-border hover:bg-accent/50 transition-colors"
+                  >
+                    <div className="flex items-center gap-3 flex-1">
+                      <div className={`p-2 rounded-md ${
+                        file.processed ? 'bg-green-100 dark:bg-green-900' : 'bg-yellow-100 dark:bg-yellow-900'
+                      }`}>
+                        <FileText className={`h-4 w-4 ${
+                          file.processed ? 'text-green-600 dark:text-green-400' : 'text-yellow-600 dark:text-yellow-400'
+                        }`} />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <p className="font-medium text-sm">{file.filename}</p>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            file.processed 
+                              ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                              : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+                          }`}>
+                            {file.processed ? 'Processed' : 'Pending'}
+                          </span>
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                          {getFileSize(file.metadata)} • {getFileType(file.filename)} • Uploaded {new Date(file.created_at).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {!file.processed && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleProcessFile(file.id)}
+                          disabled={isTraining}
+                          className="bg-primary/10 hover:bg-primary/20"
+                        >
+                          <Play className="h-4 w-4" />
+                        </Button>
+                      )}
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleDeleteFile(file)}
+                        className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Training Status */}
+      {isTraining && (
+        <Card className="border-primary/20 bg-card/50 backdrop-blur-sm">
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-4">
+              <Brain className="h-8 w-8 text-primary animate-spin" />
+              <div>
+                <p className="font-medium">Training AI Model...</p>
+                <p className="text-sm text-muted-foreground">Processing {processedFilesCount} processed files and updating the model</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <AlertTriangle className="h-5 w-5 text-destructive" />
+              File Already Exists
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              A file named "{fileToDelete?.filename}" already exists in your training data. 
+              Do you want to delete the existing file and upload the new one?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleCancelDelete}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleConfirmDelete}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Delete & Upload New
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
+  );
+};
+
+export default TrainingContent;

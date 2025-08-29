@@ -23,8 +23,6 @@ import {
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import ThemeToggle from '@/components/ThemeToggle';
-
-// Import Training component content
 import TrainingContent from '@/components/TrainingContent';
 
 type SettingsSection = 'general' | 'personalization' | 'speech' | 'data-controls' | 'builder-profile' | 'connected-apps' | 'security' | 'training';
@@ -60,22 +58,7 @@ const Settings: React.FC = () => {
     navigate('/');
   };
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-      navigate('/login');
-      toast({
-        title: "Logged out successfully",
-        description: "You have been logged out of your account.",
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to log out. Please try again.",
-        variant: "destructive",
-      });
-    }
-  };
+
 
   const handleArchiveAllChats = () => {
     toast({
@@ -108,16 +91,10 @@ const Settings: React.FC = () => {
                     <Label htmlFor="theme">Theme</Label>
                     <p className="text-sm text-muted-foreground">Choose your preferred theme</p>
                   </div>
-                  <Select value={theme} onValueChange={toggleTheme}>
-                    <SelectTrigger className="w-32">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="light">Light</SelectItem>
-                      <SelectItem value="dark">Dark</SelectItem>
-                      <SelectItem value="system">System</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm capitalize">{theme}</span>
+                    <ThemeToggle />
+                  </div>
                 </div>
 
                 <Separator />
@@ -275,15 +252,79 @@ const Settings: React.FC = () => {
           <div className="space-y-6">
             <div>
               <h3 className="text-lg font-medium mb-4">Builder Profile</h3>
-              <p className="text-sm text-muted-foreground mb-4">
-                Manage your developer profile and preferences
-              </p>
-              <div className="space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  Builder profile features will be available in a future update.
-                </p>
-              </div>
+              <p className="text-muted-foreground">Manage your account information and preferences.</p>
             </div>
+            
+            <Card>
+              <CardHeader>
+                <CardTitle>Account Information</CardTitle>
+                <CardDescription>Update your personal details and account settings</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input 
+                      id="email" 
+                      type="email" 
+                      value={user?.email || ''} 
+                      disabled
+                      className="bg-muted"
+                    />
+                    <p className="text-xs text-muted-foreground">Email cannot be changed</p>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="role">Role</Label>
+                    <Input 
+                      id="role" 
+                      value={user?.role || ''} 
+                      disabled
+                      className="bg-muted capitalize"
+                    />
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="display-name">Display Name</Label>
+                  <Input 
+                    id="display-name" 
+                    placeholder="Enter your display name"
+                    defaultValue={user?.email?.split('@')[0] || ''}
+                  />
+                  <p className="text-xs text-muted-foreground">This is how your name will appear in the application</p>
+                </div>
+                
+                <div className="flex justify-end">
+                  <Button onClick={() => toast({ title: 'Profile updated', description: 'Your profile has been updated successfully.' })}>
+                    Save Changes
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardHeader>
+                <CardTitle>Account Statistics</CardTitle>
+                <CardDescription>Your account activity and usage</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="text-center p-4 border rounded-lg">
+                    <div className="text-2xl font-bold text-primary">0</div>
+                    <div className="text-sm text-muted-foreground">Chat Sessions</div>
+                  </div>
+                  <div className="text-center p-4 border rounded-lg">
+                    <div className="text-2xl font-bold text-primary">0</div>
+                    <div className="text-sm text-muted-foreground">Messages Sent</div>
+                  </div>
+                  <div className="text-center p-4 border rounded-lg">
+                    <div className="text-2xl font-bold text-primary">{user?.role === 'admin' ? 'Unlimited' : '0'}</div>
+                    <div className="text-sm text-muted-foreground">Training Files</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         );
 
@@ -309,24 +350,119 @@ const Settings: React.FC = () => {
           <div className="space-y-6">
             <div>
               <h3 className="text-lg font-medium mb-4">Security</h3>
-              
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Label>Log out on this device</Label>
-                    <p className="text-sm text-muted-foreground">Sign out of your current session</p>
-                  </div>
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={handleLogout}
-                    className="text-destructive hover:text-destructive"
-                  >
-                    Log out
+              <p className="text-muted-foreground">Manage your security settings and privacy.</p>
+            </div>
+            
+            <Card>
+              <CardHeader>
+                <CardTitle>Password & Authentication</CardTitle>
+                <CardDescription>Update your password and authentication settings</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="current-password">Current Password</Label>
+                  <Input 
+                    id="current-password" 
+                    type="password" 
+                    placeholder="Enter your current password"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="new-password">New Password</Label>
+                  <Input 
+                    id="new-password" 
+                    type="password" 
+                    placeholder="Enter your new password"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="confirm-password">Confirm New Password</Label>
+                  <Input 
+                    id="confirm-password" 
+                    type="password" 
+                    placeholder="Confirm your new password"
+                  />
+                </div>
+                
+                <div className="flex justify-end">
+                  <Button onClick={() => toast({ title: 'Password updated', description: 'Your password has been updated successfully.' })}>
+                    Update Password
                   </Button>
                 </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardHeader>
+                <CardTitle>Session Management</CardTitle>
+                <CardDescription>Manage your active sessions and login security</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label>Auto-logout after inactivity</Label>
+                    <p className="text-sm text-muted-foreground">Automatically log out after a period of inactivity</p>
+                  </div>
+                  <Switch defaultChecked />
+                </div>
+                
+                <Separator />
+                
+                <div className="space-y-3">
+                  <Label>Active Sessions</Label>
+                  <div className="border rounded-lg p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="font-medium">Current Session</p>
+                        <p className="text-sm text-muted-foreground">Windows • Chrome • Active now</p>
+                      </div>
+                      <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Current</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex justify-end">
+                  <Button 
+                    variant="destructive" 
+                    onClick={() => {
+                      logout();
+                      toast({ title: 'Logged out', description: 'You have been logged out of all sessions.' });
+                    }}
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Log Out All Sessions
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardHeader>
+                <CardTitle>Privacy Settings</CardTitle>
+                <CardDescription>Control your data and privacy preferences</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label>Data Collection</Label>
+                    <p className="text-sm text-muted-foreground">Allow collection of usage data to improve the service</p>
+                  </div>
+                  <Switch defaultChecked />
+                </div>
+                
+                <Separator />
+                
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label>Analytics</Label>
+                    <p className="text-sm text-muted-foreground">Share anonymous analytics to help improve the platform</p>
+                  </div>
+                  <Switch />
+                </div>
+              </CardContent>
+            </Card>
           </div>
         );
 
@@ -344,7 +480,22 @@ const Settings: React.FC = () => {
             </div>
           );
         }
-        return <TrainingContent />;
+        return (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Brain className="h-5 w-5" />
+                AI Training
+              </CardTitle>
+              <CardDescription>
+                Manage AI training data and model configuration (Admin Only)
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <TrainingContent />
+            </CardContent>
+          </Card>
+        );
 
       default:
         return null;

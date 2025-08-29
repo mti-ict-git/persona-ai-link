@@ -61,7 +61,10 @@ const Index = () => {
   // Load messages for active session
   useEffect(() => {
     if (activeSessionId) {
-      loadSessionMessages(activeSessionId);
+      // Only load messages if we don't already have messages (to preserve optimistic UI)
+      if (currentMessages.length === 0) {
+        loadSessionMessages(activeSessionId);
+      }
     } else {
       setCurrentMessages([]);
     }
@@ -69,18 +72,49 @@ const Index = () => {
 
   const loadSessionMessages = async (sessionId: string) => {
     try {
+      console.log(`Loading messages for session: ${sessionId}`);
       const dbMessages = await getSessionMessages(sessionId);
-      const uiMessages: Message[] = dbMessages.map(msg => ({
+      console.log(`Loaded ${dbMessages.length} messages from database:`, dbMessages.map(m => ({ id: m.id, content: m.content.substring(0, 50), role: m.role })));
+      
+      // Check for duplicates in the database response
+      const messageIds = dbMessages.map(m => m.id);
+      const uniqueIds = new Set(messageIds);
+      if (messageIds.length !== uniqueIds.size) {
+        console.warn('⚠️ Duplicate message IDs found in database response!');
+        console.warn('All IDs:', messageIds);
+        console.warn('Unique IDs:', Array.from(uniqueIds));
+      }
+      
+      // Remove duplicates based on message ID (safety measure)
+      const uniqueDbMessages = dbMessages.filter((msg, index, arr) => 
+        arr.findIndex(m => m.id === msg.id) === index
+      );
+      
+      if (uniqueDbMessages.length !== dbMessages.length) {
+        console.warn(`⚠️ Removed ${dbMessages.length - uniqueDbMessages.length} duplicate messages from UI`);
+      }
+      
+      const uiMessages: Message[] = uniqueDbMessages.map(msg => ({
         id: msg.id,
         content: msg.content,
         role: msg.role,
         timestamp: new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }));
+      
+      console.log(`Setting ${uiMessages.length} UI messages`);
       setCurrentMessages(uiMessages);
     } catch (error) {
       console.error('Failed to load session messages:', error);
       setCurrentMessages([]);
     }
+  };
+
+  const handleNewChat = () => {
+    // Clear current session without creating a new one
+    // New session will be created when first message is sent
+    setCurrentMessages([]);
+    selectSession(''); // Clear active session
+    setShowSuggestions(true); // Show suggestions for new chat
   };
 
   const handleCreateNewSession = async (initialMessage?: string) => {
@@ -97,39 +131,37 @@ const Index = () => {
 
   const handleSendMessage = async (content: string) => {
     let sessionId = activeSessionId;
+    let isNewSession = false;
     
-    // Create new session if none exists
+    // Lazy session creation - create new session only when first message is sent
     if (!sessionId) {
       sessionId = await handleCreateNewSession();
+      isNewSession = true;
+      // Update local state immediately
+      selectSession(sessionId);
+      setShowSuggestions(false); // Hide suggestions once chat starts
     }
 
-    const currentSession = getCurrentSession();
-    if (!currentSession && sessionId !== activeSessionId) {
-      // If we just created a new session, we need to wait for state update
-      // Use the sessionId we just created
-    }
+    // Create optimistic user message for immediate display
+    const optimisticUserMessage: Message = {
+      id: `temp-${Date.now()}`,
+      content,
+      role: 'user',
+      timestamp: new Date().toISOString()
+    };
+
+    // Immediately show user message for better UX
+    setCurrentMessages(prev => [...prev, optimisticUserMessage]);
+    console.log(`User message displayed immediately: "${content.substring(0, 50)}..."`); 
 
     setIsTyping(true);
     try {
-      // Add user message to database
-      await addMessage(sessionId, {
-        content,
-        role: "user"
-        // message_order will be automatically set by addMessage
-      });
+      console.log(`Sending message to N8N webhook for session ${sessionId}: "${content.substring(0, 50)}..."`); 
       
-      // Add to UI immediately
-      const userMessage: Message = {
-        id: Date.now().toString(),
-        content,
-        role: "user",
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      };
-      setCurrentMessages(prev => [...prev, userMessage]);
-
-      // Send to N8N webhook
+      // Send to N8N webhook - the backend will handle adding messages to database
+      // Use 'session_created' for first message in new sessions, 'chat_message' for subsequent messages
       const response = await apiService.sendToN8N({
-        event_type: 'message_sent',
+        event_type: isNewSession ? 'session_created' : 'chat_message',
         sessionId: sessionId,
         message: {
           content,
@@ -142,49 +174,95 @@ const Index = () => {
               role: msg.role,
               timestamp: msg.timestamp
             })),
-            session_name: currentSession?.session_name || undefined
+            session_name: getCurrentSession()?.session_name || undefined
           }
         });
+
+        console.log('N8N webhook response received, reloading messages from database...');
 
         // Handle session name update from N8N response or generate fallback
         if (response?.data?.session_name_update) {
           await handleSessionNameUpdate(sessionId, response.data.session_name_update);
-        } else if (!currentSession?.session_name) {
+        } else if (!getCurrentSession()?.session_name) {
           // Fallback: Generate session name from first user message
           const fallbackName = content.length > 30 
             ? content.substring(0, 30) + '...' 
             : content;
           await handleSessionNameUpdate(sessionId, fallbackName);
         }
-
-        // Extract AI response content from the correct path
-        const aiContent = response?.data?.message || "I've processed your message successfully.";
-
-        // Add AI response to database
-        await addMessage(sessionId, {
-          content: aiContent,
-          role: "assistant",
-          message_order: Date.now() + 1,
-          metadata: response?.data?.raw_response
-        });
         
-        // Add to UI immediately
-        const assistantMessage: Message = {
-          id: (Date.now() + 1).toString(),
-          content: aiContent,
-          role: "assistant",
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        };
-        setCurrentMessages(prev => [...prev, assistantMessage]);
+        // Reload messages from database to show both user message and AI response
+        // (backend adds both messages, this will replace optimistic message with real ones)
+        await loadSessionMessages(sessionId);
     } catch (error) {
       console.error('Failed to send message:', error);
+      // Keep optimistic message visible on N8N error - don't reload from database
+      // This prevents the WelcomeScreen from reappearing when N8N fails
+      console.log('Keeping optimistic message visible due to N8N error');
     } finally {
       setIsTyping(false);
     }
   };
 
-  const handleSuggestionSelect = (prompt: string) => {
-    handleSendMessage(prompt);
+  const handleSuggestionSelect = async (prompt: string) => {
+    setShowSuggestions(false); // Hide suggestions immediately
+    
+    // Create optimistic user message for immediate display
+    const optimisticUserMessage: Message = {
+      id: `temp-${Date.now()}`,
+      content: prompt,
+      role: 'user',
+      timestamp: new Date().toISOString()
+    };
+    
+    // Immediately show user message and start typing animation
+    setCurrentMessages([optimisticUserMessage]);
+    setIsTyping(true);
+    
+    // Create new session after setting optimistic UI
+    const sessionId = await handleCreateNewSession();
+    // Note: createNewSession already sets the active session
+    
+    try {
+      console.log(`Sending prompt template to N8N webhook for new session ${sessionId}: "${prompt.substring(0, 50)}..."`); 
+      
+      // Send to N8N webhook with session_created event type
+      const response = await apiService.sendToN8N({
+        event_type: 'session_created',
+        sessionId: sessionId,
+        message: {
+          content: prompt,
+          role: 'user',
+          timestamp: new Date().toISOString()
+        },
+        context: {
+          session_history: [],
+          session_name: undefined
+        }
+      });
+
+      console.log('N8N webhook response received, reloading messages from database...');
+
+      // Handle session name update from N8N response or generate fallback
+      if (response?.data?.session_name_update) {
+        await handleSessionNameUpdate(sessionId, response.data.session_name_update);
+      } else {
+        // Fallback: Generate session name from prompt
+        const fallbackName = prompt.length > 30 
+          ? prompt.substring(0, 30) + '...' 
+          : prompt;
+        await handleSessionNameUpdate(sessionId, fallbackName);
+      }
+      
+      // Reload messages from database to show both user message and AI response
+      await loadSessionMessages(sessionId);
+    } catch (error) {
+      console.error('Failed to send prompt template message:', error);
+      // Keep optimistic message visible on N8N error
+      console.log('Keeping optimistic message visible due to N8N error');
+    } finally {
+      setIsTyping(false);
+    }
   };
 
   return (
@@ -196,7 +274,7 @@ const Index = () => {
         <ChatSidebar
           sessions={sessions}
           onSessionSelect={selectSession}
-          onNewChat={handleCreateNewSession}
+          onNewChat={handleNewChat}
           onDeleteSession={deleteSession}
           onRenameSession={renameSession}
           activeSessionId={activeSessionId || undefined}

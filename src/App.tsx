@@ -9,6 +9,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Training from "./pages/Training";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -38,11 +39,12 @@ const App = () => (
                 </ProtectedRoute>
               } 
             />
+
             <Route 
-              path="/training" 
+              path="/settings" 
               element={
                 <ProtectedRoute>
-                  <Training />
+                  <Settings />
                 </ProtectedRoute>
               } 
             />

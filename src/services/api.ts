@@ -225,6 +225,35 @@ class ApiService {
     });
   }
 
+  // Generic HTTP methods for file operations
+  async get(endpoint: string): Promise<any> {
+    return this.request(endpoint, {
+      method: 'GET',
+    });
+  }
+
+  async post(endpoint: string, data?: any, options?: { headers?: Record<string, string> }): Promise<any> {
+    const headers: Record<string, string> = {
+      ...options?.headers,
+    };
+
+    // Don't set Content-Type for FormData, let the browser set it
+    if (!(data instanceof FormData)) {
+      headers['Content-Type'] = 'application/json';
+    }
+
+    return this.request(endpoint, {
+      method: 'POST',
+      body: data instanceof FormData ? data : JSON.stringify(data),
+      headers,
+    });
+  }
+
+  async delete(endpoint: string): Promise<any> {
+    return this.request(endpoint, {
+      method: 'DELETE',
+    });
+  }
 
 }
 

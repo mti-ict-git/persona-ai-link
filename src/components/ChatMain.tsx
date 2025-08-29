@@ -189,7 +189,7 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
             </div>
             <div>
               <h1 className="font-bold text-foreground text-lg">Tsindeka AI</h1>
-              <p className="text-xs text-muted-foreground/80 font-medium">Session {sessionId || 'New'}</p>
+              <p className="text-xs text-muted-foreground/80 font-medium">Session {sessionId || 'New Chat'}</p>
             </div>
           </div>
         </div>
