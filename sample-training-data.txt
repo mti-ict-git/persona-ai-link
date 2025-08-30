@@ -1,0 +1,39 @@
+# Sample Training Data for Persona AI
+
+## Company Information
+Merdeka Battery Indonesia is a leading battery manufacturer specializing in automotive and industrial battery solutions.
+
+## Product Categories
+1. Automotive Batteries
+   - Car batteries for various vehicle types
+   - Motorcycle batteries
+   - Truck and heavy vehicle batteries
+
+2. Industrial Batteries
+   - UPS backup systems
+   - Solar energy storage
+   - Marine applications
+
+## Customer Service Guidelines
+- Always greet customers politely
+- Provide accurate product information
+- Offer technical support for battery maintenance
+- Handle warranty claims professionally
+
+## Common Questions
+Q: How long do automotive batteries typically last?
+A: Most automotive batteries last 3-5 years depending on usage and maintenance.
+
+Q: What is the warranty period for your batteries?
+A: We offer a 2-year warranty on automotive batteries and 1-year on industrial batteries.
+
+Q: How should I maintain my battery?
+A: Keep terminals clean, check electrolyte levels regularly, and avoid deep discharge cycles.
+
+## Technical Specifications
+- Voltage ranges: 6V, 12V, 24V
+- Capacity ranges: 35Ah to 200Ah
+- Cold cranking amps: 300-1000 CCA
+- Operating temperature: -20°C to +60°C
+
+This training data helps the AI understand our products and provide accurate customer support.

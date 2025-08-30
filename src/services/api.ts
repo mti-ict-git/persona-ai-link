@@ -47,9 +47,13 @@ class ApiService {
     const url = `${API_BASE_URL}${endpoint}`;
     
     const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
       ...options.headers as Record<string, string>,
     };
+
+    // Only set Content-Type if not already specified (important for FormData)
+    if (!headers['Content-Type']) {
+      headers['Content-Type'] = 'application/json';
+    }
 
     // Add auth token if available
     const token = this.getAuthToken();
@@ -237,9 +241,13 @@ class ApiService {
       ...options?.headers,
     };
 
-    // Don't set Content-Type for FormData, let the browser set it
+    // Don't set Content-Type for FormData, let the browser set it with boundary
     if (!(data instanceof FormData)) {
       headers['Content-Type'] = 'application/json';
+    }
+    // For FormData, explicitly avoid setting Content-Type
+    else {
+      delete headers['Content-Type'];
     }
 
     return this.request(endpoint, {

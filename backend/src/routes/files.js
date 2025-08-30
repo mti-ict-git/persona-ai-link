@@ -3,8 +3,15 @@ const Joi = require('joi');
 const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
+const https = require('https');
 const { processedFilesManager } = require('../utils/processedFilesManager');
+const { deleteFileFromSftp, generateRemoteFilePath } = require('../utils/sftp');
 const router = express.Router();
+
+// Create HTTPS agent to handle self-signed certificates
+const httpsAgent = new https.Agent({
+  rejectUnauthorized: false
+});
 
 // Validation schemas
 const createFileSchema = Joi.object({
@@ -206,7 +213,48 @@ router.delete('/:id', async (req, res) => {
       });
     }
 
-    // Delete physical file if it exists
+    // Send webhook to n8n for Supabase record deletion FIRST
+    try {
+      const n8nBaseUrl = process.env.N8N_BASE_WEBHOOK_URL || 'https://n8nprod.merdekabattery.com:5679/webhook/';
+      const n8nWebhookUrl = n8nBaseUrl + 'train'; // Use same endpoint as processing
+      
+      const webhookPayload = {
+        file_operation: 'delete',
+        file_id: parseInt(id),
+        filename: existingFile.filename,
+        file_path: existingFile.file_path,
+        sftp_path: existingFile.metadata?.sftpPath || generateRemoteFilePath(existingFile.filename),
+        metadata: existingFile.metadata
+      };
+      
+      console.log('Sending delete request to n8n:', webhookPayload);
+      
+      const n8nResponse = await axios.post(n8nWebhookUrl, webhookPayload, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        timeout: 30000, // 30 second timeout
+        httpsAgent: httpsAgent
+      });
+      
+      console.log('N8N delete response:', n8nResponse.data);
+      
+      // Check if N8N deletion was successful
+      if (n8nResponse.status !== 200) {
+        throw new Error(`N8N delete request failed with status ${n8nResponse.status}`);
+      }
+      
+      console.log('Successfully deleted from n8n/Supabase');
+    } catch (webhookError) {
+      console.error('Error sending delete request to n8n:', webhookError.message);
+      return res.status(500).json({
+        success: false,
+        error: 'Failed to delete from Supabase',
+        message: webhookError.message
+      });
+    }
+
+    // After successful n8n deletion, delete physical file
     if (existingFile.file_path) {
       try {
         // Extract filename from file_path (remove /uploads/ prefix)
@@ -225,33 +273,16 @@ router.delete('/:id', async (req, res) => {
       }
     }
 
-    // Send webhook to n8n for Supabase record deletion
-    try {
-      const n8nBaseUrl = process.env.N8N_WEBHOOK_BASE_URL || 'http://localhost:5678';
-      const n8nWebhookUrl = `${n8nBaseUrl}/delete`;
-      
-      // Extract title from filename (remove extension)
-      const title = existingFile.filename.replace(/\.[^/.]+$/, '');
-      
-      const webhookPayload = {
-        title: title,
-        filename: existingFile.filename,
-        file_path: existingFile.file_path
-      };
-      
-      console.log('Sending delete webhook to n8n:', webhookPayload);
-      
-      await axios.post(n8nWebhookUrl, webhookPayload, {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        timeout: 5000 // 5 second timeout
-      });
-      
-      console.log('Successfully notified n8n about file deletion');
-    } catch (webhookError) {
-      console.error('Error sending delete webhook to n8n:', webhookError.message);
-      // Continue with local deletion even if webhook fails
+    // Delete file from SFTP server
+    if (existingFile.filename) {
+      try {
+        const remoteFilePath = existingFile.metadata?.sftpPath || generateRemoteFilePath(existingFile.filename);
+        await deleteFileFromSftp(remoteFilePath);
+        console.log(`SFTP file deleted: ${remoteFilePath}`);
+      } catch (sftpError) {
+        console.error('Error deleting SFTP file:', sftpError.message);
+        // Continue with database deletion even if SFTP deletion fails
+      }
     }
 
     // Delete database record

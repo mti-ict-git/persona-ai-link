@@ -17,7 +17,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Search, Plus, MessageCircle, MoreHorizontal, LogOut, Trash2, Edit2, Check, X } from "lucide-react";
+import { Search, Plus, MessageCircle, MoreHorizontal, LogOut, Trash2, Edit2, Check, X, Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ThemeToggle from "@/components/ThemeToggle";
 
@@ -36,9 +36,11 @@ interface ChatSidebarProps {
   onDeleteSession: (sessionId: string) => void;
   onRenameSession: (sessionId: string, newName: string) => void;
   activeSessionId?: string;
+  showSidebar?: boolean;
+  onToggleSidebar?: () => void;
 }
 
-const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, onRenameSession, activeSessionId }: ChatSidebarProps) => {
+const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, onRenameSession, activeSessionId, showSidebar = true, onToggleSidebar }: ChatSidebarProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [sessionToDelete, setSessionToDelete] = useState<string | null>(null);
@@ -115,7 +117,20 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
               <p className="text-xs text-muted-foreground/80 font-medium">MTI AI Assistant</p>
             </div>
           </div>
-          <ThemeToggle />
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            {onToggleSidebar && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={onToggleSidebar}
+                className="h-9 w-9 rounded-xl hover:bg-muted/80 transition-all duration-200"
+                title="Hide sidebar"
+              >
+                <Menu className="w-4 h-4" />
+              </Button>
+            )}
+          </div>
         </div>
         
         {/* Search */}

@@ -12,6 +12,7 @@ const filesRoutes = require('./routes/files');
 const uploadRoutes = require('./routes/upload');
 const processingRoutes = require('./routes/processing');
 const feedbackRoutes = require('./routes/feedback');
+const trainingRoutes = require('./routes/training');
 const { router: authRoutes } = require('./routes/auth');
 const { initializeDatabase } = require('./utils/database');
 
@@ -62,6 +63,7 @@ app.use('/api/files', filesRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/processing', processingRoutes);
 app.use('/api/feedback', feedbackRoutes);
+app.use('/api/training', trainingRoutes);
 app.use('/api/webhooks', webhookRoutes);
 
 // Error handling middleware

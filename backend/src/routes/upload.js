@@ -3,6 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const { processedFilesManager } = require('../utils/processedFilesManager');
+const { uploadFileToSftp, generateRemoteFilePath } = require('../utils/sftp');
 const router = express.Router();
 
 // Configure multer for file uploads
@@ -90,6 +91,29 @@ router.post('/', upload.single('file'), async (req, res) => {
 
     console.log(`File uploaded successfully: ${originalname} -> ${filename}`);
 
+    // Upload file to SFTP server
+    let sftpPath = null;
+    try {
+      const remotePath = generateRemoteFilePath(originalname);
+      await uploadFileToSftp(filePath, remotePath);
+      sftpPath = remotePath;
+      console.log(`File uploaded to SFTP: ${remotePath}`);
+      
+      // Update file record with SFTP path
+      await processedFilesManager.updateProcessedStatus(
+        fileRecord.id,
+        false,
+        {
+          ...fileRecord.metadata,
+          sftpPath: remotePath,
+          sftpUploadedAt: new Date().toISOString()
+        }
+      );
+    } catch (sftpError) {
+      console.error('SFTP upload failed:', sftpError.message);
+      // Continue without SFTP - file is still available locally
+    }
+
     res.status(201).json({
       success: true,
       data: {
@@ -97,12 +121,13 @@ router.post('/', upload.single('file'), async (req, res) => {
         filename: originalname,
         storedFilename: filename,
         file_path: `/uploads/${filename}`,
+        sftp_path: sftpPath,
         size: size,
         type: mimetype,
         created_at: fileRecord.created_at,
         processed: fileRecord.processed
       },
-      message: 'File uploaded successfully'
+      message: sftpPath ? 'File uploaded successfully to local storage and SFTP' : 'File uploaded successfully to local storage (SFTP upload failed)'
     });
 
   } catch (error) {

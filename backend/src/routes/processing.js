@@ -1,8 +1,19 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const axios = require('axios');
+const https = require('https');
 const { processedFilesManager } = require('../utils/processedFilesManager');
 const router = express.Router();
+
+// Create axios instance with SSL certificate verification disabled for n8n
+const httpsAgent = new https.Agent({
+  rejectUnauthorized: false
+});
+
+// N8N webhook configuration
+const N8N_BASE_WEBHOOK_URL = process.env.N8N_BASE_WEBHOOK_URL || 'https://n8nprod.merdekabattery.com:5679/webhook/';
+const N8N_PROCESS_WEBHOOK_URL = N8N_BASE_WEBHOOK_URL + 'train';
 
 // POST /api/processing/process/:id - Process a specific file
 router.post('/process/:id', async (req, res) => {
@@ -45,30 +56,68 @@ router.post('/process/:id', async (req, res) => {
       
       const fileContent = fs.readFileSync(filePath, 'utf8');
       
-      // Simulate AI processing (replace with actual AI processing logic)
-      const processingResult = await simulateAIProcessing(fileContent, file.filename);
+      // Send file metadata to N8N for processing (without content)
+    const n8nPayload = {
+      file_operation: 'upload',
+      file_id: parseInt(fileId),
+      filename: file.filename,
+      file_path: file.file_path,
+      sftp_path: file.metadata?.sftpPath || null,
+      word_count: fileContent.split(/\s+/).length,
+      uploaded_at: file.uploaded_at,
+      metadata: file.metadata
+    };
       
-      // Update file as processed with results
-      const processedFile = await processedFilesManager.updateProcessedStatus(
-        fileId, 
-        true, 
-        { 
-          ...file.metadata, 
-          status: 'completed',
-          processing_result: processingResult,
-          processed_at: new Date().toISOString(),
-          content_length: fileContent.length
-        }
-      );
+      console.log(`Sending file to N8N for processing: ${file.filename}`);
       
-      console.log(`File processing completed for: ${file.filename}`);
-      
-      res.json({
-        success: true,
-        data: processedFile,
-        message: 'File processed successfully',
-        processing_result: processingResult
+      // Send to N8N webhook
+      const n8nResponse = await axios.post(N8N_PROCESS_WEBHOOK_URL, n8nPayload, {
+        timeout: 30000, // 30 seconds timeout
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        httpsAgent: httpsAgent
       });
+      
+      console.log('N8N Response:', n8nResponse.data);
+      
+      // Check if N8N processing was successful
+      if (n8nResponse.status === 200 && n8nResponse.data) {
+        // Extract response data (handle array format from your example)
+        const responseData = Array.isArray(n8nResponse.data) ? n8nResponse.data[0]?.response?.body : n8nResponse.data;
+        
+        if (responseData?.success && responseData?.status === 'Processed') {
+          // Update file as processed with N8N results
+          const processedFile = await processedFilesManager.updateProcessedStatus(
+            fileId, 
+            true, 
+            { 
+              ...file.metadata, 
+              status: 'completed',
+              processing_result: {
+                word_count: n8nPayload.word_count,
+                processed_by: 'n8n',
+                n8n_message: responseData.message
+              },
+              processed_at: new Date().toISOString(),
+              content_length: fileContent.length
+            }
+          );
+          
+          console.log(`File processing completed via N8N for: ${file.filename}`);
+          
+          res.json({
+            success: true,
+            data: processedFile,
+            message: responseData.message || 'File processed successfully via N8N',
+            processing_result: processedFile.metadata.processing_result
+          });
+        } else {
+          throw new Error(`N8N processing failed: ${responseData?.message || 'Unknown error'}`);
+        }
+      } else {
+        throw new Error(`N8N webhook returned status ${n8nResponse.status}`);
+      }
       
     } catch (processingError) {
       console.error('Processing error:', processingError);
@@ -128,7 +177,7 @@ router.post('/batch', async (req, res) => {
           continue;
         }
         
-        // Process file (similar logic as single file processing)
+        // Process file using N8N webhook (same logic as single file processing)
         await processedFilesManager.updateProcessedStatus(
           parseInt(fileId), 
           false, 
@@ -140,25 +189,63 @@ router.post('/batch', async (req, res) => {
         
         if (fs.existsSync(filePath)) {
           const fileContent = fs.readFileSync(filePath, 'utf8');
-          const processingResult = await simulateAIProcessing(fileContent, file.filename);
           
-          await processedFilesManager.updateProcessedStatus(
-            parseInt(fileId), 
-            true, 
-            { 
-              ...file.metadata, 
-              status: 'completed',
-              processing_result: processingResult,
-              processed_at: new Date().toISOString()
+          // Send file metadata to N8N for processing (without content)
+      const n8nPayload = {
+        file_id: parseInt(fileId),
+        filename: file.filename,
+        file_path: file.file_path,
+        sftp_path: file.metadata?.sftpPath || null,
+        word_count: fileContent.split(/\s+/).length,
+        uploaded_at: file.uploaded_at,
+        metadata: file.metadata
+      };
+          
+          console.log(`Batch processing: Sending file to N8N: ${file.filename}`);
+          
+          // Send to N8N webhook
+           const n8nResponse = await axios.post(N8N_PROCESS_WEBHOOK_URL, n8nPayload, {
+             timeout: 30000, // 30 seconds timeout
+             headers: {
+               'Content-Type': 'application/json'
+             },
+             httpsAgent: httpsAgent
+           });
+          
+          // Check if N8N processing was successful
+          if (n8nResponse.status === 200 && n8nResponse.data) {
+            // Extract response data (handle array format)
+            const responseData = Array.isArray(n8nResponse.data) ? n8nResponse.data[0]?.response?.body : n8nResponse.data;
+            
+            if (responseData?.success && responseData?.status === 'Processed') {
+              await processedFilesManager.updateProcessedStatus(
+                parseInt(fileId), 
+                true, 
+                { 
+                  ...file.metadata, 
+                  status: 'completed',
+                  processing_result: {
+                    word_count: n8nPayload.word_count,
+                    processed_by: 'n8n',
+                    n8n_message: responseData.message
+                  },
+                  processed_at: new Date().toISOString(),
+                  content_length: fileContent.length
+                }
+              );
+              
+              results.push({
+                fileId,
+                success: true,
+                filename: file.filename,
+                message: responseData.message || 'File processed successfully via N8N'
+              });
+            } else {
+              throw new Error(`N8N processing failed: ${responseData?.message || 'Unknown error'}`);
             }
-          );
-          
-          results.push({
-            fileId,
-            success: true,
-            filename: file.filename,
-            processing_result: processingResult
-          });
+          } else {
+            throw new Error(`N8N webhook returned status ${n8nResponse.status}`);
+          }
         } else {
           throw new Error('Physical file not found');
         }

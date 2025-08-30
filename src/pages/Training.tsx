@@ -15,6 +15,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 interface TrainingFile {
   id: string;
@@ -31,6 +38,8 @@ const Training = () => {
   const [files, setFiles] = useState<TrainingFile[]>([]);
   const [isTraining, setIsTraining] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [processingFiles, setProcessingFiles] = useState<string[]>([]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [fileToDelete, setFileToDelete] = useState<TrainingFile | null>(null);
   const [duplicateFile, setDuplicateFile] = useState<File | null>(null);
@@ -69,6 +78,18 @@ const Training = () => {
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
+
+    // Check file size (10MB limit)
+    const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+    if (file.size > maxSize) {
+      toast({
+        title: "File too large",
+        description: `File size (${(file.size / 1024 / 1024).toFixed(1)}MB) exceeds the 10MB limit. Please choose a smaller file.`,
+        variant: "destructive",
+      });
+      event.target.value = '';
+      return;
+    }
 
     // Check if file already exists
     const existingFile = files.find(f => f.filename === file.name);
@@ -223,6 +244,8 @@ const Training = () => {
   };
 
   const handleProcessFile = async (fileId: string) => {
+    setIsProcessing(true);
+    setProcessingFiles([fileId]);
     try {
       const response = await fetch(`/api/processing/process/${fileId}`, {
         method: 'POST',
@@ -254,6 +277,9 @@ const Training = () => {
         description: "Failed to process file. Please try again.",
         variant: "destructive",
       });
+    } finally {
+      setIsProcessing(false);
+      setProcessingFiles([]);
     }
   };
 
@@ -268,9 +294,10 @@ const Training = () => {
       return;
     }
 
-    setIsTraining(true);
+    const fileIds = unprocessedFiles.map(f => f.id);
+    setIsProcessing(true);
+    setProcessingFiles(fileIds);
     try {
-      const fileIds = unprocessedFiles.map(f => f.id);
       const response = await fetch('/api/processing/batch', {
         method: 'POST',
         headers: {
@@ -303,7 +330,8 @@ const Training = () => {
         variant: "destructive",
       });
     } finally {
-      setIsTraining(false);
+      setIsProcessing(false);
+      setProcessingFiles([]);
     }
   };
 
@@ -320,13 +348,29 @@ const Training = () => {
 
     setIsTraining(true);
     try {
-      // TODO: Implement actual training API call
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      
-      toast({
-        title: "Model training completed",
-        description: `AI model has been successfully updated with ${processedFiles.length} processed files.`,
+      const response = await fetch('/api/training/train', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
+
+      if (response.ok) {
+        const data = await response.json();
+        const trainingResult = data.data;
+        
+        toast({
+          title: "Model training completed",
+          description: `AI model successfully trained with ${trainingResult.files_processed} files (${trainingResult.total_words} words) in ${(trainingResult.duration_ms / 1000).toFixed(1)}s. Model version: ${trainingResult.model_version}`,
+        });
+      } else {
+        const errorData = await response.json();
+        toast({
+          title: "Training failed",
+          description: errorData.message || "Failed to train the model.",
+          variant: "destructive",
+        });
+      }
     } catch (error) {
       console.error('Training error:', error);
       toast({
@@ -429,9 +473,10 @@ const Training = () => {
                 </div>
                 
                 <div className="space-y-2 text-xs text-muted-foreground">
-                  <p>• Maximum file size: 10MB</p>
-                  <p>• Supported formats: PDF, DOCX, TXT</p>
+                  <p className="font-medium text-orange-600 dark:text-orange-400">• Maximum file size: 10MB</p>
+                  <p>• Supported formats: PDF, DOCX, TXT, DOC</p>
                   <p>• Files will be processed automatically</p>
+                  <p className="text-xs text-muted-foreground/70">Files exceeding 10MB will be rejected</p>
                 </div>
               </div>
             </CardContent>
@@ -453,12 +498,12 @@ const Training = () => {
                 {files.filter(f => !f.processed).length > 0 && (
                   <Button
                     onClick={handleBatchProcess}
-                    disabled={isTraining}
+                    disabled={isProcessing || isTraining}
                     variant="outline"
                     size="sm"
                     className="bg-primary/10 hover:bg-primary/20"
                   >
-                    {isTraining ? (
+                    {isProcessing ? (
                       <>
                         <Brain className="mr-2 h-4 w-4 animate-spin" />
                         Processing...
@@ -522,10 +567,14 @@ const Training = () => {
                             variant="outline"
                             size="sm"
                             onClick={() => handleProcessFile(file.id)}
-                            disabled={isTraining}
+                            disabled={isProcessing || isTraining}
                             className="bg-primary/10 hover:bg-primary/20"
                           >
-                            <Play className="h-4 w-4" />
+                            {processingFiles.includes(file.id) ? (
+                              <Brain className="h-4 w-4 animate-spin" />
+                            ) : (
+                              <Play className="h-4 w-4" />
+                            )}
                           </Button>
                         )}
                         <Button
@@ -586,6 +635,58 @@ const Training = () => {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+
+        {/* Training Progress Modal */}
+        <Dialog open={isTraining} onOpenChange={() => {}}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Brain className="h-5 w-5 animate-pulse text-primary" />
+                Training AI Model
+              </DialogTitle>
+              <DialogDescription className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                  Processing your training data...
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-primary/60 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }} />
+                  Processed {processedFilesCount} files
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-primary/40 rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
+                  Please wait while we train your model...
+                </div>
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+
+        {/* File Processing Modal */}
+        <Dialog open={isProcessing} onOpenChange={() => {}}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Play className="h-5 w-5 animate-pulse text-blue-500" />
+                Processing Files
+              </DialogTitle>
+              <DialogDescription className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                  {processingFiles.length === 1 ? 'Processing file...' : `Processing ${processingFiles.length} files...`}
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }} />
+                  Sending data to processing pipeline
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-blue-300 rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
+                  Please wait while we process your files...
+                </div>
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

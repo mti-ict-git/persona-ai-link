@@ -314,7 +314,7 @@ const Index = () => {
   return (
     <div className="h-screen flex bg-background">
       {/* Sidebar with conditional rendering and animations */}
-      <div className={`transition-all duration-300 ease-in-out ${
+      <div className={`transition-all duration-300 ease-in-out flex-shrink-0 ${
         showSidebar ? 'w-80 opacity-100' : 'w-0 opacity-0 overflow-hidden'
       }`}>
         <ChatSidebar
@@ -324,6 +324,8 @@ const Index = () => {
           onDeleteSession={deleteSession}
           onRenameSession={renameSession}
           activeSessionId={activeSessionId || undefined}
+          showSidebar={showSidebar}
+          onToggleSidebar={() => setShowSidebar(!showSidebar)}
         />
       </div>
       

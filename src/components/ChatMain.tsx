@@ -181,7 +181,8 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
               variant="ghost"
               size="sm"
               onClick={onToggleSidebar}
-              className="lg:hidden h-9 w-9 rounded-xl hover:bg-muted/80 transition-all duration-200"
+              className="h-9 w-9 rounded-xl hover:bg-muted/80 transition-all duration-200"
+              title={showSidebar ? "Hide sidebar" : "Show sidebar"}
             >
               {showSidebar ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
             </Button>

@@ -14,6 +14,13 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import {
   Upload,
   FileText,
   Brain,
@@ -37,6 +44,8 @@ const TrainingContent: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
   const [isTraining, setIsTraining] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [processingFiles, setProcessingFiles] = useState<string[]>([]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [fileToDelete, setFileToDelete] = useState<FileData | null>(null);
   const [pendingFile, setPendingFile] = useState<File | null>(null);
@@ -66,6 +75,18 @@ const TrainingContent: React.FC = () => {
     const file = event.target.files?.[0];
     if (!file) return;
 
+    // Check file size (10MB limit)
+    const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+    if (file.size > maxSize) {
+      toast({
+        title: "File too large",
+        description: `File size (${(file.size / 1024 / 1024).toFixed(1)}MB) exceeds the 10MB limit. Please choose a smaller file.`,
+        variant: "destructive",
+      });
+      event.target.value = '';
+      return;
+    }
+
     // Check if file already exists
     const existingFile = files.find(f => f.filename === file.name);
     if (existingFile) {
@@ -85,26 +106,22 @@ const TrainingContent: React.FC = () => {
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await apiService.post('/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      const response = await apiService.post('/upload', formData);
 
-      if (response.data.success) {
+      if (response.success) {
         toast({
           title: "File uploaded successfully",
           description: `${file.name} has been uploaded and is ready for processing.`,
         });
         fetchFiles();
       } else {
-        throw new Error(response.data.message || 'Upload failed');
+        throw new Error(response.message || 'Upload failed');
       }
     } catch (error: any) {
       console.error('Upload error:', error);
       toast({
         title: "Upload failed",
-        description: error.response?.data?.message || "Failed to upload file. Please try again.",
+        description: error.response?.data?.message || error.message || "Failed to upload file. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -153,60 +170,66 @@ const TrainingContent: React.FC = () => {
   };
 
   const handleProcessFile = async (fileId: string) => {
+    setIsProcessing(true);
+    setProcessingFiles([fileId]);
     try {
-      const response = await apiService.post(`/webhooks/upload`, {
-        fileId,
-        action: 'process'
-      });
+      const response = await apiService.post(`/processing/process/${fileId}`);
 
-      if (response.data.success) {
+      if (response.success) {
         toast({
-          title: "File processing started",
-          description: "The file is being processed and will be ready for training soon.",
+          title: "File processing completed",
+          description: "The file has been processed and is ready for training.",
         });
         fetchFiles();
       } else {
-        throw new Error(response.data.message || 'Processing failed');
+        throw new Error(response.message || 'Processing failed');
       }
     } catch (error: any) {
       console.error('Processing error:', error);
       toast({
         title: "Processing failed",
-        description: error.response?.data?.message || "Failed to process file. Please try again.",
+        description: error.response?.data?.message || error.message || "Failed to process file. Please try again.",
         variant: "destructive",
       });
+    } finally {
+      setIsProcessing(false);
+      setProcessingFiles([]);
     }
   };
 
   const handleBatchProcess = async () => {
     const unprocessedFiles = files.filter(f => !f.processed);
-    if (unprocessedFiles.length === 0) return;
+    if (unprocessedFiles.length === 0) {
+      toast({
+        title: "No files to process",
+        description: "All files have already been processed.",
+        variant: "destructive",
+      });
+      return;
+    }
 
-    setIsTraining(true);
+    const fileIds = unprocessedFiles.map(f => f.id);
+    setIsProcessing(true);
+    setProcessingFiles(fileIds);
     try {
-      const promises = unprocessedFiles.map(file => 
-        apiService.post(`/webhooks/upload`, {
-          fileId: file.id,
-          action: 'process'
-        })
-      );
-
-      await Promise.all(promises);
+      const response = await apiService.post('/processing/batch', { fileIds });
       
       toast({
         title: "Batch processing completed",
-        description: `${unprocessedFiles.length} files have been processed successfully.`,
+        description: response.message,
       });
+      // Refresh file list
       fetchFiles();
     } catch (error) {
       console.error('Batch processing error:', error);
       toast({
         title: "Batch processing failed",
-        description: "Failed to process files. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to process files. Please try again.",
         variant: "destructive",
       });
     } finally {
-      setIsTraining(false);
+      setIsProcessing(false);
+      setProcessingFiles([]);
     }
   };
 
@@ -223,13 +246,29 @@ const TrainingContent: React.FC = () => {
 
     setIsTraining(true);
     try {
-      // TODO: Implement actual training API call
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      
-      toast({
-        title: "Model training completed",
-        description: `AI model has been successfully updated with ${processedFiles.length} processed files.`,
+      const response = await fetch('/api/training/train', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
+
+      if (response.ok) {
+        const data = await response.json();
+        const trainingResult = data.data;
+        
+        toast({
+          title: "Model training completed",
+          description: `AI model successfully trained with ${trainingResult.files_processed} files (${trainingResult.total_words} words) in ${(trainingResult.duration_ms / 1000).toFixed(1)}s. Model version: ${trainingResult.model_version}`,
+        });
+      } else {
+        const errorData = await response.json();
+        toast({
+          title: "Training failed",
+          description: errorData.message || "Failed to train the model.",
+          variant: "destructive",
+        });
+      }
     } catch (error) {
       console.error('Training error:', error);
       toast({
@@ -321,9 +360,10 @@ const TrainingContent: React.FC = () => {
               </div>
               
               <div className="space-y-2 text-xs text-muted-foreground">
-                <p>• Maximum file size: 10MB</p>
-                <p>• Supported formats: PDF, DOCX, TXT</p>
+                <p className="font-medium text-orange-600 dark:text-orange-400">• Maximum file size: 10MB</p>
+                <p>• Supported formats: PDF, DOCX, TXT, DOC</p>
                 <p>• Files will be processed automatically</p>
+                <p className="text-xs text-muted-foreground/70">Files exceeding 10MB will be rejected</p>
               </div>
             </div>
           </CardContent>
@@ -345,12 +385,12 @@ const TrainingContent: React.FC = () => {
               {files.filter(f => !f.processed).length > 0 && (
                 <Button
                   onClick={handleBatchProcess}
-                  disabled={isTraining}
+                  disabled={isProcessing || isTraining}
                   variant="outline"
                   size="sm"
                   className="bg-primary/10 hover:bg-primary/20"
                 >
-                  {isTraining ? (
+                  {isProcessing ? (
                     <>
                       <Brain className="mr-2 h-4 w-4 animate-spin" />
                       Processing...
@@ -414,10 +454,14 @@ const TrainingContent: React.FC = () => {
                           variant="outline"
                           size="sm"
                           onClick={() => handleProcessFile(file.id)}
-                          disabled={isTraining}
+                          disabled={isProcessing || isTraining || processingFiles.includes(file.id)}
                           className="bg-primary/10 hover:bg-primary/20"
                         >
-                          <Play className="h-4 w-4" />
+                          {processingFiles.includes(file.id) ? (
+                            <Brain className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <Play className="h-4 w-4" />
+                          )}
                         </Button>
                       )}
                       <Button
@@ -478,6 +522,66 @@ const TrainingContent: React.FC = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Training Progress Modal */}
+      <Dialog open={isTraining} onOpenChange={() => {}}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-3">
+              <Brain className="h-6 w-6 text-primary animate-spin" />
+              Training AI Model
+            </DialogTitle>
+            <DialogDescription className="text-center pt-4">
+              <div className="space-y-4">
+                <div className="flex justify-center">
+                  <div className="relative">
+                    <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <Brain className="h-6 w-6 text-primary" />
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <p className="text-sm font-medium">Processing training data...</p>
+                  <p className="text-xs text-muted-foreground">
+                    Training the AI model with {processedFilesCount} processed files.
+                    This may take up to 60 seconds.
+                  </p>
+                  <p className="text-xs text-muted-foreground font-medium">
+                    Please wait and do not close this window.
+                  </p>
+                </div>
+              </div>
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+
+      {/* File Processing Modal */}
+      <Dialog open={isProcessing} onOpenChange={() => {}}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Play className="h-5 w-5 animate-pulse text-blue-500" />
+              Processing Files
+            </DialogTitle>
+            <DialogDescription className="space-y-2">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                {processingFiles.length === 1 ? 'Processing file...' : `Processing ${processingFiles.length} files...`}
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }} />
+                Sending data to processing pipeline
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-blue-300 rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
+                Please wait while we process your files...
+              </div>
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
