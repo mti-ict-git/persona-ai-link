@@ -31,8 +31,7 @@ services:
       - ./backend/package.json:/app/package.json
       - ./backend/uploads:/app/uploads
       - /app/node_modules
-    networks:
-      - persona-network-dev
+    # Using default Docker network
     restart: unless-stopped
     # No database dependency since using external database
     command: npm run dev
@@ -61,8 +60,7 @@ services:
       - ./tailwind.config.ts:/app/tailwind.config.ts
       - ./tsconfig.json:/app/tsconfig.json
       - /app/node_modules
-    networks:
-      - persona-network-dev
+    # Using default Docker network
     restart: unless-stopped
     depends_on:
       - backend
@@ -71,10 +69,4 @@ services:
     tty: true
 
 # No volumes needed for external database setup
-
-networks:
-  persona-network-dev:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.21.0.0/16
+# Using default Docker bridge network

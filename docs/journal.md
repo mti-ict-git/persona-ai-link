@@ -1,5 +1,37 @@
 # Development Journal
 
+## September 1, 2025 - Docker Network Configuration Fix
+
+**Summary**: Removed custom Docker network configurations to resolve subnet conflict errors during container deployment.
+
+**Issue Resolved**:
+- Docker Compose was failing with error: "failed to create network persona-ai-link_persona-network: Error response from daemon: invalid pool request: Pool overlaps with other one on this address space"
+- Custom networks with defined subnets were causing conflicts with existing Docker networks on the system
+- Both production and development compose files had custom network definitions
+
+**Changes Made**:
+1. **docker-compose.yml**: Removed custom network configuration
+   - Eliminated `persona-network` with subnet 172.20.0.0/16
+   - Removed network references from frontend and backend services
+   - Replaced with comments indicating use of default Docker network
+
+2. **docker-compose.dev.yml**: Removed custom network configuration
+   - Eliminated `persona-network-dev` with subnet 172.21.0.0/16
+   - Removed network references from frontend and backend services
+   - Replaced with comments indicating use of default Docker network
+
+**Technical Details**:
+- Custom networks are not mandatory for basic Docker Compose setups
+- Default Docker bridge network provides adequate service-to-service communication
+- Services can still communicate using service names as hostnames
+- Eliminates potential subnet conflicts with existing Docker networks
+
+**Benefits**:
+- Resolves Docker network creation errors
+- Simplifies Docker Compose configuration
+- Reduces potential for network conflicts
+- Maintains all required service connectivity
+
 ## September 1, 2025 - Docker Build Dependency Fix
 
 **Summary**: Fixed Docker frontend build failure caused by missing Vite dependency during the build process.
