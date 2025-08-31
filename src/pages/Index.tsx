@@ -36,7 +36,6 @@ const Index = () => {
     setNewMessageIds(prev => {
       const newSet = new Set(prev);
       newSet.delete(messageId);
-      console.log(`Typewriter animation completed for message ${messageId}, removed from tracking`);
       return newSet;
     });
   };
@@ -87,27 +86,16 @@ const Index = () => {
 
   const loadSessionMessages = async (sessionId: string) => {
     try {
-      console.log(`Loading messages for session: ${sessionId}`);
       const dbMessages = await getSessionMessages(sessionId);
-      console.log(`Loaded ${dbMessages.length} messages from database:`, dbMessages.map(m => ({ id: m.id, content: m.content.substring(0, 50), role: m.role })));
       
       // Check for duplicates in the database response
       const messageIds = dbMessages.map(m => m.id);
       const uniqueIds = new Set(messageIds);
-      if (messageIds.length !== uniqueIds.size) {
-        console.warn('⚠️ Duplicate message IDs found in database response!');
-        console.warn('All IDs:', messageIds);
-        console.warn('Unique IDs:', Array.from(uniqueIds));
-      }
       
       // Remove duplicates based on message ID (safety measure)
       const uniqueDbMessages = dbMessages.filter((msg, index, arr) => 
         arr.findIndex(m => m.id === msg.id) === index
       );
-      
-      if (uniqueDbMessages.length !== dbMessages.length) {
-        console.warn(`⚠️ Removed ${dbMessages.length - uniqueDbMessages.length} duplicate messages from UI`);
-      }
       
       const uiMessages: Message[] = uniqueDbMessages.map(msg => ({
         id: msg.id,
@@ -116,7 +104,6 @@ const Index = () => {
         timestamp: new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }));
       
-      console.log(`Setting ${uiMessages.length} UI messages`);
       setCurrentMessages(uiMessages);
       // Clear new message IDs when loading existing messages (no animation for existing messages)
       setNewMessageIds(new Set());
@@ -160,7 +147,6 @@ const Index = () => {
 
     // Immediately show user message for better UX
     setCurrentMessages(prev => [...prev, optimisticUserMessage]);
-    console.log(`User message displayed immediately: "${content.substring(0, 50)}..."`); 
     setIsTyping(true);
     
     // Lazy session creation - create new session only when first message is sent
@@ -171,8 +157,7 @@ const Index = () => {
       selectSession(sessionId);
       setShowSuggestions(false); // Hide suggestions once chat starts
     }
-    try {
-      console.log(`Sending message to N8N webhook for session ${sessionId}: "${content.substring(0, 50)}..."`); 
+    try { 
       
       // Send to N8N webhook - the backend will handle adding messages to database
       // Use 'session_created' for first message in new sessions, 'chat_message' for subsequent messages
@@ -194,7 +179,7 @@ const Index = () => {
           }
         });
 
-        console.log('N8N webhook response received, reloading messages from database...');
+        // Reload messages from database after N8N response
 
         // Handle session name update from N8N response or generate fallback
         if (response?.data?.session_name_update) {
@@ -223,13 +208,11 @@ const Index = () => {
         if (newAssistantMessages.length > 0) {
           const newIds = new Set(newAssistantMessages.map(msg => msg.id));
           setNewMessageIds(newIds);
-          console.log(`Marked ${newIds.size} new assistant messages for typewriter animation:`, Array.from(newIds));
         }
     } catch (error) {
       console.error('Failed to send message:', error);
       // Keep optimistic message visible on N8N error - don't reload from database
       // This prevents the WelcomeScreen from reappearing when N8N fails
-      console.log('Keeping optimistic message visible due to N8N error');
     } finally {
       setIsTyping(false);
     }
@@ -254,8 +237,7 @@ const Index = () => {
     const sessionId = await handleCreateNewSession();
     // Note: createNewSession already sets the active session
     
-    try {
-      console.log(`Sending prompt template to N8N webhook for new session ${sessionId}: "${prompt.substring(0, 50)}..."`); 
+    try { 
       
       // Send to N8N webhook with session_created event type
       const response = await apiService.sendToN8N({
@@ -272,7 +254,7 @@ const Index = () => {
         }
       });
 
-      console.log('N8N webhook response received, reloading messages from database...');
+      // Reload messages from database after N8N response
 
       // Handle session name update from N8N response or generate fallback
       if (response?.data?.session_name_update) {
@@ -300,12 +282,10 @@ const Index = () => {
       if (newAssistantMessages.length > 0) {
         const newIds = new Set(newAssistantMessages.map(msg => msg.id));
         setNewMessageIds(newIds);
-        console.log(`Marked ${newIds.size} new assistant messages for typewriter animation:`, Array.from(newIds));
       }
     } catch (error) {
       console.error('Failed to send prompt template message:', error);
       // Keep optimistic message visible on N8N error
-      console.log('Keeping optimistic message visible due to N8N error');
     } finally {
       setIsTyping(false);
     }

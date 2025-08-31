@@ -4,7 +4,7 @@ import { apiService, ApiError } from '../services/api';
 
 interface WebhookResponse {
   success: boolean;
-  data?: any;
+  data?: unknown;
   error?: string;
   session_name_update?: string;
 }
@@ -32,7 +32,7 @@ export const useN8NWebhook = () => {
     };
   }): Promise<{
     success: boolean;
-    response?: any;
+    response?: unknown;
     session_name_update?: string;
     ai_message?: {
       content: string;
@@ -43,11 +43,7 @@ export const useN8NWebhook = () => {
     setError(null);
 
     try {
-      console.log('Sending to N8N via API:', payload);
-      
       const result = await apiService.sendToN8N(payload);
-      
-      console.log('N8N Response via API:', result);
       
       return result;
     } catch (err) {
@@ -66,18 +62,14 @@ export const useN8NWebhook = () => {
 
   const testWebhook = useCallback(async (): Promise<{
     success: boolean;
-    response?: any;
+    response?: unknown;
     error?: string;
   }> => {
     setIsLoading(true);
     setError(null);
 
     try {
-      console.log('Testing N8N server connection via API');
-      
       const result = await apiService.testWebhook();
-      
-      console.log('N8N server test response via API:', result);
       
       if (result.success) {
         toast.success('N8N server connection successful!');
