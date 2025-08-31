@@ -3792,3 +3792,185 @@ Implemented comprehensive LDAP (Active Directory) authentication support using t
 - **Consistent Navigation**: Users now have a single, predictable location for account management in the sidebar
 
 The account settings functionality remains fully accessible through the bottom left sidebar, maintaining all original functionality while improving the overall user experience.
+
+## August 31, 2025 - Docker Port Configuration Implementation
+
+**Status**: ✅ COMPLETED
+
+**Summary**: Implemented flexible port configuration for Docker containers while preserving local development setup on port 8080.
+
+**Key Changes**:
+
+1. **Environment Variables Added to `.env`**:
+   - `FRONTEND_PORT=3000` - Docker production frontend (avoiding 8080 conflicts)
+   - `FRONTEND_DEV_PORT=5173` - Docker development frontend
+   - `BACKEND_PORT=3001` - Docker backend port
+   - Network subnet configurations for both environments
+
+2. **Docker Compose Updates**:
+   - Updated `docker-compose.yml` to use environment variables with fallback defaults
+   - Updated `docker-compose.dev.yml` for consistent port management
+   - All port mappings now configurable via environment variables
+
+3. **Documentation Created**:
+   - `docs/docker-ports.md` - Comprehensive guide for port configuration
+   - Usage examples for different scenarios
+   - Command-line override instructions
+
+**Port Strategy**:
+- **Local Development**: Continue using port 8080 (unchanged workflow)
+- **Docker Production**: Use port 3000 (configurable, avoids conflicts)
+- **Docker Development**: Use port 5173 (configurable)
+- **Runtime Override**: All ports can be changed via environment variables
+
+**Benefits**:
+- Avoids port 8080 conflicts in Docker environments
+- Maintains flexibility for different deployment scenarios
+- Preserves existing local development workflow
+- Provides clear documentation for port management
+- Easy runtime configuration without editing Docker files
+
+**Files Modified**:
+- `.env` - Added Docker port configuration variables
+- `docker-compose.yml` - Environment variable integration
+- `docker-compose.dev.yml` - Development port flexibility
+- `docs/docker-ports.md` - Port configuration documentation
+
+**Status**: ✅ COMPLETED - Docker port configuration is now flexible and well-documented
+
+## August 31, 2025 - Enhanced README.Docker.md with Comprehensive Port Configuration Documentation
+
+**Status**: ✅ COMPLETED
+
+**Summary**: Significantly enhanced `README.Docker.md` with comprehensive documentation about the flexible port configuration implementation, providing users with clear guidance on how to change frontend and backend ports in Docker environments.
+
+**Key Enhancements**:
+
+1. **Port Configuration Section Added**:
+   - Detailed explanation of environment variables for port configuration
+   - Clear port strategy documentation across different environments
+   - Three distinct methods for changing ports with step-by-step instructions
+   - Comprehensive port comparison table for different environments
+   - Port conflict resolution strategies and troubleshooting
+
+2. **Updated Documentation Structure**:
+   - Changed prerequisites from hardcoded ports to configurable ports reference
+   - Updated all access URLs from port 8080 to port 3000 (new default)
+   - Enhanced troubleshooting section with Windows and Linux/Mac commands
+   - Updated health check examples to use environment variables with fallbacks
+
+## August 31, 2025 - Database Initialization Scripts for Docker Deployment
+
+**Status**: ✅ COMPLETED
+
+**Summary**: Created comprehensive database initialization scripts for Docker deployment with MS SQL Server 2022, including automated schema creation, default users, and proper Docker integration.
+
+**Key Components Created**:
+
+1. **Database Initialization Scripts** (`database/docker-init/`):
+   - `01-create-database.sql`: Database creation and configuration
+   - `02-create-schema.sql`: Complete schema with tables, indexes, and constraints
+   - `03-create-triggers.sql`: Automatic timestamp update triggers
+   - `04-insert-initial-data.sql`: Default users and role permissions
+   - `docker-entrypoint.sh`: Orchestration script for initialization
+
+2. **Database Docker Configuration**:
+   - `database/Dockerfile`: MS SQL Server 2022 container with initialization
+   - `database/README.Docker.md`: Comprehensive documentation for database setup
+   - Health checks and monitoring configuration
+   - Volume persistence for data retention
+
+3. **Docker Compose Integration**:
+   - Updated `docker-compose.yml` with database service
+   - Updated `docker-compose.dev.yml` with development database
+   - Added database environment variables to `.env`
+   - Configured service dependencies and health checks
+
+**Database Schema Features**:
+- **chat_Users**: User authentication with local/LDAP support
+- **sessions**: Chat session management with metadata
+- **messages**: Message storage with ordering and relationships
+- **role_permissions**: RBAC system for granular access control
+- **ProcessedFiles**: Training data management
+- **message_feedback**: User feedback system
+
+**Default Users Created**:
+- `superadmin@personaai.local` (password: admin123) - Full system access
+- `admin@personaai.local` (password: admin123) - Administrative access
+- `demo@personaai.local` (password: demo123) - Demo/testing account
+
+**Environment Variables Added**:
+- `DB_PORT=1433`: Database port configuration
+- `DB_SA_PASSWORD=PersonaAI2024!`: SA user password
+- `DB_NAME=PersonaAILink`: Database name
+- `DB_USER=sa`: Database user
+- `DB_HOST=localhost`: Database host
+
+**Docker Features**:
+- Automated database initialization on first run
+- Health checks for container monitoring
+- Volume persistence for data retention
+- Security configurations and resource limits
+- Cross-platform compatibility (Windows/Linux/Mac)
+
+**Benefits**:
+- **Zero-configuration setup**: Database ready immediately after container start
+- **Production-ready**: Proper security, health checks, and monitoring
+- **Development-friendly**: Separate volumes for dev/prod environments
+- **Comprehensive documentation**: Complete setup and troubleshooting guides
+- **Scalable architecture**: Proper indexing and performance optimization
+
+**Files Modified/Created**:
+- `database/docker-init/01-create-database.sql` (new)
+- `database/docker-init/02-create-schema.sql` (new)
+- `database/docker-init/03-create-triggers.sql` (new)
+- `database/docker-init/04-insert-initial-data.sql` (new)
+- `database/docker-init/docker-entrypoint.sh` (new)
+- `database/Dockerfile` (new)
+- `database/README.Docker.md` (new)
+- `docker-compose.yml` (updated with database service)
+- `docker-compose.dev.yml` (updated with database service)
+- `.env` (updated with database configuration)
+
+3. **Three Port Change Methods Documented**:
+   - **Method 1**: Environment Variables (Recommended) - Update `.env` and restart
+   - **Method 2**: Docker Compose Override - Create `docker-compose.override.yml`
+   - **Method 3**: Command Line Override - Runtime environment variable specification
+
+4. **Cross-Platform Support**:
+   - Windows-specific commands (`netstat -ano | findstr`)
+   - Linux/Mac commands (`lsof -i`, `netstat -tulpn`)
+   - Platform-agnostic Docker commands
+
+5. **Practical Examples Added**:
+   - Step-by-step port change scenarios
+   - Environment-specific configuration examples
+   - Conflict resolution workflows
+   - Production deployment considerations
+
+**Documentation Improvements**:
+- **Environment Variables Table**: Complete reference for all port configurations
+- **Port Strategy Explanation**: Clear distinction between local dev, Docker prod, and Docker dev
+- **Conflict Resolution Guide**: Comprehensive troubleshooting for port conflicts
+- **Override Examples**: Practical YAML and command-line examples
+- **Cross-Reference Updates**: All port references updated throughout the document
+
+**User Benefits**:
+- Clear understanding of flexible port configuration capabilities
+- Step-by-step guidance for customizing ports to avoid conflicts
+- Comprehensive troubleshooting support for common port issues
+- Cross-platform compatibility with specific command examples
+- Production-ready deployment guidance with security considerations
+
+**Files Modified**:
+- `README.Docker.md` - Comprehensive enhancement with port configuration documentation
+- `docs/journal.md` - This documentation entry
+
+**Technical Details**:
+- Updated all hardcoded port references (8080 → 3000)
+- Added environment variable syntax with fallback defaults
+- Included practical override examples for different use cases
+- Enhanced troubleshooting with platform-specific commands
+- Maintained backward compatibility while promoting new flexible approach
+
+**Status**: ✅ COMPLETED - README.Docker.md now provides comprehensive guidance for Docker port configuration

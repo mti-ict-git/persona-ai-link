@@ -1,6 +1,46 @@
 version: '3.8'
 
 services:
+  # Database (MS SQL Server)
+  database:
+    build:
+      context: ./database
+      dockerfile: Dockerfile
+    container_name: persona-ai-database
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${DB_SA_PASSWORD:-PersonaAI2024!}
+      - MSSQL_PID=Express
+      - MSSQL_TCP_PORT=1433
+    ports:
+      - "${DB_PORT:-1433}:1433"
+    volumes:
+      - persona-ai-db-data:/var/opt/mssql
+    networks:
+      - persona-network
+    restart: unless-stopped
+    healthcheck:
+      test: [
+        "CMD", 
+        "/opt/mssql-tools/bin/sqlcmd", 
+        "-S", "localhost", 
+        "-U", "sa", 
+        "-P", "${DB_SA_PASSWORD:-PersonaAI2024!}", 
+        "-Q", "SELECT 1"
+      ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 1G
+
   # Backend API
   backend:
     build:
@@ -11,47 +51,74 @@ services:
       - ./backend/.env
     environment:
       - NODE_ENV=production
-      - FRONTEND_URL=http://localhost:8080
+      - FRONTEND_URL=http://localhost:${FRONTEND_PORT:-3000}
+      - DB_HOST=database
+      - DB_PORT=1433
+      - DB_NAME=PersonaAILink
+      - DB_USER=sa
+      - DB_PASSWORD=${DB_SA_PASSWORD:-PersonaAI2024!}
     ports:
-      - "3001:3001"
+      - "${BACKEND_PORT:-3001}:3001"
     networks:
       - persona-network
     restart: unless-stopped
+    depends_on:
+      database:
+        condition: service_healthy
     healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3001/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) }).on('error', () => process.exit(1))"]
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3001/api/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) }).on('error', () => process.exit(1))"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
 
-  # Frontend React App
+  # Frontend (React + Nginx)
   frontend:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: persona-ai-frontend
-    env_file:
-      - ./.env
-    environment:
-      - VITE_API_BASE_URL=http://localhost:3001/api
     ports:
-      - "8080:8080"
-    depends_on:
-      backend:
-        condition: service_healthy
+      - "${FRONTEND_PORT:-3000}:8080"
     networks:
       - persona-network
     restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "--timeout=5", "http://localhost:8080/"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 30s
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+
+volumes:
+  persona-ai-db-data:
+    driver: local
+    name: persona-ai-db-data
 
 networks:
   persona-network:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.20.0.0/16
+        - subnet: ${DOCKER_NETWORK_SUBNET:-172.20.0.0/16}
+    driver_opts:
+      com.docker.network.bridge.name: persona-bridge

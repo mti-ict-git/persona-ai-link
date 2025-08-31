@@ -14,7 +14,7 @@ The application consists of three main services:
 - Docker Engine 20.10+
 - Docker Compose 2.0+
 - At least 4GB RAM available for containers
-- Ports 8080, 3001, and 1433 available
+- Configurable ports (see Port Configuration section below)
 
 ## Quick Start
 
@@ -38,8 +38,8 @@ The application consists of three main services:
    ```
 
 4. **Access the application**:
-   - Frontend: http://localhost:8080
-   - Backend API: http://localhost:3001
+   - Frontend: http://localhost:3000 (configurable)
+   - Backend API: http://localhost:3001 (configurable)
    - Database: localhost:1433
 
 ### Development Setup
@@ -67,7 +67,7 @@ Create `backend/.env` file with the following variables:
 # Server Configuration
 PORT=3001
 NODE_ENV=production
-FRONTEND_URL=http://localhost:8080
+FRONTEND_URL=http://localhost:3000
 
 # Database Configuration
 DB_SERVER=database
@@ -97,7 +97,127 @@ Set environment variables for the frontend:
 ```env
 VITE_API_BASE_URL=http://localhost:3001/api
 VITE_N8N_WEBHOOK_URL=your_n8n_webhook_url
+VITE_DEV_MODE=false
+VITE_TYPEWRITER_ENABLED=true
+VITE_TYPEWRITER_SPEED=50
 ```
+
+## Port Configuration
+
+The application uses flexible port configuration to avoid conflicts and provide runtime configurability.
+
+### Environment Variables for Ports
+
+Create or update the root `.env` file with the following Docker port configurations:
+
+```env
+# Docker Port Configuration
+# Frontend port for Docker containers (avoid 8080 conflicts)
+FRONTEND_PORT=3000
+
+# Frontend port for Docker development environment
+FRONTEND_DEV_PORT=5173
+
+# Backend port (consistent across environments)
+BACKEND_PORT=3001
+
+# Docker Network Configuration
+DOCKER_NETWORK_SUBNET=172.20.0.0/16
+DOCKER_DEV_NETWORK_SUBNET=172.21.0.0/16
+```
+
+### Port Strategy
+
+- **Local Development**: Uses port 5173 (Vite default) for frontend, 3001 for backend
+- **Docker Production**: Uses port 3000 for frontend, 3001 for backend
+- **Docker Development**: Uses port 5173 for frontend, 3001 for backend
+- **Port 8080**: Avoided in Docker to prevent conflicts with common services
+
+### Changing Ports
+
+#### Method 1: Environment Variables (Recommended)
+
+1. **Update the root `.env` file**:
+   ```env
+   # Change frontend port to 4000
+   FRONTEND_PORT=4000
+   
+   # Change backend port to 4001
+   BACKEND_PORT=4001
+   ```
+
+2. **Restart Docker services**:
+   ```bash
+   docker-compose down
+   docker-compose up -d
+   ```
+
+3. **Access the application**:
+   - Frontend: http://localhost:4000
+   - Backend API: http://localhost:4001
+
+#### Method 2: Docker Compose Override
+
+Create a `docker-compose.override.yml` file:
+
+```yaml
+version: '3.8'
+services:
+  frontend:
+    ports:
+      - "4000:80"
+  
+  backend:
+    ports:
+      - "4001:3001"
+    environment:
+      - PORT=3001
+      - FRONTEND_URL=http://localhost:4000
+```
+
+#### Method 3: Command Line Override
+
+```bash
+# Override ports at runtime
+FRONTEND_PORT=4000 BACKEND_PORT=4001 docker-compose up -d
+```
+
+### Development vs Production Ports
+
+| Environment | Frontend Port | Backend Port | Configuration File |
+|-------------|---------------|--------------|--------------------|
+| Local Dev   | 5173          | 3001         | `npm run dev`      |
+| Docker Prod | 3000 (configurable) | 3001 (configurable) | `docker-compose.yml` |
+| Docker Dev  | 5173 (configurable) | 3001 (configurable) | `docker-compose.dev.yml` |
+
+### Port Conflict Resolution
+
+If you encounter port conflicts:
+
+1. **Check what's using the port**:
+   ```bash
+   # Windows
+   netstat -ano | findstr :3000
+   
+   # Linux/Mac
+   lsof -i :3000
+   ```
+
+2. **Choose alternative ports**:
+   ```env
+   # Use alternative ports
+   FRONTEND_PORT=3002
+   BACKEND_PORT=3003
+   ```
+
+3. **Update frontend API URL** if backend port changes:
+   ```env
+   # In backend/.env
+   FRONTEND_URL=http://localhost:3002
+   
+   # In frontend .env
+   VITE_API_BASE_URL=http://localhost:3003/api
+   ```
 
 ## Docker Commands
 
@@ -158,8 +278,8 @@ All services include health checks:
 docker-compose ps
 
 # Manual health check endpoints
-curl http://localhost:8080/health  # Frontend
-curl http://localhost:3001/health  # Backend
+curl http://localhost:${FRONTEND_PORT:-3000}/health  # Frontend
+curl http://localhost:${BACKEND_PORT:-3001}/health  # Backend
 ```
 
 ## Troubleshooting
@@ -168,8 +288,14 @@ curl http://localhost:3001/health  # Backend
 
 1. **Port conflicts**:
    ```bash
-   # Check what's using the ports
-   netstat -tulpn | grep :8080
+   # Check what's using the configured ports
+   # Windows
+   netstat -ano | findstr :3000  # Frontend (or your configured FRONTEND_PORT)
+   netstat -ano | findstr :3001  # Backend (or your configured BACKEND_PORT)
+   netstat -ano | findstr :1433  # Database
+   
+   # Linux/Mac
+   netstat -tulpn | grep :3000
    netstat -tulpn | grep :3001
    netstat -tulpn | grep :1433
    ```
