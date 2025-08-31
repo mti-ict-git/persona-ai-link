@@ -1,5 +1,111 @@
 # Development Journal
 
+## August 31, 2025 - Fixed TypeScript Errors (Updated)
+
+**Status:** Complete  
+**Time:** 19:49
+
+### Summary
+Resolved multiple TypeScript compilation errors across the codebase to ensure type safety and proper component integration.
+
+### Issues Fixed
+1. **MessageFeedback.tsx** - Removed unnecessary catch clause (eslint no-useless-catch)
+2. **Training.tsx** - Fixed ExternalSource interface mismatch with ExternalSourcesManager
+3. **TrainingContent.tsx** - Fixed ExternalSourcesManager props and API response typing
+4. **ExternalSourcesManager.tsx** - Updated props interface to support optional parameters
+5. **TrainingContent.tsx (Additional)** - Fixed remaining TypeScript errors with proper interface definitions
+
+### Technical Changes
+1. **MessageFeedback.tsx**
+   - Removed useless catch clause that was just re-throwing errors
+   - Simplified error handling flow
+
+2. **Training.tsx**
+   - Updated ExternalSource interface to match ExternalSourcesManager expectations
+   - Changed 'title' property to 'name' for consistency
+   - Added missing optional properties (addedAt, updatedAt, lastValidated, validationStatus)
+   - Updated type union to match component requirements
+
+3. **TrainingContent.tsx**
+   - Added proper typing for API response in batch processing
+   - Added external sources state management
+   - Updated ExternalSourcesManager usage with proper props
+
+4. **ExternalSourcesManager.tsx**
+   - Made sources and onSourcesChange props optional
+   - Added onClose prop to interface
+   - Updated component to handle optional props with default values
+
+5. **TrainingContent.tsx (Additional Fixes)**
+   - Added ExternalSource interface definition for proper typing
+   - Created ApiResponse interface for API call return types
+   - Fixed 'any' type usage by replacing with ExternalSource[] for external sources state
+   - Added proper type assertions for API responses in upload and reprocess functions
+   - Resolved all remaining TypeScript compilation errors
+
+### Validation
+- All TypeScript compilation errors resolved
+- `npx tsc --noEmit` passes without errors
+- Type safety maintained across component interfaces
+
+### Final TypeScript Fixes (7:51 PM)
+- Fixed remaining ESLint errors in TrainingContent.tsx:
+  - Replaced `data?: any` with `data?: FileData[]` in ApiResponse interface
+  - Added `FileApiResponse` interface for file fetching operations
+  - Added type assertions for `/files` and `/processing/process` API calls
+  - Eliminated all `unknown` type issues in API response handling
+- All TypeScript and ESLint errors now resolved
+
+---
+
+## August 31, 2025 - Fixed Training Functionality in Settings Page
+
+**Status:** Complete  
+**Time:** 19:42
+
+### Summary
+Fixed the missing "Reprocess" and "Manage External Links" buttons by implementing them in the correct component (TrainingContent.tsx) that's used in the Settings page.
+
+### Issue Resolution
+The Training functionality has been moved to the Settings page and uses the `TrainingContent` component instead of the standalone `Training` page. The buttons were previously added to the wrong component.
+
+### Features Implemented
+1. **Reprocess Functionality in TrainingContent**
+   - Added "Reprocess" button for files that have already been processed
+   - Allows users to reprocess files if needed (e.g., after content updates)
+   - Button appears only for processed files, replacing the "Process" button
+
+2. **Enhanced External Links Management in TrainingContent**
+   - Added dedicated "Manage External Links" button for all files
+   - Improved accessibility to external sources management
+   - Button available for both processed and unprocessed files
+   - Integrated ExternalSourcesManager dialog
+
+### Technical Implementation
+1. **Frontend Changes (TrainingContent.tsx)**
+   - Added imports for `RotateCcw`, `Link` icons and `ExternalSourcesManager`
+   - Added state management for external sources dialog
+   - Added `handleReprocessFile` function with API call to `/processing/reprocess/${fileId}`
+   - Added `handleManageExternalSources` and `handleCloseExternalSources` functions
+   - Updated file action buttons logic to show appropriate buttons based on file status
+   - Added ExternalSourcesManager dialog component
+
+2. **UI/UX Improvements**
+   - Conditional rendering: "Process" for unprocessed files, "Reprocess" for processed files
+   - Added "Manage External Links" button for all files
+   - Improved button styling with distinct colors for different actions
+   - Added tooltips for better user experience
+   - Used appropriate icons (RotateCcw for reprocess, Link for external sources)
+
+### Files Modified
+- `src/components/TrainingContent.tsx` - Added reprocess functionality and external links management
+- `docs/journal.md` - Updated documentation
+
+### Location
+The Training functionality is now accessible via Settings > Training (admin/superadmin only)
+
+---
+
 ## August 31, 2025 - Admin Functionality Implementation Complete
 
 **Status**: ✅ COMPLETED
@@ -47,6 +153,138 @@
 - **UI/UX**: Responsive design with modern interface patterns
 
 **Testing**: Admin functionality tested and verified working correctly.
+
+## August 31, 2025 19:36 - Training File Reprocess & External Links UI Enhancement
+
+**Status**: ✅ COMPLETED
+
+**Summary**: Enhanced the Training page to add reprocess functionality for already processed files and improved external sources management accessibility.
+
+**Features Implemented**:
+
+1. **Reprocess Button for Processed Files**:
+   - Added "Reprocess" button (RefreshCw icon) for files that have already been processed
+   - Orange-themed styling to distinguish from initial processing
+   - Maintains same processing logic but allows re-processing of completed files
+   - Proper loading states with spinning animation during reprocessing
+
+2. **Enhanced External Sources Management**:
+   - Added dedicated "Manage External Links" button (Link icon) for all files
+   - Blue-themed styling for better visual distinction
+   - Improved accessibility - no longer hidden behind expand-only interface
+   - Tooltip support for better user experience
+
+3. **UI/UX Improvements**:
+   - Better visual hierarchy with distinct button colors and icons
+   - Consistent button sizing and spacing
+   - Dark mode support for all new button variants
+   - Improved tooltips for better user guidance
+
+**Files Modified**:
+- `src/pages/Training.tsx` - Added reprocess button and enhanced external links UI
+
+**Technical Implementation**:
+- **Icons**: Added RefreshCw and Link icons from Lucide React
+- **Styling**: Tailwind CSS with proper dark mode variants
+- **Functionality**: Reuses existing `handleProcessFile` function for reprocessing
+- **Accessibility**: Added proper tooltips and ARIA labels
+
+**User Experience**: Users can now easily reprocess files and manage external sources without needing to expand file details first.
+
+## August 31, 2025 - External Source Links Implementation
+
+**Status**: ✅ COMPLETED
+
+**Summary**: Implementing external source link functionality for training files to associate external documents and resources.
+
+**Features Implemented**:
+
+1. **Backend API Extensions** (`backend/src/routes/files.js`):
+   - External source management endpoints (GET, POST, PUT, DELETE)
+   - Enhanced validation schemas with URL accessibility checking
+   - Duplicate URL prevention within files
+   - Validation status tracking with timestamps
+
+2. **Frontend UI Components**:
+   - `ExternalSourcesManager.tsx` - Complete external source management interface
+   - Updated `Training.tsx` with expand/collapse file cards
+   - Validation status badges (Valid/Redirect/Error)
+   - Integration with existing training file workflow
+
+3. **Validation & Security**:
+   - URL accessibility validation with HEAD/GET requests
+   - Strict URL validation (HTTP/HTTPS only)
+   - Name pattern validation to prevent special characters
+   - Enhanced external source metadata structure
+
+**Files Created/Modified**:
+- `backend/src/routes/files.js` - Added external source endpoints with validation
+- `src/components/ExternalSourcesManager.tsx` - New component for managing external sources
+- `src/pages/Training.tsx` - Enhanced with external source integration
+
+**Technical Implementation**:
+- **Backend**: Enhanced validation with URL accessibility checking
+- **Frontend**: React components with validation status display
+- **Database**: Extended metadata structure in ProcessedFiles table
+- **UI/UX**: Expandable file cards with external source management
+
+**Testing Results**:
+- ✅ Backend API endpoints working correctly (GET, POST, PUT, DELETE)
+- ✅ URL validation preventing invalid URLs (returns 400 Bad Request)
+- ✅ URL accessibility checking with timeout handling
+- ✅ Duplicate URL prevention within files
+- ✅ Frontend UI components displaying validation status
+- ✅ Database metadata structure supporting external sources
+
+**Implementation Complete**: All external source link functionality has been successfully implemented and tested.
+
+## August 31, 2025 - Docker Setup Simplified and Completed
+
+**Status**: ✅ COMPLETED
+
+**Summary**: Completely rebuilt Docker configuration with simplified setup for production and development environments using external database connections only.
+
+**Changes Made**:
+
+1. **Removed Previous Docker Files**:
+   - Deleted all existing Docker-related files to start fresh
+   - Removed complex multi-environment configurations
+
+2. **Created Separate Docker Configurations**:
+   - `docker-compose.yml` - Production environment
+   - `docker-compose.dev.yml` - Development environment with hot reload
+
+3. **Production Dockerfiles**:
+   - `Dockerfile` - Frontend production build with Nginx
+   - `backend/Dockerfile` - Backend production with Node.js optimization
+
+4. **Development Dockerfiles**:
+   - `Dockerfile.dev` - Frontend with Vite dev server and hot reload
+   - `backend/Dockerfile.dev` - Backend with nodemon and debugging support
+
+5. **Environment Configuration**:
+   - `.env.production` - Production-specific environment variables
+   - `.env.development` - Development-specific environment variables
+   - Both configured for external SQL Server connections only
+
+**Key Features**:
+- **External Database Only**: No local database containers, uses existing SQL Server instances
+- **Hot Reload**: Development setup supports live code changes
+- **Debugging**: Backend development includes Node.js debugging on port 9229
+- **Security**: Production uses non-root users and optimized builds
+- **Separation**: Clear distinction between production and development environments
+
+**Files Created**:
+- `docker-compose.yml` and `docker-compose.dev.yml`
+- `Dockerfile`, `Dockerfile.dev`, `backend/Dockerfile`, `backend/Dockerfile.dev`
+- `.env.production` and `.env.development`
+
+**Technical Implementation**:
+- **Frontend**: Multi-stage builds for production, Vite dev server for development
+- **Backend**: Optimized Node.js containers with proper security practices
+- **Networking**: Configured Docker networks for service communication
+- **Health Checks**: Implemented for production reliability
+- **Resource Management**: Set appropriate limits and restart policies
 
 ## August 31, 2025 - LDAP Account Separation and Password Management
 

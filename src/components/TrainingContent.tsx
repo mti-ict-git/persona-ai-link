@@ -28,8 +28,23 @@ import {
   Trash2,
   PlayCircle,
   AlertTriangle,
+  RotateCcw,
+  Link,
 } from 'lucide-react';
 import { apiService } from '@/services/api';
+import ExternalSourcesManager from '@/components/ExternalSourcesManager';
+
+interface ExternalSource {
+  id: string;
+  name: string;
+  url: string;
+  description?: string;
+  type: 'download' | 'view' | 'edit' | 'onedrive' | 'googledrive' | 'dropbox' | 'url';
+  addedAt?: string;
+  updatedAt?: string;
+  lastValidated?: string;
+  validationStatus?: number;
+}
 
 interface FileMetadata {
   originalName?: string;
@@ -38,6 +53,16 @@ interface FileMetadata {
   type?: string;
   uploadedAt?: string;
   lastModified?: number;
+}
+
+interface ApiResponse {
+  success: boolean;
+  message?: string;
+  data?: FileData[];
+}
+
+interface FileApiResponse {
+  data: FileData[];
 }
 
 interface ApiError {
@@ -67,6 +92,9 @@ const TrainingContent: React.FC = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [fileToDelete, setFileToDelete] = useState<FileData | null>(null);
   const [pendingFile, setPendingFile] = useState<File | null>(null);
+  const [externalSourcesOpen, setExternalSourcesOpen] = useState(false);
+  const [selectedFileForSources, setSelectedFileForSources] = useState<FileData | null>(null);
+  const [externalSources, setExternalSources] = useState<ExternalSource[]>([]);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -75,7 +103,7 @@ const TrainingContent: React.FC = () => {
 
   const fetchFiles = async () => {
     try {
-      const response = await apiService.get('/files');
+      const response = await apiService.get('/files') as FileApiResponse;
       setFiles(response.data);
     } catch (error) {
       console.error('Error fetching files:', error);
@@ -124,7 +152,7 @@ const TrainingContent: React.FC = () => {
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await apiService.post('/upload', formData);
+      const response = await apiService.post('/upload', formData) as ApiResponse;
 
       if (response.success) {
         toast({
@@ -188,11 +216,50 @@ const TrainingContent: React.FC = () => {
     setPendingFile(null);
   };
 
+  const handleReprocessFile = async (fileId: string) => {
+    setIsProcessing(true);
+    setProcessingFiles([fileId]);
+    try {
+      const response = await apiService.post(`/processing/reprocess/${fileId}`) as ApiResponse;
+
+      if (response.success) {
+        toast({
+          title: "File reprocessed",
+          description: "The file has been reprocessed successfully.",
+        });
+        fetchFiles();
+      } else {
+        throw new Error(response.message || 'Reprocessing failed');
+      }
+    } catch (error: unknown) {
+      const apiError = error as ApiError;
+      console.error('Reprocessing error:', error);
+      toast({
+        title: "Reprocessing failed",
+        description: apiError.response?.data?.message || apiError.message || "Failed to reprocess file. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
+      setProcessingFiles([]);
+    }
+  };
+
+  const handleManageExternalSources = (file: FileData) => {
+    setSelectedFileForSources(file);
+    setExternalSourcesOpen(true);
+  };
+
+  const handleCloseExternalSources = () => {
+    setExternalSourcesOpen(false);
+    setSelectedFileForSources(null);
+  };
+
   const handleProcessFile = async (fileId: string) => {
     setIsProcessing(true);
     setProcessingFiles([fileId]);
     try {
-      const response = await apiService.post(`/processing/process/${fileId}`);
+      const response = await apiService.post(`/processing/process/${fileId}`) as ApiResponse;
 
       if (response.success) {
         toast({
@@ -232,7 +299,7 @@ const TrainingContent: React.FC = () => {
     setIsProcessing(true);
     setProcessingFiles(fileIds);
     try {
-      const response = await apiService.post('/processing/batch', { fileIds });
+      const response = await apiService.post('/processing/batch', { fileIds }) as { message: string };
       
       toast({
         title: "Batch processing completed",
@@ -469,13 +536,14 @@ const TrainingContent: React.FC = () => {
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      {!file.processed && (
+                      {!file.processed ? (
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => handleProcessFile(file.id)}
                           disabled={isProcessing || isTraining || processingFiles.includes(file.id)}
                           className="bg-primary/10 hover:bg-primary/20"
+                          title="Process"
                         >
                           {processingFiles.includes(file.id) ? (
                             <Brain className="h-4 w-4 animate-spin" />
@@ -483,12 +551,37 @@ const TrainingContent: React.FC = () => {
                             <Play className="h-4 w-4" />
                           )}
                         </Button>
+                      ) : (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleReprocessFile(file.id)}
+                          disabled={isProcessing || isTraining || processingFiles.includes(file.id)}
+                          className="bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30"
+                          title="Reprocess File"
+                        >
+                          {processingFiles.includes(file.id) ? (
+                            <Brain className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <RotateCcw className="h-4 w-4" />
+                          )}
+                        </Button>
                       )}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleManageExternalSources(file)}
+                        className="bg-green-50 hover:bg-green-100 dark:bg-green-900/20 dark:hover:bg-green-900/30"
+                        title="Manage External Links"
+                      >
+                        <Link className="h-4 w-4" />
+                      </Button>
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => handleDeleteFile(file)}
                         className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                        title="Delete File"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -600,6 +693,26 @@ const TrainingContent: React.FC = () => {
               </div>
             </DialogDescription>
           </DialogHeader>
+        </DialogContent>
+      </Dialog>
+
+      {/* External Sources Manager Dialog */}
+      <Dialog open={externalSourcesOpen} onOpenChange={setExternalSourcesOpen}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Manage External Sources</DialogTitle>
+            <DialogDescription>
+              Manage external source links for {selectedFileForSources?.filename}
+            </DialogDescription>
+          </DialogHeader>
+          {selectedFileForSources && (
+            <ExternalSourcesManager
+              fileId={selectedFileForSources.id}
+              sources={externalSources}
+              onSourcesChange={setExternalSources}
+              onClose={handleCloseExternalSources}
+            />
+          )}
         </DialogContent>
       </Dialog>
     </div>

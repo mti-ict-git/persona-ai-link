@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Upload, FileText, Trash2, Brain, ArrowLeft, AlertTriangle, Play, PlayCircle } from 'lucide-react';
+import { Upload, FileText, Trash2, Brain, ArrowLeft, AlertTriangle, Play, PlayCircle, ChevronDown, ChevronRight, RefreshCw, Link } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
 import {
@@ -22,6 +22,19 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import ExternalSourcesManager from '@/components/ExternalSourcesManager';
+
+interface ExternalSource {
+  id: string;
+  name: string;
+  url: string;
+  description?: string;
+  type: 'download' | 'view' | 'edit' | 'onedrive' | 'googledrive' | 'dropbox' | 'url';
+  addedAt?: string;
+  updatedAt?: string;
+  lastValidated?: string;
+  validationStatus?: number;
+}
 
 interface FileMetadata {
   originalName?: string;
@@ -30,6 +43,7 @@ interface FileMetadata {
   type?: string;
   uploadedAt?: string;
   lastModified?: number;
+  externalSources?: ExternalSource[];
 }
 
 interface TrainingFile {
@@ -53,6 +67,7 @@ const Training = () => {
   const [fileToDelete, setFileToDelete] = useState<TrainingFile | null>(null);
   const [duplicateFile, setDuplicateFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(true);
+  const [expandedFiles, setExpandedFiles] = useState<Set<string>>(new Set());
 
   // Fetch files from backend
   const fetchFiles = async () => {
@@ -392,6 +407,46 @@ const Training = () => {
     }
   };
 
+  const toggleFileExpansion = (fileId: string) => {
+    const newExpanded = new Set(expandedFiles);
+    if (newExpanded.has(fileId)) {
+      newExpanded.delete(fileId);
+    } else {
+      newExpanded.add(fileId);
+    }
+    setExpandedFiles(newExpanded);
+  };
+
+  const handleExternalSourcesChange = async (fileId: string, sources: ExternalSource[]) => {
+    try {
+      // Update the file's metadata with new external sources
+      const updatedFiles = files.map(file => {
+        if (file.id === fileId) {
+          return {
+            ...file,
+            metadata: {
+              ...file.metadata,
+              externalSources: sources
+            }
+          };
+        }
+        return file;
+      });
+      setFiles(updatedFiles);
+    } catch (error) {
+      console.error('Error updating external sources:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to update external sources',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const getExternalSources = (file: TrainingFile): ExternalSource[] => {
+    return file.metadata?.externalSources || [];
+  };
+
   const getFileSize = (metadata: FileMetadata | undefined) => {
     if (metadata?.size) {
       const sizeInKB = metadata.size / 1024;
@@ -541,62 +596,116 @@ const Training = () => {
                 </div>
               ) : (
                 <div className="space-y-3">
-                  {files.map((file) => (
-                    <div
-                      key={file.id}
-                      className="flex items-center justify-between p-4 rounded-lg border border-border hover:bg-accent/50 transition-colors"
-                    >
-                      <div className="flex items-center gap-3 flex-1">
-                        <div className={`p-2 rounded-md ${
-                          file.processed ? 'bg-green-100 dark:bg-green-900' : 'bg-yellow-100 dark:bg-yellow-900'
-                        }`}>
-                          <FileText className={`h-4 w-4 ${
-                            file.processed ? 'text-green-600 dark:text-green-400' : 'text-yellow-600 dark:text-yellow-400'
-                          }`} />
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2">
-                            <p className="font-medium text-sm">{file.filename}</p>
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                              file.processed 
-                                ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                                : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+                  {files.map((file) => {
+                    const isExpanded = expandedFiles.has(file.id);
+                    const externalSources = getExternalSources(file);
+                    
+                    return (
+                      <div key={file.id} className="border border-border rounded-lg overflow-hidden">
+                        <div className="flex items-center justify-between p-4 hover:bg-accent/50 transition-colors">
+                          <div className="flex items-center gap-3 flex-1">
+                            <div className={`p-2 rounded-md ${
+                              file.processed ? 'bg-green-100 dark:bg-green-900' : 'bg-yellow-100 dark:bg-yellow-900'
                             }`}>
-                              {file.processed ? 'Processed' : 'Pending'}
-                            </span>
+                              <FileText className={`h-4 w-4 ${
+                                file.processed ? 'text-green-600 dark:text-green-400' : 'text-yellow-600 dark:text-yellow-400'
+                              }`} />
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2">
+                                <p className="font-medium text-sm">{file.filename}</p>
+                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                  file.processed 
+                                    ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                                    : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+                                }`}>
+                                  {file.processed ? 'Processed' : 'Pending'}
+                                </span>
+                                {externalSources.length > 0 && (
+                                  <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                                    {externalSources.length} link{externalSources.length !== 1 ? 's' : ''}
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-xs text-muted-foreground">
+                                {getFileSize(file.metadata)} • {getFileType(file.filename)} • Uploaded {new Date(file.created_at).toLocaleDateString()}
+                              </p>
+                            </div>
                           </div>
-                          <p className="text-xs text-muted-foreground">
-                            {getFileSize(file.metadata)} • {getFileType(file.filename)} • Uploaded {new Date(file.created_at).toLocaleDateString()}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        {!file.processed && (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleProcessFile(file.id)}
-                            disabled={isProcessing || isTraining}
-                            className="bg-primary/10 hover:bg-primary/20"
-                          >
-                            {processingFiles.includes(file.id) ? (
-                              <Brain className="h-4 w-4 animate-spin" />
+                          <div className="flex items-center gap-2">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => toggleFileExpansion(file.id)}
+                              className="h-8 w-8 p-0"
+                            >
+                              {isExpanded ? (
+                                <ChevronDown className="h-4 w-4" />
+                              ) : (
+                                <ChevronRight className="h-4 w-4" />
+                              )}
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => toggleFileExpansion(file.id)}
+                              className="bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/40 text-blue-600 dark:text-blue-400"
+                              title="Manage External Links"
+                            >
+                              <Link className="h-4 w-4" />
+                            </Button>
+                            {!file.processed ? (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleProcessFile(file.id)}
+                                disabled={isProcessing || isTraining}
+                                className="bg-primary/10 hover:bg-primary/20"
+                              >
+                                {processingFiles.includes(file.id) ? (
+                                  <Brain className="h-4 w-4 animate-spin" />
+                                ) : (
+                                  <Play className="h-4 w-4" />
+                                )}
+                              </Button>
                             ) : (
-                              <Play className="h-4 w-4" />
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleProcessFile(file.id)}
+                                disabled={isProcessing || isTraining}
+                                className="bg-orange-50 hover:bg-orange-100 dark:bg-orange-900/20 dark:hover:bg-orange-900/40 text-orange-600 dark:text-orange-400"
+                                title="Reprocess File"
+                              >
+                                {processingFiles.includes(file.id) ? (
+                                  <RefreshCw className="h-4 w-4 animate-spin" />
+                                ) : (
+                                  <RefreshCw className="h-4 w-4" />
+                                )}
+                              </Button>
                             )}
-                          </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleDeleteFile(file)}
+                              className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                        {isExpanded && (
+                          <div className="px-4 pb-4 bg-accent/20">
+                            <ExternalSourcesManager
+                              fileId={file.id}
+                              sources={externalSources}
+                              onSourcesChange={(sources) => handleExternalSourcesChange(file.id, sources)}
+                            />
+                          </div>
                         )}
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleDeleteFile(file)}
-                          className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </CardContent>

@@ -72,8 +72,6 @@ const MessageFeedback: React.FC<MessageFeedbackProps> = ({
         messageContent: messageContent.substring(0, 500), // Truncate for storage
         timestamp: new Date().toISOString()
       });
-    } catch (error) {
-      throw error;
     } finally {
       setIsSubmitting(false);
     }

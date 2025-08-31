@@ -312,4 +312,324 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+// External Source Management Routes
+
+// Helper function to validate URL accessibility
+const validateUrlAccess = async (url) => {
+  try {
+    // Check if URL is reachable with a HEAD request
+    const response = await axios.head(url, {
+      timeout: 5000,
+      httpsAgent,
+      validateStatus: (status) => status < 500 // Accept redirects and client errors
+    });
+    return { accessible: true, status: response.status };
+  } catch (error) {
+    // If HEAD fails, try GET with limited data
+    try {
+      const response = await axios.get(url, {
+        timeout: 5000,
+        httpsAgent,
+        maxContentLength: 1024, // Only download first 1KB
+        validateStatus: (status) => status < 500
+      });
+      return { accessible: true, status: response.status };
+    } catch (getError) {
+      return { 
+        accessible: false, 
+        error: getError.code || getError.message,
+        status: getError.response?.status
+      };
+    }
+  }
+};
+
+// Enhanced validation schema for external sources
+const externalSourceSchema = Joi.object({
+  name: Joi.string().min(1).max(255).required()
+    .pattern(/^[a-zA-Z0-9\s\-_\.\(\)]+$/)
+    .messages({
+      'string.pattern.base': 'Name can only contain letters, numbers, spaces, hyphens, underscores, dots, and parentheses'
+    }),
+  url: Joi.string().uri({ scheme: ['http', 'https'] }).required()
+    .messages({
+      'string.uri': 'URL must be a valid HTTP or HTTPS URL'
+    }),
+  type: Joi.string().valid('download', 'view', 'edit').default('view'),
+  description: Joi.string().max(500).optional().allow('', null)
+});
+
+const updateExternalSourceSchema = Joi.object({
+  name: Joi.string().min(1).max(255).optional()
+    .pattern(/^[a-zA-Z0-9\s\-_\.\(\)]+$/)
+    .messages({
+      'string.pattern.base': 'Name can only contain letters, numbers, spaces, hyphens, underscores, dots, and parentheses'
+    }),
+  url: Joi.string().uri({ scheme: ['http', 'https'] }).optional()
+    .messages({
+      'string.uri': 'URL must be a valid HTTP or HTTPS URL'
+    }),
+  type: Joi.string().valid('download', 'view', 'edit').optional(),
+  description: Joi.string().max(500).optional().allow('', null)
+});
+
+// GET /api/files/:id/sources - Get all external sources for a file
+router.get('/:id/sources', async (req, res) => {
+  try {
+    const fileId = req.params.id;
+    const file = await processedFilesManager.getFileById(fileId);
+    
+    if (!file) {
+      return res.status(404).json({
+        success: false,
+        error: 'File not found'
+      });
+    }
+
+    const externalSources = file.metadata?.externalSources || [];
+    
+    res.json({
+      success: true,
+      data: externalSources,
+      count: externalSources.length
+    });
+  } catch (error) {
+    console.error('Error fetching external sources:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch external sources',
+      message: error.message
+    });
+  }
+});
+
+// POST /api/files/:id/sources - Add external source to a file
+router.post('/:id/sources', async (req, res) => {
+  try {
+    const { error, value } = externalSourceSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        error: 'Validation failed',
+        details: error.details
+      });
+    }
+
+    const fileId = req.params.id;
+    const file = await processedFilesManager.getFileById(fileId);
+    
+    if (!file) {
+      return res.status(404).json({
+        success: false,
+        error: 'File not found'
+      });
+    }
+
+    // Validate URL accessibility
+    const urlValidation = await validateUrlAccess(value.url);
+    if (!urlValidation.accessible) {
+      return res.status(400).json({
+        success: false,
+        error: 'URL is not accessible',
+        details: {
+          url: value.url,
+          error: urlValidation.error,
+          status: urlValidation.status
+        }
+      });
+    }
+
+    // Initialize metadata if it doesn't exist
+    const metadata = file.metadata || {};
+    const externalSources = metadata.externalSources || [];
+    
+    // Check for duplicate URLs
+    const existingSource = externalSources.find(source => source.url === value.url);
+    if (existingSource) {
+      return res.status(400).json({
+        success: false,
+        error: 'URL already exists for this file',
+        details: { existingSource: existingSource.name }
+      });
+    }
+    
+    // Create new external source
+    const newSource = {
+      id: `source-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      name: value.name,
+      url: value.url,
+      type: value.type,
+      description: value.description || '',
+      addedAt: new Date().toISOString(),
+      lastValidated: new Date().toISOString(),
+      validationStatus: urlValidation.status
+    };
+    
+    // Add to sources array
+    externalSources.push(newSource);
+    metadata.externalSources = externalSources;
+    
+    // Update file metadata
+    await processedFilesManager.updateProcessedStatus(fileId, file.processed, metadata);
+    
+    res.status(201).json({
+      success: true,
+      data: newSource,
+      message: 'External source added successfully'
+    });
+  } catch (error) {
+    console.error('Error adding external source:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to add external source',
+      message: error.message
+    });
+  }
+});
+
+// PUT /api/files/:id/sources/:sourceId - Update external source
+router.put('/:id/sources/:sourceId', async (req, res) => {
+  try {
+    const { error, value } = updateExternalSourceSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        error: 'Validation failed',
+        details: error.details
+      });
+    }
+
+    const fileId = req.params.id;
+    const sourceId = req.params.sourceId;
+    const file = await processedFilesManager.getFileById(fileId);
+    
+    if (!file) {
+      return res.status(404).json({
+        success: false,
+        error: 'File not found'
+      });
+    }
+
+    const metadata = file.metadata || {};
+    const externalSources = metadata.externalSources || [];
+    
+    // Find the source to update
+    const sourceIndex = externalSources.findIndex(source => source.id === sourceId);
+    if (sourceIndex === -1) {
+      return res.status(404).json({
+        success: false,
+        error: 'External source not found'
+      });
+    }
+    
+    // If URL is being updated, validate accessibility
+    let urlValidation = null;
+    if (value.url && value.url !== externalSources[sourceIndex].url) {
+      // Check for duplicate URLs (excluding current source)
+      const existingSource = externalSources.find((source, index) => 
+        index !== sourceIndex && source.url === value.url
+      );
+      if (existingSource) {
+        return res.status(400).json({
+          success: false,
+          error: 'URL already exists for this file',
+          details: { existingSource: existingSource.name }
+        });
+      }
+      
+      urlValidation = await validateUrlAccess(value.url);
+      if (!urlValidation.accessible) {
+        return res.status(400).json({
+          success: false,
+          error: 'URL is not accessible',
+          details: {
+            url: value.url,
+            error: urlValidation.error,
+            status: urlValidation.status
+          }
+        });
+      }
+    }
+    
+    // Update the source
+    const updatedSource = {
+      ...externalSources[sourceIndex],
+      ...value,
+      updatedAt: new Date().toISOString()
+    };
+    
+    // Add validation info if URL was validated
+    if (urlValidation) {
+      updatedSource.lastValidated = new Date().toISOString();
+      updatedSource.validationStatus = urlValidation.status;
+    }
+    
+    externalSources[sourceIndex] = updatedSource;
+    metadata.externalSources = externalSources;
+    
+    // Update file metadata
+    await processedFilesManager.updateProcessedStatus(fileId, file.processed, metadata);
+    
+    res.json({
+      success: true,
+      data: updatedSource,
+      message: 'External source updated successfully'
+    });
+  } catch (error) {
+    console.error('Error updating external source:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to update external source',
+      message: error.message
+    });
+  }
+});
+
+// DELETE /api/files/:id/sources/:sourceId - Remove external source
+router.delete('/:id/sources/:sourceId', async (req, res) => {
+  try {
+    const fileId = req.params.id;
+    const sourceId = req.params.sourceId;
+    const file = await processedFilesManager.getFileById(fileId);
+    
+    if (!file) {
+      return res.status(404).json({
+        success: false,
+        error: 'File not found'
+      });
+    }
+
+    const metadata = file.metadata || {};
+    const externalSources = metadata.externalSources || [];
+    
+    // Find and remove the source
+    const sourceIndex = externalSources.findIndex(source => source.id === sourceId);
+    if (sourceIndex === -1) {
+      return res.status(404).json({
+        success: false,
+        error: 'External source not found'
+      });
+    }
+    
+    const removedSource = externalSources.splice(sourceIndex, 1)[0];
+    metadata.externalSources = externalSources;
+    
+    // Update file metadata
+    await processedFilesManager.updateProcessedStatus(fileId, file.processed, metadata);
+    
+    res.json({
+      success: true,
+      data: removedSource,
+      message: 'External source removed successfully'
+    });
+  } catch (error) {
+    console.error('Error removing external source:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to remove external source',
+      message: error.message
+    });
+  }
+});
+
 module.exports = router;
