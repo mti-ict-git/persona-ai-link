@@ -21,6 +21,12 @@ interface Message {
   timestamp: string;
 }
 
+interface User {
+  firstName?: string;
+  lastName?: string;
+  username?: string;
+}
+
 interface ChatMainProps {
   messages: Message[];
   onSendMessage: (message: string) => void;
@@ -36,6 +42,28 @@ interface ChatMainProps {
 }
 
 const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false, sessionId, showSuggestions = true, onToggleSuggestions, showSidebar = true, onToggleSidebar, newMessageIds = new Set(), onTypewriterComplete }: ChatMainProps) => {
+  // Motivational HR messages
+  const motivationalMessages = [
+    "Empowering your HR journey",
+    "Building better workplaces together",
+    "Your HR success starts here",
+    "Transforming HR, one conversation at a time",
+    "Making HR simple and effective",
+    "Your partner in people management",
+    "Elevating HR excellence",
+    "Streamlining your HR processes",
+    "Innovating the future of HR",
+    "Where HR meets intelligence",
+    "Optimizing your workforce potential",
+    "Creating positive workplace experiences"
+  ];
+  
+  // Get a consistent motivational message based on sessionId
+  const getMotivationalMessage = () => {
+    if (!sessionId) return "Ready to assist you";
+    const index = sessionId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % motivationalMessages.length;
+    return motivationalMessages[index];
+  };
   const [inputMessage, setInputMessage] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -56,7 +84,7 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
     }
   };
 
-  const getUserInitials = (user: any) => {
+  const getUserInitials = (user: User | undefined) => {
     if (user?.firstName && user?.lastName) {
       return `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
     }
@@ -136,9 +164,16 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
         <h1 className="text-4xl font-bold mb-2">
           Welcome To
         </h1>
-        <h2 className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-4">
-          Tsindeka AI
-        </h2>
+        <div className="flex items-center justify-center gap-4 mb-4">
+          <img 
+            src="/MTI-removebg-preview.png" 
+            alt="MTI Logo" 
+            className="w-12 h-12 object-contain"
+          />
+          <h2 className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+            Tsindeka AI
+          </h2>
+        </div>
         <p className="text-muted-foreground mb-12">
           Get started by scripting a task, and Chat can do the rest. Not sure where to begin?
         </p>
@@ -189,12 +224,16 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
           )}
           
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-sm">
-              <Brain className="w-5 h-5 text-primary-foreground" />
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-sm">
+              <img 
+                src="/MTI-removebg-preview.png" 
+                alt="MTI Logo" 
+                className="h-8 w-8 object-contain"
+              />
             </div>
             <div>
-              <h1 className="font-bold text-foreground text-lg">Tsindeka AI</h1>
-              <p className="text-xs text-muted-foreground/80 font-medium">Session {sessionId || 'New Chat'}</p>
+              <h1 className="font-bold text-foreground text-lg">Your Smart HR Companion</h1>
+              <p className="text-xs text-muted-foreground/80 font-medium">{getMotivationalMessage()}</p>
             </div>
           </div>
         </div>

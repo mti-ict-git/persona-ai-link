@@ -31,12 +31,30 @@ import {
 } from 'lucide-react';
 import { apiService } from '@/services/api';
 
+interface FileMetadata {
+  originalName?: string;
+  storedName?: string;
+  size?: number;
+  type?: string;
+  uploadedAt?: string;
+  lastModified?: number;
+}
+
+interface ApiError {
+  message?: string;
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+}
+
 interface FileData {
   id: string;
   filename: string;
   processed: boolean;
   created_at: string;
-  metadata?: any;
+  metadata?: FileMetadata;
 }
 
 const TrainingContent: React.FC = () => {
@@ -75,12 +93,12 @@ const TrainingContent: React.FC = () => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    // Check file size (10MB limit)
-    const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+    // Check file size (20MB limit)
+    const maxSize = 20 * 1024 * 1024; // 20MB in bytes
     if (file.size > maxSize) {
       toast({
         title: "File too large",
-        description: `File size (${(file.size / 1024 / 1024).toFixed(1)}MB) exceeds the 10MB limit. Please choose a smaller file.`,
+        description: `File size (${(file.size / 1024 / 1024).toFixed(1)}MB) exceeds the 20MB limit. Please choose a smaller file.`,
         variant: "destructive",
       });
       event.target.value = '';
@@ -117,13 +135,14 @@ const TrainingContent: React.FC = () => {
       } else {
         throw new Error(response.message || 'Upload failed');
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const apiError = error as ApiError;
       console.error('Upload error:', error);
-      toast({
-        title: "Upload failed",
-        description: error.response?.data?.message || error.message || "Failed to upload file. Please try again.",
-        variant: "destructive",
-      });
+       toast({
+         title: "Upload failed",
+         description: apiError.response?.data?.message || apiError.message || "Failed to upload file. Please try again.",
+         variant: "destructive",
+       });
     } finally {
       setIsUploading(false);
     }
@@ -184,11 +203,12 @@ const TrainingContent: React.FC = () => {
       } else {
         throw new Error(response.message || 'Processing failed');
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const apiError = error as ApiError;
       console.error('Processing error:', error);
       toast({
         title: "Processing failed",
-        description: error.response?.data?.message || error.message || "Failed to process file. Please try again.",
+        description: apiError.response?.data?.message || apiError.message || "Failed to process file. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -281,7 +301,7 @@ const TrainingContent: React.FC = () => {
     }
   };
 
-  const getFileSize = (metadata: any) => {
+  const getFileSize = (metadata: FileMetadata | undefined) => {
     if (metadata?.size) {
       const sizeInKB = metadata.size / 1024;
       if (sizeInKB < 1024) {
@@ -360,10 +380,10 @@ const TrainingContent: React.FC = () => {
               </div>
               
               <div className="space-y-2 text-xs text-muted-foreground">
-                <p className="font-medium text-orange-600 dark:text-orange-400">• Maximum file size: 10MB</p>
+                <p className="font-medium text-orange-600 dark:text-orange-400">• Maximum file size: 20MB</p>
                 <p>• Supported formats: PDF, DOCX, TXT, DOC</p>
                 <p>• Files will be processed automatically</p>
-                <p className="text-xs text-muted-foreground/70">Files exceeding 10MB will be rejected</p>
+                <p className="text-xs text-muted-foreground/70">Files exceeding 20MB will be rejected</p>
               </div>
             </div>
           </CardContent>

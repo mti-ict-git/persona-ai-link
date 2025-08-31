@@ -252,6 +252,67 @@ Updated the chat webhook timeout from 30 seconds to 60 seconds to match the trai
   - Backend: `bcryptjs`, `jsonwebtoken`, `express-session`
   - Frontend: `@radix-ui/react-dropdown-menu`
 
+## August 31, 2025 12:30:32 PM - HR AI Assistant Slogan Implementation
+
+### Enhancement
+Updated the header text in the chat interface from "Tsindeka AI" to "Your Smart HR Companion" - a proper slogan for the HR AI Assistant.
+
+### Implementation Details
+1. **Component Modified**: `ChatMain.tsx` header section
+2. **Change**: Replaced "Tsindeka AI" with "Your Smart HR Companion" slogan
+3. **Purpose**: Provide an engaging, descriptive slogan that reflects the AI's role as an HR companion
+4. **Location**: Chat interface header next to MTI logo
+
+### Technical Details
+- **File**: `src/components/ChatMain.tsx`
+- **Line**: Header h1 element (line ~213)
+- **Change**: `<h1>Tsindeka AI</h1>` → `<h1>Your Smart HR Companion</h1>`
+- **Styling**: Maintained existing font-bold and text-lg classes
+
+### Benefits
+✅ **Engaging Slogan**: "Your Smart HR Companion" creates a friendly, approachable tone
+✅ **Clear Value Proposition**: Emphasizes the AI as a helpful companion for HR tasks
+✅ **Professional Branding**: Maintains MTI logo while providing memorable messaging
+✅ **User Connection**: Creates a personal relationship between user and AI assistant
+
+## August 31, 2025 12:32:07 PM - Motivational Messages Implementation
+
+### Enhancement
+Replaced the session ID display with motivational HR-related messages to create a more engaging and inspiring user experience.
+
+### Implementation Details
+1. **Component Modified**: `ChatMain.tsx` header section
+2. **Feature**: Added array of 12 motivational HR messages
+3. **Logic**: Consistent message selection based on sessionId hash
+4. **Fallback**: "Ready to assist you" for new sessions without sessionId
+
+### Technical Details
+- **File**: `src/components/ChatMain.tsx`
+- **Messages Array**: 12 HR-focused motivational phrases
+- **Selection Logic**: Hash-based consistent selection using sessionId characters
+- **Function**: `getMotivationalMessage()` for message retrieval
+
+### Motivational Messages
+- "Empowering your HR journey"
+- "Building better workplaces together"
+- "Your HR success starts here"
+- "Transforming HR, one conversation at a time"
+- "Making HR simple and effective"
+- "Your partner in people management"
+- "Elevating HR excellence"
+- "Streamlining your HR processes"
+- "Innovating the future of HR"
+- "Where HR meets intelligence"
+- "Optimizing your workforce potential"
+- "Creating positive workplace experiences"
+
+### Benefits
+✅ **Inspiring Interface**: Motivational messages create positive user engagement
+✅ **HR-Focused**: Messages specifically tailored to HR professionals and tasks
+✅ **Consistent Experience**: Same sessionId always shows the same motivational message
+✅ **Professional Tone**: Maintains business-appropriate language while being encouraging
+✅ **Enhanced UX**: Replaces technical session ID with meaningful, user-friendly content
+
 ### Database Schema Implementation
 - Successfully executed database schema on SQL Server (10.60.10.47)
 - Created sessions and messages tables with proper indexes and triggers
@@ -2395,6 +2456,76 @@ axios.post(N8N_WEBHOOK_URL, payload, {
 - ✅ Ready for production use with actual AI/ML models
 - ✅ Flexible webhook configuration for multiple endpoints
 
+## 2025-08-31 12:17:27 - File Upload Limit Increased & TypeScript Fixes
+
+### Enhancement: File Upload Size Limit Increased from 10MB to 20MB
+
+**Issue**: Users needed to upload larger training files but were limited by the 10MB file size restriction.
+
+**Solution**: Increased maximum file upload size from 10MB to 20MB across the entire application.
+
+### Features Implemented
+1. **Backend Configuration**: Updated multer middleware to accept files up to 20MB
+2. **Client-Side Validation**: Enhanced pre-upload validation to check against 20MB limit
+3. **UI Updates**: Updated all user-facing text to reflect the new 20MB limit
+4. **TypeScript Improvements**: Fixed eslint warnings by replacing 'any' types with proper interfaces
+
+### Technical Details
+- **Backend Limit**: 20MB (20 * 1024 * 1024 bytes) configured in multer middleware
+- **Client Validation**: File size checked before upload attempt in both Training components
+- **Error Handling**: 
+  - Client-side: Immediate toast with actual file size vs. 20MB limit
+  - Server-side: `LIMIT_FILE_SIZE` error with clear message
+- **Type Safety**: Added `FileMetadata` interface to replace `any` types
+
+### TypeScript Improvements
+- **Interface Definitions**: Created multiple interfaces with proper typing:
+  ```typescript
+  interface FileMetadata {
+    originalName?: string;
+    storedName?: string;
+    size?: number;
+    type?: string;
+    uploadedAt?: string;
+    lastModified?: number;
+  }
+  
+  interface User {
+    firstName?: string;
+    lastName?: string;
+    username?: string;
+  }
+  
+  interface ApiError {
+    message?: string;
+    response?: {
+      data?: {
+        message?: string;
+      };
+    };
+  }
+  ```
+- **Function Signatures**: Updated functions to use proper types:
+  - `getFileSize` functions: `FileMetadata | undefined`
+  - `getUserInitials` function: `User | undefined`
+  - Error handling: `unknown` with type assertion to `ApiError`
+- **Error Handling**: Improved error handling with proper type safety
+- **Eslint Compliance**: Eliminated all `@typescript-eslint/no-explicit-any` warnings in components
+
+### Files Modified
+- `backend/src/routes/upload.js`: Increased multer file size limit to 20MB
+- `src/pages/Training.tsx`: Updated validation, UI text, and TypeScript interfaces
+- `src/components/TrainingContent.tsx`: Updated validation, UI text, TypeScript interfaces, and error handling
+- `src/components/ChatMain.tsx`: Added User interface and updated getUserInitials function typing
+- `docs/journal.md`: Documented implementation
+
+### Benefits
+- **Larger Files**: Users can now upload training documents up to 20MB
+- **Better UX**: Clear feedback with actual file sizes in error messages
+- **Type Safety**: Improved code quality with proper TypeScript interfaces
+- **Consistency**: Uniform 20MB limit across all upload interfaces
+- **Maintainability**: Better code structure with defined interfaces
+
 ## 2025-08-30 14:31:12 - Training Webhook Timeout Increased
 
 ### Issue
@@ -2661,3 +2792,65 @@ Improved file upload experience by adding client-side file size validation and m
 - `backend/src/routes/files.js` - Added https import and httpsAgent configuration
 
 **Status**: ✅ Fixed - Delete operations now properly handle self-signed certificates and should work without SSL errors.
+
+## 2025-08-31 12:24:55 PM - Logo Update Across All Components
+
+### Summary
+Updated all application components to use the MTI logo (`MTI-removebg-preview.png`) instead of icon-based headers, ensuring consistent branding throughout the application.
+
+### Changes Made
+
+#### 1. ChatMain Component Header Update
+- Replaced Brain icon with MTI logo image
+- Updated header styling:
+  - Removed gradient background (`bg-gradient-to-br from-primary to-primary/80`)
+  - Added MTI logo with `h-8 w-8 object-contain` sizing
+  - Maintained consistent spacing and layout
+
+#### 2. ChatSidebar Component Header Update
+- Replaced MessageCircle icon with MTI logo image
+- Applied same styling updates as ChatMain:
+  - Removed gradient background
+  - Added MTI logo with proper sizing
+  - Preserved existing layout structure
+
+### Files Modified
+- `src/components/ChatMain.tsx` - Updated header to use MTI logo
+- `src/components/ChatSidebar.tsx` - Updated header to use MTI logo
+- `src/pages/Login.tsx` - Already using MTI logo (confirmed)
+
+### Technical Benefits
+- **Consistent Branding**: All components now display the MTI logo
+- **Professional Appearance**: Replaced generic icons with company branding
+- **Visual Cohesion**: Unified logo usage across login, sidebar, and main chat areas
+- **Brand Recognition**: Strengthened MTI brand presence throughout the application
+
+**Status**: ✅ Completed - All application headers now display the MTI logo consistently.
+
+## August 31, 2025
+
+### Welcome Screen Logo Enhancement
+
+**Summary**: Added MTI logo to the left of "Tsindeka AI" text on the main welcome screen for enhanced brand presence.
+
+**Implementation Details**:
+- **Updated ChatMain.tsx Welcome Screen**: Modified the welcome screen layout to include MTI logo
+- **Layout Changes**:
+  - Created horizontal flex container (`flex items-center justify-center gap-4`) for logo and title alignment
+  - Logo positioned to the left of "Tsindeka AI" text with 4-unit gap spacing
+  - Logo sized at `w-12 h-12` with `object-contain` for proper scaling and aspect ratio
+- **Visual Improvements**:
+  - Enhanced brand presence on the main welcome/landing screen
+  - Maintained centered alignment and responsive design principles
+  - Preserved existing gradient text styling for "Tsindeka AI" title
+  - Consistent logo usage with other application components
+
+### Files Modified
+- `src/components/ChatMain.tsx` - Updated WelcomeScreen component to include MTI logo
+
+### User Experience Benefits
+- **Brand Recognition**: Improved MTI brand visibility on the primary user interface
+- **Visual Consistency**: Logo now appears across login, headers, and welcome screen
+- **Professional Appearance**: Enhanced overall application branding and visual identity
+
+**Status**: ✅ Completed - Welcome screen now displays MTI logo alongside "Tsindeka AI" text.
