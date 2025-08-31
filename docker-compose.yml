@@ -3,6 +3,8 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+      args:
+        - PORT=${BACKEND_PORT}
     container_name: persona-ai-backend-prod
     env_file:
       - .env                    # Docker orchestration variables (ports, etc.)
@@ -41,6 +43,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        - FRONTEND_PORT=${FRONTEND_PORT}
+        - BACKEND_PORT=${BACKEND_PORT}
     container_name: persona-ai-frontend-prod
     environment:
       - NODE_ENV=production

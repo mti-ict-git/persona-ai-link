@@ -134,8 +134,8 @@ npm run dev
    ```
 
 4. **Access the application**:
-   - Frontend: http://localhost:3000
-   - Backend API: http://localhost:3001
+   - Frontend: http://localhost:8090
+- Backend API: http://localhost:3006
 
 ## How can I deploy this project?
 

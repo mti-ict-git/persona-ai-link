@@ -23,12 +23,16 @@ RUN mkdir -p uploads && chown -R backend:nodejs /app
 # Switch to non-root user
 USER backend
 
+# Set default port if not provided
+ARG PORT=3006
+ENV PORT=${PORT}
+
 # Expose port
-EXPOSE 3001
+EXPOSE ${PORT}
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:3001/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"
+  CMD node -e "require('http').get('http://localhost:${PORT}/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"
 
 # Start the application
 CMD ["node", "src/server.js"]

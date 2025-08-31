@@ -6,12 +6,12 @@ This document explains how to configure ports for Docker containers while keepin
 
 ### Local Development (without Docker)
 - Frontend: `http://localhost:8080` (Vite dev server)
-- Backend: `http://localhost:3001`
+- Backend: `http://localhost:3006`
 
 ### Docker Containers
-- Frontend Production: `http://localhost:3000` (configurable via `FRONTEND_PORT`)
+- Frontend Production: `http://localhost:8090` (configurable via `FRONTEND_PORT`)
 - Frontend Development: `http://localhost:5173` (configurable via `FRONTEND_DEV_PORT`)
-- Backend: `http://localhost:3001` (configurable via `BACKEND_PORT`)
+- Backend: `http://localhost:3006` (configurable via `BACKEND_PORT`)
 
 ## Environment Variables
 
@@ -19,13 +19,13 @@ The following environment variables in `.env` control Docker port mappings:
 
 ```bash
 # Frontend port for Docker production containers
-FRONTEND_PORT=3000
+FRONTEND_PORT=8090
 
 # Frontend port for Docker development containers
 FRONTEND_DEV_PORT=5173
 
 # Backend port for all Docker containers
-BACKEND_PORT=3001
+BACKEND_PORT=3006
 ```
 
 ## Usage Examples
@@ -34,7 +34,7 @@ BACKEND_PORT=3001
 ```bash
 # Production Docker
 docker-compose up
-# Access at: http://localhost:3000
+# Access at: http://localhost:8090
 
 # Development Docker
 docker-compose -f docker-compose.dev.yml up

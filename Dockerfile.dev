@@ -16,8 +16,12 @@ RUN npm install
 # Copy source code
 COPY . .
 
+# Set default dev port if not provided
+ARG FRONTEND_DEV_PORT=5173
+ENV FRONTEND_DEV_PORT=${FRONTEND_DEV_PORT}
+
 # Expose port for Vite dev server
-EXPOSE 5173
+EXPOSE ${FRONTEND_DEV_PORT}
 
 # Start development server with hot reload
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "5173"]
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "${FRONTEND_DEV_PORT}"]

@@ -5,6 +5,8 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile.dev
+      args:
+        - PORT=${BACKEND_PORT}
     container_name: persona-ai-backend-dev
     environment:
       - NODE_ENV=development
@@ -41,6 +43,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
+      args:
+        - FRONTEND_DEV_PORT=${FRONTEND_DEV_PORT}
     container_name: persona-ai-frontend-dev
     environment:
       - NODE_ENV=development

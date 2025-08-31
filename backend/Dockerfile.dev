@@ -22,8 +22,12 @@ COPY src/ ./src/
 # Create uploads directory
 RUN mkdir -p uploads
 
+# Set default port if not provided
+ARG PORT=3006
+ENV PORT=${PORT}
+
 # Expose ports for app and debugging
-EXPOSE 3001 9229
+EXPOSE ${PORT} 9229
 
 # Start with nodemon for hot reload and debugging
 CMD ["nodemon", "--inspect=0.0.0.0:9229", "src/server.js"]

@@ -1,5 +1,61 @@
 # Development Journal
 
+## January 2, 2025 - Complete Docker Variable Configuration
+
+**Summary**: Updated all Dockerfiles and nginx configuration to use environment variables instead of hardcoded port values for better flexibility and configuration management.
+
+**Changes Made**:
+1. **Backend Dockerfiles**:
+   - **backend/Dockerfile**: Added `ARG PORT=3006` and `ENV PORT=${PORT}`
+   - **backend/Dockerfile.dev**: Added PORT variable support
+   - Updated EXPOSE directives and health check URLs to use `${PORT}`
+
+2. **Frontend Dockerfiles**:
+   - **Dockerfile**: Added `ARG FRONTEND_PORT=8090` and `ARG BACKEND_PORT=3006`
+   - **Dockerfile.dev**: Added `ARG FRONTEND_DEV_PORT=5173`
+   - Updated EXPOSE directives and CMD to use variables
+   - Added envsubst for nginx configuration template processing
+
+3. **Nginx Configuration**:
+   - **nginx.conf**: Updated to use `${FRONTEND_PORT}` and `${BACKEND_PORT}` variables
+   - Changed listen directive and proxy_pass to use environment variables
+
+4. **Docker Compose Files**:
+   - **docker-compose.yml**: Added build args for both frontend and backend services
+   - **docker-compose.dev.yml**: Added build args for development services
+
+**Benefits**:
+- **Complete Flexibility**: All ports configurable at build time
+- **Consistency**: Same variable approach across all services and environments
+- **Maintainability**: Single source of truth for port configuration
+- **Docker Best Practices**: Proper use of ARG, ENV, and envsubst
+- **Template Processing**: Nginx config dynamically generated from environment variables
+
+**Files Modified**:
+- `backend/Dockerfile` and `backend/Dockerfile.dev`
+- `Dockerfile` and `Dockerfile.dev` (frontend)
+- `nginx.conf`
+- `docker-compose.yml` and `docker-compose.dev.yml`
+
+---
+
+## January 2, 2025 - Port Configuration Update
+
+**Summary**: Updated Docker port configuration to avoid conflicts with existing services on the production server.
+
+**Changes Made**:
+- **Frontend Port**: Changed from `3000` to `8090`
+- **Backend Port**: Changed from `3001` to `3006`
+- **API URL**: Updated `VITE_API_BASE_URL` to `http://localhost:3006/api`
+
+**Rationale**: 
+After analyzing existing Docker containers on the server, ports 3000 and 3001 were found to be in use by other services (open-webui and other applications). The new ports 8090 and 3006 are confirmed available based on the current container list.
+
+**Files Modified**:
+- `.env`: Updated `FRONTEND_PORT`, `BACKEND_PORT`, and `VITE_API_BASE_URL`
+
+---
+
 ## September 1, 2025 - Environment Variables Cleanup
 
 **Status:** Complete  
@@ -97,6 +153,55 @@ Cleaned up environment variable configuration by removing database-related varia
 2. **`.env.production` (Frontend Production)**
    - Removed external database configuration block
    - Maintained production-specific frontend and Docker variables
+
+---
+
+## September 1, 2025 - Implemented Option 2: Docker Compose env_file Configuration
+
+**Status:** Complete  
+**Time:** Current
+
+### Summary
+Implemented Option 2 environment variable configuration using Docker Compose `env_file` directive to eliminate duplication and maintain clean separation between frontend and backend environment variables.
+
+### Issues Addressed
+1. **Eliminated Duplication** - Removed duplicated backend variables from root `.env` file
+2. **Docker Compose Integration** - Used `env_file` directive for proper multi-file environment loading
+3. **Clean Separation** - Maintained clear boundaries between frontend and backend configurations
+4. **Warning Resolution** - Resolved Docker Compose warnings about unset environment variables
+
+### Technical Changes
+1. **`docker-compose.yml`**
+   - Added `env_file` directive to backend service:
+     ```yaml
+     env_file:
+       - .env                    # Docker orchestration variables (ports, etc.)
+       - ./backend/.env          # Backend-specific variables
+     ```
+   - Updated environment variable references to use backend variable names
+   - Removed explicit variable declarations that are now loaded from env files
+
+2. **Root `.env` (Frontend + Docker)**
+   - Removed all backend-specific variables (database, security, N8N)
+   - Kept frontend variables (`VITE_*`) and Docker orchestration variables
+   - Added explanatory note about the new configuration
+
+3. **`backend/.env`**
+   - Added missing variables: `WEBHOOK_SECRET`, `ADMIN_USERNAME`, `ADMIN_PASSWORD`
+   - Now contains all backend-specific variables (database, security, services)
+
+### Final Environment Structure
+- **Root `.env`**: Frontend variables + Docker ports/network config
+- **`backend/.env`**: All backend variables (database, security, N8N, admin)
+- **Docker Compose**: Reads both files automatically via `env_file` directive
+- **No duplication**: Each variable exists in only one place
+- **Clean separation**: Frontend and backend concerns are properly isolated
+
+### Benefits
+- Eliminates variable duplication between files
+- Maintains security by keeping sensitive data in backend only
+- Simplifies maintenance - variables only need to be updated in one place
+- Follows Docker Compose best practices for multi-file environment configuration
 
 ### Final Environment Structure
 - **Frontend files** (`.env`, `.env.production`): Only VITE_* variables and Docker port mappings
