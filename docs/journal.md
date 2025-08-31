@@ -1,5 +1,30 @@
 # Development Journal
 
+## September 1, 2025 - Nginx Configuration Fix
+
+**Summary**: Fixed nginx container startup failure caused by invalid gzip_proxied directive value.
+
+**Issue Resolved**:
+- Frontend container (nginx) was failing to start with error: "invalid value 'must-revalidate' in /etc/nginx/conf.d/default.conf:11"
+- The nginx gzip_proxied directive was using an invalid value format
+- Container was stuck in restart loop due to configuration syntax error
+
+**Changes Made**:
+1. **nginx.conf**: Fixed gzip_proxied directive syntax
+   - Changed: `gzip_proxied expired no-cache no-store private must-revalidate auth;`
+   - To: `gzip_proxied expired no-cache no-store private must_revalidate auth;`
+   - Issue: nginx expects underscore (_) not hyphen (-) in "must_revalidate"
+
+**Technical Details**:
+- The gzip_proxied directive controls when nginx compresses responses for proxied requests
+- Valid values include: expired, no-cache, no-store, private, must_revalidate, auth
+- nginx is strict about directive value formatting and requires exact syntax
+
+**Benefits**:
+- Resolves nginx container startup failures
+- Enables proper gzip compression for frontend assets
+- Allows frontend container to serve the application correctly
+
 ## September 1, 2025 - Docker Network Configuration Fix
 
 **Summary**: Removed custom Docker network configurations to resolve subnet conflict errors during container deployment.
