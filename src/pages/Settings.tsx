@@ -75,7 +75,7 @@ const Settings: React.FC = () => {
     });
   };
 
-  const isAdmin = user?.role === 'admin';
+  const isAdmin = user?.role === 'admin' || user?.role === 'superadmin';
 
   const renderContent = () => {
     switch (activeSection) {
@@ -474,7 +474,7 @@ const Settings: React.FC = () => {
                 <Shield className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
                 <h3 className="text-lg font-medium mb-2">Access Restricted</h3>
                 <p className="text-sm text-muted-foreground">
-                  You need administrator privileges to access the training section.
+                  You need administrator or super administrator privileges to access the training section.
                 </p>
               </div>
             </div>
@@ -488,7 +488,7 @@ const Settings: React.FC = () => {
                 AI Training
               </CardTitle>
               <CardDescription>
-                Manage AI training data and model configuration (Admin Only)
+                Manage AI training data and model configuration (Admin/Super Admin Only)
               </CardDescription>
             </CardHeader>
             <CardContent>

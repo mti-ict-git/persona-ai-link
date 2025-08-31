@@ -66,28 +66,30 @@ class SessionManager {
     this.db = dbManager;
   }
 
-  async createSession(title = 'New Conversation', sessionName = null) {
+  async createSession(title = 'New Conversation', sessionName = null, userId = null) {
     try {
       const pool = await this.db.getConnection();
       const sessionId = uuidv4();
       const now = new Date();
 
       const request = pool.request();
-      request.input('id', sql.UniqueIdentifier, sessionId);
+      request.input('id', sql.NVarChar(50), sessionId);
       request.input('title', sql.NVarChar(255), title);
       request.input('session_name', sql.NVarChar(255), sessionName);
+      request.input('user_id', sql.NVarChar(50), userId);
       request.input('created_at', sql.DateTime2, now);
       request.input('updated_at', sql.DateTime2, now);
 
       await request.query(`
-        INSERT INTO sessions (id, title, session_name, created_at, updated_at)
-        VALUES (@id, @title, @session_name, @created_at, @updated_at)
+        INSERT INTO sessions (id, title, session_name, user_id, created_at, updated_at)
+        VALUES (@id, @title, @session_name, @user_id, @created_at, @updated_at)
       `);
 
       return {
         id: sessionId,
         title,
         session_name: sessionName,
+        user_id: userId,
         created_at: now,
         updated_at: now
       };
@@ -97,17 +99,23 @@ class SessionManager {
     }
   }
 
-  async getSession(sessionId) {
+  async getSession(sessionId, userId = null) {
     try {
       const pool = await this.db.getConnection();
       const request = pool.request();
-      request.input('sessionId', sql.UniqueIdentifier, sessionId);
+      request.input('sessionId', sql.NVarChar(50), sessionId);
 
-      const result = await request.query(`
-        SELECT id, title, session_name, created_at, updated_at
+      let query = `
+        SELECT id, title, session_name, user_id, created_at, updated_at
         FROM sessions
-        WHERE id = @sessionId
-      `);
+        WHERE id = @sessionId`;
+      
+      if (userId) {
+        request.input('user_id', sql.NVarChar(50), userId);
+        query += ` AND user_id = @user_id`;
+      }
+
+      const result = await request.query(query);
 
       return result.recordset[0] || null;
     } catch (error) {
@@ -116,17 +124,24 @@ class SessionManager {
     }
   }
 
-  async getAllSessions(limit = 50) {
+  async getAllSessions(limit = 50, userId = null) {
     try {
       const pool = await this.db.getConnection();
       const request = pool.request();
       request.input('limit', sql.Int, limit);
+      
+      let query = `
+        SELECT TOP(@limit) id, title, session_name, user_id, created_at, updated_at
+        FROM sessions`;
+      
+      if (userId) {
+        request.input('user_id', sql.NVarChar(50), userId);
+        query += ` WHERE user_id = @user_id`;
+      }
+      
+      query += ` ORDER BY updated_at DESC`;
 
-      const result = await request.query(`
-        SELECT TOP(@limit) id, title, session_name, created_at, updated_at
-        FROM sessions
-        ORDER BY updated_at DESC
-      `);
+      const result = await request.query(query);
 
       return result.recordset;
     } catch (error) {
@@ -143,7 +158,7 @@ class SessionManager {
       const setClauses = [];
       const allowedFields = ['title', 'session_name'];
       
-      request.input('sessionId', sql.UniqueIdentifier, sessionId);
+      request.input('sessionId', sql.NVarChar(50), sessionId);
       request.input('updated_at', sql.DateTime2, new Date());
       
       allowedFields.forEach(field => {
@@ -183,12 +198,12 @@ class SessionManager {
       try {
         // Delete messages first (foreign key constraint)
         let request = new sql.Request(transaction);
-        request.input('sessionId', sql.UniqueIdentifier, sessionId);
+        request.input('sessionId', sql.NVarChar(50), sessionId);
         await request.query('DELETE FROM messages WHERE session_id = @sessionId');
         
         // Delete session
         request = new sql.Request(transaction);
-        request.input('sessionId', sql.UniqueIdentifier, sessionId);
+        request.input('sessionId', sql.NVarChar(50), sessionId);
         await request.query('DELETE FROM sessions WHERE id = @sessionId');
         
         await transaction.commit();
@@ -217,7 +232,7 @@ class MessageManager {
 
       // Get the next message order for this session
       const orderRequest = pool.request();
-      orderRequest.input('sessionId', sql.UniqueIdentifier, sessionId);
+      orderRequest.input('sessionId', sql.NVarChar(50), sessionId);
       const orderResult = await orderRequest.query(`
         SELECT ISNULL(MAX(message_order), 0) + 1 as next_order 
         FROM messages 
@@ -226,8 +241,8 @@ class MessageManager {
       const messageOrder = orderResult.recordset[0].next_order;
 
       const request = pool.request();
-      request.input('id', sql.UniqueIdentifier, messageId);
-      request.input('session_id', sql.UniqueIdentifier, sessionId);
+      request.input('id', sql.NVarChar(50), messageId);
+      request.input('session_id', sql.NVarChar(50), sessionId);
       request.input('content', sql.NVarChar(sql.MAX), content);
       request.input('role', sql.NVarChar(20), role);
       request.input('message_order', sql.Int, messageOrder);
@@ -241,7 +256,7 @@ class MessageManager {
 
       // Update session timestamp
       const updateRequest = pool.request();
-      updateRequest.input('sessionId', sql.UniqueIdentifier, sessionId);
+      updateRequest.input('sessionId', sql.NVarChar(50), sessionId);
       updateRequest.input('updated_at', sql.DateTime2, now);
       await updateRequest.query(`
         UPDATE sessions SET updated_at = @updated_at WHERE id = @sessionId
@@ -266,7 +281,7 @@ class MessageManager {
     try {
       const pool = await this.db.getConnection();
       const request = pool.request();
-      request.input('sessionId', sql.UniqueIdentifier, sessionId);
+      request.input('sessionId', sql.NVarChar(50), sessionId);
       request.input('limit', sql.Int, limit);
 
       const result = await request.query(`
@@ -290,7 +305,7 @@ class MessageManager {
     try {
       const pool = await this.db.getConnection();
       const request = pool.request();
-      request.input('messageId', sql.UniqueIdentifier, messageId);
+      request.input('messageId', sql.NVarChar(50), messageId);
 
       await request.query('DELETE FROM messages WHERE id = @messageId');
       return true;

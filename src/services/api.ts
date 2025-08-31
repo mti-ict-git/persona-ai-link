@@ -203,15 +203,15 @@ class ApiService {
     data?: {
       message?: string;
       session_name_update?: string;
-      raw_response?: any;
+      raw_response?: unknown;
     };
-    response?: any;
+    response?: unknown;
     session_name_update?: string;
     ai_message?: {
       content: string;
       role: string;
     };
-    metadata?: any;
+    metadata?: unknown;
   }> {
     return this.request('/webhooks/send-to-n8n', {
       method: 'POST',
@@ -221,7 +221,7 @@ class ApiService {
 
   async testWebhook(): Promise<{
     success: boolean;
-    response?: any;
+    response?: unknown;
     error?: string;
   }> {
     return this.request('/webhooks/test', {
@@ -230,13 +230,13 @@ class ApiService {
   }
 
   // Generic HTTP methods for file operations
-  async get(endpoint: string): Promise<any> {
+  async get<T = unknown>(endpoint: string): Promise<T> {
     return this.request(endpoint, {
       method: 'GET',
     });
   }
 
-  async post(endpoint: string, data?: any, options?: { headers?: Record<string, string> }): Promise<any> {
+  async post<T = unknown>(endpoint: string, data?: unknown, options?: { headers?: Record<string, string> }): Promise<T> {
     const headers: Record<string, string> = {
       ...options?.headers,
     };
@@ -257,7 +257,28 @@ class ApiService {
     });
   }
 
-  async delete(endpoint: string): Promise<any> {
+  async put<T = unknown>(endpoint: string, data?: unknown, options?: { headers?: Record<string, string> }): Promise<T> {
+    const headers: Record<string, string> = {
+      ...options?.headers,
+    };
+
+    // Don't set Content-Type for FormData, let the browser set it with boundary
+    if (!(data instanceof FormData)) {
+      headers['Content-Type'] = 'application/json';
+    }
+    // For FormData, explicitly avoid setting Content-Type
+    else {
+      delete headers['Content-Type'];
+    }
+
+    return this.request(endpoint, {
+      method: 'PUT',
+      body: data instanceof FormData ? data : JSON.stringify(data),
+      headers,
+    });
+  }
+
+  async delete<T = unknown>(endpoint: string): Promise<T> {
     return this.request(endpoint, {
       method: 'DELETE',
     });
@@ -283,7 +304,7 @@ class ApiService {
     endDate?: string;
     feedbackType?: 'positive' | 'negative';
     sessionId?: string;
-  }): Promise<any[]> {
+  }): Promise<unknown[]> {
     const queryParams = new URLSearchParams();
     if (filters?.startDate) queryParams.append('startDate', filters.startDate);
     if (filters?.endDate) queryParams.append('endDate', filters.endDate);

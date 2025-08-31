@@ -13,6 +13,7 @@ const uploadRoutes = require('./routes/upload');
 const processingRoutes = require('./routes/processing');
 const feedbackRoutes = require('./routes/feedback');
 const trainingRoutes = require('./routes/training');
+const adminRoutes = require('./routes/admin');
 const { router: authRoutes } = require('./routes/auth');
 const { initializeDatabase } = require('./utils/database');
 
@@ -57,6 +58,7 @@ app.get('/health', (req, res) => {
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/api/sessions', sessionRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/files', filesRoutes);

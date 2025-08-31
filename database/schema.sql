@@ -68,8 +68,46 @@ BEGIN
     INNER JOIN inserted i ON s.id = i.id;
 END;
 
--- Create admin user
+-- Role permissions table for granular access control
+CREATE TABLE role_permissions (
+    id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    role NVARCHAR(20) NOT NULL,
+    permission NVARCHAR(50) NOT NULL,
+    created_at DATETIME2 DEFAULT GETDATE()
+);
+
+-- Indexes for role_permissions table
+CREATE INDEX IX_role_permissions_role ON role_permissions(role);
+CREATE INDEX IX_role_permissions_permission ON role_permissions(permission);
+CREATE UNIQUE INDEX IX_role_permissions_unique ON role_permissions(role, permission);
+
+GO
+
+-- Insert role permissions
+-- Superadmin can manage users and training
+INSERT INTO role_permissions (role, permission) VALUES 
+('superadmin', 'manage_users'),
+('superadmin', 'manage_training'),
+('superadmin', 'view_admin_dashboard'),
+('superadmin', 'system_administration');
+
+-- Admin can only manage training
+INSERT INTO role_permissions (role, permission) VALUES 
+('admin', 'manage_training'),
+('admin', 'view_admin_dashboard');
+
+-- Regular user permissions
+INSERT INTO role_permissions (role, permission) VALUES 
+('user', 'chat_access');
+
+GO
+
+-- Create superadmin user (upgraded from admin)
 -- Password: P@ssw0rd.123 (hashed with bcrypt)
+INSERT INTO chat_Users (username, email, passwordHash, firstName, lastName, role, active) VALUES 
+('superadmin', 'mti.superadmin@merdekabattery.com', '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Super', 'Admin', 'superadmin', 1);
+
+-- Create regular admin user for training management
 INSERT INTO chat_Users (username, email, passwordHash, firstName, lastName, role, active) VALUES 
 ('admin', 'mti.admin@merdekabattery.com', '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Admin', 'User', 'admin', 1);
 

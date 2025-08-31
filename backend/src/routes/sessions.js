@@ -1,6 +1,7 @@
 const express = require('express');
 const Joi = require('joi');
 const { sessionManager } = require('../utils/database');
+const { authenticateToken } = require('./auth');
 
 const router = express.Router();
 
@@ -18,10 +19,10 @@ const updateSessionSchema = Joi.object({
 const sessionIdSchema = Joi.string().uuid().required();
 
 // GET /api/sessions - Get all sessions
-router.get('/', async (req, res, next) => {
+router.get('/', authenticateToken, async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || 50;
-    const sessions = await sessionManager.getAllSessions(limit);
+    const sessions = await sessionManager.getAllSessions(limit, String(req.user.id));
     
     res.json({
       success: true,
@@ -34,7 +35,7 @@ router.get('/', async (req, res, next) => {
 });
 
 // POST /api/sessions - Create new session
-router.post('/', async (req, res, next) => {
+router.post('/', authenticateToken, async (req, res, next) => {
   try {
     const { error, value } = createSessionSchema.validate(req.body);
     if (error) {
@@ -47,7 +48,8 @@ router.post('/', async (req, res, next) => {
 
     const session = await sessionManager.createSession(
       value.title,
-      value.session_name
+      value.session_name,
+      String(req.user.id)
     );
 
     res.status(201).json({
@@ -60,7 +62,7 @@ router.post('/', async (req, res, next) => {
 });
 
 // GET /api/sessions/:id - Get specific session
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', authenticateToken, async (req, res, next) => {
   try {
     const { error } = sessionIdSchema.validate(req.params.id);
     if (error) {
@@ -70,7 +72,7 @@ router.get('/:id', async (req, res, next) => {
       });
     }
 
-    const session = await sessionManager.getSession(req.params.id);
+    const session = await sessionManager.getSession(req.params.id, String(req.user.id));
     
     if (!session) {
       return res.status(404).json({
@@ -89,7 +91,7 @@ router.get('/:id', async (req, res, next) => {
 });
 
 // PUT /api/sessions/:id - Update session
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', authenticateToken, async (req, res, next) => {
   try {
     const { error: idError } = sessionIdSchema.validate(req.params.id);
     if (idError) {
@@ -108,8 +110,8 @@ router.put('/:id', async (req, res, next) => {
       });
     }
 
-    // Check if session exists
-    const existingSession = await sessionManager.getSession(req.params.id);
+    // Check if session exists and user owns it
+    const existingSession = await sessionManager.getSession(req.params.id, String(req.user.id));
     if (!existingSession) {
       return res.status(404).json({
         success: false,
@@ -129,7 +131,7 @@ router.put('/:id', async (req, res, next) => {
 });
 
 // DELETE /api/sessions/:id - Delete session
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', authenticateToken, async (req, res, next) => {
   try {
     const { error } = sessionIdSchema.validate(req.params.id);
     if (error) {
@@ -139,8 +141,8 @@ router.delete('/:id', async (req, res, next) => {
       });
     }
 
-    // Check if session exists
-    const existingSession = await sessionManager.getSession(req.params.id);
+    // Check if session exists and user owns it
+    const existingSession = await sessionManager.getSession(req.params.id, String(req.user.id));
     if (!existingSession) {
       return res.status(404).json({
         success: false,

@@ -2,7 +2,13 @@ const express = require('express');
 const axios = require('axios');
 const https = require('https');
 const { processedFilesManager } = require('../utils/processedFilesManager');
+const { authenticateToken } = require('./auth');
+const { requireTrainingManagement } = require('../middleware/rbac');
 const router = express.Router();
+
+// Apply authentication and training management permission to all routes
+router.use(authenticateToken);
+router.use(requireTrainingManagement());
 
 // Create axios instance with SSL certificate verification disabled for n8n
 const httpsAgent = new https.Agent({
