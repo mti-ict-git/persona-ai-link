@@ -6,6 +6,9 @@ const { processedFilesManager } = require('../utils/processedFilesManager');
 
 const router = express.Router();
 
+// Webhook timeout configuration from environment variables
+const CHAT_WEBHOOK_TIMEOUT = parseInt(process.env.CHAT_WEBHOOK_TIMEOUT) || 60000; // Default 60 seconds
+
 // Validation schemas
 const sendToN8NSchema = Joi.object({
   event_type: Joi.string().required(),
@@ -140,7 +143,7 @@ router.post('/send-to-n8n', async (req, res, next) => {
       
       // Send to N8N webhook
       const response = await axios.post(webhookUrl, payload, {
-        timeout: 30000,
+        timeout: CHAT_WEBHOOK_TIMEOUT,
         headers: {
           'Content-Type': 'application/json',
           'User-Agent': 'PersonaAI-Link/1.0'

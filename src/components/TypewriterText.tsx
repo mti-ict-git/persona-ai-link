@@ -12,7 +12,7 @@ interface TypewriterTextProps {
 
 const TypewriterText: React.FC<TypewriterTextProps> = ({
   text,
-  speed = 30,
+  speed = Number(import.meta.env.VITE_TYPEWRITER_SPEED) || 30,
   onComplete,
   isMarkdown = false,
   className = ''
@@ -20,8 +20,20 @@ const TypewriterText: React.FC<TypewriterTextProps> = ({
   const [displayedText, setDisplayedText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
+  
+  // Check if typewriter animation is enabled from environment
+  const isTypewriterEnabled = import.meta.env.VITE_TYPEWRITER_ENABLED === 'true';
 
   useEffect(() => {
+    if (!isTypewriterEnabled) {
+      // If typewriter is disabled, show full text immediately
+      setDisplayedText(text);
+      setCurrentIndex(text.length);
+      setIsComplete(true);
+      onComplete?.();
+      return;
+    }
+
     if (currentIndex < text.length) {
       const timer = setTimeout(() => {
         setDisplayedText(prev => prev + text[currentIndex]);
@@ -33,7 +45,7 @@ const TypewriterText: React.FC<TypewriterTextProps> = ({
       setIsComplete(true);
       onComplete?.();
     }
-  }, [currentIndex, text, speed, onComplete, isComplete]);
+  }, [currentIndex, text, speed, onComplete, isComplete, isTypewriterEnabled]);
 
   // Reset when text changes
   useEffect(() => {
@@ -105,7 +117,7 @@ const TypewriterText: React.FC<TypewriterTextProps> = ({
         >
           {displayedText}
         </ReactMarkdown>
-        {!isComplete && (
+        {!isComplete && isTypewriterEnabled && (
           <span className="inline-block w-2 h-5 bg-primary animate-pulse ml-1" />
         )}
       </div>
@@ -116,7 +128,7 @@ const TypewriterText: React.FC<TypewriterTextProps> = ({
     <div className={className}>
       <p className="whitespace-pre-wrap leading-relaxed">
         {displayedText}
-        {!isComplete && (
+        {!isComplete && isTypewriterEnabled && (
           <span className="inline-block w-2 h-5 bg-primary animate-pulse ml-1" />
         )}
       </p>

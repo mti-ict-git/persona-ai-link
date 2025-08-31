@@ -13,6 +13,9 @@ const httpsAgent = new https.Agent({
   rejectUnauthorized: false
 });
 
+// Processing webhook timeout configuration
+const PROCESSING_WEBHOOK_TIMEOUT = parseInt(process.env.PROCESSING_WEBHOOK_TIMEOUT) || 60000;
+
 // Validation schemas
 const createFileSchema = Joi.object({
   filename: Joi.string().min(1).max(255).required(),
@@ -233,7 +236,7 @@ router.delete('/:id', async (req, res) => {
         headers: {
           'Content-Type': 'application/json'
         },
-        timeout: 30000, // 30 second timeout
+        timeout: PROCESSING_WEBHOOK_TIMEOUT,
         httpsAgent: httpsAgent
       });
       

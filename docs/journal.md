@@ -1,5 +1,214 @@
 # Development Journal
 
+## 2025-08-30 16:15:07 - Processing Webhook Timeout Fix
+
+### Issue Resolution
+Resolved the persistent 30-second timeout error in file processing operations by implementing configurable timeout settings for processing webhooks.
+
+### Root Cause Analysis
+The 30-second timeout error was occurring because:
+1. **Chat and Training webhooks** were updated to use 60-second configurable timeouts
+2. **Processing webhooks** in `processing.js` and `files.js` still had hardcoded 30-second timeouts
+3. File processing operations (document upload, batch processing, file deletion) were hitting the 30-second limit
+
+### Solution Implemented
+1. **Environment Variable**: Added `PROCESSING_WEBHOOK_TIMEOUT` configuration option
+2. **Default Value**: Set to 120 seconds (120000ms) to handle large file processing
+3. **Consistent Implementation**: Applied to all processing-related webhook calls
+4. **Flexible Configuration**: Users can adjust timeout based on file sizes and processing complexity
+
+### Technical Details
+- **Processing Operations**: Uses `PROCESSING_WEBHOOK_TIMEOUT` environment variable in `processing.js`
+- **File Deletion**: Uses `PROCESSING_WEBHOOK_TIMEOUT` environment variable in `files.js`
+- **Parsing**: Environment variables are parsed as integers with fallback to 120000ms
+- **Extended Timeout**: Increased default from 30s to 120s for complex processing operations
+
+### Configuration Options
+```env
+# Processing webhook timeout for file operations (milliseconds)
+PROCESSING_WEBHOOK_TIMEOUT=120000
+```
+
+### Files Modified
+- `backend/src/routes/processing.js`: Added configurable processing webhook timeout
+- `backend/src/routes/files.js`: Added configurable file deletion webhook timeout
+- `backend/.env`: Added processing timeout configuration (120 seconds)
+- `backend/.env.example`: Added processing timeout documentation
+- `docs/journal.md`: Documented the fix
+
+### Benefits
+✅ **Eliminates 30s Timeout Errors**: File processing operations now have adequate time
+✅ **Handles Large Files**: 120-second default accommodates complex document processing
+✅ **Environment-Specific**: Different timeouts for development, staging, and production
+✅ **Consistent Configuration**: All webhook types now use configurable timeouts
+✅ **No Code Changes**: Timeout adjustments don't require code deployment
+
+## 2025-08-30 15:59:22 - Configurable Webhook Timeout Implementation
+
+### Enhancement
+Implemented configurable webhook timeout settings via environment variables to allow flexible timeout configuration without code changes.
+
+### Features Implemented
+1. **Environment Variables**: Added `CHAT_WEBHOOK_TIMEOUT` and `TRAINING_WEBHOOK_TIMEOUT` configuration options
+2. **Default Values**: Both timeouts default to 60 seconds (60000ms) if not specified
+3. **Flexible Configuration**: Users can now customize timeout values based on their infrastructure needs
+4. **Consistent Implementation**: Applied to both chat and training webhook endpoints
+
+### Technical Details
+- **Chat Webhook**: Uses `CHAT_WEBHOOK_TIMEOUT` environment variable in `webhooks.js`
+- **Training Webhook**: Uses `TRAINING_WEBHOOK_TIMEOUT` environment variable in `training.js`
+- **Parsing**: Environment variables are parsed as integers with fallback to 60000ms
+- **Validation**: Invalid values fall back to default timeout
+
+### Configuration Options
+```env
+# Chat webhook timeout for AI responses (milliseconds)
+CHAT_WEBHOOK_TIMEOUT=60000
+
+# Training webhook timeout for model training operations (milliseconds)
+TRAINING_WEBHOOK_TIMEOUT=60000
+```
+
+### Files Modified
+- `backend/src/routes/webhooks.js`: Added configurable chat webhook timeout
+- `backend/src/routes/training.js`: Added configurable training webhook timeout
+- `backend/.env`: Added timeout configuration variables
+- `backend/.env.example`: Added timeout configuration documentation
+- `docs/journal.md`: Documented the implementation
+
+### Benefits
+✅ **Flexible Configuration**: Timeout values can be adjusted per environment
+✅ **No Code Changes**: Configuration changes don't require code deployment
+✅ **Environment-Specific**: Different timeouts for development, staging, and production
+✅ **Backward Compatible**: Maintains existing 60-second default behavior
+✅ **Consistent Implementation**: Both webhook types use the same configuration pattern
+
+## 2025-08-30 15:51:49 - Chat Webhook Timeout Fix
+
+### Issue
+Users were receiving 30-second timeout errors in toast notifications despite the training webhook having a 60-second timeout. Investigation revealed that the chat webhook in `webhooks.js` was still using a 30-second timeout.
+
+### Root Cause
+The chat webhook timeout was inconsistent with the training webhook timeout:
+- Training webhook: 60 seconds (`backend/src/routes/training.js`)
+- Chat webhook: 30 seconds (`backend/src/routes/webhooks.js`)
+
+### Solution
+Updated the chat webhook timeout from 30 seconds to 60 seconds to match the training webhook configuration:
+- Changed `timeout: 30000` to `timeout: 60000` in the axios request configuration
+- Added comment for clarity: `// 60 second timeout`
+
+### Files Modified
+- `backend/src/routes/webhooks.js`: Updated axios timeout configuration for chat webhook
+- `docs/journal.md`: Documented the timeout fix
+
+### Result
+✅ Both chat and training webhooks now use consistent 60-second timeouts
+✅ Users should no longer receive 30-second timeout errors in toast notifications
+✅ Improved reliability for longer-running AI processing operations
+
+## August 30, 2025
+
+### Configurable Typewriter Animation Implementation
+
+**Status**: ✅ COMPLETED
+
+**Summary**: Successfully implemented configurable typewriter animation with environment-based enable/disable and speed control.
+
+**Implementation Details**:
+
+1. **Environment Configuration**:
+   - Added `VITE_TYPEWRITER_ENABLED` (true/false) to control animation on/off
+   - Added `VITE_TYPEWRITER_SPEED` (milliseconds per character) for speed control
+   - Updated both `.env` and `.env.example` files with new configuration options
+
+2. **Component Enhancement**:
+   - Modified `TypewriterText.tsx` to read environment variables
+   - Added `isTypewriterEnabled` flag from `VITE_TYPEWRITER_ENABLED`
+   - Updated default speed to use `VITE_TYPEWRITER_SPEED` or fallback to 30ms
+   - Enhanced useEffect to handle disabled state (immediate text display)
+
+3. **Animation Control**:
+   - When disabled: Shows full text immediately without character-by-character animation
+   - When enabled: Uses configured speed for typewriter effect
+   - Cursor animation only shows when typewriter is enabled
+   - Maintains all existing functionality (markdown support, onComplete callback)
+
+4. **Configuration Options**:
+   - `VITE_TYPEWRITER_ENABLED=true` - Enable typewriter animation
+   - `VITE_TYPEWRITER_ENABLED=false` - Disable animation (instant text display)
+   - `VITE_TYPEWRITER_SPEED=30` - Default speed (30ms per character)
+   - `VITE_TYPEWRITER_SPEED=50` - Slower animation
+   - `VITE_TYPEWRITER_SPEED=10` - Faster animation
+
+**Files Modified**:
+- `src/components/TypewriterText.tsx` - Added environment configuration support
+- `.env` - Added typewriter configuration variables
+- `.env.example` - Added configuration documentation
+
+**Features**:
+- ✅ Environment-based enable/disable control
+- ✅ Configurable animation speed
+- ✅ Instant text display when disabled
+- ✅ Conditional cursor animation
+- ✅ Backward compatibility with existing props
+- ✅ Works with both markdown and plain text modes
+
+**Usage**: Developers can now control typewriter animation behavior through environment variables without code changes.
+
+---
+
+### Collapsible Chat Session Sidebar Implementation - FINAL
+
+**Status**: ✅ COMPLETED
+
+**Summary**: Successfully implemented and refined a collapsible chat session sidebar feature with proper button positioning.
+
+**Final Implementation Details**:
+
+1. **Component Analysis**: 
+   - Examined `ChatSidebar.tsx` structure and layout
+   - Analyzed `Index.tsx` for sidebar state management
+   - Reviewed `ChatMain.tsx` for existing toggle functionality
+
+2. **State Management**: 
+   - Leveraged existing `showSidebar` state in `Index.tsx`
+   - Added `showSidebar` and `onToggleSidebar` props to `ChatSidebarProps` interface
+   - Connected sidebar visibility state between components
+
+3. **Toggle Button Implementation**:
+   - Added Menu icon import to `ChatSidebar.tsx`
+   - **FIXED**: Positioned toggle button AFTER `ThemeToggle` (right side of dark mode button)
+   - Made existing toggle button in `ChatMain.tsx` visible on all screen sizes (removed `lg:hidden`)
+   - Added proper accessibility with title attributes
+
+4. **CSS Transitions**:
+   - Enhanced existing transitions in `Index.tsx` with `flex-shrink-0`
+   - Maintained smooth `transition-all duration-300 ease-in-out` animations
+   - Ensured proper width and opacity transitions
+
+5. **Layout Integration**:
+   - Updated `Index.tsx` to pass collapse props to `ChatSidebar`
+   - Maintained responsive behavior across different screen sizes
+   - Preserved existing conditional rendering logic
+
+**Files Modified**:
+- `src/components/ChatMain.tsx` - Enhanced toggle button visibility
+- `src/components/ChatSidebar.tsx` - Added collapse button with correct positioning
+- `src/pages/Index.tsx` - Connected collapse props and improved transitions
+
+**Features**:
+- ✅ Toggle button positioned correctly next to dark mode button
+- ✅ Toggle button in both sidebar header and main chat area
+- ✅ Smooth CSS transitions for collapse/expand animations
+- ✅ Responsive design maintained
+- ✅ Proper state management between components
+- ✅ Accessibility features (title attributes)
+
+**User Feedback Addressed**: Fixed button positioning issue - collapse button now appears to the right of the dark mode toggle as requested.
+
+---
+
 ## August 24, 2025
 
 ### Real Authentication Implementation

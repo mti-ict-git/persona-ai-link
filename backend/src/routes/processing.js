@@ -15,6 +15,9 @@ const httpsAgent = new https.Agent({
 const N8N_BASE_WEBHOOK_URL = process.env.N8N_BASE_WEBHOOK_URL || 'https://n8nprod.merdekabattery.com:5679/webhook/';
 const N8N_PROCESS_WEBHOOK_URL = N8N_BASE_WEBHOOK_URL + 'train';
 
+// Processing webhook timeout configuration
+const PROCESSING_WEBHOOK_TIMEOUT = parseInt(process.env.PROCESSING_WEBHOOK_TIMEOUT) || 60000;
+
 // POST /api/processing/process/:id - Process a specific file
 router.post('/process/:id', async (req, res) => {
   try {
@@ -72,7 +75,7 @@ router.post('/process/:id', async (req, res) => {
       
       // Send to N8N webhook
       const n8nResponse = await axios.post(N8N_PROCESS_WEBHOOK_URL, n8nPayload, {
-        timeout: 30000, // 30 seconds timeout
+        timeout: PROCESSING_WEBHOOK_TIMEOUT,
         headers: {
           'Content-Type': 'application/json'
         },
@@ -205,7 +208,7 @@ router.post('/batch', async (req, res) => {
           
           // Send to N8N webhook
            const n8nResponse = await axios.post(N8N_PROCESS_WEBHOOK_URL, n8nPayload, {
-             timeout: 30000, // 30 seconds timeout
+             timeout: PROCESSING_WEBHOOK_TIMEOUT,
              headers: {
                'Content-Type': 'application/json'
              },

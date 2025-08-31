@@ -13,6 +13,9 @@ const httpsAgent = new https.Agent({
 const N8N_BASE_WEBHOOK_URL = process.env.N8N_WEBHOOK_URL || 'https://n8nprod.merdekabattery.com:5679/webhook/';
 const N8N_TRAIN_WEBHOOK_URL = N8N_BASE_WEBHOOK_URL + 'train';
 
+// Training webhook timeout configuration from environment variables
+const TRAINING_WEBHOOK_TIMEOUT = parseInt(process.env.TRAINING_WEBHOOK_TIMEOUT) || 60000; // Default 60 seconds
+
 // POST /api/training/train - Train the AI model with processed files
 router.post('/train', async (req, res) => {
   try {
@@ -87,7 +90,7 @@ router.post('/train', async (req, res) => {
         headers: {
           'Content-Type': 'application/json'
         },
-        timeout: 60000, // 60 second timeout
+        timeout: TRAINING_WEBHOOK_TIMEOUT,
         httpsAgent: httpsAgent
       });
 
