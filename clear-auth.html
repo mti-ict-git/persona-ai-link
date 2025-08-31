@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clear Authentication</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .button {
+            background-color: #dc3545;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        .button:hover {
+            background-color: #c82333;
+        }
+        .success {
+            color: #28a745;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .info {
+            background-color: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Fix Authentication Issue</h1>
+        
+        <div class="info">
+            <strong>Problem:</strong> Your JWT token has an invalid signature, causing 401 Unauthorized errors.
+            <br><br>
+            <strong>Solution:</strong> Clear the stored authentication token and log in again.
+        </div>
+        
+        <h3>Current Token Status:</h3>
+        <p id="tokenStatus">Checking...</p>
+        
+        <h3>Actions:</h3>
+        <button class="button" onclick="clearAuth()">Clear Authentication Token</button>
+        <button class="button" onclick="redirectToLogin()">Go to Login Page</button>
+        
+        <div id="result"></div>
+        
+        <h3>Manual Steps (if needed):</h3>
+        <ol>
+            <li>Open Developer Tools (F12)</li>
+            <li>Go to Application/Storage → Local Storage</li>
+            <li>Find and delete the 'auth_token' key</li>
+            <li>Refresh the page and log in again</li>
+        </ol>
+    </div>
+    
+    <script>
+        function checkTokenStatus() {
+            const token = localStorage.getItem('auth_token');
+            const statusEl = document.getElementById('tokenStatus');
+            
+            if (token) {
+                statusEl.innerHTML = `<span style="color: #dc3545;">❌ Token found but invalid (causing 401 errors)</span>`;
+            } else {
+                statusEl.innerHTML = `<span style="color: #28a745;">✅ No token found (ready for fresh login)</span>`;
+            }
+        }
+        
+        function clearAuth() {
+            // Clear all possible auth-related items
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            sessionStorage.clear();
+            
+            document.getElementById('result').innerHTML = 
+                '<div class="success">✅ Authentication data cleared successfully!</div>';
+            
+            // Recheck status
+            setTimeout(checkTokenStatus, 100);
+        }
+        
+        function redirectToLogin() {
+            // Assuming the app runs on localhost:5173
+            window.location.href = 'http://localhost:5173/login';
+        }
+        
+        // Check token status on page load
+        checkTokenStatus();
+    </script>
+</body>
+</html>

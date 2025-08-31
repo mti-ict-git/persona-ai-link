@@ -1,5 +1,5 @@
 const sql = require('mssql');
-const config = require('../utils/database');
+const { dbManager } = require('../utils/database');
 
 /**
  * Role-Based Access Control Middleware
@@ -13,7 +13,7 @@ const config = require('../utils/database');
  */
 async function getUserPermissions(userId) {
     try {
-        const pool = await sql.connect(config);
+        const pool = await dbManager.getConnection();
         const result = await pool.request()
             .input('userId', sql.Int, userId)
             .query(`

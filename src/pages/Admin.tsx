@@ -21,6 +21,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -101,7 +102,8 @@ const Admin: React.FC = () => {
     try {
       const data = await apiService.get<{ users: User[] }>('/admin/users');
       setUsers(data.users || []);
-    } catch (error) {
+    } catch (error: unknown) {
+      console.error('Error fetching users:', error);
       toast.error('Error fetching users');
     }
   };
@@ -110,7 +112,8 @@ const Admin: React.FC = () => {
     try {
       const data = await apiService.get<SystemStats>('/admin/stats');
       setStats(data);
-    } catch (error) {
+    } catch (error: unknown) {
+      console.error('Error fetching statistics:', error);
       toast.error('Error fetching statistics');
     } finally {
       setLoading(false);
@@ -124,7 +127,8 @@ const Admin: React.FC = () => {
       fetchUsers();
       setIsEditDialogOpen(false);
       setEditingUser(null);
-    } catch (error) {
+    } catch (error: unknown) {
+      console.error('Error updating user:', error);
       toast.error('Error updating user');
     }
   };
@@ -139,7 +143,8 @@ const Admin: React.FC = () => {
       toast.success('User deleted successfully');
       fetchUsers();
       fetchStats();
-    } catch (error) {
+    } catch (error: unknown) {
+      console.error('Error deleting user:', error);
       toast.error('Error deleting user');
     }
   };
@@ -173,8 +178,15 @@ const Admin: React.FC = () => {
       setResetPassword('');
       setResetUserId(null);
       setIsResetPasswordDialogOpen(false);
-    } catch (error: any) {
-      toast.error(error.response?.data?.error || 'Error resetting password');
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error && 'response' in error && 
+        typeof error.response === 'object' && error.response !== null &&
+        'data' in error.response && 
+        typeof error.response.data === 'object' && error.response.data !== null &&
+        'error' in error.response.data
+        ? String(error.response.data.error)
+        : 'Error resetting password';
+      toast.error(errorMessage);
     }
   };
 
