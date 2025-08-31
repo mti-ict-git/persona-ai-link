@@ -1,5 +1,33 @@
 # Development Journal
 
+## September 1, 2025 - Environment Variables Cleanup
+
+**Status:** Complete  
+**Time:** 00:15
+
+### Summary
+Removed external database configuration variables from the frontend environment file to maintain proper separation of concerns between frontend and backend configurations.
+
+### Changes Made
+1. **Frontend .env file cleanup**
+   - Removed `EXTERNAL_DB_HOST`, `EXTERNAL_DB_PORT`, `EXTERNAL_DB_NAME`
+   - Removed `EXTERNAL_DB_USER`, `EXTERNAL_DB_PASSWORD`
+   - Removed `EXTERNAL_DB_ENCRYPT`, `EXTERNAL_DB_TRUST_CERT`
+   - These variables belong in backend configuration, not frontend
+
+### Rationale
+- Frontend applications should not have direct access to database credentials
+- Database configuration should be handled exclusively by the backend
+- Maintains security best practices by keeping sensitive data server-side
+- Follows proper environment variable separation patterns
+
+### Current State
+- Frontend `.env` files now contain only frontend-specific variables (VITE_*) and Docker orchestration settings
+- Backend `.env` file contains all database and security configurations
+- Environment variable separation properly implemented
+
+---
+
 ## August 31, 2025 - Fixed TypeScript Errors (Updated)
 
 **Status:** Complete  
@@ -47,6 +75,38 @@ Resolved multiple TypeScript compilation errors across the codebase to ensure ty
 - All TypeScript compilation errors resolved
 - `npx tsc --noEmit` passes without errors
 - Type safety maintained across component interfaces
+
+## September 1, 2025 - Environment Variables Cleanup
+
+**Status:** Complete  
+**Time:** 00:15
+
+### Summary
+Cleaned up environment variable configuration by removing database-related variables from frontend environment files and ensuring proper separation of concerns between frontend and backend configurations.
+
+### Issues Addressed
+1. **Frontend Environment Files** - Removed database configuration variables that don't belong in frontend
+2. **Separation of Concerns** - Ensured frontend files only contain frontend-specific variables
+3. **Security Best Practices** - Database credentials now only exist in backend environment files
+
+### Technical Changes
+1. **`.env` (Frontend Root)**
+   - Removed external database configuration block
+   - Kept only frontend-specific variables (VITE_*) and Docker orchestration variables
+
+2. **`.env.production` (Frontend Production)**
+   - Removed external database configuration block
+   - Maintained production-specific frontend and Docker variables
+
+### Final Environment Structure
+- **Frontend files** (`.env`, `.env.production`): Only VITE_* variables and Docker port mappings
+- **Backend files** (`backend/.env`): All database, security, and service configurations
+- **Proper separation**: Database credentials isolated to backend where they belong
+
+### Validation
+- Environment variable separation follows security best practices
+- Frontend no longer has access to sensitive database credentials
+- Backend retains all necessary database and service configurations
 
 ### Final TypeScript Fixes (7:51 PM)
 - Fixed remaining ESLint errors in TrainingContent.tsx:
