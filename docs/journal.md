@@ -1,5 +1,33 @@
 # Development Journal
 
+## September 1, 2025 - Docker Build Dependency Fix
+
+**Summary**: Fixed Docker frontend build failure caused by missing Vite dependency during the build process.
+
+**Issue Resolved**:
+- Docker build was failing with error: "sh: vite: not found" during `npm run build`
+- Root cause: Frontend Dockerfile was using `npm ci --only=production` which excludes dev dependencies
+- Vite is typically listed as a dev dependency but is required for the build process
+
+**Changes Made**:
+1. **Dockerfile**: Updated dependency installation command
+   - Changed: `RUN npm ci --only=production`
+   - To: `RUN npm ci` (installs all dependencies including dev dependencies)
+   - Rationale: Build tools like Vite are needed during the build stage even though they're dev dependencies
+
+**Technical Details**:
+- The build stage needs dev dependencies (Vite, TypeScript, etc.) to compile and bundle the application
+- The final production image only contains the built static files served by Nginx
+- Dev dependencies are not included in the final image, maintaining production efficiency
+
+**Benefits**:
+- ✅ Resolves Docker build failures
+- ✅ Ensures all necessary build tools are available during compilation
+- ✅ Maintains production image efficiency (dev deps not in final image)
+- ✅ Follows standard Docker multi-stage build practices
+
+---
+
 ## September 1, 2025 - Docker Compose Environment Variable Fix
 
 **Summary**: Fixed Docker Compose warnings about undefined database environment variables by removing redundant explicit environment variable mappings in production configuration.
