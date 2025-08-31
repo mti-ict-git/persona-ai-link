@@ -90,6 +90,49 @@
 
 **Testing**: LDAP account separation functionality tested and verified working correctly.
 
+## August 31, 2025 - Security Cleanup: Removed Test Files and Scripts
+
+**Status**: ✅ COMPLETED
+
+**Summary**: Cleaned up the project by removing test scripts, debug files, and utility scripts that contained sensitive data including hardcoded database credentials and authentication tokens.
+
+**Files Removed**:
+
+1. **Backend Test Scripts**:
+   - `backend/test-ldap-debug.js` - LDAP testing with credentials
+   - `backend/test-rbac.js` - Role-based access control testing
+   - `backend/test-sftp-debug.js` - SFTP connection testing
+   - `backend/test-sftp-delete.js` - SFTP deletion testing
+   - `backend/test-unified-webhook.js` - Webhook testing
+   - `backend/test-user-creation.cjs` - User creation testing
+
+2. **Backend Utility Scripts**:
+   - `backend/check-permissions.js` - Contained hardcoded DB credentials
+   - `backend/check-user-role.js` - User role checking utility
+   - `backend/query-users.js` - Database query utility
+
+3. **Frontend Debug Files**:
+   - `clear-auth.html` - Authentication clearing debug page
+   - `debug-auth.html` - Authentication debugging page
+   - `debug-current-auth.html` - Current auth state debugging
+   - `debug-token.html` - Token debugging page
+   - `test-login.html` - Login testing page
+   - `test-user-creation-final.html` - User creation testing page
+   - `public/debug-user-role.html` - User role debugging page
+
+4. **Other Test Files**:
+   - `test-user-creation.cjs` - User creation testing script
+   - `check_duplicates.cjs` - Database duplicate checking
+   - `test-upload.txt` - File upload testing
+
+**Security Benefits**:
+- Removed hardcoded database credentials from codebase
+- Eliminated debug files that could expose authentication tokens
+- Cleaned up test scripts that contained sensitive configuration data
+- Reduced attack surface by removing unnecessary debug endpoints
+
+**Impact**: Project is now cleaner and more secure with no sensitive data exposed in test files.
+
 ## August 31, 2025 - LDAP Authentication Implementation Complete
 
 **Status**: ✅ COMPLETED
