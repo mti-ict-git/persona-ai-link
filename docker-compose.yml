@@ -1,26 +1,23 @@
-version: '3.8'
-
 services:
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
     container_name: persona-ai-backend-prod
+    env_file:
+      - .env                    # Docker orchestration variables (ports, etc.)
+      - ./backend/.env          # Backend-specific variables
     environment:
       - NODE_ENV=production
       - PORT=${BACKEND_PORT}
-      - DB_HOST=${EXTERNAL_DB_HOST}
-      - DB_PORT=${EXTERNAL_DB_PORT}
-      - DB_NAME=${EXTERNAL_DB_NAME}
-      - DB_USER=${EXTERNAL_DB_USER}
-      - DB_PASSWORD=${EXTERNAL_DB_PASSWORD}
-      - DB_ENCRYPT=${EXTERNAL_DB_ENCRYPT}
-      - DB_TRUST_CERT=${EXTERNAL_DB_TRUST_CERT}
-      - N8N_WEBHOOK_URL=${N8N_WEBHOOK_URL}
-      - WEBHOOK_SECRET=${WEBHOOK_SECRET}
-      - JWT_SECRET=${JWT_SECRET}
-      - ADMIN_USERNAME=${ADMIN_USERNAME}
-      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      # Database variables now come from backend/.env
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_DATABASE}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_ENCRYPT=${DB_ENCRYPT}
+      - DB_TRUST_CERT=${DB_TRUST_CERT}
     ports:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
     networks:
