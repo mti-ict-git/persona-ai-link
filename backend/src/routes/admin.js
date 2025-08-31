@@ -11,8 +11,20 @@ const {
 } = require('../middleware/rbac');
 
 // Apply authentication to all admin routes
+router.use((req, res, next) => {
+  console.log('[ADMIN] 🚀 Admin route accessed:', req.method, req.originalUrl);
+  next();
+});
 router.use(authenticateToken);
+router.use((req, res, next) => {
+  console.log('[ADMIN] ✅ Authentication passed, checking admin access...');
+  next();
+});
 router.use(requireAdminAccess()); // Require admin dashboard access
+router.use((req, res, next) => {
+  console.log('[ADMIN] ✅ Admin access granted, proceeding to route handler...');
+  next();
+});
 
 // GET /api/admin/users - Get all users with pagination (superadmin only)
 router.get('/users', requireUserManagement(), async (req, res) => {
@@ -289,7 +301,12 @@ router.delete('/sessions/:id', async (req, res) => {
 });
 
 // POST /api/admin/users - Create new user (superadmin only)
-router.post('/users', requireSuperAdmin(), async (req, res) => {
+router.post('/users', (req, res, next) => {
+  console.log('[ADMIN] 👤 POST /users route accessed - checking superadmin permissions...');
+  console.log('[ADMIN] Request body:', JSON.stringify(req.body, null, 2));
+  next();
+}, requireSuperAdmin(), async (req, res) => {
+  console.log('[ADMIN] 🔐 SuperAdmin check passed, creating user...');
   try {
     const { username, email, password, role } = req.body;
     
@@ -313,7 +330,7 @@ router.post('/users', requireSuperAdmin(), async (req, res) => {
       return res.status(400).json({ error: 'Password must be at least 6 characters long' });
     }
     
-    const bcrypt = require('bcrypt');
+    const bcrypt = require('bcryptjs');
     const hashedPassword = await bcrypt.hash(password, 10);
     
     const pool = await dbManager.getConnection();
@@ -324,7 +341,7 @@ router.post('/users', requireSuperAdmin(), async (req, res) => {
     request.input('role', sql.NVarChar(20), role);
     
     const result = await request.query(`
-      INSERT INTO chat_Users (username, email, password, role, createdAt)
+      INSERT INTO chat_Users (username, email, passwordHash, role, createdAt)
       OUTPUT INSERTED.id, INSERTED.username, INSERTED.email, INSERTED.role, INSERTED.createdAt
       VALUES (@username, @email, @password, @role, GETDATE())
     `);
@@ -366,7 +383,7 @@ router.post('/users/:id/reset-password', requireSuperAdmin(), async (req, res) =
       return res.status(400).json({ error: 'Password must be at least 6 characters long' });
     }
     
-    const bcrypt = require('bcrypt');
+    const bcrypt = require('bcryptjs');
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     
     const pool = await dbManager.getConnection();
@@ -376,7 +393,7 @@ router.post('/users/:id/reset-password', requireSuperAdmin(), async (req, res) =
     
     const result = await request.query(`
       UPDATE chat_Users 
-      SET password = @password
+      SET passwordHash = @password
       WHERE id = @userId
     `);
     

@@ -32,15 +32,16 @@ class ApiError extends Error {
 
 class ApiService {
   private getAuthToken(): string | null {
-    return localStorage.getItem('auth_token');
+    const token = localStorage.getItem('authToken');
+    return token;
   }
 
   private setAuthToken(token: string): void {
-    localStorage.setItem('auth_token', token);
+    localStorage.setItem('authToken', token);
   }
 
   private removeAuthToken(): void {
-    localStorage.removeItem('auth_token');
+    localStorage.removeItem('authToken');
   }
 
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
@@ -342,6 +343,33 @@ class ApiService {
     }
     
     return response.blob();
+  }
+
+  // Generic HTTP methods
+  async get<T>(endpoint: string): Promise<T> {
+    return this.request<T>(endpoint, {
+      method: 'GET',
+    });
+  }
+
+  async post<T>(endpoint: string, data?: any): Promise<T> {
+    return this.request<T>(endpoint, {
+      method: 'POST',
+      body: data ? JSON.stringify(data) : undefined,
+    });
+  }
+
+  async put<T>(endpoint: string, data?: any): Promise<T> {
+    return this.request<T>(endpoint, {
+      method: 'PUT',
+      body: data ? JSON.stringify(data) : undefined,
+    });
+  }
+
+  async delete<T>(endpoint: string): Promise<T> {
+    return this.request<T>(endpoint, {
+      method: 'DELETE',
+    });
   }
 
 }

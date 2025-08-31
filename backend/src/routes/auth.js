@@ -23,17 +23,32 @@ const resetPasswordSchema = Joi.object({
 
 // Middleware to verify JWT token
 const authenticateToken = (req, res, next) => {
+  console.log('[AUTH] =================================');
+  console.log('[AUTH] Request URL:', req.method, req.originalUrl);
+  console.log('[AUTH] Headers:', JSON.stringify(req.headers, null, 2));
+  
   const authHeader = req.headers['authorization'];
+  console.log('[AUTH] Auth header:', authHeader);
+  
   const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+  console.log('[AUTH] Extracted token:', token ? `${token.substring(0, 20)}...` : 'null');
 
   if (!token) {
+    console.log('[AUTH] ❌ No token provided');
     return res.status(401).json({ error: 'Access token required' });
   }
 
+  console.log('[AUTH] JWT_SECRET being used:', JWT_SECRET ? `${JWT_SECRET.substring(0, 10)}...` : 'undefined');
+  
   jwt.verify(token, JWT_SECRET, (err, user) => {
     if (err) {
+      console.log('[AUTH] ❌ JWT verification failed:', err.message);
+      console.log('[AUTH] Error details:', err);
       return res.status(403).json({ error: 'Invalid or expired token' });
     }
+    
+    console.log('[AUTH] ✅ JWT verification successful');
+    console.log('[AUTH] Decoded user:', JSON.stringify(user, null, 2));
     req.user = user;
     next();
   });

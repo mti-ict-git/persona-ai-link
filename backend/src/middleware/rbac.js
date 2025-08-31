@@ -13,6 +13,7 @@ const { dbManager } = require('../utils/database');
  */
 async function getUserPermissions(userId) {
     try {
+        console.log(`[RBAC] 🔍 Fetching permissions for user ID: ${userId}`);
         const pool = await dbManager.getConnection();
         const result = await pool.request()
             .input('userId', sql.Int, userId)
@@ -24,9 +25,11 @@ async function getUserPermissions(userId) {
             `);
         
         console.log(`[RBAC] User ${userId} permissions:`, result.recordset);
-        return result.recordset.map(row => row.permission);
+        const permissions = result.recordset.map(row => row.permission);
+        console.log(`[RBAC] 📋 Extracted permission list for user ${userId}:`, permissions);
+        return permissions;
     } catch (error) {
-        console.error('Error fetching user permissions:', error);
+        console.error('[RBAC] ❌ Error fetching user permissions:', error);
         return [];
     }
 }

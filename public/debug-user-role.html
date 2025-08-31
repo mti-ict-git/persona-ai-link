@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug User Role</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .info { background-color: #d1ecf1; color: #0c5460; }
+        pre {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Debug User Role & Authentication</h1>
+        
+        <button class="button" onclick="checkUserRole()">Check Current User Role</button>
+        <button class="button" onclick="testUserCreation()">Test User Creation API</button>
+        <button class="button" onclick="clearAuth()">Clear Auth & Reload</button>
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        function updateResults(content) {
+            document.getElementById('results').innerHTML = content;
+        }
+        
+        async function checkUserRole() {
+            updateResults('<h3>🔍 Checking User Role...</h3>');
+            
+            const token = localStorage.getItem('authToken');
+            const user = localStorage.getItem('user');
+            
+            let results = '<h3>🔍 User Role Check Results</h3>';
+            
+            if (!token) {
+                results += '<div class="status error">❌ No auth token found in localStorage</div>';
+                updateResults(results);
+                return;
+            }
+            
+            results += '<div class="status success">✅ Auth token found</div>';
+            
+            if (user) {
+                try {
+                    const userData = JSON.parse(user);
+                    results += `<div class="status info">👤 User Data:</div>`;
+                    results += `<pre>${JSON.stringify(userData, null, 2)}</pre>`;
+                } catch (e) {
+                    results += '<div class="status error">❌ Invalid user data in localStorage</div>';
+                }
+            } else {
+                results += '<div class="status error">❌ No user data found in localStorage</div>';
+            }
+            
+            // Test token validation
+            try {
+                const response = await fetch('http://localhost:3001/api/auth/validate', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    results += '<div class="status success">✅ Token is valid</div>';
+                    results += `<div class="status info">🔐 Validated User Data:</div>`;
+                    results += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+                } else {
+                    const errorText = await response.text();
+                    results += `<div class="status error">❌ Token validation failed: ${response.status}</div>`;
+                    results += `<pre>${errorText}</pre>`;
+                }
+            } catch (error) {
+                results += `<div class="status error">❌ Network error during validation: ${error.message}</div>`;
+            }
+            
+            updateResults(results);
+        }
+        
+        async function testUserCreation() {
+            updateResults('<h3>🧪 Testing User Creation...</h3>');
+            
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                updateResults('<h3>🧪 User Creation Test</h3><div class="status error">❌ No token found - cannot test</div>');
+                return;
+            }
+            
+            try {
+                const response = await fetch('http://localhost:3001/api/admin/users', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: 'test.debug.user',
+                        email: 'test.debug@example.com',
+                        password: 'TestPassword123!',
+                        role: 'user'
+                    })
+                });
+                
+                let results = '<h3>🧪 User Creation Test Results</h3>';
+                results += `<div class="status info">Response Status: ${response.status} ${response.statusText}</div>`;
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    results += '<div class="status success">✅ User creation successful!</div>';
+                    results += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+                } else {
+                    const errorText = await response.text();
+                    results += '<div class="status error">❌ User creation failed</div>';
+                    results += `<pre>${errorText}</pre>`;
+                }
+                
+                updateResults(results);
+            } catch (error) {
+                updateResults(`<h3>🧪 User Creation Test</h3><div class="status error">❌ Network error: ${error.message}</div>`);
+            }
+        }
+        
+        function clearAuth() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('user');
+            updateResults('<h3>🧹 Auth Cleared</h3><div class="status success">✅ Authentication data cleared. Reloading page...</div>');
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500);
+        }
+        
+        // Auto-check on page load
+        window.onload = function() {
+            checkUserRole();
+        };
+    </script>
+</body>
+</html>

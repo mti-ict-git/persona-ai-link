@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Current Auth State</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        button { margin: 5px; padding: 10px 15px; }
+        pre { background: #f5f5f5; padding: 10px; border-radius: 3px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Debug Current Authentication State</h1>
+    
+    <div class="section">
+        <h3>LocalStorage Contents</h3>
+        <div id="localStorage-content"></div>
+    </div>
+    
+    <div class="section">
+        <h3>Authentication Test</h3>
+        <button onclick="testAuth()">Test Authentication</button>
+        <div id="auth-result"></div>
+    </div>
+    
+    <div class="section">
+        <h3>User Creation Test</h3>
+        <button onclick="testUserCreation()">Test User Creation</button>
+        <div id="user-creation-result"></div>
+    </div>
+    
+    <div class="section">
+        <h3>Manual Login</h3>
+        <input type="email" id="email" placeholder="Email" value="mti.admin@mti.co.id">
+        <input type="password" id="password" placeholder="Password" value="admin123">
+        <button onclick="manualLogin()">Login</button>
+        <div id="login-result"></div>
+    </div>
+
+    <script>
+        // Display localStorage contents
+        function displayLocalStorage() {
+            const content = document.getElementById('localStorage-content');
+            const keys = Object.keys(localStorage);
+            
+            if (keys.length === 0) {
+                content.innerHTML = '<p class="info">No items in localStorage</p>';
+                return;
+            }
+            
+            let html = '<ul>';
+            keys.forEach(key => {
+                const value = localStorage.getItem(key);
+                html += `<li><strong>${key}:</strong> ${value}</li>`;
+            });
+            html += '</ul>';
+            content.innerHTML = html;
+        }
+        
+        // Test authentication
+        async function testAuth() {
+            const resultDiv = document.getElementById('auth-result');
+            const token = localStorage.getItem('authToken');
+            
+            if (!token) {
+                resultDiv.innerHTML = '<p class="error">No auth token found in localStorage</p>';
+                return;
+            }
+            
+            try {
+                const response = await fetch('http://localhost:3001/api/auth/validate', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `<p class="success">Authentication successful</p><pre>${JSON.stringify(data, null, 2)}</pre>`;
+                } else {
+                    resultDiv.innerHTML = `<p class="error">Authentication failed: ${data.message || 'Unknown error'}</p>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+            }
+        }
+        
+        // Test user creation
+        async function testUserCreation() {
+            const resultDiv = document.getElementById('user-creation-result');
+            const token = localStorage.getItem('authToken');
+            
+            if (!token) {
+                resultDiv.innerHTML = '<p class="error">No auth token found in localStorage</p>';
+                return;
+            }
+            
+            const testUser = {
+                username: 'testuser' + Date.now(),
+                email: 'test' + Date.now() + '@example.com',
+                password: 'password123',
+                role: 'user'
+            };
+            
+            try {
+                const response = await fetch('http://localhost:3001/api/admin/users', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(testUser)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `<p class="success">User creation successful</p><pre>${JSON.stringify(data, null, 2)}</pre>`;
+                } else {
+                    resultDiv.innerHTML = `<p class="error">User creation failed: ${data.message || data.error || 'Unknown error'}</p><pre>Status: ${response.status}</pre>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+            }
+        }
+        
+        // Manual login
+        async function manualLogin() {
+            const resultDiv = document.getElementById('login-result');
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const response = await fetch('http://localhost:3001/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    localStorage.setItem('authToken', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    resultDiv.innerHTML = `<p class="success">Login successful</p><pre>${JSON.stringify(data, null, 2)}</pre>`;
+                    displayLocalStorage(); // Refresh localStorage display
+                } else {
+                    resultDiv.innerHTML = `<p class="error">Login failed: ${data.message || 'Unknown error'}</p>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+            }
+        }
+        
+        // Initialize
+        displayLocalStorage();
+    </script>
+</body>
+</html>
