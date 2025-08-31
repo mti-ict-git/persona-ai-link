@@ -355,7 +355,7 @@ const externalSourceSchema = Joi.object({
     .messages({
       'string.uri': 'URL must be a valid HTTP or HTTPS URL'
     }),
-  type: Joi.string().valid('download', 'view', 'edit').default('view'),
+  type: Joi.string().valid('download', 'view', 'edit', 'onedrive', 'googledrive', 'dropbox', 'url').default('view'),
   description: Joi.string().max(500).optional().allow('', null)
 });
 
@@ -369,7 +369,7 @@ const updateExternalSourceSchema = Joi.object({
     .messages({
       'string.uri': 'URL must be a valid HTTP or HTTPS URL'
     }),
-  type: Joi.string().valid('download', 'view', 'edit').optional(),
+  type: Joi.string().valid('download', 'view', 'edit', 'onedrive', 'googledrive', 'dropbox', 'url').optional(),
   description: Joi.string().max(500).optional().allow('', null)
 });
 
@@ -425,19 +425,7 @@ router.post('/:id/sources', async (req, res) => {
       });
     }
 
-    // Validate URL accessibility
-    const urlValidation = await validateUrlAccess(value.url);
-    if (!urlValidation.accessible) {
-      return res.status(400).json({
-        success: false,
-        error: 'URL is not accessible',
-        details: {
-          url: value.url,
-          error: urlValidation.error,
-          status: urlValidation.status
-        }
-      });
-    }
+    // Skip URL accessibility validation to allow authenticated URLs (SharePoint, OneDrive, etc.)
 
     // Initialize metadata if it doesn't exist
     const metadata = file.metadata || {};
@@ -460,9 +448,7 @@ router.post('/:id/sources', async (req, res) => {
       url: value.url,
       type: value.type,
       description: value.description || '',
-      addedAt: new Date().toISOString(),
-      lastValidated: new Date().toISOString(),
-      validationStatus: urlValidation.status
+      addedAt: new Date().toISOString()
     };
     
     // Add to sources array
@@ -537,18 +523,7 @@ router.put('/:id/sources/:sourceId', async (req, res) => {
         });
       }
       
-      urlValidation = await validateUrlAccess(value.url);
-      if (!urlValidation.accessible) {
-        return res.status(400).json({
-          success: false,
-          error: 'URL is not accessible',
-          details: {
-            url: value.url,
-            error: urlValidation.error,
-            status: urlValidation.status
-          }
-        });
-      }
+      // Skip URL accessibility validation to allow authenticated URLs
     }
     
     // Update the source
@@ -557,12 +532,6 @@ router.put('/:id/sources/:sourceId', async (req, res) => {
       ...value,
       updatedAt: new Date().toISOString()
     };
-    
-    // Add validation info if URL was validated
-    if (urlValidation) {
-      updatedSource.lastValidated = new Date().toISOString();
-      updatedSource.validationStatus = urlValidation.status;
-    }
     
     externalSources[sourceIndex] = updatedSource;
     metadata.externalSources = externalSources;

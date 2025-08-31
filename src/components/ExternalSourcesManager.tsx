@@ -92,7 +92,10 @@ const ExternalSourcesManager = ({ fileId, sources = [], onSourcesChange, onClose
 
   const handleCloseDialog = () => {
     setIsDialogOpen(false);
-    resetForm();
+    // Reset form after dialog closes to prevent controlled/uncontrolled input warning
+    setTimeout(() => {
+      resetForm();
+    }, 100);
   };
 
   const detectSourceType = (url: string): ExternalSource['type'] => {
@@ -262,7 +265,7 @@ const ExternalSourcesManager = ({ fileId, sources = [], onSourcesChange, onClose
                     <Label htmlFor="name">Name</Label>
           <Input
             id="name"
-            value={formData.name}
+            value={formData.name || ''}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       placeholder="e.g., Company Policy Document"
                       required
@@ -273,7 +276,7 @@ const ExternalSourcesManager = ({ fileId, sources = [], onSourcesChange, onClose
                     <Input
                       id="url"
                       type="url"
-                      value={formData.url}
+                      value={formData.url || ''}
                       onChange={(e) => setFormData({ ...formData, url: e.target.value })}
                       placeholder="https://..."
                       required
@@ -283,7 +286,7 @@ const ExternalSourcesManager = ({ fileId, sources = [], onSourcesChange, onClose
                     <Label htmlFor="description">Description (Optional)</Label>
                     <Input
                       id="description"
-                      value={formData.description}
+                      value={formData.description || ''}
                       onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                       placeholder="Brief description of the linked resource"
                     />

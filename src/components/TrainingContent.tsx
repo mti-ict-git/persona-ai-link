@@ -245,14 +245,40 @@ const TrainingContent: React.FC = () => {
     }
   };
 
-  const handleManageExternalSources = (file: FileData) => {
+  const handleManageExternalSources = async (file: FileData) => {
     setSelectedFileForSources(file);
     setExternalSourcesOpen(true);
+    
+    // Fetch external sources for this file
+    try {
+      const response = await apiService.get<{
+        success: boolean;
+        data: ExternalSource[];
+        count: number;
+        error?: string;
+      }>(`/files/${file.id}/sources`);
+      
+      if (response.success) {
+        setExternalSources(response.data || []);
+      } else {
+        console.error('Failed to fetch external sources:', response.error);
+        setExternalSources([]);
+      }
+    } catch (error) {
+      console.error('Error fetching external sources:', error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch external sources. Please try again.",
+        variant: "destructive",
+      });
+      setExternalSources([]);
+    }
   };
 
   const handleCloseExternalSources = () => {
     setExternalSourcesOpen(false);
     setSelectedFileForSources(null);
+    setExternalSources([]);
   };
 
   const handleProcessFile = async (fileId: string) => {

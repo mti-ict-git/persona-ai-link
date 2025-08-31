@@ -123,12 +123,45 @@ router.post('/send-to-n8n', async (req, res, next) => {
       });
     }
 
+    // Get user information if session has user_id
+    let userInfo = null;
+    if (session.user_id) {
+      try {
+        const { dbManager } = require('../utils/database');
+        const pool = await dbManager.getConnection();
+        const request = pool.request();
+        request.input('user_id', require('mssql').NVarChar(50), session.user_id);
+        
+        const userResult = await request.query(`
+          SELECT id, username, email, firstName, lastName, role
+          FROM chat_Users 
+          WHERE id = @user_id AND active = 1
+        `);
+        
+        if (userResult.recordset.length > 0) {
+          const user = userResult.recordset[0];
+          userInfo = {
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            role: user.role
+          };
+        }
+      } catch (userError) {
+        console.warn('Failed to fetch user information:', userError.message);
+        // Continue without user info rather than failing the webhook
+      }
+    }
+
     // Prepare payload for N8N
     const payload = {
       event_type: event_type,
       sessionId: sessionId,
       message_id: require('uuid').v4(),
       message: message,
+      user: userInfo, // Add user information to payload
       context: {
         session_name: context?.session_name || session.session_name,
         session_title: session.title,

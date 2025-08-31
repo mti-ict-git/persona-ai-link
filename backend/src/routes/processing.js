@@ -381,4 +381,121 @@ function analyzeSentiment(content) {
   return 'neutral';
 }
 
+// POST /api/processing/reprocess/:id - Reprocess a specific file
+router.post('/reprocess/:id', async (req, res) => {
+  try {
+    const fileId = parseInt(req.params.id);
+    
+    // Get file record
+    const file = await processedFilesManager.getFileById(fileId);
+    if (!file) {
+      return res.status(404).json({
+        success: false,
+        error: 'File not found'
+      });
+    }
+    
+    // Update status to processing (no need to reset processed flag since Supabase data is deleted)
+    await processedFilesManager.updateProcessedStatus(
+      fileId, 
+      file.processed, // Keep current processed status
+      { ...file.metadata, status: 'processing' }
+    );
+    
+    // Read file content
+    const filename = file.file_path ? file.file_path.replace('/uploads/', '') : file.filename;
+    const filePath = path.join(__dirname, '../../uploads', filename);
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({
+        success: false,
+        error: 'File not found on disk'
+      });
+    }
+
+    const fileContent = fs.readFileSync(filePath, 'utf8');
+
+    // Send file metadata to N8N for reprocessing with proper payload structure
+    const n8nPayload = {
+      file_operation: 'upload',
+      file_id: parseInt(fileId),
+      filename: file.filename,
+      file_path: file.file_path,
+      sftp_path: file.metadata?.sftpPath || null,
+      word_count: fileContent.split(/\s+/).length,
+      uploaded_at: file.uploaded_at,
+      metadata: file.metadata
+    };
+
+    console.log(`Reprocessing file via N8N: ${file.filename}`);
+
+    const response = await axios.post(N8N_PROCESS_WEBHOOK_URL, n8nPayload, {
+      timeout: PROCESSING_WEBHOOK_TIMEOUT,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      httpsAgent: httpsAgent
+    });
+    
+    console.log('N8N Response:', response.data);
+    
+    // Check if N8N processing was successful
+    if (response.status === 200 && response.data) {
+      // Extract response data (handle array format from your example)
+      const responseData = Array.isArray(response.data) ? response.data[0]?.response?.body : response.data;
+      
+      if (responseData?.success && responseData?.status === 'Processed') {
+        // Update file as processed with N8N results
+        const processedFile = await processedFilesManager.updateProcessedStatus(
+          fileId, 
+          true, 
+          { 
+            ...file.metadata, 
+            status: 'completed',
+            processing_result: {
+              word_count: n8nPayload.word_count,
+              processed_by: 'n8n',
+              n8n_message: responseData.message
+            },
+            processed_at: new Date().toISOString(),
+            content_length: fileContent.length
+          }
+        );
+        
+        console.log(`File reprocessing completed via N8N for: ${file.filename}`);
+        
+        res.json({
+          success: true,
+          data: processedFile,
+          message: responseData.message || 'File reprocessed successfully via N8N',
+          processing_result: processedFile.metadata.processing_result
+        });
+      } else {
+        throw new Error(`N8N processing failed: ${responseData?.message || 'Unknown error'}`);
+      }
+    } else {
+      throw new Error(`N8N processing failed: ${response.data?.message || 'Unknown error'}`);
+    }
+    
+  } catch (error) {
+    console.error('Error reprocessing file:', error);
+    
+    // Update file status to failed
+    await processedFilesManager.updateProcessedStatus(
+      parseInt(req.params.id),
+      false,
+      {
+        status: 'failed',
+        error: error.message,
+        failed_at: new Date().toISOString()
+      }
+    );
+    
+    return res.status(500).json({
+      success: false,
+      error: 'File reprocessing failed',
+      message: error.message
+    });
+  }
+});
+
 module.exports = router;
