@@ -12,14 +12,7 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=${BACKEND_PORT}
-      # Database variables now come from backend/.env
-      - DB_HOST=${DB_HOST}
-      - DB_PORT=${DB_PORT}
-      - DB_NAME=${DB_DATABASE}
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_ENCRYPT=${DB_ENCRYPT}
-      - DB_TRUST_CERT=${DB_TRUST_CERT}
+      # Database variables are loaded from backend/.env via env_file
     ports:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
     networks:

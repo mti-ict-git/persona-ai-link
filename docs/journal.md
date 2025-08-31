@@ -1,5 +1,31 @@
 # Development Journal
 
+## September 1, 2025 - Docker Compose Environment Variable Fix
+
+**Summary**: Fixed Docker Compose warnings about undefined database environment variables by removing redundant explicit environment variable mappings in production configuration.
+
+**Issue Resolved**:
+- Docker Compose was showing warnings: "The 'DB_HOST' variable is not set. Defaulting to a blank string" (and similar for other DB variables)
+- Root cause: `docker-compose.yml` had explicit environment variable mappings for database variables that were only defined in `backend/.env`, not in root `.env` files
+
+**Changes Made**:
+1. **docker-compose.yml**: Removed redundant explicit database environment variable mappings
+   - Removed: `DB_HOST=${DB_HOST}`, `DB_PORT=${DB_PORT}`, `DB_NAME=${DB_DATABASE}`, etc.
+   - Kept: `NODE_ENV=production` and `PORT=${BACKEND_PORT}` (these are properly defined in root .env files)
+   - Rationale: Backend service already loads all variables from `backend/.env` via `env_file` directive
+
+**Environment Strategy**:
+- **Production**: Uses `backend/.env` loaded via `env_file` directive in docker-compose.yml
+- **Development**: Uses `EXTERNAL_DB_*` variables from `.env.development` with explicit environment mappings
+
+**Benefits**:
+- **Clean Deployment**: No more environment variable warnings during Docker Compose build
+- **Proper Separation**: Database credentials stay in backend-specific configuration files
+- **Simplified Configuration**: Reduced redundancy in environment variable definitions
+- **Maintained Functionality**: All database variables still properly loaded via env_file
+
+---
+
 ## January 2, 2025 - Complete Docker Variable Configuration
 
 **Summary**: Updated all Dockerfiles and nginx configuration to use environment variables instead of hardcoded port values for better flexibility and configuration management.
