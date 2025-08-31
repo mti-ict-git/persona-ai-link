@@ -10,6 +10,7 @@ export interface User {
   firstName?: string;
   lastName?: string;
   role: string;
+  authMethod?: 'local' | 'ldap';
 }
 
 export interface LoginResponse {
@@ -85,10 +86,10 @@ class ApiService {
   }
 
   // Authentication
-  async login(email: string, password: string): Promise<LoginResponse> {
+  async login(email: string, password: string, authMethod: 'local' | 'ldap' = 'local'): Promise<LoginResponse> {
     const response = await this.request<LoginResponse>('/auth/login', {
       method: 'POST',
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password, authMethod }),
     });
     
     // Store the token

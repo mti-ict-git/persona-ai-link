@@ -383,23 +383,42 @@ router.post('/users/:id/reset-password', requireSuperAdmin(), async (req, res) =
       return res.status(400).json({ error: 'Password must be at least 6 characters long' });
     }
     
+    const pool = await dbManager.getConnection();
+    
+    // Check if user exists and get their authMethod
+    const userCheckRequest = pool.request();
+    userCheckRequest.input('userId', sql.Int, userId);
+    const userResult = await userCheckRequest.query(`
+      SELECT id, username, authMethod 
+      FROM chat_Users 
+      WHERE id = @userId
+    `);
+    
+    if (userResult.recordset.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    const user = userResult.recordset[0];
+    
+    // Prevent password reset for LDAP accounts
+    if (user.authMethod === 'ldap') {
+      return res.status(400).json({ 
+        error: 'Cannot reset password for LDAP accounts. Password must be changed through Active Directory.' 
+      });
+    }
+    
     const bcrypt = require('bcryptjs');
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     
-    const pool = await dbManager.getConnection();
-    const request = pool.request();
-    request.input('userId', sql.Int, userId);
-    request.input('password', sql.NVarChar(255), hashedPassword);
+    const updateRequest = pool.request();
+    updateRequest.input('userId', sql.Int, userId);
+    updateRequest.input('password', sql.NVarChar(255), hashedPassword);
     
-    const result = await request.query(`
+    const result = await updateRequest.query(`
       UPDATE chat_Users 
       SET passwordHash = @password
       WHERE id = @userId
     `);
-    
-    if (result.rowsAffected[0] === 0) {
-      return res.status(404).json({ error: 'User not found' });
-    }
     
     res.json({ message: 'Password reset successfully' });
   } catch (error) {

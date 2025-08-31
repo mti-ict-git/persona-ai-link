@@ -356,41 +356,61 @@ const Settings: React.FC = () => {
             <Card>
               <CardHeader>
                 <CardTitle>Password & Authentication</CardTitle>
-                <CardDescription>Update your password and authentication settings</CardDescription>
+                <CardDescription>
+                  {user?.authMethod === 'ldap' 
+                    ? 'Your account uses Active Directory authentication. Password changes must be made through your domain administrator.'
+                    : 'Update your password and authentication settings'
+                  }
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="current-password">Current Password</Label>
-                  <Input 
-                    id="current-password" 
-                    type="password" 
-                    placeholder="Enter your current password"
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="new-password">New Password</Label>
-                  <Input 
-                    id="new-password" 
-                    type="password" 
-                    placeholder="Enter your new password"
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="confirm-password">Confirm New Password</Label>
-                  <Input 
-                    id="confirm-password" 
-                    type="password" 
-                    placeholder="Confirm your new password"
-                  />
-                </div>
-                
-                <div className="flex justify-end">
-                  <Button onClick={() => toast({ title: 'Password updated', description: 'Your password has been updated successfully.' })}>
-                    Update Password
-                  </Button>
-                </div>
+                {user?.authMethod === 'ldap' ? (
+                  <div className="p-4 bg-muted rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Shield className="h-4 w-4 text-muted-foreground" />
+                      <span className="font-medium">LDAP Account</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      This account is managed through Active Directory. To change your password, 
+                      please contact your system administrator or use your organization's password reset process.
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    <div className="space-y-2">
+                      <Label htmlFor="current-password">Current Password</Label>
+                      <Input 
+                        id="current-password" 
+                        type="password" 
+                        placeholder="Enter your current password"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="new-password">New Password</Label>
+                      <Input 
+                        id="new-password" 
+                        type="password" 
+                        placeholder="Enter your new password"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="confirm-password">Confirm New Password</Label>
+                      <Input 
+                        id="confirm-password" 
+                        type="password" 
+                        placeholder="Confirm your new password"
+                      />
+                    </div>
+                    
+                    <div className="flex justify-end">
+                      <Button onClick={() => toast({ title: 'Password updated', description: 'Your password has been updated successfully.' })}>
+                        Update Password
+                      </Button>
+                    </div>
+                  </>
+                )}
               </CardContent>
             </Card>
             

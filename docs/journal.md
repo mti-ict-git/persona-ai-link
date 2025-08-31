@@ -48,6 +48,100 @@
 
 **Testing**: Admin functionality tested and verified working correctly.
 
+## August 31, 2025 - LDAP Account Separation and Password Management
+
+**Status**: ✅ COMPLETED
+
+**Summary**: Successfully implemented LDAP account separation with proper password management restrictions to prevent password changes for LDAP-authenticated users.
+
+**Features Implemented**:
+
+1. **Database Schema Updates**:
+   - Added `authMethod` column to `chat_Users` table to distinguish between local and LDAP accounts
+   - Created migration script `002_add_auth_method.sql` with default values for existing users
+   - Successfully executed migration using credentials from .env file
+
+2. **Backend Authentication Updates**:
+   - Updated LDAP service to set `authMethod='ldap'` when creating/updating LDAP users
+   - Updated local authentication to set `authMethod='local'` for local accounts
+   - Added validation to prevent password changes for LDAP accounts in:
+     - `/api/admin/users/:id/reset-password` (admin password reset)
+     - `/reset-password` (general password reset)
+
+3. **Frontend Interface Updates**:
+   - Updated `User` interface in both `api.ts` and `Admin.tsx` to include `authMethod` property
+   - Enhanced Settings page to conditionally hide password change options for LDAP accounts
+   - Updated Admin interface to display account type (Local/LDAP) with appropriate badges
+   - Disabled password reset button for LDAP accounts with informative tooltips
+
+**Files Modified**:
+- `database/migrations/002_add_auth_method.sql` - Database migration script
+- `backend/src/services/ldapService.js` - LDAP user creation with authMethod
+- `backend/src/routes/auth.js` - Local auth and password reset validation
+- `backend/src/routes/admin.js` - Admin password reset validation
+- `src/services/api.ts` - User interface with authMethod
+- `src/pages/Settings.tsx` - Conditional password change UI
+- `src/pages/Admin.tsx` - Account type display and restrictions
+
+**Security Enhancements**:
+- Prevents unauthorized password changes for LDAP accounts
+- Clear user feedback for account type restrictions
+- Proper error handling for LDAP account operations
+
+**Testing**: LDAP account separation functionality tested and verified working correctly.
+
+## August 31, 2025 - LDAP Authentication Implementation Complete
+
+**Status**: ✅ COMPLETED
+
+**Summary**: Successfully implemented LDAP (Active Directory) authentication with automatic user provisioning and seamless integration with existing JWT authentication system.
+
+**Features Implemented**:
+
+1. **LDAP Service** (`backend/src/services/ldapService.js`):
+   - Service account binding for user search
+   - User credential validation against Active Directory
+   - Automatic local user creation/update
+   - Comprehensive error handling and logging
+   - Support for multiple username formats (UPN, domain\username)
+
+2. **Authentication Integration**:
+   - Updated login route to support LDAP authentication method
+   - Seamless JWT token generation for LDAP users
+   - Automatic user provisioning with default 'user' role
+   - Database schema compatibility fixes
+
+3. **Configuration & Security**:
+   - Environment variable configuration for LDAP settings
+   - Secure credential handling with proper quoting
+   - Service account authentication for user lookups
+   - Password validation through LDAP bind operations
+
+**Technical Fixes Applied**:
+- Fixed database table name from 'users' to 'chat_Users'
+- Corrected column names (passwordHash, createdAt, updatedAt)
+- Resolved environment variable parsing issues with special characters
+- Updated SQL data types (UniqueIdentifier for user IDs)
+
+**Files Created/Modified**:
+- `backend/src/services/ldapService.js` - Complete LDAP authentication service
+- `backend/.env` - LDAP configuration variables
+- `backend/src/routes/auth.js` - Enhanced login endpoint
+- `backend/package.json` - Added ldapts dependency
+
+**Testing Results**:
+- ✅ LDAP connection successful
+- ✅ User authentication working
+- ✅ Automatic user creation verified (user: widji.santoso)
+- ✅ JWT token generation functional
+- ✅ End-to-end login flow complete
+
+**Key Benefits**:
+- Zero admin intervention for new LDAP users
+- Automatic synchronization with Active Directory
+- Maintains existing local authentication for non-LDAP users
+- Secure credential validation through AD
+
 ## August 31, 2025 - Authentication Debugging & Resolution
 
 **Status**: ✅ RESOLVED
@@ -3531,3 +3625,127 @@ Only kept essential error logging for debugging without exposing sensitive data.
 - `src/pages/Index.tsx` - Removed message content logging
 - `src/hooks/useN8NWebhook.ts` - Secured webhook logging
 - `docs/journal.md` - Documented security enhancement
+
+## 2025-08-31 15:53:00 - UI Improvement: Removed Duplicate Account Settings Menu
+
+### Problem
+The application had duplicate account settings menus - one in the top right corner of the main chat interface and another in the bottom left sidebar, creating redundancy and potential user confusion.
+
+### Solution
+Removed the duplicate account settings dropdown menu from the top right corner of the ChatMain component since the same functionality is already available in the bottom left sidebar.
+
+### Changes Made
+- **File Modified**: `src/components/ChatMain.tsx`
+- **Removed**: Complete DropdownMenu component with user avatar, settings link, and logout functionality
+- **Cleaned Up**: Removed unused imports and interfaces:
+  - DropdownMenu components from @/components/ui/dropdown-menu
+  - Avatar components from @/components/ui/avatar
+  - Settings, LogOut, User icons from lucide-react
+  - useNavigate from react-router-dom
+
+### Benefits
+- Cleaner UI without duplicate elements
+- Better user experience with consistent navigation
+- Code optimization by removing unused imports and functions
+- Account settings still accessible via bottom left sidebar
+
+---
+
+## 2025-08-31 16:03:16 - LDAP Authentication Implementation
+
+### Problem
+The application only supported local database authentication, limiting integration with enterprise Active Directory systems.
+
+### Solution
+Implemented comprehensive LDAP (Active Directory) authentication support using the `ldapts` library.
+
+### Changes Made
+
+#### Backend Changes
+1. **Environment Configuration** (`backend/.env`):
+   - Added LDAP configuration variables:
+     - `LDAP_URL=ldap://192.168.1.100:389`
+     - `LDAP_BASE_DN=DC=mti,DC=local`
+     - `LDAP_USERNAME=mti\administrator`
+     - `LDAP_PASSWORD=P@ssw0rd123`
+     - `LDAP_BIND_DN=CN=administrator,CN=Users,DC=mti,DC=local`
+     - `LDAP_BIND_PASSWORD=P@ssw0rd123`
+     - `LDAP_BASE_OU=OU=Users,DC=mti,DC=local`
+
+2. **Dependencies** (`backend/package.json`):
+   - Installed `ldapts` for LDAP client functionality
+   - Installed `bcrypt` for password hashing
+
+3. **LDAP Service** (`backend/src/services/ldapService.js`):
+   - Created comprehensive `LDAPService` class
+   - Implemented user authentication against Active Directory
+   - Added automatic user creation/update in local database
+   - Included JWT token generation for authenticated users
+   - Added LDAP connection testing functionality
+
+4. **Authentication Routes** (`backend/src/routes/auth.js`):
+   - Updated login schema to support `authMethod` parameter
+   - Modified login route to handle both local and LDAP authentication
+   - Added `/ldap/test` endpoint for connection testing
+   - Enhanced error handling and logging
+
+#### Frontend Changes
+1. **API Service** (`src/services/api.ts`):
+   - Updated `login` method to accept `authMethod` parameter
+   - Modified request payload to include authentication method
+
+2. **Authentication Context** (`src/contexts/AuthContext.tsx`):
+   - Updated `AuthContextType` interface for LDAP support
+   - Modified `login` function to pass authentication method
+
+3. **Login Component** (`src/pages/Login.tsx`):
+   - Added Shadcn UI Tabs component for authentication method selection
+   - Implemented tabbed interface with "Local Account" and "Active Directory" options
+   - Added appropriate icons (User for local, Building for LDAP)
+   - Maintained consistent form validation and error handling
+   - Updated field labels and placeholders for LDAP context
+
+### Technical Implementation
+
+#### LDAP Authentication Flow
+1. User selects authentication method (Local/LDAP) on login form
+2. Frontend sends credentials with `authMethod` parameter
+3. Backend routes to appropriate authentication service
+4. For LDAP: Connects to Active Directory, validates credentials
+5. Creates/updates user record in local database
+6. Generates JWT token for session management
+7. Returns user data and token to frontend
+
+#### Security Features
+- Secure LDAP connection with proper bind credentials
+- Password validation against Active Directory
+- Local user record synchronization
+- JWT token-based session management
+- Comprehensive error handling and logging
+
+### Testing Results
+- LDAP service successfully created and integrated
+- Backend server starts without errors
+- LDAP test endpoint responds (connection fails as expected with test credentials)
+- Frontend displays tabbed authentication interface
+- Both local and LDAP login forms functional
+
+### Benefits
+- Enterprise Active Directory integration
+- Seamless user experience with tabbed interface
+- Automatic user provisioning from LDAP
+- Maintains backward compatibility with local accounts
+- Centralized authentication management
+- Enhanced security through domain authentication
+  - useAuth hook and related functionality
+  - User interface definition
+  - getUserInitials helper function
+  - handleLogout function
+
+### Benefits
+- **Cleaner UI**: Eliminated visual redundancy in the interface
+- **Better UX**: Reduced confusion by having a single, consistent location for account settings
+- **Code Optimization**: Removed unused code and dependencies
+- **Consistent Navigation**: Users now have a single, predictable location for account management in the sidebar
+
+The account settings functionality remains fully accessible through the bottom left sidebar, maintaining all original functionality while improving the overall user experience.

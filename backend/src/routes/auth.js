@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { dbManager } = require('../utils/database');
 const Joi = require('joi');
+const ldapService = require('../services/ldapService');
 
 const router = express.Router();
 
@@ -12,8 +13,9 @@ const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h';
 
 // Validation schemas
 const loginSchema = Joi.object({
-  email: Joi.string().email().required(),
-  password: Joi.string().min(6).required()
+  email: Joi.string().required(), // Can be email or username for LDAP
+  password: Joi.string().min(1).required(),
+  authMethod: Joi.string().valid('local', 'ldap').optional().default('local')
 });
 
 const resetPasswordSchema = Joi.object({
@@ -63,66 +65,93 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: error.details[0].message });
     }
 
-    const { email, password } = value;
-    console.log('Login attempt for email:', email);
-    const pool = await dbManager.getConnection();
+    const { email, password, authMethod } = value;
+    console.log('Login attempt for:', email, 'using method:', authMethod);
 
-    // Find user by email
-    const result = await pool.request()
-      .input('email', email)
-      .query('SELECT id, username, email, passwordHash, firstName, lastName, role, active FROM chat_Users WHERE email = @email');
+    let user, token;
 
-    console.log('User query result:', result.recordset.length, 'users found');
-    if (result.recordset.length === 0) {
-      console.log('No user found with email:', email);
-      return res.status(401).json({ error: 'Invalid email or password' });
+    if (authMethod === 'ldap') {
+      // LDAP Authentication
+      try {
+        console.log('Attempting LDAP authentication...');
+        const ldapResult = await ldapService.authenticateUser(email, password);
+        
+        if (ldapResult.success) {
+          user = ldapResult.user;
+          token = await ldapService.generateToken(user);
+          console.log('LDAP authentication successful for:', user.username);
+        } else {
+          return res.status(401).json({ error: 'LDAP authentication failed' });
+        }
+      } catch (ldapError) {
+        console.error('LDAP authentication error:', ldapError.message);
+        return res.status(401).json({ error: 'Authentication failed' });
+      }
+    } else {
+      // Local Database Authentication
+      const pool = await dbManager.getConnection();
+
+      // Find user by email
+      const result = await pool.request()
+        .input('email', email)
+        .query('SELECT id, username, email, passwordHash, firstName, lastName, role, active FROM chat_Users WHERE email = @email');
+
+      console.log('User query result:', result.recordset.length, 'users found');
+      if (result.recordset.length === 0) {
+        console.log('No user found with email:', email);
+        return res.status(401).json({ error: 'Invalid email or password' });
+      }
+
+      const dbUser = result.recordset[0];
+      console.log('Found user:', { id: dbUser.id, email: dbUser.email, active: dbUser.active });
+
+      // Check if user is active
+      if (!dbUser.active) {
+        console.log('User account is deactivated');
+        return res.status(401).json({ error: 'Account is deactivated' });
+      }
+
+      // Verify password
+      console.log('Comparing password...');
+      const isValidPassword = await bcrypt.compare(password, dbUser.passwordHash);
+      console.log('Password valid:', isValidPassword);
+      if (!isValidPassword) {
+        console.log('Password comparison failed');
+        return res.status(401).json({ error: 'Invalid email or password' });
+      }
+
+      // Generate JWT token
+      token = jwt.sign(
+        {
+          id: dbUser.id,
+          email: dbUser.email,
+          username: dbUser.username,
+          role: dbUser.role,
+          authMethod: 'local'
+        },
+        JWT_SECRET,
+        { expiresIn: JWT_EXPIRES_IN }
+      );
+
+      // Prepare user data
+      user = {
+        id: dbUser.id,
+        username: dbUser.username,
+        email: dbUser.email,
+        firstName: dbUser.firstName,
+        lastName: dbUser.lastName,
+        role: dbUser.role,
+        authMethod: 'local'
+      };
     }
-
-    const user = result.recordset[0];
-    console.log('Found user:', { id: user.id, email: user.email, active: user.active });
-
-    // Check if user is active
-    if (!user.active) {
-      console.log('User account is deactivated');
-      return res.status(401).json({ error: 'Account is deactivated' });
-    }
-
-    // Verify password
-    console.log('Comparing password...');
-    const isValidPassword = await bcrypt.compare(password, user.passwordHash);
-    console.log('Password valid:', isValidPassword);
-    if (!isValidPassword) {
-      console.log('Password comparison failed');
-      return res.status(401).json({ error: 'Invalid email or password' });
-    }
-
-    // Generate JWT token
-    const token = jwt.sign(
-      {
-        id: user.id,
-        email: user.email,
-        username: user.username,
-        role: user.role
-      },
-      JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN }
-    );
-
-    // Return user data (without password) and token
-    const userData = {
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      role: user.role
-    };
 
     res.json({
       message: 'Login successful',
       token,
-      user: userData
+      user: user
     });
+
+    console.log('Login successful for user:', user.username, 'via', user.authMethod || authMethod);
 
   } catch (error) {
     console.error('Login error:', error);
@@ -170,6 +199,17 @@ router.get('/validate', authenticateToken, async (req, res) => {
   }
 });
 
+// Test LDAP connection endpoint
+router.get('/ldap/test', async (req, res) => {
+  try {
+    const testResult = await ldapService.testConnection();
+    res.json(testResult);
+  } catch (error) {
+    console.error('LDAP test error:', error);
+    res.status(500).json({ success: false, message: 'LDAP test failed', error: error.message });
+  }
+});
+
 // Get current user profile
 router.get('/profile', authenticateToken, async (req, res) => {
   try {
@@ -207,7 +247,7 @@ router.post('/reset-password', async (req, res) => {
     // Find user by email
     const userResult = await pool.request()
       .input('email', email)
-      .query('SELECT id, email, active FROM chat_Users WHERE email = @email');
+      .query('SELECT id, email, active, authMethod FROM chat_Users WHERE email = @email');
 
     if (userResult.recordset.length === 0) {
       console.log('No user found with email:', email);
@@ -215,7 +255,15 @@ router.post('/reset-password', async (req, res) => {
     }
 
     const user = userResult.recordset[0];
-    console.log('Found user for password reset:', { id: user.id, email: user.email });
+    console.log('Found user for password reset:', { id: user.id, email: user.email, authMethod: user.authMethod });
+    
+    // Prevent password reset for LDAP accounts
+    if (user.authMethod === 'ldap') {
+      console.log('Password reset blocked for LDAP account:', user.email);
+      return res.status(400).json({ 
+        error: 'Cannot reset password for LDAP accounts. Password must be changed through Active Directory.' 
+      });
+    }
 
     // Hash the new password
     const saltRounds = 12;

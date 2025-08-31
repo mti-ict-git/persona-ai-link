@@ -40,6 +40,7 @@ interface User {
   email: string;
   role: string;
   created_at: string;
+  authMethod?: 'local' | 'ldap';
 }
 
 interface SystemStats {
@@ -287,14 +288,15 @@ const Admin: React.FC = () => {
         <CardContent>
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>Username</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Created</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
+          <TableRow>
+            <TableHead>Username</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead>Role</TableHead>
+            <TableHead>Account Type</TableHead>
+            <TableHead>Created</TableHead>
+            <TableHead>Actions</TableHead>
+          </TableRow>
+        </TableHeader>
           <TableBody>
             {users.map((user) => (
               <TableRow key={user.id}>
@@ -307,6 +309,11 @@ const Admin: React.FC = () => {
                     'secondary'
                   }>
                     {user.role || 'user'}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <Badge variant={user.authMethod === 'ldap' ? 'outline' : 'secondary'}>
+                    {user.authMethod === 'ldap' ? 'LDAP' : 'Local'}
                   </Badge>
                 </TableCell>
                 <TableCell>
@@ -326,7 +333,8 @@ const Admin: React.FC = () => {
                       variant="outline"
                       size="sm"
                       onClick={() => openResetPasswordDialog(user.id)}
-                      title="Reset Password"
+                      title={user.authMethod === 'ldap' ? 'Cannot reset password for LDAP accounts' : 'Reset Password'}
+                      disabled={user.authMethod === 'ldap'}
                     >
                       <KeyRound className="h-4 w-4" />
                     </Button>
