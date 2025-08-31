@@ -1,0 +1,127 @@
+# Database .dockerignore
+# Optimized for MS SQL Server Docker container builds
+
+# ===== VERSION CONTROL =====
+.git
+.gitignore
+.gitattributes
+.gitmodules
+
+# ===== DOCUMENTATION =====
+README.md
+*.md
+docs/
+*.txt
+*.pdf
+
+# ===== IDE AND EDITOR FILES =====
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.sublime-*
+*.sublime-project
+*.sublime-workspace
+
+# ===== OS GENERATED FILES =====
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ===== TEMPORARY FILES =====
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+*.orig
+
+# ===== LOGS =====
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ===== NODE.JS (if any) =====
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# ===== ENVIRONMENT FILES =====
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*
+
+# ===== BUILD ARTIFACTS =====
+dist/
+build/
+out/
+target/
+
+# ===== TEST FILES =====
+__tests__/
+test/
+tests/
+*.test.*
+*.spec.*
+coverage/
+.nyc_output/
+
+# ===== DATABASE SPECIFIC EXCLUSIONS =====
+# Exclude sample data and development scripts
+sample-data/
+dev-scripts/
+migration-backups/
+
+# Exclude database backups and dumps
+*.bak
+*.dump
+*.sql.bak
+*.mdf
+*.ldf
+*.ndf
+
+# Exclude local database files
+data/
+localdb/
+*.db
+*.sqlite
+*.sqlite3
+
+# ===== SECURITY =====
+*.key
+*.pem
+*.p12
+*.pfx
+certs/
+secrets/
+
+# ===== DOCKER RELATED =====
+# Keep Dockerfile and docker-init scripts
+# Exclude other docker files
+docker-compose*.yml
+.dockerignore
+
+# ===== MISC =====
+*.cache
+*.pid
+*.seed
+*.pid.lock
+.npm
+.eslintcache
+.stylelintcache

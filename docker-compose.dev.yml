@@ -1,118 +1,76 @@
 version: '3.8'
 
 services:
-  # Database (MS SQL Server) - Development
-  database-dev:
-    build:
-      context: ./database
-      dockerfile: Dockerfile
-    container_name: persona-ai-database-dev
-    environment:
-      - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=${DB_SA_PASSWORD:-PersonaAI2024!}
-      - MSSQL_PID=Express
-      - MSSQL_TCP_PORT=1433
-    ports:
-      - "${DB_PORT:-1433}:1433"
-    volumes:
-      - persona-ai-db-dev-data:/var/opt/mssql
-    networks:
-      - persona-network-dev
-    restart: unless-stopped
-    healthcheck:
-      test: [
-        "CMD", 
-        "/opt/mssql-tools/bin/sqlcmd", 
-        "-S", "localhost", 
-        "-U", "sa", 
-        "-P", "${DB_SA_PASSWORD:-PersonaAI2024!}", 
-        "-Q", "SELECT 1"
-      ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 60s
-    security_opt:
-      - no-new-privileges:true
-    deploy:
-      resources:
-        limits:
-          memory: 2G
-        reservations:
-          memory: 1G
-
-  # Backend API (Development with hot reload)
-  backend-dev:
+  backend:
     build:
       context: ./backend
       dockerfile: Dockerfile.dev
     container_name: persona-ai-backend-dev
-    env_file:
-      - ./backend/.env
     environment:
       - NODE_ENV=development
-      - FRONTEND_URL=http://localhost:${FRONTEND_DEV_PORT:-5173}
-      - DB_HOST=database-dev
-      - DB_PORT=1433
-      - DB_NAME=PersonaAILink
-      - DB_USER=sa
-      - DB_PASSWORD=${DB_SA_PASSWORD:-PersonaAI2024!}
+      - PORT=${BACKEND_PORT}
+      - DB_HOST=${EXTERNAL_DB_HOST}
+      - DB_PORT=${EXTERNAL_DB_PORT}
+      - DB_NAME=${EXTERNAL_DB_NAME}
+      - DB_USER=${EXTERNAL_DB_USER}
+      - DB_PASSWORD=${EXTERNAL_DB_PASSWORD}
+      - DB_ENCRYPT=${EXTERNAL_DB_ENCRYPT}
+      - DB_TRUST_CERT=${EXTERNAL_DB_TRUST_CERT}
+      - N8N_WEBHOOK_URL=${N8N_WEBHOOK_URL}
+      - WEBHOOK_SECRET=${WEBHOOK_SECRET}
+      - JWT_SECRET=${JWT_SECRET}
+      - ADMIN_USERNAME=${ADMIN_USERNAME}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
     ports:
-      - "${BACKEND_PORT:-3001}:3001"
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+      - "9229:9229"  # Node.js debugging port
     volumes:
-      - ./backend/src:/app/src:ro
-      - ./backend/package.json:/app/package.json:ro
+      - ./backend/src:/app/src
+      - ./backend/package.json:/app/package.json
+      - ./backend/uploads:/app/uploads
+      - /app/node_modules
     networks:
       - persona-network-dev
     restart: unless-stopped
-    depends_on:
-      database-dev:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3001/api/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) }).on('error', () => process.exit(1))"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-    security_opt:
-      - no-new-privileges:true
+    # No database dependency since using external database
     command: npm run dev
+    stdin_open: true
+    tty: true
 
-  # Frontend (Development with Vite hot reload)
-  frontend-dev:
+  frontend:
     build:
       context: .
-      dockerfile: Dockerfile
-      target: dependencies
+      dockerfile: Dockerfile.dev
     container_name: persona-ai-frontend-dev
     environment:
       - NODE_ENV=development
-      - VITE_API_BASE_URL=http://localhost:3001/api
+      - VITE_API_URL=http://localhost:${BACKEND_PORT}
+      - CHOKIDAR_USEPOLLING=true
     ports:
-      - "${FRONTEND_DEV_PORT:-5173}:5173"
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
     volumes:
-      - ./src:/app/src:ro
-      - ./public:/app/public:ro
-      - ./index.html:/app/index.html:ro
-      - ./vite.config.ts:/app/vite.config.ts:ro
-      - ./tailwind.config.ts:/app/tailwind.config.ts:ro
-      - ./postcss.config.js:/app/postcss.config.js:ro
+      - ./src:/app/src
+      - ./public:/app/public
+      - ./index.html:/app/index.html
+      - ./package.json:/app/package.json
+      - ./vite.config.ts:/app/vite.config.ts
+      - ./tailwind.config.ts:/app/tailwind.config.ts
+      - ./tsconfig.json:/app/tsconfig.json
+      - /app/node_modules
     networks:
       - persona-network-dev
     restart: unless-stopped
     depends_on:
-      backend-dev:
-        condition: service_healthy
+      - backend
     command: npm run dev -- --host 0.0.0.0
+    stdin_open: true
+    tty: true
 
-volumes:
-  persona-ai-db-dev-data:
-    driver: local
-    name: persona-ai-db-dev-data
+# No volumes needed for external database setup
 
 networks:
   persona-network-dev:
     driver: bridge
     ipam:
       config:
-        - subnet: ${DOCKER_DEV_NETWORK_SUBNET:-172.21.0.0/16}
+        - subnet: 172.21.0.0/16
