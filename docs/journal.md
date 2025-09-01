@@ -1,28 +1,34 @@
 # Development Journal
 
-## September 1, 2025 - Nginx Configuration Fix
+## September 1, 2025 - Nginx Configuration Fix (Final)
 
-**Summary**: Fixed nginx container startup failure caused by invalid gzip_proxied directive value.
+**Summary**: Fixed nginx container startup failure by removing invalid gzip_proxied directive value.
 
 **Issue Resolved**:
-- Frontend container (nginx) was failing to start with error: "invalid value 'must-revalidate' in /etc/nginx/conf.d/default.conf:11"
-- The nginx gzip_proxied directive was using an invalid value format
+- Frontend container (nginx) was failing to start with error: "invalid value 'must_revalidate' in /etc/nginx/conf.d/default.conf:11"
+- The nginx gzip_proxied directive contained an invalid value 'must_revalidate'
 - Container was stuck in restart loop due to configuration syntax error
 
+**Root Cause**: 
+- Research revealed that 'must_revalidate' is NOT a valid value for the gzip_proxied directive
+- Valid gzip_proxied values are: off, expired, no-cache, no-store, private, no_last_modified, no_etag, auth, any
+- 'must_revalidate' is a Cache-Control header value, not a gzip_proxied parameter
+
 **Changes Made**:
-1. **nginx.conf**: Fixed gzip_proxied directive syntax
-   - Changed: `gzip_proxied expired no-cache no-store private must-revalidate auth;`
-   - To: `gzip_proxied expired no-cache no-store private must_revalidate auth;`
-   - Issue: nginx expects underscore (_) not hyphen (-) in "must_revalidate"
+1. **nginx.conf**: Removed invalid value from gzip_proxied directive
+   - Changed: `gzip_proxied expired no-cache no-store private must_revalidate auth;`
+   - To: `gzip_proxied expired no-cache no-store private auth;`
+   - Removed the invalid 'must_revalidate' value entirely
 
 **Technical Details**:
 - The gzip_proxied directive controls when nginx compresses responses for proxied requests
-- Valid values include: expired, no-cache, no-store, private, must_revalidate, auth
-- nginx is strict about directive value formatting and requires exact syntax
+- Valid values are documented in nginx official documentation
+- The remaining values (expired no-cache no-store private auth) provide appropriate compression for non-cacheable and authorized responses
 
 **Benefits**:
 - Resolves nginx container startup failures
 - Enables proper gzip compression for frontend assets
+- Configuration now follows nginx best practices
 - Allows frontend container to serve the application correctly
 
 ## September 1, 2025 - Docker Network Configuration Fix
