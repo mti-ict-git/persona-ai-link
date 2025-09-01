@@ -14,7 +14,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [authMethod, setAuthMethod] = useState<'local' | 'ldap'>('local');
+  const [authMethod, setAuthMethod] = useState<'local' | 'ldap'>('ldap');
   const [formData, setFormData] = useState({
     email: "",
     password: ""
@@ -187,10 +187,13 @@ const Login = () => {
                       type="text"
                       value={formData.email}
                       onChange={handleInputChange}
-                      placeholder="Enter your domain username"
+                      placeholder="mti.user@merdekabattery.com"
                       className="bg-background border-border focus:border-primary"
                       required
                     />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Example: mti.user@merdekabattery.com
+                    </p>
                   </div>
 
                   <div className="space-y-2">
