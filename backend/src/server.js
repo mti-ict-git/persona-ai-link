@@ -23,7 +23,12 @@ const PORT = process.env.PORT || 3001;
 // Security middleware
 app.use(helmet());
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:8080',
+  origin: [
+    process.env.FRONTEND_URL || 'http://localhost:8090',
+    'http://localhost:8090',
+    'http://10.60.10.59:8090',
+    'http://127.0.0.1:8090'
+  ],
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization', 'authorization', 'X-Requested-With', 'Accept'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -34,7 +39,16 @@ app.use(cors({
 app.options('*', (req, res) => {
   console.log('[PREFLIGHT] OPTIONS request for:', req.originalUrl);
   console.log('[PREFLIGHT] Headers:', req.headers);
-  res.header('Access-Control-Allow-Origin', process.env.FRONTEND_URL || 'http://localhost:8080');
+  const allowedOrigins = [
+    process.env.FRONTEND_URL || 'http://localhost:8090',
+    'http://localhost:8090',
+    'http://10.60.10.59:8090',
+    'http://127.0.0.1:8090'
+  ];
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, authorization, X-Requested-With, Accept');
   res.header('Access-Control-Allow-Credentials', 'true');

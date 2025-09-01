@@ -1,5 +1,89 @@
 # Development Journal
 
+## September 1, 2025 10:53:32 - CORS Configuration Fix for Network Access
+
+**Summary**: Fixed CORS policy blocking frontend access from network IP address to backend API.
+
+**Issue Resolved**:
+- Frontend accessing from `http://10.60.10.59:8090` was blocked by CORS policy
+- Backend only allowed `http://localhost:8090` origin
+- Error: "Access-Control-Allow-Origin header has a value 'http://localhost:8090' that is not equal to the supplied origin"
+
+**Root Cause**:
+- Backend CORS configuration only accepted single origin (localhost)
+- Network access from different IP addresses was not permitted
+- Preflight OPTIONS requests were not handling multiple origins properly
+
+**Changes Made**:
+- Updated CORS origin configuration to accept array of allowed origins:
+  - `http://localhost:8090` (original)
+  - `http://10.60.10.59:8090` (network IP)
+  - `http://127.0.0.1:8090` (loopback)
+  - Environment variable `FRONTEND_URL` (configurable)
+- Enhanced preflight OPTIONS handler to dynamically set Access-Control-Allow-Origin based on request origin
+- Restarted backend development server to apply changes
+
+**Technical Details**:
+- Modified `backend/src/server.js` CORS middleware configuration
+- Changed from single origin string to array of allowed origins
+- Updated OPTIONS request handler to check origin against allowed list
+- Maintained security by only allowing explicitly defined origins
+
+**Verification**:
+- Backend server restarted successfully on port 3006
+- CORS configuration now accepts multiple frontend origins
+- Network access from `http://10.60.10.59:8090` should now be permitted
+
+**Benefits**:
+- Enables frontend access from both localhost and network IP addresses
+- Maintains security by explicitly defining allowed origins
+- Supports development and testing from different network locations
+- Resolves authentication and API access issues from network clients
+
+## September 1, 2025 - Docker Compose Port Mapping Fix
+
+**Summary**: Fixed Docker Compose port mapping configuration to resolve frontend accessibility issues.
+
+**Issue Resolved**:
+- Frontend container was not accessible on the expected port due to incorrect port mapping
+- Docker Compose was mapping container port 80 to host port 8090, but Nginx was configured to listen on port 8090 inside the container
+- Health check was failing due to port mismatch
+
+**Root Cause**:
+- The docker-compose.yml had `ports: "80:${FRONTEND_PORT}"` which maps container port 80 to host port 8090
+- However, the Nginx configuration inside the container was set to listen on port 8090 (via FRONTEND_PORT environment variable)
+- This created a mismatch where Nginx listened on 8090 but Docker expected it on port 80
+
+**Changes Made**:
+1. **docker-compose.yml**: Updated frontend service port mapping
+   - Changed: `ports: "80:${FRONTEND_PORT}"`
+   - To: `ports: "${FRONTEND_PORT}:${FRONTEND_PORT}"`
+2. **Health check configuration**: Updated to use correct port
+   - Changed: `http://localhost:80/`
+   - To: `http://localhost:${FRONTEND_PORT}/`
+
+**Technical Details**:
+- Used SSH connection to remote server for configuration updates
+- Created backup of original docker-compose.yml in /tmp directory
+- Applied changes with proper permissions using sudo
+- Restarted containers with `docker-compose down` and `docker-compose up -d`
+
+**Verification**:
+- Frontend container now shows as "Up (healthy)" status
+- Backend container is running on port 3006 as expected
+- Application is accessible at http://localhost:8090
+
+**Local Environment Update**:
+- Applied the same fixes to local development docker-compose.yml
+- Updated port mapping from `"${FRONTEND_PORT}:80"` to `"${FRONTEND_PORT}:${FRONTEND_PORT}"`
+- Updated health check URL from `http://localhost:80` to `http://localhost:${FRONTEND_PORT}`
+
+**Benefits**:
+- Resolved container accessibility issues
+- Fixed health check monitoring
+- Ensured consistent port configuration across Docker and Nginx
+- Synchronized remote and local development environments
+
 ## September 1, 2025 - Node.js Version Upgrade
 
 **Summary**: Upgraded Node.js version from 18 to 20 across all Docker images to resolve package compatibility issues.
