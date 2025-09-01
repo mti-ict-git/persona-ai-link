@@ -98,6 +98,47 @@
 **Impact**: 
 - 🎯 Local development environment now properly connects frontend to backend
 - 🔐 Login functionality restored for local testing
+
+## September 1, 2025 - Production Environment Configuration Setup
+
+### Changes Made
+- Created `.env.production` with production-specific frontend environment variables
+  - Changed `VITE_API_BASE_URL` from `http://localhost:3006/api` to `/api` for Docker internal networking
+  - Set `VITE_DEV_MODE=false` for production builds
+- Created `backend/.env.production` with production-specific backend environment variables
+  - Changed `NODE_ENV` from `development` to `production`
+- Updated `docker-compose.yml` to use `.env.production` files instead of `.env` for both services
+
+### Technical Benefits
+- Separates development and production configurations
+- Enables proper Docker internal networking with relative API paths
+- Maintains development workflow while fixing production deployment issues
+
+### Impact
+- Resolves `ERR_CONNECTION_REFUSED` error in production Docker containers
+- Frontend can now properly communicate with backend service via Docker internal networking
+- Development environment remains unchanged and functional
+
+## September 1, 2025 - Fixed Hardcoded API URLs in Vite Configuration
+
+### Issue Identified
+- Frontend was still redirecting to `http://localhost:3006/api/auth/login` causing `ERR_CONNECTION_REFUSED`
+- Found hardcoded `localhost:3006` references in `vite.config.ts`
+
+### Changes Made
+- Updated `vite.config.ts` proxy target to use environment variable: `process.env.VITE_API_BASE_URL?.replace('/api', '') || 'http://localhost:3006'`
+- Changed fallback value in define section from `'http://localhost:3006/api'` to `'/api'`
+- Restarted frontend development server to apply configuration changes
+
+### Technical Benefits
+- Eliminates hardcoded localhost references that prevented proper Docker networking
+- Makes proxy configuration environment-aware
+- Ensures consistent API endpoint resolution across development and production
+
+### Impact
+- Resolves persistent `ERR_CONNECTION_REFUSED` errors in both development and production
+- Frontend now properly uses relative `/api` paths for Docker internal networking
+- Maintains backward compatibility for local development
 - 🚀 Both servers running: Backend (3006), Frontend (8090)
 
 **Status**: ✅ Local development API communication working

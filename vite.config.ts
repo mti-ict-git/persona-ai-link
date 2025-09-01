@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => ({
     port: 8090,
     proxy: {
       '/api': {
-        target: 'http://localhost:3006',
+        target: process.env.VITE_API_BASE_URL?.replace('/api', '') || 'http://localhost:3006',
         changeOrigin: true,
         secure: false,
       },
@@ -29,7 +29,7 @@ export default defineConfig(({ mode }) => ({
   define: {
     // Ensure environment variables are available
     'import.meta.env.VITE_API_BASE_URL': JSON.stringify(
-      process.env.VITE_API_BASE_URL || 'http://localhost:3006/api'
+      process.env.VITE_API_BASE_URL || '/api'
     ),
     'import.meta.env.VITE_N8N_WEBHOOK_URL': JSON.stringify(
       process.env.VITE_N8N_WEBHOOK_URL || ''
