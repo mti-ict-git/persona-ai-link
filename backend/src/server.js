@@ -27,7 +27,10 @@ app.use(cors({
     process.env.FRONTEND_URL || 'http://localhost:8090',
     'http://localhost:8090',
     'http://10.60.10.59:8090',
-    'http://127.0.0.1:8090'
+    'http://127.0.0.1:8090',
+    'https://tsindeka.merdekabattery.com',
+    'http://frontend:8090',  // Docker service name
+    'http://persona-ai-frontend-prod:8090'  // Docker container name
   ],
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization', 'authorization', 'X-Requested-With', 'Accept'],
@@ -43,7 +46,8 @@ app.options('*', (req, res) => {
     process.env.FRONTEND_URL || 'http://localhost:8090',
     'http://localhost:8090',
     'http://10.60.10.59:8090',
-    'http://127.0.0.1:8090'
+    'http://127.0.0.1:8090',
+    'https://tsindeka.merdekabattery.com'
   ];
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {

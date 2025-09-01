@@ -1,5 +1,64 @@
 # Development Journal
 
+## September 1, 2025 11:56:09 - 🐳 DOCKER NETWORKING CONFIGURATION FIX
+
+**Issue**: Docker environment authentication and API communication failures
+
+**Root Cause**: 
+- Frontend trying to connect to `http://localhost:3006/api` instead of using nginx proxy
+- CORS configuration missing Docker service names
+- Environment variables not properly configured for containerized deployment
+
+**Solution Implemented**:
+1. **Updated CORS Configuration** (`backend/src/server.js`):
+   - ✅ Added Docker service names to allowed origins: `http://frontend:8090`, `http://persona-ai-frontend-prod:8090`
+   - ✅ Maintains compatibility with local development and production domains
+
+2. **Fixed API Base URL Configuration**:
+   - ✅ Updated `.env`: `VITE_API_BASE_URL=/api` (relative path for nginx proxy)
+   - ✅ Updated `.env.production`: `VITE_API_BASE_URL=/api`
+   - ✅ Updated `docker-compose.yml`: `VITE_API_BASE_URL=/api`
+
+3. **Docker Network Architecture**:
+   - ✅ Frontend nginx proxies `/api/*` requests to `http://backend:3006`
+   - ✅ Frontend uses relative paths, nginx handles service discovery
+   - ✅ Eliminates localhost dependency in containerized environment
+
+**Impact**: 
+- 🎯 Docker deployment now properly handles frontend-backend communication
+- 🔐 Authentication and API calls work correctly in containerized environment
+- 🔄 Maintains backward compatibility with local development setup
+
+**Files Modified**:
+- `backend/src/server.js` - Added Docker service names to CORS
+- `.env` - Changed API URL to relative path
+- `.env.production` - Changed API URL to relative path  
+- `docker-compose.yml` - Fixed environment variable name and value
+
+---
+
+## September 1, 2025 11:38:38 - 🌐 PRODUCTION CORS CONFIGURATION FIX
+
+**Issue**: CORS error blocking access from production domain `https://tsindeka.merdekabattery.com` to backend API.
+
+**Error Details**:
+```
+Access to fetch at 'http://localhost:3006/api/auth/login' from origin 'https://tsindeka.merdekabattery.com' 
+has been blocked by CORS policy: Response to preflight request doesn't pass access control check: 
+No 'Access-Control-Allow-Origin' header is present on the requested resource.
+```
+
+**Root Cause**: Backend CORS configuration only included localhost and local network origins, missing the production domain.
+
+**Solution Implemented**:
+- ✅ Added `https://tsindeka.merdekabattery.com` to allowed origins in `backend/src/server.js`
+- ✅ Updated both main CORS middleware and preflight OPTIONS handler
+- ✅ Production frontend can now authenticate with backend API
+
+**Security Consideration**: This allows production site to access local development backend. For production deployment, ensure backend is also deployed at appropriate production URL.
+
+---
+
 ## September 1, 2025 11:34:50 - 🔐 PORTAINER SECURITY SOLUTION: Docker Secrets Implementation
 
 **Summary**: Implemented comprehensive solution to prevent credential exposure in Portainer environment variables.
