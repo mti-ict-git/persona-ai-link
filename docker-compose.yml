@@ -63,5 +63,5 @@ services:
         reservations:
           memory: 256M
 
-# No volumes needed for external database setup
+# Volume mapping for persistent uploads storage
 # Using default Docker bridge network
