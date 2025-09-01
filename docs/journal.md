@@ -48,6 +48,59 @@
 **Impact**: 
 - 🎯 Docker deployment now properly handles frontend-backend communication
 - 🔐 Authentication and API calls work correctly in containerized environment
+
+## September 1, 2025 14:59:39 - 🔧 DOCKER-COMPOSE ENVIRONMENT CONFIGURATION CLEANUP
+
+**Issue**: Conflicting environment variable definitions between `.env` file and `docker-compose.yml` causing configuration inconsistencies.
+
+**Root Cause**: 
+- Frontend service in `docker-compose.yml` had hardcoded `VITE_API_BASE_URL=/api` in environment section
+- This was overriding the `.env` file setting of `VITE_API_BASE_URL=http://localhost:3006/api`
+- Backend service properly used `env_file` directive but frontend didn't follow the same pattern
+
+**Solution Implemented**:
+1. **Removed Conflicting Environment Variable**:
+   - ✅ Removed hardcoded `VITE_API_BASE_URL=/api` from frontend service environment section
+   - ✅ Added `env_file: - .env` directive to frontend service for consistency with backend
+   - ✅ Now both services use the same pattern: `env_file` for loading variables + `environment` for service-specific overrides
+
+2. **Improved Configuration Consistency**:
+   - ✅ Frontend service now mirrors backend service structure
+   - ✅ All environment variables loaded from `.env` file via `env_file` directive
+   - ✅ Only `NODE_ENV=production` remains as explicit environment override
+
+**Files Modified**:
+- `docker-compose.yml` - Added env_file directive to frontend service, removed conflicting VITE_API_BASE_URL
+
+**Impact**: 
+- 🎯 Eliminates environment variable conflicts between `.env` and `docker-compose.yml`
+- 🔧 Consistent configuration pattern across all services
+- 📝 Single source of truth for environment variables in `.env` file
+- 🐳 Cleaner docker-compose.yml with better maintainability
+
+## September 1, 2025 14:56:09 - 🔧 LOCAL DEVELOPMENT API CONFIGURATION FIX
+
+**Issue**: Login functionality broken locally with `net::ERR_CONNECTION_REFUSED` error when trying to POST to `http://localhost:3006/api/auth/login`
+
+**Root Cause**: 
+- Main `.env` file had `VITE_API_BASE_URL=/api` (relative path)
+- For local development, frontend needs full URL to backend server
+- Backend was running on port 3006 but frontend couldn't reach it with relative path
+
+**Solution**:
+1. ✅ Updated `.env`: Changed `VITE_API_BASE_URL=/api` to `VITE_API_BASE_URL=http://localhost:3006/api`
+2. ✅ Started backend server on port 3006 using `npm run dev`
+3. ✅ Started frontend server on port 8090 using `npm run dev`
+
+**Files Modified**:
+- `.env` - Updated VITE_API_BASE_URL for local development
+
+**Impact**: 
+- 🎯 Local development environment now properly connects frontend to backend
+- 🔐 Login functionality restored for local testing
+- 🚀 Both servers running: Backend (3006), Frontend (8090)
+
+**Status**: ✅ Local development API communication working
 - 🔄 Maintains backward compatibility with local development setup
 
 **Files Modified**:
@@ -4523,6 +4576,50 @@ Removed the duplicate account settings dropdown menu from the top right corner o
 - Better user experience with consistent navigation
 - Code optimization by removing unused imports and functions
 - Account settings still accessible via bottom left sidebar
+
+---
+
+## September 1, 2025 - Production Environment Configuration Setup
+
+**Summary**: Created dedicated production environment files and updated Docker Compose configuration to use production-specific settings.
+
+**Issue Addressed**:
+- Frontend was using development API endpoint (`http://localhost:3006/api`) in production Docker containers
+- No separation between development and production environment configurations
+- Docker Compose was using development environment files for production builds
+
+**Changes Made**:
+
+1. **Root Environment File** (`.env.production`):
+   - Copied from `.env` and modified for production use
+   - Changed `VITE_API_BASE_URL` from `http://localhost:3006/api` to `/api`
+   - Set `VITE_DEV_MODE=false` for production
+   - Maintains all other configuration (ports, N8N webhook, etc.)
+
+2. **Backend Environment File** (`backend/.env.production`):
+   - Copied from `backend/.env` and modified for production
+   - Changed `NODE_ENV` from `development` to `production`
+   - Preserves all database, LDAP, and security configurations
+
+3. **Docker Compose Configuration** (`docker-compose.yml`):
+   - Updated backend service to use `.env.production` and `backend/.env.production`
+   - Updated frontend service to use `.env.production`
+   - Maintains proper environment variable loading hierarchy
+
+**Technical Benefits**:
+- **Proper API Routing**: Frontend now uses `/api` which works correctly with Docker internal networking
+- **Environment Separation**: Clear distinction between development and production configurations
+- **Maintainability**: Production settings isolated from development changes
+- **Docker Optimization**: Production containers use appropriate environment settings
+
+**Files Created**:
+- `.env.production` - Production frontend environment variables
+- `backend/.env.production` - Production backend environment variables
+
+**Files Modified**:
+- `docker-compose.yml` - Updated to use production environment files
+
+**Impact**: Resolves the `ERR_CONNECTION_REFUSED` error in production Docker containers by ensuring the frontend uses the correct API endpoint (`/api`) instead of trying to connect to `localhost:3006/api`.
 
 ---
 
