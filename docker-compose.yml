@@ -15,6 +15,8 @@ services:
       # Database variables are loaded from backend/.env via env_file
     ports:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
+    volumes:
+      - ./backend/uploads:/app/uploads
     # Using default Docker network
     restart: unless-stopped
     # No database dependency since using external database
