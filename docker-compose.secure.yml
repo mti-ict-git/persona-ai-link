@@ -1,0 +1,116 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      args:
+        - PORT=${BACKEND_PORT}
+    container_name: persona-ai-backend-secure
+    environment:
+      - NODE_ENV=production
+      - PORT=${BACKEND_PORT}
+      - DB_HOST=${EXTERNAL_DB_HOST}
+      - DB_PORT=${EXTERNAL_DB_PORT}
+      - DB_NAME=${EXTERNAL_DB_NAME}
+      - DB_USER=${EXTERNAL_DB_USER}
+      - DB_ENCRYPT=${EXTERNAL_DB_ENCRYPT}
+      - DB_TRUST_CERT=${EXTERNAL_DB_TRUST_CERT}
+      - N8N_WEBHOOK_URL=${N8N_WEBHOOK_URL}
+      - ADMIN_USERNAME=${ADMIN_USERNAME}
+      # Secret file paths instead of direct values
+      - DB_PASSWORD_FILE=/run/secrets/db_password
+      - JWT_SECRET_FILE=/run/secrets/jwt_secret
+      - ADMIN_PASSWORD_FILE=/run/secrets/admin_password
+      - LDAP_PASSWORD_FILE=/run/secrets/ldap_password
+      - BIND_PW_FILE=/run/secrets/bind_password
+      - WEBHOOK_SECRET_FILE=/run/secrets/webhook_secret
+      - API_KEY_FILE=/run/secrets/api_key
+    secrets:
+      - db_password
+      - jwt_secret
+      - admin_password
+      - ldap_password
+      - bind_password
+      - webhook_secret
+      - api_key
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${BACKEND_PORT}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - FRONTEND_PORT=${FRONTEND_PORT}
+        - BACKEND_PORT=${BACKEND_PORT}
+    container_name: persona-ai-frontend-secure
+    environment:
+      - NODE_ENV=production
+      - VITE_API_URL=http://localhost:${BACKEND_PORT}
+      # Frontend secrets (if any)
+      - VITE_N8N_API_KEY_FILE=/run/secrets/n8n_api_key
+    secrets:
+      - n8n_api_key
+    ports:
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+    restart: unless-stopped
+    depends_on:
+      - backend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${FRONTEND_PORT}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+
+secrets:
+  db_password:
+    external: true
+    name: persona_ai_db_password
+  jwt_secret:
+    external: true
+    name: persona_ai_jwt_secret
+  admin_password:
+    external: true
+    name: persona_ai_admin_password
+  ldap_password:
+    external: true
+    name: persona_ai_ldap_password
+  bind_password:
+    external: true
+    name: persona_ai_bind_password
+  webhook_secret:
+    external: true
+    name: persona_ai_webhook_secret
+  api_key:
+    external: true
+    name: persona_ai_api_key
+  n8n_api_key:
+    external: true
+    name: persona_ai_n8n_api_key
+
+# Using default Docker bridge network
+networks:
+  default:
+    driver: bridge
