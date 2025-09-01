@@ -47,6 +47,7 @@ router.get('/users', requireUserManagement(), async (req, res) => {
         u.username,
         u.email,
         u.role,
+        u.authMethod,
         u.createdAt as created_at,
         COUNT(DISTINCT s.id) as session_count,
         COUNT(DISTINCT m.id) as message_count
@@ -54,7 +55,7 @@ router.get('/users', requireUserManagement(), async (req, res) => {
       LEFT JOIN sessions s ON u.id = CAST(s.user_id AS INT)
       LEFT JOIN messages m ON s.id = m.session_id
       WHERE u.username LIKE @search OR u.email LIKE @search
-      GROUP BY u.id, u.username, u.email, u.role, u.createdAt
+      GROUP BY u.id, u.username, u.email, u.role, u.authMethod, u.createdAt
       ORDER BY u.createdAt DESC
       OFFSET @offset ROWS
       FETCH NEXT @limit ROWS ONLY
@@ -104,6 +105,7 @@ router.get('/users/:id', requireUserManagement(), async (req, res) => {
         u.username,
         u.email,
         u.role,
+        u.authMethod,
         u.createdAt as created_at,
         COUNT(DISTINCT s.id) as session_count,
         COUNT(DISTINCT m.id) as message_count
@@ -111,7 +113,7 @@ router.get('/users/:id', requireUserManagement(), async (req, res) => {
       LEFT JOIN sessions s ON u.id = CAST(s.user_id AS INT)
       LEFT JOIN messages m ON s.id = m.session_id
       WHERE u.id = @userId
-      GROUP BY u.id, u.username, u.email, u.role, u.createdAt
+      GROUP BY u.id, u.username, u.email, u.role, u.authMethod, u.createdAt
     `);
     
     if (result.recordset.length === 0) {

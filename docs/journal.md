@@ -1,5 +1,26 @@
 # Development Journal
 
+## September 1, 2025 13:29:56 - 🔐 LDAP USER DETECTION FIX
+
+**Issue**: Three LDAP users were incorrectly showing as "Local" account type in the admin interface after successful login.
+
+**Root Cause**: The admin API endpoints (`/api/admin/users` and `/api/admin/users/:id`) were not including the `authMethod` field in their SQL queries, even though:
+- The database migration properly added the `authMethod` column
+- LDAP authentication correctly sets `authMethod = 'ldap'` when creating users
+- Frontend interface was properly configured to display Account Type based on `authMethod`
+
+**Solution**: Updated admin route queries in `backend/src/routes/admin.js`:
+1. Added `u.authMethod` to SELECT statements in both user list and individual user queries
+2. Added `u.authMethod` to GROUP BY clauses to maintain SQL compliance
+3. Restarted backend server to apply changes
+
+**Files Modified**:
+- `backend/src/routes/admin.js` - Added authMethod field to admin user queries
+
+**Impact**: LDAP users now correctly display as "LDAP" account type in admin interface, and password reset functionality is properly disabled for LDAP accounts.
+
+**Status**: ✅ LDAP user detection working correctly
+
 ## September 1, 2025 11:56:09 - 🐳 DOCKER NETWORKING CONFIGURATION FIX
 
 **Issue**: Docker environment authentication and API communication failures
