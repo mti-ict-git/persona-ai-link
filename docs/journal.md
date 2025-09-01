@@ -1,5 +1,35 @@
 # Development Journal
 
+## September 1, 2025 - Node.js Version Upgrade
+
+**Summary**: Upgraded Node.js version from 18 to 20 across all Docker images to resolve package compatibility issues.
+
+**Issue Resolved**:
+- npm warning: "EBADENGINE Unsupported engine" for @typespec/ts-http-runtime@0.3.0
+- Package requires Node.js >=20.0.0 but Docker images were using Node.js v18.20.8
+- Potential compatibility issues with newer packages requiring Node.js 20+
+
+**Changes Made**:
+1. **Frontend Production Dockerfile**: Updated base image from `node:18-alpine` to `node:20-alpine`
+2. **Frontend Development Dockerfile**: Updated base image from `node:18-alpine` to `node:20-alpine`
+3. **Backend Production Dockerfile**: Updated base image from `node:18-alpine` to `node:20-alpine`
+4. **Backend Development Dockerfile**: Updated base image from `node:18-alpine` to `node:20-alpine`
+
+**Technical Details**:
+- Node.js 20 is the current LTS version with better performance and security features
+- Alpine Linux base images maintain small container size while providing latest Node.js
+- All Docker images now use consistent Node.js version across development and production
+
+**Benefits**:
+- Resolves npm engine compatibility warnings
+- Enables use of packages requiring Node.js 20+
+- Improved performance and security from latest LTS version
+- Consistent development and production environments
+
+**Next Steps**:
+- Rebuild Docker containers to apply the Node.js upgrade
+- Test application functionality with new Node.js version
+
 ## September 1, 2025 - Nginx Configuration Fix (Final)
 
 **Summary**: Fixed nginx container startup failure by removing invalid gzip_proxied directive value.
