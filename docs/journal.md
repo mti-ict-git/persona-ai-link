@@ -5382,3 +5382,59 @@ await processedFilesManager.updateProcessedStatus(fileId, file.processed, {...})
 - Follows security best practices for environment variable management
 
 **Impact**: Production environment files are now properly excluded from Git, preventing potential security risks and ensuring clean version control history.
+
+## 2025-09-03 05:15:56 - 📝 FEEDBACK SYSTEM ENHANCEMENT: Previous Question Context
+
+**Enhancement**: Added previous question context to the feedback mechanism to provide better understanding of AI response quality.
+
+**Changes Made**:
+
+1. **Frontend Updates**:
+   - ✅ Modified `src/components/MessageFeedback.tsx` to accept `previousQuestion` prop
+   - ✅ Updated `src/components/ChatMain.tsx` to identify and pass previous user question to feedback component
+   - ✅ Enhanced feedback submission to include question context for AI responses
+
+2. **Backend Updates**:
+   - ✅ Enhanced `backend/src/routes/feedback.js` to handle `previousQuestion` field
+   - ✅ Updated both INSERT and UPDATE operations to store previous question context
+   - ✅ Modified feedback export functionality to include previous question in CSV exports
+   - ✅ Updated API service to send previous question data
+
+3. **Database Schema**:
+   - ✅ Created migration script `database/add_previous_question_column.sql`
+   - ✅ Updated base schema `database/add_feedback_table.sql` for future deployments
+   - ✅ Added performance index for `previous_question` column
+
+**Technical Implementation**:
+- Frontend logic identifies the previous user message when rendering AI responses
+- Feedback component receives both the AI response and the original user question
+- Backend API stores the question-answer pair for comprehensive feedback analysis
+- CSV exports include previous question context for data analysis
+
+**Impact**: 
+- 🎯 Feedback now provides complete context of user question and AI response pairs
+- 📊 Enhanced data collection for AI model improvement and response quality analysis
+- 🔄 Maintains backward compatibility with existing feedback data
+- 💡 Enables better understanding of AI response appropriateness in context
+
+## 2025-09-03 05:36:44 - ✅ DATABASE MIGRATION: Previous Question Column Added
+
+**Migration Executed**: Successfully applied database schema update to add `previous_question` column to `message_feedback` table.
+
+**Database Details**:
+- Server: 10.60.10.47:1433
+- Database: AIChatBot
+- Table: message_feedback
+- New Column: `previous_question NVARCHAR(MAX) NULL`
+
+**Migration Results**:
+- ✅ Column successfully added to existing table
+- ✅ Table structure verified with 10 total columns
+- ⚠️ Index creation skipped (NVARCHAR(MAX) limitation in SQL Server)
+- ✅ Backward compatibility maintained
+
+**Files Updated**:
+- Fixed `database/add_previous_question_column.sql` to remove problematic index
+- Updated `database/add_feedback_table.sql` base schema
+
+**Status**: Database schema is now ready to store previous question context with feedback submissions.

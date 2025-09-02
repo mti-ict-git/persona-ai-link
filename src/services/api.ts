@@ -293,6 +293,7 @@ class ApiService {
     feedbackType: 'positive' | 'negative';
     comment: string;
     messageContent: string;
+    previousQuestion: string;
     timestamp: string;
   }): Promise<{ success: boolean; id?: string }> {
     return this.request('/feedback/message', {

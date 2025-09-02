@@ -19,6 +19,7 @@ interface MessageFeedbackProps {
   messageId: string;
   messageContent: string;
   sessionId: string;
+  previousQuestion?: string;
   className?: string;
 }
 
@@ -28,6 +29,7 @@ const MessageFeedback: React.FC<MessageFeedbackProps> = ({
   messageId,
   messageContent,
   sessionId,
+  previousQuestion,
   className = ''
 }) => {
   const [feedback, setFeedback] = useState<FeedbackType>(null);
@@ -63,13 +65,13 @@ const MessageFeedback: React.FC<MessageFeedbackProps> = ({
 
     setIsSubmitting(true);
     try {
-      // TODO: Implement API call to submit feedback
       await apiService.submitMessageFeedback({
         messageId,
         sessionId,
         feedbackType: type,
         comment,
         messageContent: messageContent.substring(0, 500), // Truncate for storage
+        previousQuestion: previousQuestion || '',
         timestamp: new Date().toISOString()
       });
     } finally {

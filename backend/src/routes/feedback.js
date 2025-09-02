@@ -28,6 +28,7 @@ router.post('/message', authenticateToken, async (req, res) => {
       feedbackType,
       comment,
       messageContent,
+      previousQuestion,
       timestamp
     } = req.body;
 
@@ -63,12 +64,13 @@ router.post('/message', authenticateToken, async (req, res) => {
       const updateRequest = pool.request();
       updateRequest.input('feedbackType', sql.NVarChar(20), feedbackType);
       updateRequest.input('comment', sql.NVarChar(sql.MAX), comment || '');
+      updateRequest.input('previousQuestion', sql.NVarChar(sql.MAX), previousQuestion || '');
       updateRequest.input('messageId', sql.NVarChar(50), messageId);
       updateRequest.input('userId', sql.NVarChar(50), String(req.user.id));
       
       const result = await updateRequest.query(`
         UPDATE message_feedback 
-        SET feedback_type = @feedbackType, comment = @comment, updated_at = GETDATE()
+        SET feedback_type = @feedbackType, comment = @comment, previous_question = @previousQuestion, updated_at = GETDATE()
         OUTPUT INSERTED.id
         WHERE message_id = @messageId AND user_id = @userId
       `);
@@ -87,13 +89,14 @@ router.post('/message', authenticateToken, async (req, res) => {
       insertRequest.input('feedbackType', sql.NVarChar(20), feedbackType);
       insertRequest.input('comment', sql.NVarChar(sql.MAX), comment || '');
       insertRequest.input('messageContent', sql.NVarChar(sql.MAX), messageContent || '');
+      insertRequest.input('previousQuestion', sql.NVarChar(sql.MAX), previousQuestion || '');
       
       const result = await insertRequest.query(`
         INSERT INTO message_feedback (
-          message_id, session_id, user_id, feedback_type, comment, message_content
+          message_id, session_id, user_id, feedback_type, comment, message_content, previous_question
         ) 
         OUTPUT INSERTED.id
-        VALUES (@messageId, @sessionId, @userId, @feedbackType, @comment, @messageContent)
+        VALUES (@messageId, @sessionId, @userId, @feedbackType, @comment, @messageContent, @previousQuestion)
       `);
 
       res.json({
@@ -132,6 +135,7 @@ router.get('/export', authenticateToken, async (req, res) => {
         mf.feedback_type,
         mf.comment,
         mf.message_content,
+        mf.previous_question,
         mf.created_at,
         u.username,
         u.email
@@ -199,6 +203,7 @@ router.get('/export/csv', authenticateToken, async (req, res) => {
         mf.feedback_type,
         mf.comment,
         mf.message_content,
+        mf.previous_question,
         mf.created_at,
         u.username,
         u.email
@@ -239,6 +244,7 @@ router.get('/export/csv', authenticateToken, async (req, res) => {
       'Feedback Type',
       'Comment',
       'Message Content',
+      'Previous Question',
       'Created At',
       'Username',
       'Email'
@@ -254,6 +260,7 @@ router.get('/export/csv', authenticateToken, async (req, res) => {
         row.feedback_type,
         `"${(row.comment || '').replace(/"/g, '""')}"`,
         `"${(row.message_content || '').substring(0, 200).replace(/"/g, '""')}"`,
+        `"${(row.previous_question || '').substring(0, 200).replace(/"/g, '""')}"`,
         row.created_at,
         `"${(row.username || '').replace(/"/g, '""')}"`,
         `"${(row.email || '').replace(/"/g, '""')}"`

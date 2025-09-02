@@ -13,6 +13,7 @@ CREATE TABLE message_feedback (
     feedback_type NVARCHAR(20) NOT NULL CHECK (feedback_type IN ('positive', 'negative')),
     comment NVARCHAR(MAX) NULL,
     message_content NVARCHAR(MAX) NULL,
+    previous_question NVARCHAR(MAX) NULL,
     created_at DATETIME2 DEFAULT GETDATE(),
     updated_at DATETIME2 DEFAULT GETDATE()
 );
@@ -23,6 +24,7 @@ CREATE INDEX IX_message_feedback_message_id ON message_feedback(message_id);
 CREATE INDEX IX_message_feedback_user_id ON message_feedback(user_id);
 CREATE INDEX IX_message_feedback_type ON message_feedback(feedback_type);
 CREATE INDEX IX_message_feedback_created_at ON message_feedback(created_at DESC);
+-- Note: Cannot create index on NVARCHAR(MAX) column (previous_question)
 
 -- Create foreign key relationships
 ALTER TABLE message_feedback 

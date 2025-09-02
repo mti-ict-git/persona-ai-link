@@ -237,7 +237,13 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
         <WelcomeScreen />
       ) : (
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
-          {messages.map((message) => (
+          {messages.map((message, index) => {
+            // Find the previous user question for AI responses
+            const previousQuestion = message.role === 'assistant' && index > 0 
+              ? messages.slice(0, index).reverse().find(m => m.role === 'user')?.content || ''
+              : '';
+            
+            return (
             <div key={message.id} className={cn(
               "flex gap-4 max-w-4xl",
               message.role === "user" ? "ml-auto flex-row-reverse" : "mr-auto"
@@ -334,6 +340,7 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
                       messageId={message.id}
                       messageContent={message.content}
                       sessionId={sessionId || 'default'}
+                      previousQuestion={previousQuestion}
                       className="mt-2"
                     />
                   </div>
@@ -355,7 +362,8 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
                 <p className="text-xs opacity-60 mt-3 font-medium">{message.timestamp}</p>
               </div>
             </div>
-          ))}
+            );
+          })}
           
           {(isLoading || isTyping) && (
             <div className="flex gap-4 max-w-4xl mr-auto">
@@ -408,7 +416,7 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
           
           <div className="text-xs text-muted-foreground/70 text-center mt-3 space-y-1">
             <p className="font-medium">AI can make mistakes. Check important info.</p>
-            <p>© 2024 PT. Merdeka Tsingshan Indonesia. All rights reserved.</p>
+            <p>© 2025 PT. Merdeka Tsingshan Indonesia. All rights reserved.</p>
             <p>Support: <a href="mailto:mti.icthelpdesk@merdekabattery.com" className="text-primary hover:underline">mti.icthelpdesk@merdekabattery.com</a></p>
           </div>
         </div>
