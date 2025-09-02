@@ -50,7 +50,7 @@ interface SystemStats {
   activeUsers: number;
 }
 
-type AdminSection = 'dashboard' | 'user-management' | 'training-management';
+type AdminSection = 'dashboard' | 'user-management' | 'feedback-export' | 'training-management';
 
 interface SidebarItem {
   id: AdminSection | 'back-to-chat';
@@ -84,6 +84,7 @@ const Admin: React.FC = () => {
   const sidebarItems: SidebarItem[] = [
     { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
     { id: 'user-management', label: 'User Management', icon: Users, superAdminOnly: true },
+    { id: 'feedback-export', label: 'Feedback Export', icon: FileText },
     { id: 'training-management', label: 'Training Process', icon: Settings },
     { id: 'back-to-chat', label: 'Back to Chat', icon: ArrowLeft },
   ];
@@ -209,6 +210,71 @@ const Admin: React.FC = () => {
     setEditingUser({ ...user });
     setIsEditDialogOpen(true);
   };
+
+  const handleExportFeedback = async () => {
+    try {
+      const blob = await apiService.downloadFeedbackCSV();
+      
+      // Create blob link to download
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      
+      // Generate filename with current date
+      const now = new Date();
+      const dateStr = now.toISOString().split('T')[0];
+      link.setAttribute('download', `feedback-export-${dateStr}.csv`);
+      
+      // Append to html link element page
+      document.body.appendChild(link);
+      
+      // Start download
+      link.click();
+      
+      // Clean up and remove the link
+      link.parentNode?.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      
+      toast.success('Feedback data exported successfully!');
+    } catch (error) {
+      console.error('Export failed:', error);
+      toast.error('Failed to export feedback data');
+    }
+  };
+
+  const renderFeedbackExport = () => (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold">Feedback Export</h1>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Export Feedback Data</CardTitle>
+          <CardDescription>
+            Download all feedback data including ratings, comments, and previous question context in CSV format.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="flex items-center space-x-4">
+              <FileText className="h-8 w-8 text-muted-foreground" />
+              <div>
+                <h3 className="font-medium">CSV Export</h3>
+                <p className="text-sm text-muted-foreground">
+                  Exports feedback data with columns: ID, Message ID, Rating, Comment, Previous Question, Created At
+                </p>
+              </div>
+            </div>
+            <Button onClick={handleExportFeedback} className="w-full sm:w-auto">
+              <FileText className="h-4 w-4 mr-2" />
+              Download Feedback CSV
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
 
   if (loading) {
     return (
@@ -391,6 +457,12 @@ const Admin: React.FC = () => {
         return canManageUsers ? renderUserManagement() : (
           <div className="text-center py-8">
             <p className="text-muted-foreground">You don't have permission to access user management.</p>
+          </div>
+        );
+      case 'feedback-export':
+        return isAdmin ? renderFeedbackExport() : (
+          <div className="text-center py-8">
+            <p className="text-muted-foreground">You don't have permission to access feedback export.</p>
           </div>
         );
       case 'training-management':

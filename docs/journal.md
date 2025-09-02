@@ -5438,3 +5438,51 @@ await processedFilesManager.updateProcessedStatus(fileId, file.processed, {...})
 - Updated `database/add_feedback_table.sql` base schema
 
 **Status**: Database schema is now ready to store previous question context with feedback submissions.
+
+## 2025-09-03 05:38:05 - 🔧 TYPESCRIPT SYNTAX FIX: CSV Export Template Literals
+
+**Issue Fixed**: Resolved TypeScript compilation error "',' expected.ts(1005)" in feedback CSV export functionality.
+
+**Problem**: 
+- Missing closing backticks and commas in template literal strings within CSV row array
+- Template literals were not properly terminated causing syntax errors
+- Affected file: `backend/src/routes/feedback.js` lines 258-268
+
+**Solution Applied**:
+- ✅ Fixed all template literal strings in csvRow array to properly close with `"` + backtick
+- ✅ Added missing closing quotes for all string fields:
+  - message_id, session_id, comment, message_content, previous_question, username, email
+- ✅ Maintained proper CSV escaping for quotes within data
+
+**Technical Details**:
+- Changed from: `\`"${field}"\`,` (missing closing backtick)
+- Changed to: `\`"${field}"\`\`,` (properly closed template literal)
+- Ensures proper JavaScript/TypeScript syntax compliance
+
+**Impact**: 
+- 🔧 TypeScript compilation now passes without syntax errors
+- 📊 CSV export functionality works correctly with all feedback fields including new previous_question
+- ✅ Maintains data integrity and proper CSV formatting
+
+**Status**: ✅ COMPLETED - TypeScript syntax error resolved, feedback system fully operational with CSV export functionality including previous question context.
+
+## September 3, 2025 5:43:00 AM - Fixed TypeScript Error in Admin Feedback Export
+
+**Issue**: TypeScript error in `Admin.tsx` - "Expected 1 arguments, but got 2.ts(2554)" on line 217-218
+
+**Root Cause**: The `apiService.get()` method only accepts one parameter (endpoint), but the code was trying to pass a second parameter with `responseType: 'blob'` configuration.
+
+**Solution**: 
+- Replaced the incorrect `apiService.get('/api/feedback/export', { responseType: 'blob' })` call
+- Used the existing `apiService.downloadFeedbackCSV()` method which properly handles blob responses
+- This method already includes proper authentication headers and blob handling
+
+**Files Modified**:
+- `src/pages/Admin.tsx` - Fixed handleExportFeedback function to use correct API method
+
+**Technical Details**:
+- The `downloadFeedbackCSV()` method in ApiService already handles the blob response correctly
+- Maintains proper error handling and authentication
+- Generates CSV files with current date in filename
+
+**Status**: ✅ COMPLETED - Admin panel feedback export functionality now working without TypeScript errors
