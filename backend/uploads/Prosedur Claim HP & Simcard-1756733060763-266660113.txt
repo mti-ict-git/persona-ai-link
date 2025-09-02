@@ -1,0 +1,48 @@
+# 📱 Prosedur Reimbursement Handphone (HP)  
+
+## 1. Persyaratan Umum  
+1. Karyawan yang dapat mengajukan klaim adalah karyawan dengan status **PKWTT (Perjanjian Kerja Waktu Tidak Tertentu)**.  
+2. Karyawan minimal memiliki **Grade 13**, dengan plafon sesuai yang tercantum dalam **Golongan Jabatan Benefit Pekerja Nasional**.  
+3. Jenis dan merk HP tidak ditentukan oleh perusahaan, namun harus memenuhi spesifikasi:  
+   - Memiliki fitur **telepon konvensional (SIM card tersedia)**.  
+   - Memiliki **koneksi internet (WiFi)**.  
+   - HP merupakan HP baru, bukan bekas
+
+---
+
+## 2. Mekanisme Klaim  
+1. Gunakan **Formulir Klaim Biaya** (Claim Expense Form) dan lampirkan **faktur asli/invoice** sebagai bukti.  
+2. Formulir dikirimkan untuk persetujuan sesuai alur otorisasi.  
+3. Pada bagian **Checked by HRD**, wajib diverifikasi oleh **Tim ICT** terkait data HP yang diklaim (merk, tipe, kondisi, nomor seri, dan tanggal pembelian).  
+4. Kerusakan HP menjadi **tanggung jawab pribadi karyawan**, bukan perusahaan.  
+
+---
+
+## 3. Ketentuan Waktu Klaim  
+1. Klaim HP baru hanya dapat dilakukan **setelah 36 bulan** dari tanggal klaim HP sebelumnya.  
+2. Jika karyawan sudah pernah klaim HP **sebelum November 2023**, maka untuk klaim HP baru, karyawan wajib membayar ke perusahaan **sisa masa pemakaian** HP lama secara prorata.  
+
+### Contoh Perhitungan  
+- Karyawan klaim HP Februari 2023 seharga Rp 4.000.000.  
+- Ingin klaim HP baru pada Maret 2024 (setelah 12 bulan).  
+- Maka karyawan wajib membayar ke perusahaan:  
+
+(36 – 12) / 36 × Rp 4.000.000 = Rp 2.666.666
+
+
+---
+
+## 4. Ketentuan Jika Resign  
+1. HP yang diklaim **menjadi milik karyawan** dan tidak dikembalikan ke perusahaan.  
+2. Namun, karyawan wajib membayar **sisa masa pakai prorata** yang belum terpenuhi dari 36 bulan.  
+
+### Contoh Perhitungan  
+- Karyawan klaim HP Februari 2023 seharga Rp 4.000.000.  
+- Resign Agustus 2023 (baru digunakan 6 bulan).  
+- Maka pada saat **exit clearance**, karyawan wajib membayar ke perusahaan:  
+
+
+(36 – 6) / 36 × Rp 4.000.000 = Rp 3.333.333
+
+
+3. Verifikasi HP (handphone dan SIM card) saat **exit clearance** dilakukan oleh **Tim ICT**.  

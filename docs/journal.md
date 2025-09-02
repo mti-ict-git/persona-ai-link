@@ -5348,3 +5348,37 @@ await processedFilesManager.updateProcessedStatus(fileId, file.processed, {...})
 ```
 
 **Status**: User information now included in all N8N webhook payloads, enabling LDAP integration and enhanced user context awareness.
+
+## 2025-09-01 20:49:00 - Login Form UX Improvements: Added Username Hint and Set LDAP as Default
+
+**Issue**: Users needed better guidance for username format and LDAP should be the default authentication method for the organization.
+
+**Changes Made**:
+- Updated `src/pages/Login.tsx` to set LDAP as the default authentication method instead of Local Account
+- Added placeholder text `mti.user@merdekabattery.com` for the username field in LDAP tab
+- Added example hint text below the username input: "Example: mti.user@merdekabattery.com"
+
+**Technical Benefits**:
+- Improved user experience with clear username format guidance
+- Reduced login errors by providing concrete examples
+- Aligned default authentication method with organizational preference
+- Enhanced form usability with contextual hints
+
+**Impact**: Users now have clear guidance on the expected username format and LDAP authentication is prioritized as the primary login method, reducing confusion and support requests.
+
+## 2025-09-03 04:04:45 - Git Ignore Update: Added .env.production Files to Version Control Exclusion
+
+**Issue**: The `.env.production` and `backend/.env.production` files were not excluded from version control, potentially exposing production configuration in Git commits.
+
+**Changes Made**:
+- Updated `.gitignore` to add `.env.production` to the environment variables exclusion list
+- Updated `.gitignore` to add `backend/.env.production` to the backend environment variables exclusion list
+- Maintained existing exclusion patterns for other environment files
+
+**Technical Benefits**:
+- Prevents accidental commit of production environment configurations
+- Maintains security by keeping production settings out of version control
+- Ensures consistent environment file handling across development and production
+- Follows security best practices for environment variable management
+
+**Impact**: Production environment files are now properly excluded from Git, preventing potential security risks and ensuring clean version control history.
