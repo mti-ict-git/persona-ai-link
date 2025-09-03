@@ -142,7 +142,7 @@ router.post('/', upload.single('file'), async (req, res) => {
       return res.status(400).json({
         success: false,
         error: 'File too large',
-        message: 'File size must be less than 10MB'
+        message: 'File size must be less than 20MB'
       });
     }
     

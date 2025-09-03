@@ -92,6 +92,10 @@ coverage/
 tmp/
 temp/
 
+# Uploaded files
+backend/uploads/
+uploads/
+
 # Database files - CRITICAL FOR SECURITY
 *.db
 *.sqlite
