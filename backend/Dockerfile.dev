@@ -22,12 +22,29 @@ COPY src/ ./src/
 # Create uploads directory
 RUN mkdir -p uploads
 
+# Create non-root user for security
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S backend -u 1001
+
+# Set permissions
+RUN chown -R backend:nodejs /app
+
+# Create a script to fix uploads permissions at runtime
+RUN echo '#!/bin/sh' > /docker-entrypoint.sh && \
+    echo 'chown -R backend:nodejs /app/uploads' >> /docker-entrypoint.sh && \
+    echo 'exec "$@"' >> /docker-entrypoint.sh && \
+    chmod +x /docker-entrypoint.sh
+
 # Set default port if not provided
 ARG PORT=3006
 ENV PORT=${PORT}
 
+# Switch to non-root user
+USER backend
+
 # Expose ports for app and debugging
 EXPOSE ${PORT} 9229
 
-# Start with nodemon for hot reload and debugging
+# Start with nodemon for hot reload and debugging using entrypoint script
+ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["nodemon", "--inspect=0.0.0.0:9229", "src/server.js"]

@@ -5486,3 +5486,64 @@ await processedFilesManager.updateProcessedStatus(fileId, file.processed, {...})
 - Generates CSV files with current date in filename
 
 **Status**: ✅ COMPLETED - Admin panel feedback export functionality now working without TypeScript errors
+
+## September 3, 2025 - Git Ignore Uploads Directory
+
+**Summary**: Added uploads directory to .gitignore to prevent uploaded files from being tracked by git.
+
+**Issue**: Uploaded files in the `backend/uploads/` directory were being tracked by git, which could lead to:
+- Repository bloat with large files
+- Potential security issues if sensitive documents are uploaded
+- Unnecessary version control of temporary/user-generated content
+
+**Solution Applied**:
+- Added `backend/uploads/` and `uploads/` to `.gitignore`
+- Prevents all uploaded files from being committed to the repository
+- Maintains clean repository without user-generated content
+
+**Files Modified**:
+- `.gitignore` - Added uploads directory exclusions
+
+**Benefits**:
+- ✅ Prevents repository bloat from uploaded files
+- ✅ Improves security by excluding potentially sensitive documents
+- ✅ Maintains clean git history focused on code changes
+- ✅ Follows best practices for file upload handling
+
+**Status**: ✅ COMPLETED - Uploads directory now properly excluded from git tracking
+
+---
+
+## September 4, 2025 - Docker Upload Permission Fix
+
+**Summary**: Fixed EACCES permission denied error when uploading files in Docker environment by implementing proper file ownership handling for volume-mounted uploads directory.
+
+**Issue Resolved**:
+- Error: `EACCES: permission denied, open '/app/uploads/filename.docx'`
+- Root cause: Docker volume mount `./backend/uploads:/app/uploads` overrides container's uploads directory with host directory that has different ownership
+- Container runs as user `backend` (uid 1001) but host directory owned by root
+
+**Changes Made**:
+1. **backend/Dockerfile**: Added runtime permission fix
+   - Created `/docker-entrypoint.sh` script to fix uploads directory ownership at container startup
+   - Script runs `chown -R backend:nodejs /app/uploads` before starting the application
+   - Updated CMD to use ENTRYPOINT with the permission script
+
+2. **backend/Dockerfile.dev**: Applied same fix for development environment
+   - Added non-root user creation (backend:nodejs)
+   - Implemented same entrypoint script approach
+   - Ensures consistent behavior between dev and production
+
+**Technical Details**:
+- Volume mounts override container filesystem, requiring runtime permission fixes
+- Entrypoint script runs as root to fix permissions, then executes application as backend user
+- Solution maintains security by running application as non-root user
+- Works for both development and production Docker environments
+
+**Benefits**:
+- ✅ Resolves file upload permission errors in Docker
+- ✅ Maintains security with non-root application execution
+- ✅ Consistent behavior across dev and production environments
+- ✅ Handles volume mount permission issues automatically
+
+**Status**: ✅ COMPLETED - Docker upload permissions now properly configured
