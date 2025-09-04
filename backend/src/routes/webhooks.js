@@ -133,7 +133,7 @@ router.post('/send-to-n8n', async (req, res, next) => {
         request.input('user_id', require('mssql').NVarChar(50), session.user_id);
         
         const userResult = await request.query(`
-          SELECT id, username, email, firstName, lastName, role
+          SELECT id, username, email, firstName, lastName, role, employeeId
           FROM chat_Users 
           WHERE id = @user_id AND active = 1
         `);
@@ -146,7 +146,8 @@ router.post('/send-to-n8n', async (req, res, next) => {
             email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
-            role: user.role
+            role: user.role,
+            employeeId: user.employeeId
           };
         }
       } catch (userError) {

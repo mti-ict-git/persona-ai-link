@@ -34,6 +34,8 @@ class LDAPService {
                     'mail',
                     'givenName',
                     'sn',
+                    'employeeID',
+                    'employeeNumber',
                     'memberOf',
                     'distinguishedName'
                 ]
@@ -72,6 +74,7 @@ class LDAPService {
                 displayName: userEntry.displayName || userEntry.givenName + ' ' + userEntry.sn,
                 firstName: userEntry.givenName || '',
                 lastName: userEntry.sn || '',
+                employeeId: userEntry.employeeID || userEntry.employeeNumber || null,
                 groups: Array.isArray(userEntry.memberOf) ? userEntry.memberOf : [userEntry.memberOf].filter(Boolean),
                 distinguishedName: userEntry.distinguishedName
             };
@@ -121,9 +124,15 @@ class LDAPService {
                 await pool.request()
                     .input('id', sql.NVarChar, user.id.toString())
                     .input('email', sql.NVarChar, ldapUserData.email)
+                    .input('firstName', sql.NVarChar, ldapUserData.firstName)
+                    .input('lastName', sql.NVarChar, ldapUserData.lastName)
+                    .input('employeeId', sql.NVarChar, ldapUserData.employeeId)
                     .query(`
                         UPDATE chat_Users 
                         SET email = @email, 
+                            firstName = @firstName,
+                            lastName = @lastName,
+                            employeeId = @employeeId,
                             authMethod = 'ldap',
                             updatedAt = GETDATE()
                         WHERE id = @id
@@ -135,13 +144,16 @@ class LDAPService {
                 const insertResult = await pool.request()
                     .input('username', sql.NVarChar, ldapUserData.username)
                     .input('email', sql.NVarChar, ldapUserData.email)
+                    .input('firstName', sql.NVarChar, ldapUserData.firstName)
+                    .input('lastName', sql.NVarChar, ldapUserData.lastName)
+                    .input('employeeId', sql.NVarChar, ldapUserData.employeeId)
                     .input('passwordHash', sql.NVarChar, await bcrypt.hash('ldap_user', 10)) // Placeholder password
                     .input('role', sql.NVarChar, 'user') // Default role
                     .input('authMethod', sql.NVarChar, 'ldap')
                     .query(`
-                        INSERT INTO chat_Users (username, email, passwordHash, role, authMethod, createdAt, updatedAt)
-                        OUTPUT INSERTED.id, INSERTED.username, INSERTED.email, INSERTED.role, INSERTED.authMethod, INSERTED.createdAt, INSERTED.updatedAt
-                        VALUES (@username, @email, @passwordHash, @role, @authMethod, GETDATE(), GETDATE())
+                        INSERT INTO chat_Users (username, email, firstName, lastName, employeeId, passwordHash, role, authMethod, createdAt, updatedAt)
+                        OUTPUT INSERTED.id, INSERTED.username, INSERTED.email, INSERTED.firstName, INSERTED.lastName, INSERTED.employeeId, INSERTED.role, INSERTED.authMethod, INSERTED.createdAt, INSERTED.updatedAt
+                        VALUES (@username, @email, @firstName, @lastName, @employeeId, @passwordHash, @role, @authMethod, GETDATE(), GETDATE())
                     `);
                     
                 user = insertResult.recordset[0];
@@ -152,6 +164,9 @@ class LDAPService {
                 id: user.id,
                 username: user.username,
                 email: user.email,
+                firstName: user.firstName || ldapUserData.firstName,
+                lastName: user.lastName || ldapUserData.lastName,
+                employeeId: user.employeeId || ldapUserData.employeeId,
                 role: user.role,
                 displayName: ldapUserData.displayName,
                 authMethod: 'ldap',
@@ -175,6 +190,70 @@ class LDAPService {
         };
         
         return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '24h' });
+    }
+
+    // Method to search for a user in LDAP without authentication
+    async searchUser(username) {
+        const client = new Client({
+            url: this.ldapUrl,
+            timeout: 10000,
+            connectTimeout: 10000,
+        });
+
+        try {
+            // Bind with service account to search for user
+            await client.bind(this.bindDN, this.bindPassword);
+            
+            // Search for the user in Active Directory
+            const searchOptions = {
+                scope: 'sub',
+                filter: `(|(sAMAccountName=${username})(userPrincipalName=${username})(mail=${username}))`,
+                attributes: [
+                    'sAMAccountName',
+                    'userPrincipalName', 
+                    'displayName',
+                    'mail',
+                    'givenName',
+                    'sn',
+                    'employeeID',
+                    'employeeNumber',
+                    'memberOf',
+                    'distinguishedName'
+                ]
+            };
+
+            const { searchEntries } = await client.search(this.baseOU, searchOptions);
+            
+            if (searchEntries.length === 0) {
+                return null; // User not found
+            }
+
+            const userEntry = searchEntries[0];
+
+            // Extract user information
+            const userData = {
+                username: userEntry.sAMAccountName || username,
+                email: userEntry.mail || `${username}@mbma.com`,
+                displayName: userEntry.displayName || userEntry.givenName + ' ' + userEntry.sn,
+                firstName: userEntry.givenName || '',
+                lastName: userEntry.sn || '',
+                employeeId: userEntry.employeeID || userEntry.employeeNumber || null,
+                groups: Array.isArray(userEntry.memberOf) ? userEntry.memberOf : [userEntry.memberOf].filter(Boolean),
+                distinguishedName: userEntry.distinguishedName
+            };
+
+            return userData;
+
+        } catch (error) {
+            console.error('LDAP Search Error:', error.message);
+            return null;
+        } finally {
+            try {
+                await client.unbind();
+            } catch (e) {
+                // Ignore unbind errors
+            }
+        }
     }
 
     // Method to check if LDAP is properly configured

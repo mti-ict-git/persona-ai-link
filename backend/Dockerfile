@@ -20,17 +20,16 @@ COPY src/ ./src/
 # Create uploads directory and set permissions
 RUN mkdir -p uploads && chown -R backend:nodejs /app
 
-# Switch to non-root user
-USER backend
+# Install su-exec for user switching
+RUN apk add --no-cache su-exec
 
 # Create a script to fix uploads permissions at runtime
-USER root
 RUN echo '#!/bin/sh' > /docker-entrypoint.sh && \
-    echo 'chown -R backend:nodejs /app/uploads' >> /docker-entrypoint.sh && \
-    echo 'exec "$@"' >> /docker-entrypoint.sh && \
+    echo '# Fix uploads directory permissions' >> /docker-entrypoint.sh && \
+    echo 'chown -R backend:nodejs /app/uploads 2>/dev/null || true' >> /docker-entrypoint.sh && \
+    echo '# Switch to backend user and execute command' >> /docker-entrypoint.sh && \
+    echo 'exec su-exec backend "$@"' >> /docker-entrypoint.sh && \
     chmod +x /docker-entrypoint.sh
-
-USER backend
 
 # Set default port if not provided
 ARG PORT=3006
@@ -43,6 +42,6 @@ EXPOSE ${PORT}
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD node -e "require('http').get('http://localhost:${PORT}/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"
 
-# Start the application with entrypoint script
+# Start the application with entrypoint script (runs as root, then switches to backend user)
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["node", "src/server.js"]

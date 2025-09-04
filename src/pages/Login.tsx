@@ -88,9 +88,7 @@ const Login = () => {
             <CardDescription className="text-sm text-muted-foreground font-medium">
               PT. Merdeka Tsingshan Indonesia
             </CardDescription>
-            <CardDescription className="text-lg text-primary font-medium">
-              (Beta Release)
-            </CardDescription>
+
             <CardDescription className="text-muted-foreground">
               Sign in to access your personalized AI assistant
             </CardDescription>
@@ -105,16 +103,18 @@ const Login = () => {
             )}
             
             <Tabs value={authMethod} onValueChange={(value) => setAuthMethod(value as 'local' | 'ldap')} className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="local" className="flex items-center gap-2">
-                  <User className="h-4 w-4" />
-                  Local Account
-                </TabsTrigger>
-                <TabsTrigger value="ldap" className="flex items-center gap-2">
-                  <Building className="h-4 w-4" />
-                  Active Directory
-                </TabsTrigger>
-              </TabsList>
+              {authMethod === 'local' && (
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="local" className="flex items-center gap-2">
+                    <User className="h-4 w-4" />
+                    Local Account
+                  </TabsTrigger>
+                  <TabsTrigger value="ldap" className="flex items-center gap-2">
+                    <Building className="h-4 w-4" />
+                    Active Directory
+                  </TabsTrigger>
+                </TabsList>
+              )}
               
               <TabsContent value="local" className="space-y-4 mt-4">
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -238,11 +238,17 @@ const Login = () => {
               </TabsContent>
             </Tabs>
 
-            <div className="text-center">
-              <Button variant="link" className="text-primary hover:text-primary/80">
-                Forgot your password?
-              </Button>
-            </div>
+            {authMethod === 'ldap' && (
+              <div className="text-center">
+                <Button 
+                  variant="link" 
+                  className="text-primary hover:text-primary/80"
+                  onClick={() => setAuthMethod('local')}
+                >
+                  Try another way to login
+                </Button>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
