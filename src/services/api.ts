@@ -232,13 +232,13 @@ class ApiService {
   }
 
   // Generic HTTP methods for file operations
-  async get<T = unknown>(endpoint: string): Promise<T> {
+  async get<T = unknown>(endpoint: string): Promise<{success: boolean, data: T}> {
     return this.request(endpoint, {
       method: 'GET',
     });
   }
 
-  async post<T = unknown>(endpoint: string, data?: unknown, options?: { headers?: Record<string, string> }): Promise<T> {
+  async post<T = unknown>(endpoint: string, data?: unknown, options?: { headers?: Record<string, string> }): Promise<{success: boolean, data: T}> {
     const headers: Record<string, string> = {
       ...options?.headers,
     };
@@ -259,7 +259,7 @@ class ApiService {
     });
   }
 
-  async put<T = unknown>(endpoint: string, data?: unknown, options?: { headers?: Record<string, string> }): Promise<T> {
+  async put<T = unknown>(endpoint: string, data?: unknown, options?: { headers?: Record<string, string> }): Promise<{success: boolean, data: T}> {
     const headers: Record<string, string> = {
       ...options?.headers,
     };
@@ -280,7 +280,7 @@ class ApiService {
     });
   }
 
-  async delete<T = unknown>(endpoint: string): Promise<T> {
+  async delete<T = unknown>(endpoint: string): Promise<{success: boolean, data?: T}> {
     return this.request(endpoint, {
       method: 'DELETE',
     });
@@ -346,6 +346,8 @@ class ApiService {
     
     return response.blob();
   }
+
+
 
 }
 

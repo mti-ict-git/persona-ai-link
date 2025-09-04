@@ -21,6 +21,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { ExternalLink, Plus, Trash2, Edit, Link } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import { apiService } from '@/services/api';
 
 interface ExternalSource {
   id: string;
@@ -117,19 +118,13 @@ const ExternalSourcesManager = ({ fileId, sources = [], onSourcesChange, onClose
 
       if (editingSource) {
         // Update existing source
-        const response = await fetch(`/api/files/${fileId}/sources/${editingSource.id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(sourceData),
-        });
+        const response = await apiService.put(`/files/${fileId}/sources/${editingSource.id}`, sourceData);
 
-        if (!response.ok) {
+        if (!response.success) {
           throw new Error('Failed to update external source');
         }
 
-        const updatedSource = await response.json();
+        const updatedSource = response.data as ExternalSource;
         const updatedSources = sources.map(s => 
           s.id === editingSource.id ? updatedSource : s
         );
@@ -140,19 +135,13 @@ const ExternalSourcesManager = ({ fileId, sources = [], onSourcesChange, onClose
         });
       } else {
         // Add new source
-        const response = await fetch(`/api/files/${fileId}/sources`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(sourceData),
-        });
+        const response = await apiService.post(`/files/${fileId}/sources`, sourceData);
 
-        if (!response.ok) {
+        if (!response.success) {
           throw new Error('Failed to add external source');
         }
 
-        const newSource = await response.json();
+        const newSource = response.data as ExternalSource;
         onSourcesChange([...sources, newSource]);
         toast({
           title: 'Success',
@@ -175,11 +164,9 @@ const ExternalSourcesManager = ({ fileId, sources = [], onSourcesChange, onClose
 
   const handleDelete = async (sourceId: string) => {
     try {
-      const response = await fetch(`/api/files/${fileId}/sources/${sourceId}`, {
-        method: 'DELETE',
-      });
+      const response = await apiService.delete(`/files/${fileId}/sources/${sourceId}`);
 
-      if (!response.ok) {
+      if (!response.success) {
         throw new Error('Failed to delete external source');
       }
 

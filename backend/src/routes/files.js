@@ -6,6 +6,7 @@ const axios = require('axios');
 const https = require('https');
 const { processedFilesManager } = require('../utils/processedFilesManager');
 const { deleteFileFromSftp, generateRemoteFilePath } = require('../utils/sftp');
+const { authenticateToken } = require('./auth');
 const router = express.Router();
 
 // Create HTTPS agent to handle self-signed certificates
@@ -374,7 +375,7 @@ const updateExternalSourceSchema = Joi.object({
 });
 
 // GET /api/files/:id/sources - Get all external sources for a file
-router.get('/:id/sources', async (req, res) => {
+router.get('/:id/sources', authenticateToken, async (req, res) => {
   try {
     const fileId = req.params.id;
     const file = await processedFilesManager.getFileById(fileId);
@@ -404,7 +405,7 @@ router.get('/:id/sources', async (req, res) => {
 });
 
 // POST /api/files/:id/sources - Add external source to a file
-router.post('/:id/sources', async (req, res) => {
+router.post('/:id/sources', authenticateToken, async (req, res) => {
   try {
     const { error, value } = externalSourceSchema.validate(req.body);
     if (error) {
@@ -474,7 +475,7 @@ router.post('/:id/sources', async (req, res) => {
 });
 
 // PUT /api/files/:id/sources/:sourceId - Update external source
-router.put('/:id/sources/:sourceId', async (req, res) => {
+router.put('/:id/sources/:sourceId', authenticateToken, async (req, res) => {
   try {
     const { error, value } = updateExternalSourceSchema.validate(req.body);
     if (error) {
@@ -555,7 +556,7 @@ router.put('/:id/sources/:sourceId', async (req, res) => {
 });
 
 // DELETE /api/files/:id/sources/:sourceId - Remove external source
-router.delete('/:id/sources/:sourceId', async (req, res) => {
+router.delete('/:id/sources/:sourceId', authenticateToken, async (req, res) => {
   try {
     const fileId = req.params.id;
     const sourceId = req.params.sourceId;
