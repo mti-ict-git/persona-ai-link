@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Settings, TestTube, Check, X, Wifi } from "lucide-react";
 import { useN8NWebhook } from "@/hooks/useN8NWebhook";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface WebhookConfigProps {
   isConfigOpen: boolean;
@@ -13,6 +14,7 @@ const WebhookConfig = ({
   isConfigOpen, 
   onConfigToggle 
 }: WebhookConfigProps) => {
+  const { t } = useLanguage();
   const [testResult, setTestResult] = useState<{ success: boolean; error?: string } | null>(null);
   const { testWebhook, isLoading } = useN8NWebhook();
 
@@ -31,7 +33,7 @@ const WebhookConfig = ({
         className="fixed top-4 right-4 z-50"
       >
         <Settings className="w-4 h-4 mr-2" />
-        Configure N8N
+        {t('webhook.configureN8N')}
       </Button>
     );
   }
@@ -42,20 +44,20 @@ const WebhookConfig = ({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Wifi className="w-5 h-5" />
-            N8N Server Connection
+            {t('webhook.serverConnection')}
           </CardTitle>
           <CardDescription>
-            Test connection to the N8N server for chat processing
+            {t('webhook.testConnectionDescription')}
           </CardDescription>
         </CardHeader>
         
         <CardContent className="space-y-4">
           <div className="bg-muted p-3 rounded-md text-sm">
-            <p className="font-medium mb-2">Server Information:</p>
+            <p className="font-medium mb-2">{t('webhook.serverInformation')}:</p>
             <div className="space-y-1 text-muted-foreground">
-              <p><span className="font-medium">Server:</span> n8nprod.merdekabattery.com:5679</p>
-              <p><span className="font-medium">Protocol:</span> HTTPS</p>
-              <p><span className="font-medium">Status:</span> {testResult?.success ? "Connected" : "Not tested"}</p>
+              <p><span className="font-medium">{t('webhook.server')}:</span> n8nprod.merdekabattery.com:5679</p>
+              <p><span className="font-medium">{t('webhook.protocol')}:</span> HTTPS</p>
+              <p><span className="font-medium">{t('webhook.status')}:</span> {testResult?.success ? t('webhook.connected') : t('webhook.notTested')}</p>
             </div>
           </div>
           
@@ -67,7 +69,7 @@ const WebhookConfig = ({
               className="flex-1"
             >
               <TestTube className="w-4 h-4 mr-2" />
-              {isLoading ? "Testing..." : "Test Connection"}
+              {isLoading ? t('webhook.testing') : t('webhook.testConnection')}
             </Button>
             
             {testResult !== null && (
@@ -86,7 +88,7 @@ const WebhookConfig = ({
               <p className={`font-medium ${
                 testResult.success ? "text-green-800" : "text-red-800"
               }`}>
-                {testResult.success ? "✓ Connection Successful" : "✗ Connection Failed"}
+                {testResult.success ? `✓ ${t('webhook.connectionSuccessful')}` : `✗ ${t('webhook.connectionFailed')}`}
               </p>
               {testResult.error && (
                 <p className="text-red-600 mt-1">{testResult.error}</p>
@@ -96,7 +98,7 @@ const WebhookConfig = ({
           
           <div className="flex gap-2">
             <Button onClick={onConfigToggle} className="flex-1">
-              Close
+              {t('common.close')}
             </Button>
           </div>
         </CardContent>

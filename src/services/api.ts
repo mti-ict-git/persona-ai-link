@@ -26,10 +26,34 @@ export interface AuthValidationResponse {
 
 // User preferences types
 export interface UserPreferences {
-  language?: string;
-  theme?: string;
-  timezone?: string;
-  [key: string]: string | undefined;
+  language?: {
+    value: string;
+    updatedAt: string;
+  };
+  theme?: {
+    value: string;
+    updatedAt: string;
+  };
+  timezone?: {
+    value: string;
+    updatedAt: string;
+  };
+  showFollowUpSuggestions?: {
+    value: string;
+    updatedAt: string;
+  };
+  alwaysShowCode?: {
+    value: string;
+    updatedAt: string;
+  };
+  firstTimeLogin?: {
+    value: string;
+    updatedAt: string;
+  };
+  [key: string]: {
+    value: string;
+    updatedAt: string;
+  } | undefined;
 }
 
 export interface PreferenceUpdateRequest {

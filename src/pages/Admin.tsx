@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 import { apiService } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   Table,
   TableBody,
@@ -62,6 +63,7 @@ interface SidebarItem {
 const Admin: React.FC = () => {
   const { user: currentUser } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [users, setUsers] = useState<User[]>([]);
   const [stats, setStats] = useState<SystemStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -82,11 +84,11 @@ const Admin: React.FC = () => {
 
   // Sidebar navigation items
   const sidebarItems: SidebarItem[] = [
-    { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
-    { id: 'user-management', label: 'User Management', icon: Users, superAdminOnly: true },
-    { id: 'feedback-export', label: 'Feedback Export', icon: FileText },
-    { id: 'training-management', label: 'Training Process', icon: Settings },
-    { id: 'back-to-chat', label: 'Back to Chat', icon: ArrowLeft },
+    { id: 'dashboard', label: t('admin.dashboard'), icon: BarChart3 },
+    { id: 'user-management', label: t('admin.userManagement'), icon: Users, superAdminOnly: true },
+    { id: 'feedback-export', label: t('admin.feedbackExport'), icon: FileText },
+    { id: 'training-management', label: t('admin.trainingProcess'), icon: Settings },
+    { id: 'back-to-chat', label: t('admin.backToChat'), icon: ArrowLeft },
   ];
 
   useEffect(() => {
@@ -102,8 +104,8 @@ const Admin: React.FC = () => {
     if (!canManageUsers) return;
     
     try {
-      const data = await apiService.get<{ users: User[] }>('/admin/users');
-      setUsers(data.users || []);
+      const response = await apiService.get<{ users: User[] }>('/admin/users');
+      setUsers(response.data.users || []);
     } catch (error: unknown) {
       console.error('Error fetching users:', error);
       toast.error('Error fetching users');
@@ -112,8 +114,8 @@ const Admin: React.FC = () => {
 
   const fetchStats = async () => {
     try {
-      const data = await apiService.get<SystemStats>('/admin/stats');
-      setStats(data);
+      const response = await apiService.get<SystemStats>('/admin/stats');
+      setStats(response.data);
     } catch (error: unknown) {
       console.error('Error fetching statistics:', error);
       toast.error('Error fetching statistics');
@@ -125,36 +127,36 @@ const Admin: React.FC = () => {
   const handleUpdateUser = async (userId: string, updates: Partial<User>) => {
     try {
       await apiService.put<{ message: string }>(`/admin/users/${userId}`, updates);
-      toast.success('User updated successfully');
+      toast.success(t('admin.userUpdatedSuccessfully'));
       fetchUsers();
       setIsEditDialogOpen(false);
       setEditingUser(null);
     } catch (error: unknown) {
       console.error('Error updating user:', error);
-      toast.error('Error updating user');
+      toast.error(t('admin.errorUpdatingUser'));
     }
   };
 
   const handleDeleteUser = async (userId: string) => {
-    if (!confirm('Are you sure you want to delete this user?')) {
+    if (!confirm(t('admin.confirmDeleteUser'))) {
       return;
     }
 
     try {
       await apiService.delete<{ message: string }>(`/admin/users/${userId}`);
-      toast.success('User deleted successfully');
+      toast.success(t('admin.userDeletedSuccessfully'));
       fetchUsers();
       fetchStats();
     } catch (error: unknown) {
       console.error('Error deleting user:', error);
-      toast.error('Error deleting user');
+      toast.error(t('admin.errorDeletingUser'));
     }
   };
 
   const handleCreateUser = async () => {
     try {
       await apiService.post<{ message: string }>('/admin/users', newUser);
-      toast.success('User created successfully');
+      toast.success(t('admin.userCreatedSuccessfully'));
       setNewUser({ username: '', email: '', password: '', role: 'user' });
       setIsCreateDialogOpen(false);
       fetchUsers();
@@ -166,7 +168,7 @@ const Admin: React.FC = () => {
         typeof error.response.data === 'object' && error.response.data !== null &&
         'error' in error.response.data
         ? String(error.response.data.error)
-        : 'Error creating user';
+        : t('admin.errorCreatingUser');
       toast.error(errorMessage);
     }
   };
@@ -176,7 +178,7 @@ const Admin: React.FC = () => {
       await apiService.post<{ message: string }>(`/admin/users/${resetUserId}/reset-password`, {
         newPassword: resetPassword
       });
-      toast.success('Password reset successfully');
+      toast.success(t('admin.passwordResetSuccessfully'));
       setResetPassword('');
       setResetUserId(null);
       setIsResetPasswordDialogOpen(false);
@@ -187,7 +189,7 @@ const Admin: React.FC = () => {
         typeof error.response.data === 'object' && error.response.data !== null &&
         'error' in error.response.data
         ? String(error.response.data.error)
-        : 'Error resetting password';
+        : t('admin.errorResettingPassword');
       toast.error(errorMessage);
     }
   };
@@ -245,14 +247,14 @@ const Admin: React.FC = () => {
   const renderFeedbackExport = () => (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Feedback Export</h1>
+        <h1 className="text-3xl font-bold">{t('admin.feedbackExport')}</h1>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Export Feedback Data</CardTitle>
+          <CardTitle>{t('admin.exportFeedbackData')}</CardTitle>
           <CardDescription>
-            Download all feedback data including ratings, comments, and previous question context in CSV format.
+            {t('admin.exportFeedbackDescription')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -260,15 +262,15 @@ const Admin: React.FC = () => {
             <div className="flex items-center space-x-4">
               <FileText className="h-8 w-8 text-muted-foreground" />
               <div>
-                <h3 className="font-medium">CSV Export</h3>
+                <h3 className="font-medium">{t('admin.csvExport')}</h3>
                 <p className="text-sm text-muted-foreground">
-                  Exports feedback data with columns: ID, Message ID, Rating, Comment, Previous Question, Created At
+                  {t('admin.csvExportDescription')}
                 </p>
               </div>
             </div>
             <Button onClick={handleExportFeedback} className="w-full sm:w-auto">
               <FileText className="h-4 w-4 mr-2" />
-              Download Feedback CSV
+              {t('admin.downloadFeedbackCSV')}
             </Button>
           </div>
         </CardContent>
@@ -279,7 +281,7 @@ const Admin: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="text-lg">Loading admin panel...</div>
+        <div className="text-lg">{t('admin.loadingAdminPanel')}</div>
       </div>
     );
   }
@@ -287,7 +289,7 @@ const Admin: React.FC = () => {
   const renderDashboard = () => (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+        <h1 className="text-3xl font-bold">{t('admin.adminDashboard')}</h1>
       </div>
 
       {/* Statistics Cards */}
@@ -295,7 +297,7 @@ const Admin: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('admin.totalUsers')}</CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -304,7 +306,7 @@ const Admin: React.FC = () => {
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Sessions</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('admin.totalSessions')}</CardTitle>
               <BarChart3 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -313,7 +315,7 @@ const Admin: React.FC = () => {
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Messages</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('admin.totalMessages')}</CardTitle>
               <MessageSquare className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -322,7 +324,7 @@ const Admin: React.FC = () => {
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Active Users</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('admin.activeUsers')}</CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -337,30 +339,30 @@ const Admin: React.FC = () => {
   const renderUserManagement = () => (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">User Management</h1>
+        <h1 className="text-3xl font-bold">{t('admin.userManagement')}</h1>
         <Button onClick={() => setIsCreateDialogOpen(true)}>
           <UserPlus className="h-4 w-4 mr-2" />
-          Create User
+          {t('admin.createUser')}
         </Button>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>User Management</CardTitle>
+          <CardTitle>{t('admin.userManagement')}</CardTitle>
           <CardDescription>
-            Manage system users and their permissions (SuperAdmin only)
+            {t('admin.userManagement')}
           </CardDescription>
         </CardHeader>
         <CardContent>
         <Table>
           <TableHeader>
           <TableRow>
-            <TableHead>Username</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Role</TableHead>
-            <TableHead>Account Type</TableHead>
-            <TableHead>Created</TableHead>
-            <TableHead>Actions</TableHead>
+            <TableHead>{t('common.username')}</TableHead>
+            <TableHead>{t('common.email')}</TableHead>
+            <TableHead>{t('common.role')}</TableHead>
+            <TableHead>{t('common.type')}</TableHead>
+            <TableHead>{t('common.date')}</TableHead>
+            <TableHead>{t('common.actions')}</TableHead>
           </TableRow>
         </TableHeader>
           <TableBody>
@@ -391,7 +393,7 @@ const Admin: React.FC = () => {
                       variant="outline"
                       size="sm"
                       onClick={() => openEditDialog(user)}
-                      title="Edit User"
+                      title={t('common.edit')}
                     >
                       <Edit className="h-4 w-4" />
                     </Button>
@@ -399,7 +401,7 @@ const Admin: React.FC = () => {
                       variant="outline"
                       size="sm"
                       onClick={() => openResetPasswordDialog(user.id)}
-                      title={user.authMethod === 'ldap' ? 'Cannot reset password for LDAP accounts' : 'Reset Password'}
+                      title={user.authMethod === 'ldap' ? t('admin.cannotResetLdapPassword') : t('admin.resetPassword')}
                       disabled={user.authMethod === 'ldap'}
                     >
                       <KeyRound className="h-4 w-4" />
@@ -408,7 +410,7 @@ const Admin: React.FC = () => {
                       variant="outline"
                       size="sm"
                       onClick={() => handleDeleteUser(user.id)}
-                      title="Delete User"
+                      title={t('common.delete')}
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -426,13 +428,13 @@ const Admin: React.FC = () => {
   const renderTrainingManagement = () => (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Training Process Management</h1>
+        <h1 className="text-3xl font-bold">{t('admin.trainingProcessManagement')}</h1>
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>Training Management</CardTitle>
+          <CardTitle>{t('admin.trainingManagement')}</CardTitle>
           <CardDescription>
-            Manage AI training processes and model configurations
+            {t('admin.trainingManagementDescription')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -440,8 +442,7 @@ const Admin: React.FC = () => {
             <Settings className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
             <h3 className="text-lg font-semibold mb-2">Training Management</h3>
             <p className="text-muted-foreground">
-              Training management features will be implemented here.
-              This section will include model training, configuration management, and process monitoring.
+              {t('admin.trainingManagementPlaceholder')}
             </p>
           </div>
         </CardContent>
@@ -456,19 +457,19 @@ const Admin: React.FC = () => {
       case 'user-management':
         return canManageUsers ? renderUserManagement() : (
           <div className="text-center py-8">
-            <p className="text-muted-foreground">You don't have permission to access user management.</p>
+            <p className="text-muted-foreground">{t('admin.noPermissionUserManagement')}</p>
           </div>
         );
       case 'feedback-export':
         return isAdmin ? renderFeedbackExport() : (
           <div className="text-center py-8">
-            <p className="text-muted-foreground">You don't have permission to access feedback export.</p>
+            <p className="text-muted-foreground">{t('admin.noPermissionFeedbackExport')}</p>
           </div>
         );
       case 'training-management':
         return canManageTraining ? renderTrainingManagement() : (
           <div className="text-center py-8">
-            <p className="text-muted-foreground">You don't have permission to access training management.</p>
+            <p className="text-muted-foreground">{t('admin.noPermissionTrainingManagement')}</p>
           </div>
         );
       default:
@@ -482,7 +483,7 @@ const Admin: React.FC = () => {
       <div className="w-64 bg-card border-r border-border flex flex-col">
         <div className="p-6 border-b border-border">
           <h2 className="text-xl font-bold">
-            {isSuperAdmin ? 'Super Admin Panel' : 'Admin Panel'}
+            {isSuperAdmin ? t('admin.superAdminPanel') : t('admin.adminPanel')}
           </h2>
         </div>
         <nav className="flex-1 p-4">
@@ -529,16 +530,16 @@ const Admin: React.FC = () => {
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Edit User</DialogTitle>
+            <DialogTitle>{t('admin.editUser')}</DialogTitle>
             <DialogDescription>
-              Update user information and permissions
+              {t('admin.editUserDescription')}
             </DialogDescription>
           </DialogHeader>
           {editingUser && (
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="username" className="text-right">
-                  Username
+                  {t('common.username')}
                 </Label>
                 <Input
                   id="username"
@@ -551,7 +552,7 @@ const Admin: React.FC = () => {
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="email" className="text-right">
-                  Email
+                  {t('common.email')}
                 </Label>
                 <Input
                   id="email"
@@ -564,7 +565,7 @@ const Admin: React.FC = () => {
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="role" className="text-right">
-                  Role
+                  {t('common.role')}
                 </Label>
                 <Select
                   value={editingUser.role || 'user'}
@@ -573,12 +574,12 @@ const Admin: React.FC = () => {
                   }
                 >
                   <SelectTrigger className="col-span-3">
-                    <SelectValue placeholder="Select a role" />
+                    <SelectValue placeholder={t('common.select')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="user">User</SelectItem>
-                    <SelectItem value="admin">Admin</SelectItem>
-                    <SelectItem value="superadmin">SuperAdmin</SelectItem>
+                    <SelectItem value="user">{t('common.user')}</SelectItem>
+                    <SelectItem value="admin">{t('common.admin')}</SelectItem>
+                    <SelectItem value="superadmin">{t('common.superadmin')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -591,7 +592,7 @@ const Admin: React.FC = () => {
                 editingUser && handleUpdateUser(editingUser.id, editingUser)
               }
             >
-              Save changes
+              {t('common.saveChanges')}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -601,54 +602,54 @@ const Admin: React.FC = () => {
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Create New User</DialogTitle>
+            <DialogTitle>{t('admin.createNewUser')}</DialogTitle>
             <DialogDescription>
-              Add a new user to the system
+              {t('admin.createNewUserDescription')}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div>
-              <Label htmlFor="create-username">Username</Label>
+              <Label htmlFor="create-username">{t('common.username')}</Label>
               <Input
                 id="create-username"
                 value={newUser.username}
                 onChange={(e) => setNewUser({...newUser, username: e.target.value})}
-                placeholder="Enter username"
+                placeholder={t('auth.username')}
               />
             </div>
             <div>
-              <Label htmlFor="create-email">Email</Label>
+              <Label htmlFor="create-email">{t('common.email')}</Label>
               <Input
                 id="create-email"
                 type="email"
                 value={newUser.email}
                 onChange={(e) => setNewUser({...newUser, email: e.target.value})}
-                placeholder="Enter email address"
+                placeholder={t('common.email')}
               />
             </div>
             <div>
-              <Label htmlFor="create-password">Password</Label>
+              <Label htmlFor="create-password">{t('common.password')}</Label>
               <Input
                 id="create-password"
                 type="password"
                 value={newUser.password}
                 onChange={(e) => setNewUser({...newUser, password: e.target.value})}
-                placeholder="Enter password (min 8 characters)"
+                placeholder={t('admin.enterPasswordPlaceholder')}
               />
             </div>
             <div>
-              <Label htmlFor="create-role">Role</Label>
+              <Label htmlFor="create-role">{t('common.role')}</Label>
               <Select
                 value={newUser.role}
                 onValueChange={(value) => setNewUser({...newUser, role: value})}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select role" />
+                  <SelectValue placeholder={t('common.select')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="user">User</SelectItem>
-                  <SelectItem value="admin">Admin</SelectItem>
-                  <SelectItem value="superadmin">Super Admin</SelectItem>
+                  <SelectItem value="user">{t('common.user')}</SelectItem>
+                  <SelectItem value="admin">{t('common.admin')}</SelectItem>
+                  <SelectItem value="superadmin">{t('common.superadmin')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -658,10 +659,10 @@ const Admin: React.FC = () => {
               setIsCreateDialogOpen(false);
               setNewUser({ username: '', email: '', password: '', role: 'user' });
             }}>
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button onClick={handleCreateUser}>
-              Create User
+              {t('admin.createUser')}
             </Button>
           </div>
         </DialogContent>
@@ -671,20 +672,20 @@ const Admin: React.FC = () => {
       <Dialog open={isResetPasswordDialogOpen} onOpenChange={setIsResetPasswordDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Reset User Password</DialogTitle>
+            <DialogTitle>{t('admin.resetUserPassword')}</DialogTitle>
             <DialogDescription>
-              Enter a new password for the selected user
+              {t('admin.resetPasswordDescription')}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div>
-              <Label htmlFor="reset-password">New Password</Label>
+              <Label htmlFor="reset-password">{t('settings.newPassword')}</Label>
               <Input
                 id="reset-password"
                 type="password"
                 value={resetPassword}
                 onChange={(e) => setResetPassword(e.target.value)}
-                placeholder="Enter new password (min 8 characters)"
+                placeholder={t('admin.enterPasswordPlaceholder')}
               />
             </div>
           </div>
@@ -694,10 +695,10 @@ const Admin: React.FC = () => {
               setResetPassword('');
               setResetUserId(null);
             }}>
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button onClick={handleResetPassword}>
-              Reset Password
+              {t('admin.resetPassword')}
             </Button>
           </div>
         </DialogContent>

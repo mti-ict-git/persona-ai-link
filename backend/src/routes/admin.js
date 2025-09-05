@@ -349,6 +349,22 @@ router.post('/users', (req, res, next) => {
     `);
     
     const newUser = result.recordset[0];
+    
+    // Create default preferences for new user
+    try {
+      await request.query(`
+        INSERT INTO user_preferences (user_id, preference_key, preference_value, created_at, updated_at)
+        VALUES 
+          (${newUser.id}, 'language', 'en', GETDATE(), GETDATE()),
+          (${newUser.id}, 'theme', 'light', GETDATE(), GETDATE()),
+          (${newUser.id}, 'firstTimeLogin', 'true', GETDATE(), GETDATE())
+      `);
+      console.log(`Created default preferences for user: ${newUser.username}`);
+    } catch (prefError) {
+      console.error('Error creating default preferences:', prefError);
+      // Don't throw error here as user creation was successful
+    }
+    
     res.status(201).json({
       message: 'User created successfully',
       user: {

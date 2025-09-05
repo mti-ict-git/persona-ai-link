@@ -1,9 +1,11 @@
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useTranslation } from "react-i18next";
 
 const ThemeToggle = () => {
   const { theme, toggleTheme } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <Button
@@ -11,7 +13,7 @@ const ThemeToggle = () => {
       size="icon"
       onClick={toggleTheme}
       className="h-9 w-9 hover:bg-accent transition-colors"
-      aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+      aria-label={theme === 'light' ? t('theme.switchToDarkMode') : t('theme.switchToLightMode')}
     >
       {theme === 'light' ? (
         <Moon className="h-4 w-4" />

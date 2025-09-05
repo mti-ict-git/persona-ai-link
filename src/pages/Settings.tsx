@@ -49,22 +49,22 @@ const Settings: React.FC = () => {
   // Sync preferences with local state
   useEffect(() => {
     if (preferences.showFollowUpSuggestions !== undefined) {
-      setShowFollowUpSuggestions(preferences.showFollowUpSuggestions === 'true');
+      setShowFollowUpSuggestions(preferences.showFollowUpSuggestions?.value === 'true');
     }
     if (preferences.alwaysShowCode !== undefined) {
-      setAlwaysShowCode(preferences.alwaysShowCode === 'true');
+      setAlwaysShowCode(preferences.alwaysShowCode?.value === 'true');
     }
   }, [preferences]);
 
   const sidebarItems: SettingsSidebarItem[] = [
-    { id: 'general', label: 'General', icon: SettingsIcon },
-    { id: 'personalization', label: 'Personalization', icon: User },
-    { id: 'speech', label: 'Speech', icon: Mic },
-    { id: 'data-controls', label: 'Data controls', icon: Database },
-    { id: 'builder-profile', label: 'Builder profile', icon: Users },
-    { id: 'connected-apps', label: 'Connected apps', icon: SettingsIcon },
-    { id: 'security', label: 'Security', icon: Shield },
-    { id: 'training', label: 'Training', icon: Brain, adminOnly: true },
+    { id: 'general', label: t('settings.general'), icon: SettingsIcon },
+    { id: 'personalization', label: t('settings.personalization'), icon: User },
+    { id: 'speech', label: t('settings.speech'), icon: Mic },
+    { id: 'data-controls', label: t('settings.dataControls'), icon: Database },
+    { id: 'builder-profile', label: t('settings.builderProfile'), icon: Users },
+    { id: 'connected-apps', label: t('settings.connectedApps'), icon: SettingsIcon },
+    { id: 'security', label: t('settings.security'), icon: Shield },
+    { id: 'training', label: t('settings.training'), icon: Brain, adminOnly: true },
   ];
 
   const handleClose = () => {
@@ -75,15 +75,15 @@ const Settings: React.FC = () => {
 
   const handleArchiveAllChats = () => {
     toast({
-      title: "Archive All Chats",
-      description: "This feature will be implemented soon.",
+      title: t('settings.archiveAllChats'),
+      description: t('settings.featureComingSoon'),
     });
   };
 
   const handleDeleteAllChats = () => {
     toast({
-      title: "Delete All Chats",
-      description: "This feature will be implemented soon.",
+      title: t('settings.deleteAllChats'),
+      description: t('settings.featureComingSoon'),
       variant: "destructive",
     });
   };
@@ -139,7 +139,7 @@ const Settings: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <Label htmlFor="theme">{t('settings.theme')}</Label>
-                    <p className="text-sm text-muted-foreground">Choose your preferred theme</p>
+                    <p className="text-sm text-muted-foreground">{t('settings.chooseTheme')}</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-sm capitalize">{theme}</span>
@@ -159,7 +159,7 @@ const Settings: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <Label htmlFor="code-analyst">{t('settings.alwaysShowCode')}</Label>
-                    <p className="text-sm text-muted-foreground">Display code blocks by default in data analysis</p>
+                    <p className="text-sm text-muted-foreground">{t('settings.displayCodeBlocks')}</p>
                   </div>
                   <Switch
                     id="code-analyst"
@@ -174,7 +174,7 @@ const Settings: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <Label htmlFor="follow-up">{t('settings.followUpSuggestions')}</Label>
-                    <p className="text-sm text-muted-foreground">Display suggested follow-up questions</p>
+                    <p className="text-sm text-muted-foreground">{t('settings.followUpSuggestions')}</p>
                   </div>
                   <Switch
                     id="follow-up"
@@ -189,15 +189,15 @@ const Settings: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <Label htmlFor="language">{t('settings.language')}</Label>
-                    <p className="text-sm text-muted-foreground">Select your preferred language</p>
+                    <p className="text-sm text-muted-foreground">{t('settings.selectLanguage')}</p>
                   </div>
                   <Select value={currentLanguage} onValueChange={handleLanguageChange} disabled={prefsLoading}>
                     <SelectTrigger className="w-40">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="en">English</SelectItem>
-                      <SelectItem value="zh">中文</SelectItem>
+                      <SelectItem value="en">{t('settings.english')}</SelectItem>
+                      <SelectItem value="zh">{t('settings.chinese')}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -210,13 +210,13 @@ const Settings: React.FC = () => {
         return (
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-medium mb-4">Personalization</h3>
+              <h3 className="text-lg font-medium mb-4">{t('settings.personalization')}</h3>
               <p className="text-sm text-muted-foreground mb-4">
-                Customize your AI assistant experience
+                {t('settings.customizeExperience')}
               </p>
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="assistant-name">Assistant Name</Label>
+                  <Label htmlFor="assistant-name">{t('settings.assistantName')}</Label>
                   <Input 
                     id="assistant-name" 
                     value="Tsindeka AI" 
@@ -224,7 +224,7 @@ const Settings: React.FC = () => {
                     disabled 
                   />
                   <p className="text-xs text-muted-foreground mt-1">
-                    Assistant name customization coming soon
+                    {t('settings.assistantNameComingSoon')}
                   </p>
                 </div>
               </div>
@@ -236,13 +236,13 @@ const Settings: React.FC = () => {
         return (
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-medium mb-4">Speech Settings</h3>
+              <h3 className="text-lg font-medium mb-4">{t('settings.speechSettings')}</h3>
               <p className="text-sm text-muted-foreground mb-4">
-                Configure voice and speech recognition settings
+                {t('settings.configureSpeech')}
               </p>
               <div className="space-y-4">
                 <p className="text-sm text-muted-foreground">
-                  Speech features will be available in a future update.
+                  {t('settings.speechComingSoon')}
                 </p>
               </div>
             </div>
@@ -253,16 +253,16 @@ const Settings: React.FC = () => {
         return (
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-medium mb-4">Data Controls</h3>
+              <h3 className="text-lg font-medium mb-4">{t('settings.dataControls')}</h3>
               
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label>Archived chats</Label>
-                    <p className="text-sm text-muted-foreground">Manage your archived conversations</p>
+                    <Label>{t('settings.archivedChats')}</Label>
+                    <p className="text-sm text-muted-foreground">{t('settings.manageArchivedConversations')}</p>
                   </div>
                   <Button variant="outline" size="sm">
-                    Manage
+                    {t('common.manage')}
                   </Button>
                 </div>
 
@@ -270,15 +270,15 @@ const Settings: React.FC = () => {
 
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label>Archive all chats</Label>
-                    <p className="text-sm text-muted-foreground">Move all conversations to archive</p>
+                    <Label>{t('settings.archiveAllChats')}</Label>
+                    <p className="text-sm text-muted-foreground">{t('settings.moveAllToArchive')}</p>
                   </div>
                   <Button 
                     variant="outline" 
                     size="sm"
                     onClick={handleArchiveAllChats}
                   >
-                    Archive all
+                    {t('settings.archiveAll')}
                   </Button>
                 </div>
 
@@ -286,15 +286,15 @@ const Settings: React.FC = () => {
 
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label>Delete all Chats</Label>
-                    <p className="text-sm text-muted-foreground">Permanently delete all conversations</p>
+                    <Label>{t('settings.deleteAllChats')}</Label>
+                    <p className="text-sm text-muted-foreground">{t('settings.permanentlyDeleteAll')}</p>
                   </div>
                   <Button 
                     variant="destructive" 
                     size="sm"
                     onClick={handleDeleteAllChats}
                   >
-                    Delete all
+                    {t('settings.deleteAll')}
                   </Button>
                 </div>
               </div>
@@ -306,19 +306,19 @@ const Settings: React.FC = () => {
         return (
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-medium mb-4">Builder Profile</h3>
-              <p className="text-muted-foreground">Manage your account information and preferences.</p>
+              <h3 className="text-lg font-medium mb-4">{t('settings.builderProfile')}</h3>
+              <p className="text-muted-foreground">{t('settings.manageAccountInfo')}</p>
             </div>
             
             <Card>
               <CardHeader>
-                <CardTitle>Account Information</CardTitle>
-                <CardDescription>Update your personal details and account settings</CardDescription>
+                <CardTitle>{t('settings.accountInformation')}</CardTitle>
+                <CardDescription>{t('settings.updatePersonalDetails')}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
+                    <Label htmlFor="email">{t('settings.email')}</Label>
                     <Input 
                       id="email" 
                       type="email" 
@@ -326,11 +326,11 @@ const Settings: React.FC = () => {
                       disabled
                       className="bg-muted"
                     />
-                    <p className="text-xs text-muted-foreground">Email cannot be changed</p>
+                    <p className="text-xs text-muted-foreground">{t('settings.emailCannotChange')}</p>
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="role">Role</Label>
+                    <Label htmlFor="role">{t('settings.role')}</Label>
                     <Input 
                       id="role" 
                       value={user?.role || ''} 
@@ -341,18 +341,18 @@ const Settings: React.FC = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="display-name">Display Name</Label>
+                  <Label htmlFor="display-name">{t('settings.displayName')}</Label>
                   <Input 
                     id="display-name" 
-                    placeholder="Enter your display name"
+                    placeholder={t('settings.enterDisplayName')}
                     defaultValue={user?.email?.split('@')[0] || ''}
                   />
-                  <p className="text-xs text-muted-foreground">This is how your name will appear in the application</p>
+                  <p className="text-xs text-muted-foreground">{t('settings.displayNameDescription')}</p>
                 </div>
                 
                 <div className="flex justify-end">
-                  <Button onClick={() => toast({ title: 'Profile updated', description: 'Your profile has been updated successfully.' })}>
-                    Save Changes
+                  <Button onClick={() => toast({ title: t('settings.profileUpdated'), description: t('settings.profileUpdatedSuccess') })}>
+                    {t('common.saveChanges')}
                   </Button>
                 </div>
               </CardContent>
@@ -360,22 +360,22 @@ const Settings: React.FC = () => {
             
             <Card>
               <CardHeader>
-                <CardTitle>Account Statistics</CardTitle>
-                <CardDescription>Your account activity and usage</CardDescription>
+                <CardTitle>{t('settings.accountStatistics')}</CardTitle>
+                <CardDescription>{t('settings.accountActivity')}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="text-center p-4 border rounded-lg">
                     <div className="text-2xl font-bold text-primary">0</div>
-                    <div className="text-sm text-muted-foreground">Chat Sessions</div>
+                    <div className="text-sm text-muted-foreground">{t('settings.chatSessions')}</div>
                   </div>
                   <div className="text-center p-4 border rounded-lg">
                     <div className="text-2xl font-bold text-primary">0</div>
-                    <div className="text-sm text-muted-foreground">Messages Sent</div>
+                    <div className="text-sm text-muted-foreground">{t('settings.messagesSent')}</div>
                   </div>
                   <div className="text-center p-4 border rounded-lg">
-                    <div className="text-2xl font-bold text-primary">{user?.role === 'admin' ? 'Unlimited' : '0'}</div>
-                    <div className="text-sm text-muted-foreground">Training Files</div>
+                    <div className="text-2xl font-bold text-primary">{user?.role === 'admin' ? t('settings.unlimited') : '0'}</div>
+                    <div className="text-sm text-muted-foreground">{t('settings.trainingFiles')}</div>
                   </div>
                 </div>
               </CardContent>
@@ -387,13 +387,13 @@ const Settings: React.FC = () => {
         return (
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-medium mb-4">Connected Apps</h3>
+              <h3 className="text-lg font-medium mb-4">{t('settings.connectedApps')}</h3>
               <p className="text-sm text-muted-foreground mb-4">
-                Manage integrations with external applications
+                {t('settings.manageIntegrations')}
               </p>
               <div className="space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  No connected apps available at this time.
+                <p className="text-sm text-muted-foreground text-center py-8">
+                  {t('settings.noConnectedApps')}
                 </p>
               </div>
             </div>
@@ -404,17 +404,17 @@ const Settings: React.FC = () => {
         return (
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-medium mb-4">Security</h3>
-              <p className="text-muted-foreground">Manage your security settings and privacy.</p>
+              <h3 className="text-lg font-medium mb-4">{t('settings.security')}</h3>
+              <p className="text-muted-foreground">{t('settings.manageSecuritySettings')}</p>
             </div>
             
             <Card>
               <CardHeader>
-                <CardTitle>Password & Authentication</CardTitle>
+                <CardTitle>{t('settings.passwordAuthentication')}</CardTitle>
                 <CardDescription>
                   {user?.authMethod === 'ldap' 
-                    ? 'Your account uses Active Directory authentication. Password changes must be made through your domain administrator.'
-                    : 'Update your password and authentication settings'
+                    ? t('settings.ldapPasswordDescription')
+                    : t('settings.updatePasswordDescription')
                   }
                 </CardDescription>
               </CardHeader>
@@ -423,45 +423,44 @@ const Settings: React.FC = () => {
                   <div className="p-4 bg-muted rounded-lg">
                     <div className="flex items-center gap-2 mb-2">
                       <Shield className="h-4 w-4 text-muted-foreground" />
-                      <span className="font-medium">LDAP Account</span>
+                      <span className="font-medium">{t('settings.ldapAccount')}</span>
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      This account is managed through Active Directory. To change your password, 
-                      please contact your system administrator or use your organization's password reset process.
+                      {t('settings.ldapAccountDescription')}
                     </p>
                   </div>
                 ) : (
                   <>
                     <div className="space-y-2">
-                      <Label htmlFor="current-password">Current Password</Label>
+                      <Label htmlFor="current-password">{t('settings.currentPassword')}</Label>
                       <Input 
                         id="current-password" 
                         type="password" 
-                        placeholder="Enter your current password"
+                        placeholder={t('settings.currentPasswordPlaceholder')}
                       />
                     </div>
                     
                     <div className="space-y-2">
-                      <Label htmlFor="new-password">New Password</Label>
+                      <Label htmlFor="new-password">{t('settings.newPassword')}</Label>
                       <Input 
                         id="new-password" 
                         type="password" 
-                        placeholder="Enter your new password"
+                        placeholder={t('settings.newPasswordPlaceholder')}
                       />
                     </div>
                     
                     <div className="space-y-2">
-                      <Label htmlFor="confirm-password">Confirm New Password</Label>
+                      <Label htmlFor="confirm-password">{t('settings.confirmNewPassword')}</Label>
                       <Input 
                         id="confirm-password" 
                         type="password" 
-                        placeholder="Confirm your new password"
+                        placeholder={t('settings.confirmNewPasswordPlaceholder')}
                       />
                     </div>
                     
                     <div className="flex justify-end">
-                      <Button onClick={() => toast({ title: 'Password updated', description: 'Your password has been updated successfully.' })}>
-                        Update Password
+                      <Button onClick={() => toast({ title: t('settings.passwordUpdated'), description: t('settings.passwordUpdatedSuccess') })}>
+                        {t('settings.updatePassword')}
                       </Button>
                     </div>
                   </>
@@ -471,14 +470,14 @@ const Settings: React.FC = () => {
             
             <Card>
               <CardHeader>
-                <CardTitle>Session Management</CardTitle>
-                <CardDescription>Manage your active sessions and login security</CardDescription>
+                <CardTitle>{t('settings.sessionManagement')}</CardTitle>
+                <CardDescription>{t('settings.manageActiveSessions')}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label>Auto-logout after inactivity</Label>
-                    <p className="text-sm text-muted-foreground">Automatically log out after a period of inactivity</p>
+                    <Label>{t('settings.autoLogout')}</Label>
+                    <p className="text-sm text-muted-foreground">{t('settings.autoLogoutDescription')}</p>
                   </div>
                   <Switch defaultChecked />
                 </div>
@@ -486,14 +485,14 @@ const Settings: React.FC = () => {
                 <Separator />
                 
                 <div className="space-y-3">
-                  <Label>Active Sessions</Label>
+                  <Label>{t('settings.activeSessions')}</Label>
                   <div className="border rounded-lg p-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium">Current Session</p>
-                        <p className="text-sm text-muted-foreground">Windows • Chrome • Active now</p>
+                        <p className="font-medium">{t('settings.currentSession')}</p>
+                        <p className="text-sm text-muted-foreground">{t('settings.sessionDetails')}</p>
                       </div>
-                      <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Current</span>
+                      <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">{t('settings.current')}</span>
                     </div>
                   </div>
                 </div>
@@ -503,11 +502,11 @@ const Settings: React.FC = () => {
                     variant="destructive" 
                     onClick={() => {
                       logout();
-                      toast({ title: 'Logged out', description: 'You have been logged out of all sessions.' });
+                      toast({ title: t('settings.loggedOut'), description: t('settings.loggedOutAllSessions') });
                     }}
                   >
                     <LogOut className="h-4 w-4 mr-2" />
-                    Log Out All Sessions
+                    {t('settings.logOutAllSessions')}
                   </Button>
                 </div>
               </CardContent>
@@ -515,14 +514,14 @@ const Settings: React.FC = () => {
             
             <Card>
               <CardHeader>
-                <CardTitle>Privacy Settings</CardTitle>
-                <CardDescription>Control your data and privacy preferences</CardDescription>
+                <CardTitle>{t('settings.privacySettings')}</CardTitle>
+                <CardDescription>{t('settings.controlDataPrivacy')}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label>Data Collection</Label>
-                    <p className="text-sm text-muted-foreground">Allow collection of usage data to improve the service</p>
+                    <Label htmlFor="data-collection">{t('settings.dataCollection')}</Label>
+                    <p className="text-sm text-muted-foreground">{t('settings.dataCollectionDescription')}</p>
                   </div>
                   <Switch defaultChecked />
                 </div>
@@ -531,8 +530,8 @@ const Settings: React.FC = () => {
                 
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label>Analytics</Label>
-                    <p className="text-sm text-muted-foreground">Share anonymous analytics to help improve the platform</p>
+                    <Label htmlFor="analytics">{t('settings.analytics')}</Label>
+                    <p className="text-sm text-muted-foreground">{t('settings.analyticsDescription')}</p>
                   </div>
                   <Switch />
                 </div>
@@ -547,9 +546,9 @@ const Settings: React.FC = () => {
             <div className="space-y-6">
               <div className="text-center py-8">
                 <Shield className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-                <h3 className="text-lg font-medium mb-2">Access Restricted</h3>
+                <h3 className="text-lg font-medium mb-2">{t('settings.accessRestricted')}</h3>
                 <p className="text-sm text-muted-foreground">
-                  You need administrator or super administrator privileges to access the training section.
+                  {t('settings.needAdminPrivileges')}
                 </p>
               </div>
             </div>
@@ -560,10 +559,10 @@ const Settings: React.FC = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Brain className="h-5 w-5" />
-                AI Training
+                {t('settings.aiTraining')}
               </CardTitle>
               <CardDescription>
-                Manage AI training data and model configuration (Admin/Super Admin Only)
+                {t('settings.manageTrainingData')}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -584,7 +583,7 @@ const Settings: React.FC = () => {
         <div className="w-64 border-r bg-card">
           <div className="p-4">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-semibold">Settings</h2>
+              <h2 className="text-lg font-semibold">{t('settings.title')}</h2>
               <Button variant="ghost" size="sm" onClick={handleClose}>
                 <X className="h-4 w-4" />
               </Button>

@@ -9,6 +9,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { ApiError } from "@/services/api";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -22,6 +23,7 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuth();
+  const { t } = useTranslation();
   const { toast } = useToast();
   
   // Get the intended destination from location state
@@ -42,15 +44,15 @@ const Login = () => {
         setError(err.message);
         toast({
           variant: "destructive",
-          title: "Login Failed",
+          title: t('auth.loginFailed'),
           description: err.message,
         });
       } else {
-        const errorMessage = "An unexpected error occurred. Please try again.";
+        const errorMessage = t('auth.unexpectedError');
         setError(errorMessage);
         toast({
           variant: "destructive",
-          title: "Login Failed",
+          title: t('auth.loginFailed'),
           description: errorMessage,
         });
       }
@@ -86,11 +88,11 @@ const Login = () => {
               Tsindeka AI
             </CardTitle>
             <CardDescription className="text-sm text-muted-foreground font-medium">
-              PT. Merdeka Tsingshan Indonesia
+              {t('auth.companyName')}
             </CardDescription>
 
             <CardDescription className="text-muted-foreground">
-              Sign in to access your personalized AI assistant
+              {t('auth.signInDescription')}
             </CardDescription>
           </CardHeader>
 
@@ -107,11 +109,11 @@ const Login = () => {
                 <TabsList className="grid w-full grid-cols-2">
                   <TabsTrigger value="local" className="flex items-center gap-2">
                     <User className="h-4 w-4" />
-                    Local Account
+                    {t('auth.localAccount')}
                   </TabsTrigger>
                   <TabsTrigger value="ldap" className="flex items-center gap-2">
                     <Building className="h-4 w-4" />
-                    Active Directory
+                    {t('auth.activeDirectory')}
                   </TabsTrigger>
                 </TabsList>
               )}
@@ -120,7 +122,7 @@ const Login = () => {
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="email" className="text-foreground font-medium">
-                      Email Address
+                      {t('auth.emailAddress')}
                     </Label>
                     <Input
                       id="email"
@@ -128,7 +130,7 @@ const Login = () => {
                       type="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      placeholder="Enter your email"
+                      placeholder={t('auth.enterEmail')}
                       className="bg-background border-border focus:border-primary"
                       required
                     />
@@ -136,7 +138,7 @@ const Login = () => {
 
                   <div className="space-y-2">
                     <Label htmlFor="password" className="text-foreground font-medium">
-                      Password
+                      {t('auth.password')}
                     </Label>
                     <div className="relative">
                       <Input
@@ -145,7 +147,7 @@ const Login = () => {
                         type={showPassword ? "text" : "password"}
                         value={formData.password}
                         onChange={handleInputChange}
-                        placeholder="Enter your password"
+                        placeholder={t('auth.enterPassword')}
                         className="bg-background border-border focus:border-primary pr-10"
                         required
                       />
@@ -170,7 +172,7 @@ const Login = () => {
                     disabled={isLoading}
                     className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {isLoading ? "Signing In..." : "Sign In"}
+                    {isLoading ? t('auth.signingIn') : t('auth.signIn')}
                   </Button>
                 </form>
               </TabsContent>
@@ -179,7 +181,7 @@ const Login = () => {
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="username" className="text-foreground font-medium">
-                      Username
+                      {t('auth.username')}
                     </Label>
                     <Input
                       id="username"
@@ -187,18 +189,18 @@ const Login = () => {
                       type="text"
                       value={formData.email}
                       onChange={handleInputChange}
-                      placeholder="mti.user@merdekabattery.com"
+                      placeholder={t('auth.usernamePlaceholder')}
                       className="bg-background border-border focus:border-primary"
                       required
                     />
                     <p className="text-xs text-muted-foreground mt-1">
-                      Example: mti.user@merdekabattery.com
+                      {t('auth.usernameExample')}
                     </p>
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="password-ldap" className="text-foreground font-medium">
-                      Password
+                      {t('auth.password')}
                     </Label>
                     <div className="relative">
                       <Input
@@ -207,7 +209,7 @@ const Login = () => {
                         type={showPassword ? "text" : "password"}
                         value={formData.password}
                         onChange={handleInputChange}
-                        placeholder="Enter your domain password"
+                        placeholder={t('auth.enterDomainPassword')}
                         className="bg-background border-border focus:border-primary pr-10"
                         required
                       />
@@ -245,7 +247,7 @@ const Login = () => {
                   className="text-primary hover:text-primary/80"
                   onClick={() => setAuthMethod('local')}
                 >
-                  Try another way to login
+                  {t('auth.tryAnotherWay')}
                 </Button>
               </div>
             )}

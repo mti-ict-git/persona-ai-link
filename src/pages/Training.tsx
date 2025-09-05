@@ -23,6 +23,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import ExternalSourcesManager from '@/components/ExternalSourcesManager';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface ExternalSource {
   id: string;
@@ -57,6 +58,7 @@ interface TrainingFile {
 }
 
 const Training = () => {
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [files, setFiles] = useState<TrainingFile[]>([]);
   const [isTraining, setIsTraining] = useState(false);
@@ -78,16 +80,16 @@ const Training = () => {
         setFiles(data.data || []);
       } else {
         toast({
-          title: "Error",
-          description: "Failed to fetch training files.",
+          title: t('common.error'),
+          description: t('training.uploadFailed'),
           variant: "destructive",
         });
       }
     } catch (error) {
       console.error('Error fetching files:', error);
       toast({
-        title: "Error",
-        description: "Failed to connect to server.",
+        title: t('common.error'),
+        description: t('training.uploadFailed'),
         variant: "destructive",
       });
     } finally {
@@ -107,8 +109,8 @@ const Training = () => {
     const maxSize = 20 * 1024 * 1024; // 20MB in bytes
     if (file.size > maxSize) {
       toast({
-        title: "File too large",
-        description: `File size (${(file.size / 1024 / 1024).toFixed(1)}MB) exceeds the 20MB limit. Please choose a smaller file.`,
+        title: t('training.fileTooLarge'),
+        description: t('training.fileSizeExceeds', { size: (file.size / 1024 / 1024).toFixed(1) }),
         variant: "destructive",
       });
       event.target.value = '';
@@ -167,21 +169,21 @@ const Training = () => {
 
           if (webhookResponse.ok) {
             toast({
-              title: "File uploaded successfully",
-              description: `${file.name} has been uploaded and saved to the server.`,
+              title: t('training.fileUploaded'),
+              description: t('training.fileUploadedSuccess', { filename: file.name }),
             });
           } else {
             toast({
-              title: "Upload completed with warnings",
-              description: `${file.name} was saved but processing may have failed.`,
+              title: t('training.uploadFailed'),
+              description: t('training.fileSavedProcessingFailed', { filename: file.name }),
               variant: "destructive",
             });
           }
         } catch (webhookError) {
           console.error('Webhook error:', webhookError);
           toast({
-            title: "Upload completed with warnings",
-            description: `${file.name} was saved but processing failed.`,
+            title: t('training.uploadFailed'),
+            description: t('training.fileSavedProcessingFailed', { filename: file.name }),
             variant: "destructive",
           });
         }
@@ -201,7 +203,7 @@ const Training = () => {
         }
         
         toast({
-          title: "Upload failed",
+          title: t('training.uploadFailed'),
           description: errorData.message || errorData.error || "Failed to upload file.",
           variant: "destructive",
         });
@@ -209,7 +211,7 @@ const Training = () => {
     } catch (error) {
       console.error('Upload error:', error);
       toast({
-        title: "Upload failed",
+        title: t('training.uploadFailed'),
         description: "Failed to upload file. Please try again.",
         variant: "destructive",
       });
@@ -226,7 +228,7 @@ const Training = () => {
 
       if (response.ok) {
         toast({
-          title: "File deleted",
+          title: t('training.fileDeleted'),
           description: `${file.filename} has been removed from training data.`,
           variant: "destructive",
         });
@@ -234,7 +236,7 @@ const Training = () => {
       } else {
         const errorData = await response.json();
         toast({
-          title: "Delete failed",
+          title: t('training.deleteFailed'),
           description: errorData.error || "Failed to delete file.",
           variant: "destructive",
         });
@@ -242,7 +244,7 @@ const Training = () => {
     } catch (error) {
       console.error('Delete error:', error);
       toast({
-        title: "Delete failed",
+        title: t('training.deleteFailed'),
         description: "Failed to delete file. Please try again.",
         variant: "destructive",
       });
@@ -281,7 +283,7 @@ const Training = () => {
       if (response.ok) {
         const data = await response.json();
         toast({
-          title: "File processed successfully",
+          title: t('training.fileProcessingCompleted'),
           description: `${data.data.filename} has been processed and analyzed.`,
         });
         // Refresh file list
@@ -289,7 +291,7 @@ const Training = () => {
       } else {
         const errorData = await response.json();
         toast({
-          title: "Processing failed",
+          title: t('training.processingFailed'),
           description: errorData.message || "Failed to process file.",
           variant: "destructive",
         });
@@ -297,7 +299,7 @@ const Training = () => {
     } catch (error) {
       console.error('Processing error:', error);
       toast({
-        title: "Processing failed",
+        title: t('training.processingFailed'),
         description: "Failed to process file. Please try again.",
         variant: "destructive",
       });
@@ -311,7 +313,7 @@ const Training = () => {
     const unprocessedFiles = files.filter(f => !f.processed);
     if (unprocessedFiles.length === 0) {
       toast({
-        title: "No files to process",
+        title: t('training.noFilesToProcess'),
         description: "All files have already been processed.",
         variant: "destructive",
       });
@@ -333,7 +335,7 @@ const Training = () => {
       if (response.ok) {
         const data = await response.json();
         toast({
-          title: "Batch processing completed",
+          title: t('training.batchProcessingCompleted'),
           description: data.message,
         });
         // Refresh file list
@@ -341,7 +343,7 @@ const Training = () => {
       } else {
         const errorData = await response.json();
         toast({
-          title: "Batch processing failed",
+          title: t('training.batchProcessingFailed'),
           description: errorData.message || "Failed to process files.",
           variant: "destructive",
         });
@@ -349,7 +351,7 @@ const Training = () => {
     } catch (error) {
       console.error('Batch processing error:', error);
       toast({
-        title: "Batch processing failed",
+        title: t('training.batchProcessingFailed'),
         description: "Failed to process files. Please try again.",
         variant: "destructive",
       });
@@ -363,7 +365,7 @@ const Training = () => {
     const processedFiles = files.filter(f => f.processed);
     if (processedFiles.length === 0) {
       toast({
-        title: "No processed files",
+        title: t('training.noProcessedFiles'),
         description: "Please process files before training the model.",
         variant: "destructive",
       });
@@ -384,13 +386,13 @@ const Training = () => {
         const trainingResult = data.data;
         
         toast({
-          title: "Model training completed",
+          title: t('training.modelTrainingCompleted'),
           description: `AI model successfully trained with ${trainingResult.files_processed} files (${trainingResult.total_words} words) in ${(trainingResult.duration_ms / 1000).toFixed(1)}s. Model version: ${trainingResult.model_version}`,
         });
       } else {
         const errorData = await response.json();
         toast({
-          title: "Training failed",
+          title: t('training.trainingFailed'),
           description: errorData.message || "Failed to train the model.",
           variant: "destructive",
         });
@@ -398,8 +400,8 @@ const Training = () => {
     } catch (error) {
       console.error('Training error:', error);
       toast({
-        title: "Training failed",
-        description: "Failed to train the model. Please try again.",
+        title: t('training.trainingFailed'),
+        description: t('training.modelTrainingFailed'),
         variant: "destructive",
       });
     } finally {
@@ -436,8 +438,8 @@ const Training = () => {
     } catch (error) {
       console.error('Error updating external sources:', error);
       toast({
-        title: 'Error',
-        description: 'Failed to update external sources',
+        title: t('common.error'),
+        description: t('training.failedUpdateExternalSources'),
         variant: 'destructive',
       });
     }
@@ -456,11 +458,11 @@ const Training = () => {
         return `${(sizeInKB / 1024).toFixed(1)} MB`;
       }
     }
-    return 'Unknown size';
+    return t('common.unknownSize');
   };
 
   const getFileType = (filename: string) => {
-    return filename.split('.').pop()?.toUpperCase() || 'Unknown';
+    return filename.split('.').pop()?.toUpperCase() || t('common.unknown');
   };
 
   const processedFilesCount = files.filter(f => f.processed).length;
@@ -480,8 +482,8 @@ const Training = () => {
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div>
-              <h1 className="text-3xl font-bold text-foreground">AI Training Center</h1>
-              <p className="text-muted-foreground">Manage training data and train the AI model</p>
+              <h1 className="text-3xl font-bold text-foreground">{t('training.title')}</h1>
+              <p className="text-muted-foreground">{t('training.description')}</p>
             </div>
           </div>
           <Button 
@@ -493,12 +495,12 @@ const Training = () => {
             {isTraining ? (
               <>
                 <Brain className="mr-2 h-5 w-5 animate-spin" />
-                Training Model...
+                {t('training.trainingModel')}
               </>
             ) : (
               <>
                 <Brain className="mr-2 h-5 w-5" />
-                Train Model ({processedFilesCount}/{files.length} ready)
+                {t('training.trainModel')} ({processedFilesCount}/{files.length} {t('training.ready')})
               </>
             )}
           </Button>
@@ -510,10 +512,10 @@ const Training = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Upload className="h-5 w-5 text-primary" />
-                Upload Training Data
+                {t('training.uploadTrainingData')}
               </CardTitle>
               <CardDescription>
-                Upload documents to train the AI model
+                {t('training.uploadDescription')}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -521,8 +523,8 @@ const Training = () => {
                 <div className="border-2 border-dashed border-primary/30 rounded-lg p-8 text-center hover:border-primary/50 transition-colors">
                   <Upload className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
                   <div className="space-y-2">
-                    <p className="text-sm font-medium">Click to upload files</p>
-                    <p className="text-xs text-muted-foreground">PDF, DOCX, TXT files supported</p>
+                    <p className="text-sm font-medium">{t('training.clickToUpload')}</p>
+                    <p className="text-xs text-muted-foreground">{t('training.supportedFormats')}</p>
                   </div>
                   <Input
                     type="file"
@@ -532,15 +534,15 @@ const Training = () => {
                     disabled={isUploading}
                   />
                   {isUploading && (
-                    <p className="text-sm text-muted-foreground mt-2">Uploading...</p>
+                    <p className="text-sm text-muted-foreground mt-2">{t('training.uploading')}</p>
                   )}
                 </div>
                 
                 <div className="space-y-2 text-xs text-muted-foreground">
-                  <p className="font-medium text-orange-600 dark:text-orange-400">• Maximum file size: 20MB</p>
-                  <p>• Supported formats: PDF, DOCX, TXT, DOC</p>
-                  <p>• Files will be processed automatically</p>
-                  <p className="text-xs text-muted-foreground/70">Files exceeding 20MB will be rejected</p>
+                  <p className="font-medium text-orange-600 dark:text-orange-400">• {t('training.maxFileSize')}</p>
+                  <p>• {t('training.supportedFormatsDetail')}</p>
+                  <p>• {t('training.autoProcess')}</p>
+                  <p className="text-xs text-muted-foreground/70">{t('training.fileSizeRejection')}</p>
                 </div>
               </div>
             </CardContent>
@@ -553,10 +555,10 @@ const Training = () => {
                 <div>
                   <CardTitle className="flex items-center gap-2">
                     <FileText className="h-5 w-5 text-primary" />
-                    Training Files ({files.length})
+                    {t('training.trainingFiles')} ({files.length})
                   </CardTitle>
                   <CardDescription>
-                    Manage your training data files • {processedFilesCount} processed, {files.length - processedFilesCount} pending
+                    {t('training.manageFiles')} • {processedFilesCount} {t('training.processed')}, {files.length - processedFilesCount} {t('training.pending')}
                   </CardDescription>
                 </div>
                 {files.filter(f => !f.processed).length > 0 && (
@@ -570,12 +572,12 @@ const Training = () => {
                     {isProcessing ? (
                       <>
                         <Brain className="mr-2 h-4 w-4 animate-spin" />
-                        Processing...
+                        {t('training.processing')}
                       </>
                     ) : (
                       <>
                         <PlayCircle className="mr-2 h-4 w-4" />
-                        Process All ({files.filter(f => !f.processed).length})
+                        {t('training.processAll')} ({files.filter(f => !f.processed).length})
                       </>
                     )}
                   </Button>
@@ -586,13 +588,13 @@ const Training = () => {
               {loading ? (
                 <div className="text-center py-12">
                   <FileText className="mx-auto h-12 w-12 text-muted-foreground mb-4 animate-pulse" />
-                  <p className="text-lg font-medium text-muted-foreground">Loading files...</p>
+                  <p className="text-lg font-medium text-muted-foreground">{t('training.loadingFiles')}</p>
                 </div>
               ) : files.length === 0 ? (
                 <div className="text-center py-12">
                   <FileText className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-                  <p className="text-lg font-medium text-muted-foreground">No training files uploaded</p>
-                  <p className="text-sm text-muted-foreground">Upload your first file to get started</p>
+                  <p className="text-lg font-medium text-muted-foreground">{t('training.noFilesUploaded')}</p>
+                  <p className="text-sm text-muted-foreground">{t('training.uploadFirstFile')}</p>
                 </div>
               ) : (
                 <div className="space-y-3">
@@ -619,16 +621,16 @@ const Training = () => {
                                     ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
                                     : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
                                 }`}>
-                                  {file.processed ? 'Processed' : 'Pending'}
+                                  {file.processed ? t('training.processed') : t('training.pending')}
                                 </span>
                                 {externalSources.length > 0 && (
                                   <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                                    {externalSources.length} link{externalSources.length !== 1 ? 's' : ''}
+                                    {externalSources.length} {externalSources.length !== 1 ? t('training.links') : t('training.link')}
                                   </span>
                                 )}
                               </div>
                               <p className="text-xs text-muted-foreground">
-                                {getFileSize(file.metadata)} • {getFileType(file.filename)} • Uploaded {new Date(file.created_at).toLocaleDateString()}
+                                {getFileSize(file.metadata)} • {getFileType(file.filename)} • {t('training.uploaded')} {new Date(file.created_at).toLocaleDateString()}
                               </p>
                             </div>
                           </div>
@@ -650,7 +652,7 @@ const Training = () => {
                               size="sm"
                               onClick={() => toggleFileExpansion(file.id)}
                               className="bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/40 text-blue-600 dark:text-blue-400"
-                              title="Manage External Links"
+                              title={t('training.manageExternalLinks')}
                             >
                               <Link className="h-4 w-4" />
                             </Button>
@@ -675,7 +677,7 @@ const Training = () => {
                                 onClick={() => handleProcessFile(file.id)}
                                 disabled={isProcessing || isTraining}
                                 className="bg-orange-50 hover:bg-orange-100 dark:bg-orange-900/20 dark:hover:bg-orange-900/40 text-orange-600 dark:text-orange-400"
-                                title="Reprocess File"
+                                title={t('training.reprocessFile')}
                               >
                                 {processingFiles.includes(file.id) ? (
                                   <RefreshCw className="h-4 w-4 animate-spin" />
@@ -719,8 +721,8 @@ const Training = () => {
               <div className="flex items-center gap-4">
                 <Brain className="h-8 w-8 text-primary animate-spin" />
                 <div>
-                  <p className="font-medium">Training AI Model...</p>
-                  <p className="text-sm text-muted-foreground">Processing {processedFilesCount} processed files and updating the model</p>
+                  <p className="font-medium">{t('training.trainingAIModel')}</p>
+                  <p className="text-sm text-muted-foreground">{t('training.processingFilesAndUpdating', { count: processedFilesCount })}</p>
                 </div>
               </div>
             </CardContent>
@@ -733,22 +735,21 @@ const Training = () => {
             <AlertDialogHeader>
               <AlertDialogTitle className="flex items-center gap-2">
                 <AlertTriangle className="h-5 w-5 text-destructive" />
-                File Already Exists
+                {t('training.fileAlreadyExists')}
               </AlertDialogTitle>
               <AlertDialogDescription>
-                A file named "{fileToDelete?.filename}" already exists in your training data. 
-                Do you want to delete the existing file and upload the new one?
+                {t('training.fileExistsDescription', { filename: fileToDelete?.filename })}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel onClick={handleCancelDelete}>
-                Cancel
+                {t('common.cancel')}
               </AlertDialogCancel>
               <AlertDialogAction 
                 onClick={handleConfirmDelete}
                 className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
               >
-                Delete & Upload New
+                {t('training.deleteAndUploadNew')}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -760,20 +761,20 @@ const Training = () => {
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <Brain className="h-5 w-5 animate-pulse text-primary" />
-                Training AI Model
+                {t('training.trainingAIModel')}
               </DialogTitle>
               <DialogDescription className="space-y-2">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-                  Processing your training data...
+                  {t('training.processingTrainingData')}
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-primary/60 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }} />
-                  Processed {processedFilesCount} files
+                  {t('training.processedFiles', { count: processedFilesCount })}
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-primary/40 rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
-                  Please wait while we train your model...
+                  {t('training.pleaseWaitTraining')}
                 </div>
               </DialogDescription>
             </DialogHeader>
@@ -786,20 +787,20 @@ const Training = () => {
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <Play className="h-5 w-5 animate-pulse text-blue-500" />
-                Processing Files
+                {t('training.processingFiles')}
               </DialogTitle>
               <DialogDescription className="space-y-2">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
-                  {processingFiles.length === 1 ? 'Processing file...' : `Processing ${processingFiles.length} files...`}
+                  {processingFiles.length === 1 ? t('training.processingFile') : t('training.processingMultipleFiles', { count: processingFiles.length })}
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }} />
-                  Sending data to processing pipeline
+                  {t('training.sendingDataToPipeline')}
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-blue-300 rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
-                  Please wait while we process your files...
+                  {t('training.pleaseWaitProcessing')}
                 </div>
               </DialogDescription>
             </DialogHeader>

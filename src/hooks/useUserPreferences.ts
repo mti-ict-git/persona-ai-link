@@ -34,7 +34,13 @@ export const useUserPreferences = (): UserPreferencesHook => {
   const updatePreference = async (key: string, value: string) => {
     try {
       await apiService.updateUserPreference(key, value);
-      setPreferences(prev => ({ ...prev, [key]: value }));
+      setPreferences(prev => ({ 
+        ...prev, 
+        [key]: { 
+          value, 
+          updatedAt: new Date().toISOString() 
+        } 
+      }));
       toast({
         title: 'Preference Updated',
         description: `${key} has been updated successfully.`,
@@ -55,7 +61,11 @@ export const useUserPreferences = (): UserPreferencesHook => {
     try {
       const preferences = Object.entries(updates).map(([key, value]) => ({ key, value }));
       await apiService.updateUserPreferencesBulk(preferences);
-      setPreferences(prev => ({ ...prev, ...updates }));
+      const structuredUpdates = Object.entries(updates).reduce((acc, [key, value]) => {
+        acc[key] = { value, updatedAt: new Date().toISOString() };
+        return acc;
+      }, {} as Record<string, { value: string; updatedAt: string }>);
+      setPreferences(prev => ({ ...prev, ...structuredUpdates }));
       toast({
         title: 'Preferences Updated',
         description: `${preferences.length} preferences updated successfully.`,

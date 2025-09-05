@@ -33,6 +33,7 @@ import {
 } from 'lucide-react';
 import { apiService } from '@/services/api';
 import ExternalSourcesManager from '@/components/ExternalSourcesManager';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface ExternalSource {
   id: string;
@@ -83,6 +84,7 @@ interface FileData {
 }
 
 const TrainingContent: React.FC = () => {
+  const { t } = useLanguage();
   const [files, setFiles] = useState<FileData[]>([]);
   const [loading, setLoading] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
@@ -108,7 +110,7 @@ const TrainingContent: React.FC = () => {
     } catch (error) {
       console.error('Error fetching files:', error);
       toast({
-        title: "Error",
+        title: t('common.error'),
         description: "Failed to fetch files. Please try again.",
         variant: "destructive",
       });
@@ -125,7 +127,7 @@ const TrainingContent: React.FC = () => {
     const maxSize = 20 * 1024 * 1024; // 20MB in bytes
     if (file.size > maxSize) {
       toast({
-        title: "File too large",
+        title: t('training.fileTooLarge'),
         description: `File size (${(file.size / 1024 / 1024).toFixed(1)}MB) exceeds the 20MB limit. Please choose a smaller file.`,
         variant: "destructive",
       });
@@ -156,7 +158,7 @@ const TrainingContent: React.FC = () => {
 
       if (response.success) {
         toast({
-          title: "File uploaded successfully",
+          title: t('training.fileUploadedSuccessfully'),
           description: `${file.name} has been uploaded and is ready for processing.`,
         });
         fetchFiles();
@@ -167,7 +169,7 @@ const TrainingContent: React.FC = () => {
       const apiError = error as ApiError;
       console.error('Upload error:', error);
        toast({
-         title: "Upload failed",
+         title: t('training.uploadFailed'),
          description: apiError.response?.data?.message || apiError.message || "Failed to upload file. Please try again.",
          variant: "destructive",
        });
@@ -187,7 +189,7 @@ const TrainingContent: React.FC = () => {
     try {
       await apiService.delete(`/files/${fileToDelete.id}`);
       toast({
-        title: "File deleted",
+        title: t('training.fileDeleted'),
         description: `${fileToDelete.filename} has been deleted.`,
       });
       fetchFiles();
@@ -200,7 +202,7 @@ const TrainingContent: React.FC = () => {
     } catch (error) {
       console.error('Delete error:', error);
       toast({
-        title: "Delete failed",
+        title: t('training.deleteFailed'),
         description: "Failed to delete file. Please try again.",
         variant: "destructive",
       });
@@ -224,7 +226,7 @@ const TrainingContent: React.FC = () => {
 
       if (response.success) {
         toast({
-          title: "File reprocessed",
+          title: t('training.fileReprocessed'),
           description: "The file has been reprocessed successfully.",
         });
         fetchFiles();
@@ -235,7 +237,7 @@ const TrainingContent: React.FC = () => {
       const apiError = error as ApiError;
       console.error('Reprocessing error:', error);
       toast({
-        title: "Reprocessing failed",
+        title: t('training.reprocessingFailed'),
         description: apiError.response?.data?.message || apiError.message || "Failed to reprocess file. Please try again.",
         variant: "destructive",
       });
@@ -251,17 +253,10 @@ const TrainingContent: React.FC = () => {
     
     // Fetch external sources for this file
     try {
-      const response = await apiService.get<{
-        success: boolean;
-        data: ExternalSource[];
-        count: number;
-        error?: string;
-      }>(`/files/${file.id}/sources`);
-      
+      const response = await apiService.get<ExternalSource[]>(`/files/${file.id}/sources`);
       if (response.success) {
         setExternalSources(response.data || []);
       } else {
-        console.error('Failed to fetch external sources:', response.error);
         setExternalSources([]);
       }
     } catch (error) {
@@ -289,7 +284,7 @@ const TrainingContent: React.FC = () => {
 
       if (response.success) {
         toast({
-          title: "File processing completed",
+          title: t('training.fileProcessingCompleted'),
           description: "The file has been processed and is ready for training.",
         });
         fetchFiles();
@@ -300,7 +295,7 @@ const TrainingContent: React.FC = () => {
       const apiError = error as ApiError;
       console.error('Processing error:', error);
       toast({
-        title: "Processing failed",
+        title: t('training.processingFailed'),
         description: apiError.response?.data?.message || apiError.message || "Failed to process file. Please try again.",
         variant: "destructive",
       });
@@ -314,7 +309,7 @@ const TrainingContent: React.FC = () => {
     const unprocessedFiles = files.filter(f => !f.processed);
     if (unprocessedFiles.length === 0) {
       toast({
-        title: "No files to process",
+        title: t('training.noFilesToProcess'),
         description: "All files have already been processed.",
         variant: "destructive",
       });
@@ -325,18 +320,18 @@ const TrainingContent: React.FC = () => {
     setIsProcessing(true);
     setProcessingFiles(fileIds);
     try {
-      const response = await apiService.post('/processing/batch', { fileIds }) as { message: string };
+      const response = await apiService.post<{ message: string }>('/processing/batch', { fileIds });
       
       toast({
-        title: "Batch processing completed",
-        description: response.message,
+        title: t('training.batchProcessingCompleted'),
+        description: response.success ? response.data.message : t('training.processingCompleted'),
       });
       // Refresh file list
       fetchFiles();
     } catch (error) {
       console.error('Batch processing error:', error);
       toast({
-        title: "Batch processing failed",
+        title: t('training.batchProcessingFailed'),
         description: error instanceof Error ? error.message : "Failed to process files. Please try again.",
         variant: "destructive",
       });
@@ -350,7 +345,7 @@ const TrainingContent: React.FC = () => {
     const processedFiles = files.filter(f => f.processed);
     if (processedFiles.length === 0) {
       toast({
-        title: "No processed files",
+        title: t('training.noProcessedFiles'),
         description: "Please process files before training the model.",
         variant: "destructive",
       });
@@ -371,13 +366,13 @@ const TrainingContent: React.FC = () => {
         const trainingResult = data.data;
         
         toast({
-          title: "Model training completed",
+          title: t('training.modelTrainingCompleted'),
           description: `AI model successfully trained with ${trainingResult.files_processed} files (${trainingResult.total_words} words) in ${(trainingResult.duration_ms / 1000).toFixed(1)}s. Model version: ${trainingResult.model_version}`,
         });
       } else {
         const errorData = await response.json();
         toast({
-          title: "Training failed",
+          title: t('training.trainingFailed'),
           description: errorData.message || "Failed to train the model.",
           variant: "destructive",
         });
@@ -417,8 +412,8 @@ const TrainingContent: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-foreground">AI Training Center</h2>
-          <p className="text-muted-foreground">Manage training data and train the AI model</p>
+          <h2 className="text-2xl font-bold text-foreground">{t('training.title')}</h2>
+          <p className="text-muted-foreground">{t('training.description')}</p>
         </div>
         <Button 
           onClick={handleTrainModel}

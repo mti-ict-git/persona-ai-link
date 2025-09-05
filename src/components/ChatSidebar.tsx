@@ -22,6 +22,7 @@ import { cn } from "@/lib/utils";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface ChatSession {
   id: string;
@@ -50,6 +51,7 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
   const [editingName, setEditingName] = useState("");
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const filteredSessions = sessions.filter(session => {
     const displayName = session.session_name || session.title;
@@ -121,8 +123,8 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
               />
             </div>
             <div>
-              <h1 className="font-bold text-foreground text-lg">Tsindeka AI</h1>
-              <p className="text-xs text-muted-foreground/80 font-medium">MTI AI Assistant</p>
+              <h1 className="font-bold text-foreground text-lg">{t('brand.tsindekaAI')}</h1>
+              <p className="text-xs text-muted-foreground/80 font-medium">{t('brand.mtiAIAssistant')}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -133,7 +135,7 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
                 size="sm"
                 onClick={onToggleSidebar}
                 className="h-9 w-9 rounded-xl hover:bg-muted/80 transition-all duration-200"
-                title="Hide sidebar"
+                title={t('sidebar.hideSidebar')}
               >
                 <Menu className="w-4 h-4" />
               </Button>
@@ -145,7 +147,7 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
         <div className="relative mb-4">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground/70" />
           <Input
-            placeholder="Search conversations..."
+            placeholder={t('sidebar.searchConversations')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10 bg-background/80 border-border/60 rounded-xl backdrop-blur-sm hover:bg-background/90 transition-all duration-200 focus:bg-background"
@@ -158,20 +160,20 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
           className="w-full bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary hover:shadow-lg hover:scale-[1.02] transition-all duration-200 rounded-xl font-medium"
         >
           <Plus className="w-4 h-4 mr-2" />
-          New Chat
+          {t('sidebar.newChat')}
         </Button>
       </div>
 
       {/* Sessions List */}
       <div className="flex-1 overflow-y-auto">
         <div className="p-3">
-          <h3 className="text-sm font-semibold text-muted-foreground/80 px-3 py-3 uppercase tracking-wide">Recent Chats</h3>
+          <h3 className="text-sm font-semibold text-muted-foreground/80 px-3 py-3 uppercase tracking-wide">{t('sidebar.recentChats')}</h3>
           {filteredSessions.length === 0 ? (
             <div className="text-center py-12 text-muted-foreground">
-              <MessageCircle className="w-12 h-12 mx-auto mb-3 opacity-40" />
-              <p className="text-sm font-medium">No conversations yet</p>
-              <p className="text-xs opacity-70 mt-1">Start a new chat to begin</p>
-            </div>
+                <MessageCircle className="w-12 h-12 mx-auto mb-3 opacity-40" />
+                <p className="text-sm font-medium">{t('chat.noConversationsYet')}</p>
+                <p className="text-xs opacity-70 mt-1">{t('chat.startNewChatToBegin')}</p>
+              </div>
           ) : (
             filteredSessions.map((session) => (
               <div
@@ -242,7 +244,7 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
                         className="rounded-lg"
                       >
                         <Edit2 className="w-4 h-4 mr-2" />
-                        Rename
+                        {t('common.rename')}
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={() => {
@@ -252,7 +254,7 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
                         className="text-destructive focus:text-destructive rounded-lg"
                       >
                         <Trash2 className="w-4 h-4 mr-2" />
-                        Delete
+                        {t('common.delete')}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -272,7 +274,7 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
             className="w-full justify-start text-left hover:bg-chat-sidebar-hover/60 transition-all duration-200 rounded-xl"
           >
             <Settings className="w-4 h-4 mr-3" />
-            Settings
+            {t('sidebar.settings')}
           </Button>
           
           {(user?.role === 'admin' || user?.role === 'superadmin') && (
@@ -282,7 +284,7 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
               className="w-full justify-start text-left hover:bg-chat-sidebar-hover/60 transition-all duration-200 rounded-xl text-primary hover:text-primary"
             >
               <Shield className="w-4 h-4 mr-3" />
-              {user?.role === 'superadmin' ? 'Super Admin Panel' : 'Admin Panel'}
+              {user?.role === 'superadmin' ? t('sidebar.superAdminPanel') : t('sidebar.adminPanel')}
             </Button>
           )}
           
@@ -292,7 +294,7 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
             className="w-full justify-start text-left hover:bg-destructive/10 hover:text-destructive transition-all duration-200 rounded-xl"
           >
             <LogOut className="w-4 h-4 mr-3" />
-            Logout
+            {t('sidebar.logout')}
           </Button>
         </div>
       </div>
@@ -301,9 +303,9 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Session</AlertDialogTitle>
+            <AlertDialogTitle>{t('chat.deleteSession')}</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete this chat session? This action cannot be undone and will permanently remove all messages in this conversation.
+              {t('chat.deleteSessionConfirm')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -311,13 +313,13 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
               setDeleteDialogOpen(false);
               setSessionToDelete(null);
             }}>
-              Cancel
+              {t('common.cancel')}
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteSession}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              Delete
+              {t('common.delete')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

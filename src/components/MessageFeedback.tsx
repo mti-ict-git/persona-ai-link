@@ -14,6 +14,7 @@ import { ThumbsUp, ThumbsDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { apiService } from '@/services/api';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface MessageFeedbackProps {
   messageId: string;
@@ -32,6 +33,7 @@ const MessageFeedback: React.FC<MessageFeedbackProps> = ({
   previousQuestion,
   className = ''
 }) => {
+  const { t } = useLanguage();
   const [feedback, setFeedback] = useState<FeedbackType>(null);
   const [showModal, setShowModal] = useState(false);
   const [feedbackText, setFeedbackText] = useState('');
@@ -43,14 +45,14 @@ const MessageFeedback: React.FC<MessageFeedbackProps> = ({
       await submitFeedback('positive', '');
       setFeedback('positive');
       toast({
-        title: "Thank you!",
-        description: "Your positive feedback has been recorded.",
+        title: t('feedback.thankYou'),
+        description: t('feedback.positiveFeedbackRecorded'),
       });
     } catch (error) {
       console.error('Failed to submit positive feedback:', error);
       toast({
-        title: "Error",
-        description: "Failed to submit feedback. Please try again.",
+        title: t('common.error'),
+        description: t('feedback.submitError'),
         variant: "destructive",
       });
     }
@@ -86,14 +88,14 @@ const MessageFeedback: React.FC<MessageFeedbackProps> = ({
       setShowModal(false);
       setFeedbackText('');
       toast({
-        title: "Thank you!",
-        description: "Your feedback has been recorded and will help us improve.",
+        title: t('feedback.thankYou'),
+        description: t('feedback.feedbackRecorded'),
       });
     } catch (error) {
       console.error('Failed to submit negative feedback:', error);
       toast({
-        title: "Error",
-        description: "Failed to submit feedback. Please try again.",
+        title: t('common.error'),
+        description: t('feedback.submitError'),
         variant: "destructive",
       });
     }
@@ -139,7 +141,7 @@ const MessageFeedback: React.FC<MessageFeedbackProps> = ({
         
         {feedback && (
           <span className="text-xs text-muted-foreground ml-2">
-            {feedback === 'positive' ? 'Thanks for your feedback!' : 'Feedback submitted'}
+            {feedback === 'positive' ? t('feedback.thanksForFeedback') : t('feedback.feedbackSubmitted')}
           </span>
         )}
       </div>
@@ -147,18 +149,18 @@ const MessageFeedback: React.FC<MessageFeedbackProps> = ({
       <Dialog open={showModal} onOpenChange={setShowModal}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Help us improve</DialogTitle>
+            <DialogTitle>{t('feedback.helpUsImprove')}</DialogTitle>
             <DialogDescription>
-              We're sorry this response wasn't helpful. Please let us know how we can improve.
+              {t('feedback.sorryNotHelpful')}
             </DialogDescription>
           </DialogHeader>
           
           <div className="space-y-4">
             <div>
-              <Label htmlFor="feedback-text">What went wrong?</Label>
+              <Label htmlFor="feedback-text">{t('feedback.whatWentWrong')}</Label>
               <Textarea
                 id="feedback-text"
-                placeholder="Please describe what was wrong with this response..."
+                placeholder={t('feedback.describeProblem')}
                 value={feedbackText}
                 onChange={(e) => setFeedbackText(e.target.value)}
                 className="mt-2 min-h-[100px]"
@@ -172,13 +174,13 @@ const MessageFeedback: React.FC<MessageFeedbackProps> = ({
               onClick={handleModalCancel}
               disabled={isSubmitting}
             >
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button
               onClick={handleModalSubmit}
               disabled={isSubmitting || !feedbackText.trim()}
             >
-              {isSubmitting ? 'Submitting...' : 'Submit Feedback'}
+              {isSubmitting ? t('feedback.submitting') : t('feedback.submitFeedback')}
             </Button>
           </DialogFooter>
         </DialogContent>

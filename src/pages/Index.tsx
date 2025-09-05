@@ -35,7 +35,7 @@ const Index = () => {
   const { preferences } = useUserPreferences();
   
   // Derive showSuggestions from user preferences
-  const showSuggestions = preferences.showFollowUpSuggestions === 'true';
+  const showSuggestions = preferences.showFollowUpSuggestions?.value === 'true';
 
   // Handle typewriter animation completion
   const handleTypewriterComplete = (messageId: string) => {

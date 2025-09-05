@@ -158,6 +158,23 @@ class LDAPService {
                     
                 user = insertResult.recordset[0];
                 console.log(`Created new user: ${ldapUserData.username}`);
+                
+                // Create default preferences for new user
+                try {
+                    await pool.request()
+                        .input('userId', sql.Int, user.id)
+                        .query(`
+                            INSERT INTO user_preferences (user_id, preference_key, preference_value, created_at, updated_at)
+                            VALUES 
+                                (@userId, 'language', 'en', GETDATE(), GETDATE()),
+                                (@userId, 'theme', 'light', GETDATE(), GETDATE()),
+                                (@userId, 'firstTimeLogin', 'true', GETDATE(), GETDATE())
+                        `);
+                    console.log(`Created default preferences for user: ${ldapUserData.username}`);
+                } catch (prefError) {
+                    console.error('Error creating default preferences:', prefError);
+                    // Don't throw error here as user creation was successful
+                }
             }
 
             return {

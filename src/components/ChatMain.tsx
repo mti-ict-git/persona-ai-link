@@ -4,6 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Send, Paperclip, RefreshCw, PanelRightOpen, PanelRightClose, Menu, X, Brain } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import TypingAnimation from "@/components/TypingAnimation";
@@ -33,25 +34,27 @@ interface ChatMainProps {
 }
 
 const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false, sessionId, showSuggestions = true, showSidebar = true, onToggleSidebar, newMessageIds = new Set(), onTypewriterComplete }: ChatMainProps) => {
+  const { t } = useLanguage();
+  
   // Motivational HR messages
   const motivationalMessages = [
-    "Empowering your HR journey",
-    "Building better workplaces together",
-    "Your HR success starts here",
-    "Transforming HR, one conversation at a time",
-    "Making HR simple and effective",
-    "Your partner in people management",
-    "Elevating HR excellence",
-    "Streamlining your HR processes",
-    "Innovating the future of HR",
-    "Where HR meets intelligence",
-    "Optimizing your workforce potential",
-    "Creating positive workplace experiences"
+    t('chat.motivational.empoweringJourney'),
+    t('chat.motivational.buildingWorkplaces'),
+    t('chat.motivational.successStartsHere'),
+    t('chat.motivational.transformingHR'),
+    t('chat.motivational.makingSimple'),
+    t('chat.motivational.partnerInManagement'),
+    t('chat.motivational.elevatingExcellence'),
+    t('chat.motivational.streamliningProcesses'),
+    t('chat.motivational.innovatingFuture'),
+    t('chat.motivational.hrMeetsIntelligence'),
+    t('chat.motivational.optimizingPotential'),
+    t('chat.motivational.positiveExperiences')
   ];
   
   // Get a consistent motivational message based on sessionId
   const getMotivationalMessage = () => {
-    if (!sessionId) return "Ready to assist you";
+    if (!sessionId) return t('brand.readyToAssist');
     const index = sessionId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % motivationalMessages.length;
     return motivationalMessages[index];
   };
@@ -102,27 +105,27 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
   const suggestions = [
     {
       id: "1",
-      title: "Kebijakan Golongan & Jabatan",
-      description: "Berikan informasi tentang struktur golongan dan kebijakan jabatan di perusahaan",
-      prompt: "Can you provide information about employee grade structure and position policies in the company?"
+      title: t('chat.suggestions.gradePolicy.title'),
+      description: t('chat.suggestions.gradePolicy.description'),
+      prompt: t('chat.suggestions.gradePolicy.prompt')
     },
     {
       id: "2", 
-      title: "Peraturan Perusahaan",
-      description: "Bagaimana aturan dan regulasi yang berlaku di perusahaan ini",
-      prompt: "What are the company rules and regulations that apply to all employees?"
+      title: t('chat.suggestions.companyRules.title'),
+      description: t('chat.suggestions.companyRules.description'),
+      prompt: t('chat.suggestions.companyRules.prompt')
     },
     {
       id: "3",
-      title: "Employee Benefits",
-      description: "Informasi lengkap mengenai benefit dan tunjangan karyawan",
-      prompt: "Can you provide complete information about employee benefits and allowances?"
+      title: t('chat.suggestions.employeeBenefits.title'),
+      description: t('chat.suggestions.employeeBenefits.description'),
+      prompt: t('chat.suggestions.employeeBenefits.prompt')
     },
     {
       id: "4",
-      title: "IT Policy",
-      description: "Kebijakan penggunaan teknologi informasi dan keamanan data",
-      prompt: "What are the IT policies regarding technology usage and data security?"
+      title: t('chat.suggestions.itPolicy.title'),
+      description: t('chat.suggestions.itPolicy.description'),
+      prompt: t('chat.suggestions.itPolicy.prompt')
     }
   ];
 
@@ -130,7 +133,7 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
     <div className="flex-1 flex flex-col items-center justify-center p-8">
       <div className="text-center max-w-4xl w-full">
         <h1 className="text-4xl font-bold mb-2">
-          Welcome To
+          {t('chat.welcomeTo')}
         </h1>
         <div className="flex items-center justify-center gap-4 mb-4">
           <img 
@@ -143,7 +146,7 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
           </h2>
         </div>
         <p className="text-muted-foreground mb-12">
-          Get started by scripting a task, and Chat can do the rest. Not sure where to begin?
+          {t('chat.getStartedDescription')}
         </p>
         
         {/* Suggestion Cards Grid */}
@@ -185,7 +188,7 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
               size="sm"
               onClick={onToggleSidebar}
               className="h-9 w-9 rounded-xl hover:bg-muted/80 transition-all duration-200"
-              title={showSidebar ? "Hide sidebar" : "Show sidebar"}
+              title={showSidebar ? t('sidebar.hideSidebar') : t('sidebar.showSidebar')}
             >
               {showSidebar ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
             </Button>
@@ -200,7 +203,7 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
               />
             </div>
             <div>
-              <h1 className="font-bold text-foreground text-lg">Your Smart HR Companion</h1>
+              <h1 className="font-bold text-foreground text-lg">{t('brand.smartHRCompanion')}</h1>
               <p className="text-xs text-muted-foreground/80 font-medium">{getMotivationalMessage()}</p>
             </div>
           </div>
@@ -379,7 +382,7 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
               value={inputMessage}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
-              placeholder="Ask me anything..."
+              placeholder={t('chat.askMeAnything')}
               className="resize-none border-0 focus:ring-0 focus:outline-none bg-transparent p-5 pr-24 min-h-[64px] max-h-[120px] text-base placeholder:text-muted-foreground/70"
               rows={1}
             />
@@ -405,9 +408,9 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
           </div>
           
           <div className="text-xs text-muted-foreground/70 text-center mt-3 space-y-1">
-            <p className="font-medium">AI can make mistakes. Check important info.</p>
-            <p>© 2025 PT. Merdeka Tsingshan Indonesia. All rights reserved.</p>
-            <p>Support: <a href="mailto:mti.icthelpdesk@merdekabattery.com" className="text-primary hover:underline">mti.icthelpdesk@merdekabattery.com</a></p>
+            <p className="font-medium">{t('footer.aiDisclaimer')}</p>
+            <p>{t('footer.copyright')}</p>
+            <p>{t('footer.support')} <a href={`mailto:${t('footer.supportEmail')}`} className="text-primary hover:underline">{t('footer.supportEmail')}</a></p>
           </div>
         </div>
       </div>

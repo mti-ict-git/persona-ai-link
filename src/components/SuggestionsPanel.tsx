@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { RefreshCw, Users, FileText, Gift, Shield, UserCheck, Calendar } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface Suggestion {
   id: string;
@@ -14,48 +15,50 @@ interface SuggestionsPanelProps {
 }
 
 const SuggestionsPanel = ({ onSuggestionSelect }: SuggestionsPanelProps) => {
+  const { t } = useTranslation();
+  
   const suggestions: Suggestion[] = [
     {
       id: "1",
-      title: "Kebijakan Golongan & Jabatan",
-      description: "Berikan informasi tentang struktur golongan dan kebijakan jabatan di perusahaan",
+      title: t('suggestions.companyStructure'),
+      description: t('suggestions.companyStructure'),
       icon: <Users className="w-5 h-5" />,
-      prompt: "Can you provide information about employee grade structure and position policies in the company?"
+      prompt: t('suggestions.companyStructurePrompt')
     },
     {
       id: "2", 
-      title: "Peraturan Perusahaan",
-      description: "Bagaimana aturan dan regulasi yang berlaku di perusahaan ini",
+      title: t('suggestions.companyRegulations'),
+      description: t('suggestions.rulesAndRegulations'),
       icon: <FileText className="w-5 h-5" />,
-      prompt: "What are the company rules and regulations that apply to all employees?"
+      prompt: t('suggestions.companyRegulationsPrompt')
     },
     {
       id: "3",
-      title: "Employee Benefits",
-      description: "Informasi lengkap mengenai benefit dan tunjangan karyawan",
+      title: t('suggestions.employeeBenefits'),
+      description: t('suggestions.benefitsAndAllowances'),
       icon: <Gift className="w-5 h-5" />,
-      prompt: "Can you provide complete information about employee benefits and allowances?"
+      prompt: t('suggestions.employeeBenefitsPrompt')
     },
     {
       id: "4",
-      title: "IT Policy",
-      description: "Kebijakan penggunaan teknologi informasi dan keamanan data",
+      title: t('suggestions.itPolicy'),
+      description: t('suggestions.itSecurityPolicy'),
       icon: <Shield className="w-5 h-5" />,
-      prompt: "What are the IT policies regarding technology usage and data security?"
+      prompt: t('suggestions.itPolicyPrompt')
     },
     {
       id: "5",
-      title: "Leave Policy",
-      description: "Aturan cuti dan prosedur pengajuan izin kerja",
+      title: t('suggestions.leavePolicy'),
+      description: t('suggestions.leaveRulesAndProcedures'),
       icon: <Calendar className="w-5 h-5" />,
-      prompt: "What are the leave policies and procedures for requesting time off?"
+      prompt: t('suggestions.leavePolicyPrompt')
     },
     {
       id: "6",
-      title: "Performance Review",
-      description: "Sistem evaluasi kinerja dan penilaian karyawan",
+      title: t('suggestions.performanceReview'),
+      description: t('suggestions.performanceEvaluationSystem'),
       icon: <UserCheck className="w-5 h-5" />,
-      prompt: "How does the performance review and employee evaluation system work?"
+      prompt: t('suggestions.performanceReviewPrompt')
     }
   ];
 
@@ -67,7 +70,7 @@ const SuggestionsPanel = ({ onSuggestionSelect }: SuggestionsPanelProps) => {
           <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
             <RefreshCw className="w-5 h-5 text-primary-foreground" />
           </div>
-          <h3 className="font-semibold text-lg text-foreground">Prompt Suggestion</h3>
+          <h3 className="font-semibold text-lg text-foreground">{t('suggestions.promptSuggestion')}</h3>
         </div>
       </div>
 
@@ -107,11 +110,11 @@ const SuggestionsPanel = ({ onSuggestionSelect }: SuggestionsPanelProps) => {
       <div className="p-4 border-t border-border">
         <div className="text-center">
           <p className="text-xs text-muted-foreground mb-3">
-            Click any suggestion to start a conversation
+            {t('suggestions.clickToStart')}
           </p>
           <Button variant="outline" size="sm" className="w-full">
             <RefreshCw className="w-4 h-4 mr-2" />
-            Refresh Suggestions
+            {t('suggestions.refreshSuggestions')}
           </Button>
         </div>
       </div>

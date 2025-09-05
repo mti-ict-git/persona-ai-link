@@ -22,6 +22,7 @@ import { Badge } from '@/components/ui/badge';
 import { ExternalLink, Plus, Trash2, Edit, Link } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { apiService } from '@/services/api';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface ExternalSource {
   id: string;
@@ -43,6 +44,7 @@ interface ExternalSourcesManagerProps {
 }
 
 const ExternalSourcesManager = ({ fileId, sources = [], onSourcesChange, onClose }: ExternalSourcesManagerProps) => {
+  const { t } = useLanguage();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingSource, setEditingSource] = useState<ExternalSource | null>(null);
   const [formData, setFormData] = useState({
@@ -58,11 +60,11 @@ const ExternalSourcesManager = ({ fileId, sources = [], onSourcesChange, onClose
     
     const status = source.validationStatus;
     if (status >= 200 && status < 300) {
-      return <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">Valid</Badge>;
+      return <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">{t('training.valid')}</Badge>;
     } else if (status >= 300 && status < 400) {
-      return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">Redirect</Badge>;
+      return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">{t('training.redirect')}</Badge>;
     } else {
-      return <Badge variant="destructive">Error {status}</Badge>;
+      return <Badge variant="destructive">{t('training.error')} {status}</Badge>;
     }
   };
 
@@ -250,51 +252,51 @@ const ExternalSourcesManager = ({ fileId, sources = [], onSourcesChange, onClose
             <DialogContent className="sm:max-w-md">
               <DialogHeader>
                 <DialogTitle>
-                  {editingSource ? 'Edit External Source' : 'Add External Source'}
+                  {editingSource ? t('training.editExternalSource') : t('training.addExternalSource')}
                 </DialogTitle>
                 <DialogDescription>
-                  Add a link to external files or resources related to this training material.
+                  {t('training.addExternalSourceDescription')}
                 </DialogDescription>
               </DialogHeader>
               <form onSubmit={handleSubmit}>
                 <div className="space-y-4">
                   <div>
-                    <Label htmlFor="name">Name</Label>
+                    <Label htmlFor="name">{t('common.name')}</Label>
           <Input
             id="name"
             value={formData.name || ''}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="e.g., Company Policy Document"
+                      placeholder={t('training.externalSourceNamePlaceholder')}
                       required
                     />
                   </div>
                   <div>
-                    <Label htmlFor="url">URL</Label>
+                    <Label htmlFor="url">{t('common.url')}</Label>
                     <Input
                       id="url"
                       type="url"
                       value={formData.url || ''}
                       onChange={(e) => setFormData({ ...formData, url: e.target.value })}
-                      placeholder="https://..."
+                      placeholder={t('training.urlPlaceholder')}
                       required
                     />
                   </div>
                   <div>
-                    <Label htmlFor="description">Description (Optional)</Label>
+                    <Label htmlFor="description">{t('training.descriptionOptional')}</Label>
                     <Input
                       id="description"
                       value={formData.description || ''}
                       onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                      placeholder="Brief description of the linked resource"
+                      placeholder={t('training.descriptionPlaceholder')}
                     />
                   </div>
                 </div>
                 <DialogFooter className="mt-6">
                   <Button type="button" variant="outline" onClick={handleCloseDialog}>
-                    Cancel
+                    {t('common.cancel')}
                   </Button>
                   <Button type="submit" disabled={isLoading}>
-                    {isLoading ? 'Saving...' : editingSource ? 'Update' : 'Add'}
+                    {isLoading ? t('common.saving') : editingSource ? t('common.update') : t('common.add')}
                   </Button>
                 </DialogFooter>
               </form>
