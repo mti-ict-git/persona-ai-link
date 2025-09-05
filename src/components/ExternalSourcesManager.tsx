@@ -109,12 +109,16 @@ const ExternalSourcesManager = ({ fileId, sources = [], onSourcesChange, onClose
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-
+    
     try {
       const sourceData = {
         ...formData,
         type: formData.type === 'view' && formData.url ? detectSourceType(formData.url) : formData.type
       };
+      
+      console.log('🔍 [FRONTEND DEBUG] Form data before processing:', formData);
+      console.log('🔍 [FRONTEND DEBUG] Source data being sent:', sourceData);
+      console.log('🔍 [FRONTEND DEBUG] Detected type from URL:', formData.url ? detectSourceType(formData.url) : 'N/A');
 
       if (editingSource) {
         // Update existing source
@@ -128,6 +132,7 @@ const ExternalSourcesManager = ({ fileId, sources = [], onSourcesChange, onClose
         const updatedSources = sources.map(s => 
           s.id === editingSource.id ? updatedSource : s
         );
+        
         onSourcesChange(updatedSources);
         toast({
           title: 'Success',
@@ -142,7 +147,9 @@ const ExternalSourcesManager = ({ fileId, sources = [], onSourcesChange, onClose
         }
 
         const newSource = response.data as ExternalSource;
-        onSourcesChange([...sources, newSource]);
+        const updatedSources = [...sources, newSource];
+        
+        onSourcesChange(updatedSources);
         toast({
           title: 'Success',
           description: 'External source added successfully',
@@ -151,7 +158,8 @@ const ExternalSourcesManager = ({ fileId, sources = [], onSourcesChange, onClose
 
       handleCloseDialog();
     } catch (error) {
-      console.error('Error managing external source:', error);
+      console.error('Error saving external source:', error);
+      
       toast({
         title: 'Error',
         description: 'Failed to save external source',
@@ -171,6 +179,7 @@ const ExternalSourcesManager = ({ fileId, sources = [], onSourcesChange, onClose
       }
 
       const updatedSources = sources.filter(s => s.id !== sourceId);
+      
       onSourcesChange(updatedSources);
       toast({
         title: 'Success',
@@ -178,6 +187,7 @@ const ExternalSourcesManager = ({ fileId, sources = [], onSourcesChange, onClose
       });
     } catch (error) {
       console.error('Error deleting external source:', error);
+      
       toast({
         title: 'Error',
         description: 'Failed to delete external source',

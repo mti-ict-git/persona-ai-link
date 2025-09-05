@@ -348,9 +348,9 @@ const validateUrlAccess = async (url) => {
 // Enhanced validation schema for external sources
 const externalSourceSchema = Joi.object({
   name: Joi.string().min(1).max(255).required()
-    .pattern(/^[a-zA-Z0-9\s\-_\.\(\)]+$/)
+    .pattern(/^[a-zA-Z0-9\s\-_\.\(\)&]+$/)
     .messages({
-      'string.pattern.base': 'Name can only contain letters, numbers, spaces, hyphens, underscores, dots, and parentheses'
+      'string.pattern.base': 'Name can only contain letters, numbers, spaces, hyphens, underscores, dots, parentheses, and ampersands'
     }),
   url: Joi.string().uri({ scheme: ['http', 'https'] }).required()
     .messages({
@@ -362,9 +362,9 @@ const externalSourceSchema = Joi.object({
 
 const updateExternalSourceSchema = Joi.object({
   name: Joi.string().min(1).max(255).optional()
-    .pattern(/^[a-zA-Z0-9\s\-_\.\(\)]+$/)
+    .pattern(/^[a-zA-Z0-9\s\-_\.\(\)&]+$/)
     .messages({
-      'string.pattern.base': 'Name can only contain letters, numbers, spaces, hyphens, underscores, dots, and parentheses'
+      'string.pattern.base': 'Name can only contain letters, numbers, spaces, hyphens, underscores, dots, parentheses, and ampersands'
     }),
   url: Joi.string().uri({ scheme: ['http', 'https'] }).optional()
     .messages({

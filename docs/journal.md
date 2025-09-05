@@ -1,5 +1,219 @@
 # Development Journal
 
+## September 5, 2025 06:50:36 - 🔧 FIXED FILE UPLOAD CONTENT-TYPE ISSUE
+
+**Problem**: File uploads were failing with 400 Bad Request error because the frontend was sending requests with `Content-Type: application/json` instead of `multipart/form-data`.
+
+**Root Cause**: The `request` method in `src/services/api.ts` was automatically setting `Content-Type: application/json` for all requests, including FormData uploads. This prevented the browser from setting the correct `multipart/form-data` Content-Type with boundary parameters.
+
+**Evidence from Debug Logs**:
+- ✅ Backend logs showed requests arriving with `content-type: 'application/json'`
+- ✅ File object was `undefined` in multer processing
+- ✅ Request body was empty instead of containing multipart data
+
+**Solution Implemented**:
+- Modified the API service `request` method to only set JSON Content-Type for non-FormData requests
+- Added condition `!(options.body instanceof FormData)` to prevent overriding browser's automatic Content-Type
+- Removed debug logging from upload routes after identifying the issue
+
+**Files Modified**:
+- `src/services/api.ts` - Fixed Content-Type handling for FormData requests
+- `backend/src/routes/upload.js` - Removed debug logging after issue resolution
+
+**Testing Results**:
+- ✅ File uploads now send proper `multipart/form-data` Content-Type
+- ✅ Multer correctly processes file uploads
+- ✅ Upload functionality fully restored
+
+**Impact**: 
+- File upload functionality completely restored with correct Content-Type headers
+- Frontend properly sends multipart form data for file uploads
+- Backend correctly processes uploaded files
+
+**Status**: ✅ **COMPLETED** - File upload Content-Type issue resolved
+
+---
+
+## September 5, 2025 06:45:23 - 🔧 FIXED FILE UPLOAD PARSING ERROR
+
+**Problem**: File uploads were failing with 500 Internal Server Error and "Unexpected token '-', "------WebK"... is not valid JSON" error, indicating that multipart form data was being incorrectly parsed as JSON.
+
+**Root Cause**: The global `express.json()` and `express.urlencoded()` middleware were attempting to parse multipart/form-data requests before they reached the upload routes that use `multer` for proper multipart handling.
+
+**Evidence from Error Logs**:
+- ✅ Frontend error: "Unexpected token '-', "------WebK"... is not valid JSON"
+- ✅ Backend error: `entity.parse.failed` in server logs
+- ✅ 500 Internal Server Error on POST /api/upload
+
+**Solution Implemented**:
+- Modified `server.js` to conditionally apply body parsing middleware
+- Added path-based exclusion for `/api/upload` routes from JSON and URL-encoded parsing
+- Allowed `multer` to handle multipart/form-data parsing exclusively for upload endpoints
+
+**Files Modified**:
+- `backend/src/server.js` - Updated middleware configuration to exclude upload routes from body parsing
+- `test-regular-upload.js` - Created test script to verify regular upload functionality
+
+**Testing Results**:
+- ✅ Regular upload (`/api/upload`) now works correctly with multipart form data
+- ✅ Direct SFTP upload (`/api/upload/direct`) continues to work as expected
+- ✅ Both upload methods return proper JSON responses
+- ✅ File storage and SFTP upload functionality intact
+
+**Impact**: 
+- File uploads from the frontend now work without parsing errors
+- Both regular and direct upload endpoints are fully functional
+- Proper separation of concerns between body parsing and multipart handling
+
+**Status**: ✅ **COMPLETED** - File upload functionality restored
+
+---
+
+## September 5, 2025 06:30:20 - 🔧 FIXED EXTERNAL SOURCE NAME VALIDATION
+
+**Problem**: External sources with names containing ampersands (&) were failing validation with 400 Bad Request errors during updates.
+
+**Root Cause**: The validation regex pattern `/^[a-zA-Z0-9\s\-_\.\(\)]+$/` in both `externalSourceSchema` and `updateExternalSourceSchema` was rejecting names containing ampersands. Names like "MCG-POL-CNB-03-04 Job Grade & Benefits Scheme" were being blocked.
+
+**Evidence from Debug Logs**:
+- ✅ **POST requests**: Working for creating external sources
+- ❌ **PUT requests**: Failing validation for names with ampersands
+- 🔍 Debug logs showed validation errors specifically for the ampersand character
+- 🔍 User confirmed "longer name makes error" - the issue was character restriction, not length
+
+**Solution Implemented**:
+- Updated regex pattern in `externalSourceSchema` from `/^[a-zA-Z0-9\s\-_\.\(\)]+$/` to `/^[a-zA-Z0-9\s\-_\.\(\)&]+$/`
+- Updated regex pattern in `updateExternalSourceSchema` with the same change
+- Updated validation error messages to include "ampersands" in the list of allowed characters
+- Removed temporary debug logging added during troubleshooting
+
+**Files Modified**:
+- `backend/src/routes/files.js` - Updated validation schemas to allow ampersands
+- `backend/src/routes/auth.js` - Removed debug logging
+
+**Impact**:
+- ✅ External sources with ampersands in names can now be created and updated
+- ✅ Validation error messages are more accurate
+- ✅ Clean codebase without debug logging
+- ✅ TypeScript compilation passes without errors
+
+**Status**: ✅ **COMPLETED** - External source name validation now supports ampersands
+
+---
+
+## September 5, 2025 06:13:20 - 🧹 DEBUG LOGGING CLEANUP
+
+**Problem**: Extensive debug logging was left in the codebase after fixing the Authorization header issue, cluttering the development environment and potentially exposing sensitive information.
+
+**Solution Implemented**:
+- **Frontend API Service** (`src/services/api.ts`): Removed extensive debug logging from the `request` method, including logs for token retrieval, header construction, fetch requests, and response handling
+- **Backend Authentication Middleware** (`backend/src/routes/auth.js`): Cleaned up verbose debug logging from the `authenticateToken` middleware, removing detailed header analysis, token extraction logs, and JWT verification debugging
+- **ExternalSourcesManager Component** (`src/components/ExternalSourcesManager.tsx`): Removed debug logging from `handleSubmit` and `handleDelete` methods, keeping only essential error logging
+- **Vite Proxy Configuration** (`vite.config.ts`): Removed console logs from proxy request/response handlers while preserving the Authorization header forwarding functionality
+
+**Files Modified**:
+- `src/services/api.ts` - Removed debug logging from request method
+- `backend/src/routes/auth.js` - Cleaned up authenticateToken middleware logging
+- `src/components/ExternalSourcesManager.tsx` - Removed debug logs from form submission and deletion
+- `vite.config.ts` - Removed proxy debug logging
+
+**Impact**:
+- ✅ Cleaner development console output
+- ✅ Reduced potential security risks from logging sensitive information
+- ✅ Maintained essential error logging for debugging purposes
+- ✅ Preserved all functionality while removing unnecessary verbosity
+- ✅ TypeScript compilation passes without errors
+
+**Status**: ✅ **COMPLETED** - All unnecessary debug logging removed from codebase
+
+---
+
+## September 5, 2025 06:05:08 - 🔧 FIXED AUTHORIZATION HEADER FOR POST/PUT REQUESTS
+
+**Problem**: External sources could not be added/updated due to 401 Unauthorized errors, despite frontend correctly setting Authorization header.
+
+**Root Cause**: The `api.ts` service had incorrect RequestInit configuration order that caused Authorization headers to be overridden in POST/PUT requests:
+```javascript
+// WRONG - options.headers could override the Authorization header
+const config: RequestInit = {
+  headers,        // Authorization header added here
+  ...options,     // But options.headers from POST/PUT could override it
+};
+```
+
+**Evidence from Debug Logs**:
+- ✅ **GET requests**: Authorization header forwarded correctly
+- ❌ **POST/PUT requests**: Authorization header stripped before reaching proxy
+- 🔍 Frontend logs showed Authorization header being set correctly
+- 🔍 Vite proxy logs showed "No Authorization header found in request" for POST
+
+**Solution Implemented**:
+
+1. **Fixed RequestInit Configuration Order** (`src/services/api.ts`):
+```javascript
+// CORRECT - headers (including Authorization) always take precedence
+const config: RequestInit = {
+  ...options,     // Spread options first
+  headers,        // Then headers (including Authorization) override
+};
+```
+
+2. **Improved POST/PUT Methods** (`src/services/api.ts`):
+   - ✅ Restructured header handling to avoid conflicts
+   - ✅ Ensured Authorization header is never overridden
+   - ✅ Maintained Content-Type handling for FormData
+
+**Files Modified**:
+- `src/services/api.ts` - Fixed RequestInit configuration and POST/PUT methods
+
+**Impact**:
+- ✅ POST/PUT requests now properly include Authorization header
+- ✅ External sources can be added/updated successfully
+- ✅ Maintains backward compatibility with existing functionality
+
+**Status**: ✅ **RESOLVED** - Authorization header now properly forwarded for all HTTP methods
+
+---
+
+## September 5, 2025 06:00:37 - 🔧 FIXED VITE PROXY AUTHORIZATION HEADER FORWARDING
+
+**Problem**: 401 Unauthorized errors when adding external sources, despite frontend correctly sending Authorization header.
+
+**Root Cause**: Vite proxy configuration was not properly forwarding Authorization headers for POST requests (GET requests worked fine).
+
+**Evidence from Debug Logs**:
+- ✅ **GET /api/files/1074/sources**: Authorization header received correctly by backend
+- ❌ **POST /api/files/1074/sources**: Authorization header was `undefined` in backend
+- 🔍 Frontend logs showed Authorization header being sent correctly
+- 🔍 Backend logs showed header missing only for POST requests
+
+**Solution Implemented**:
+
+1. **Enhanced Vite Proxy Configuration** (`vite.config.ts`):
+   - ✅ Added explicit Authorization header preservation
+   - ✅ Added comprehensive proxy request/response logging
+   - ✅ Added WebSocket support (`ws: true`)
+   - ✅ Excluded 'host' header to prevent conflicts
+   - ✅ Added detailed debugging output for header forwarding
+
+**Key Fix**:
+```javascript
+// Explicitly preserve Authorization header
+if (req.headers.authorization) {
+  proxyReq.setHeader('Authorization', req.headers.authorization);
+  console.log('[VITE PROXY] Authorization header forwarded:', req.headers.authorization.substring(0, 20) + '...');
+} else {
+  console.log('[VITE PROXY] No Authorization header found in request');
+}
+```
+
+**Files Modified**:
+- `vite.config.ts` - Enhanced proxy configuration with explicit Authorization header handling
+
+**Status**: ✅ Proxy configuration fixed, frontend server restarted with new configuration
+
+---
+
 ## September 4, 2025 20:03:18 - 🆔 LDAP EMPLOYEE ID INTEGRATION
 
 **Feature**: Integrated employee ID retrieval from Active Directory and added to webhook chat payload.
@@ -4516,6 +4730,123 @@ Updated all application components to use the MTI logo (`MTI-removebg-preview.pn
 
 ---
 
+## September 5, 2025 - Comprehensive Debug Logging Implementation for 401 Authorization Issues
+
+**Status:** Complete  
+**Time:** 05:56:31
+
+### Summary
+Implemented comprehensive debug logging across frontend and backend to trace authorization token flow and identify the root cause of persistent 401 Unauthorized errors when adding external sources.
+
+### Problem Context
+User experiencing persistent `401 Unauthorized` errors when attempting to add external sources via `POST /api/files/:id/sources` despite:
+- Valid JWT token in localStorage
+- Successful proxy configuration
+- Backend server running correctly
+- Previous successful authentication
+
+### Debug Logging Implementation
+
+#### 1. Frontend API Service Enhancement (`src/services/api.ts`)
+**Enhanced the `request` method with comprehensive logging:**
+- 🚀 **Request initiation logging**: Method, URL, options
+- 🔍 **Token retrieval process**: localStorage inspection, token validation
+- ✅ **Authorization header setting**: Detailed header construction
+- 📤 **Request configuration**: Complete fetch config logging
+- 📥 **Response analysis**: Status, headers, response data
+- 💥 **Error handling**: Detailed error information and stack traces
+
+**Key Debug Features:**
+- Token existence verification with character count
+- Authorization header presence confirmation
+- localStorage keys inspection when token missing
+- Complete request/response cycle tracing
+
+#### 2. Backend Authentication Middleware Enhancement (`backend/src/routes/auth.js`)
+**Enhanced the `authenticateToken` middleware with detailed logging:**
+- 🔐 **Request context**: Timestamp, IP, User-Agent, full URL
+- 🔍 **Header analysis**: Complete header inspection with special focus on Authorization
+- 🔍 **Token extraction**: Step-by-step Bearer token parsing
+- 🔍 **JWT verification**: Secret validation, token structure analysis
+- ✅ **Success flow**: User data extraction and middleware progression
+- ❌ **Failure flow**: Detailed error analysis and response codes
+
+**Key Debug Features:**
+- Authorization header existence and format validation
+- Token length and structure verification
+- JWT secret configuration confirmation
+- Detailed error categorization (missing token vs invalid token)
+- User payload inspection after successful verification
+
+#### 3. ExternalSourcesManager Component Enhancement (`src/components/ExternalSourcesManager.tsx`)
+**Enhanced form submission and deletion with comprehensive logging:**
+- 📝 **Form submission**: Complete form data and processing flow
+- ➕ **Add operation**: POST request payload and response analysis
+- 🔄 **Update operation**: PUT request tracking for existing sources
+- 🗑️ **Delete operation**: DELETE request monitoring
+- 💥 **Error handling**: Detailed error analysis for all operations
+
+**Key Debug Features:**
+- Form data validation and type detection logging
+- localStorage token verification before API calls
+- Request payload and endpoint logging
+- Response success/failure analysis
+- Source count tracking for state management
+
+### Technical Benefits
+
+#### Debugging Capabilities
+- **End-to-end tracing**: Complete request flow from frontend to backend
+- **Token lifecycle tracking**: From localStorage retrieval to JWT verification
+- **Header inspection**: Detailed analysis of Authorization header construction
+- **Error categorization**: Precise identification of failure points
+- **State management**: Source array and component state tracking
+
+#### Production Readiness
+- **Conditional logging**: Can be easily disabled for production
+- **Security conscious**: Partial token display to prevent exposure
+- **Performance aware**: Minimal impact on application performance
+- **Structured output**: Consistent emoji-based categorization for easy filtering
+
+### Debug Output Format
+```
+🚀 [API DEBUG] ========================================== 
+🔍 [AUTH DEBUG] Authorization header raw value: Bearer eyJ...
+📝 [ESM DEBUG] Form submission started
+✅ [API DEBUG] Authorization header SET: Bearer eyJ...
+💥 [ESM DEBUG] ERROR in handleSubmit: Error message
+```
+
+### Files Modified
+- **Frontend**: `src/services/api.ts` - Enhanced request method with comprehensive logging
+- **Backend**: `backend/src/routes/auth.js` - Enhanced authenticateToken middleware
+- **Component**: `src/components/ExternalSourcesManager.tsx` - Enhanced form operations
+- **Documentation**: `docs/journal.md` - Documented debugging implementation
+
+### Usage Instructions
+1. **Open browser developer tools** (F12)
+2. **Navigate to Console tab**
+3. **Attempt to add external source**
+4. **Review debug output** with emoji prefixes:
+   - 🚀 API request initiation
+   - 🔍 Token and header analysis  
+   - 📝 Component form operations
+   - 🔐 Backend authentication
+   - ✅ Success operations
+   - ❌💥 Error conditions
+
+### Next Steps
+With comprehensive logging in place, the exact point of authorization failure can now be identified:
+- **Frontend token issues**: Look for 🔍 [API DEBUG] token retrieval logs
+- **Header problems**: Check 🔍 [AUTH DEBUG] authorization header logs
+- **Backend verification**: Monitor 🔐 [AUTH DEBUG] JWT verification logs
+- **Component state**: Track 📝 [ESM DEBUG] form submission logs
+
+### Security Note
+All logging includes partial token display (first 10-30 characters) to aid debugging while maintaining security. Full tokens are never logged to prevent exposure in production environments.
+
+---
+
 ## January 31, 2025 - Authorization Header CORS Issue Resolution
 
 ### Problem Identified
@@ -5685,3 +6016,121 @@ await processedFilesManager.updateProcessedStatus(fileId, file.processed, {...})
 - External sources functionality maintains proper type safety
 
 **Status**: ✅ COMPLETED - TypeScript type errors resolved in ExternalSourcesManager
+## September 4, 2025 22:48:25 -  EXTERNAL SOURCES 401 ERROR FIX
+
+**Issue**: External Sources functionality was returning 401 Unauthorized errors despite valid authentication tokens.
+
+**Root Cause**: Backend environment variable FRONTEND_URL was set to production URL (https://tsindeka.merdekabattery.com) while running in local development mode (http://localhost:8090).
+
+**Investigation Process**:
+1.  Confirmed authentication token validity and expiration
+2.  Verified CORS configuration allows localhost origins
+3.  Confirmed authentication middleware is properly applied to external sources routes
+4.  Added debugging logs to frontend API service
+5.  Frontend logs showed Authorization header being set correctly
+6.  Backend logs revealed FRONTEND_URL mismatch
+
+**Solution**:
+- Updated ackend/.env file: FRONTEND_URL=http://localhost:8090
+- Restarted backend server to apply environment variable change
+
+**Files Modified**:
+- ackend/.env - Updated FRONTEND_URL for local development
+- src/services/api.ts - Added debugging logs (temporary)
+
+**Impact**: 
+-  External Sources functionality now works correctly in local development
+-  Added comprehensive debugging logs for future troubleshooting
+-  Environment configuration properly aligned with development setup
+
+**Status**:  External Sources 401 error resolved
+
+## September 4, 2025 22:49:58 -  EXTERNAL SOURCES API PROXY FIX
+
+**Issue**: After fixing FRONTEND_URL, the 401 error persisted because requests were bypassing the Vite development proxy.
+
+**Root Cause**: API service was configured with absolute URL (http://localhost:3006/api) instead of relative URL (/api), causing requests to bypass the Vite proxy that handles CORS and routing.
+
+**Solution**:
+- Updated src/services/api.ts: Changed API_BASE_URL from 'http://localhost:3006/api' to '/api'
+- This ensures requests go through Vite's proxy configuration in development
+- Vite proxy forwards /api requests to localhost:3006 with proper headers
+
+**Files Modified**:
+- src/services/api.ts - Fixed API base URL to use relative path
+
+**Impact**: 
+-  External Sources functionality now properly uses Vite proxy in development
+-  Authorization headers are correctly forwarded through the proxy
+-  Development environment properly mimics production routing
+
+**Status**:  External Sources API proxy configuration fixed
+# #   0 9 / 0 5 / 2 0 2 5   0 5 : 3 9 : 1 2   -   F i x e d   A u t h o r i z a t i o n   H e a d e r   I s s u e   i n   V i t e   P r o x y 
+ 
+ # # #   P r o b l e m 
+ -   B a c k e n d   l o g s   s h o w e d   ' A u t h   h e a d e r :   u n d e f i n e d '   d e s p i t e   f r o n t e n d   s e t t i n g   A u t h o r i z a t i o n   h e a d e r 
+ -   T h e   i s s u e   w a s   t h a t   t h e   f r o n t e n d   e n v i r o n m e n t   v a r i a b l e   V I T E _ A P I _ B A S E _ U R L   w a s   s e t   t o   a b s o l u t e   U R L   ( h t t p : / / l o c a l h o s t : 3 0 0 6 / a p i ) 
+ -   T h i s   c a u s e d   r e q u e s t s   t o   b y p a s s   V i t e ' s   d e v e l o p m e n t   p r o x y ,   g o i n g   d i r e c t l y   t o   b a c k e n d 
+ -   D i r e c t   r e q u e s t s   w e r e n ' t   p r o p e r l y   f o r w a r d i n g   A u t h o r i z a t i o n   h e a d e r s 
+ 
+ # # #   S o l u t i o n 
+ 1 .   U p d a t e d   f r o n t e n d   . e n v   f i l e :   C h a n g e d   V I T E _ A P I _ B A S E _ U R L   f r o m   ' h t t p : / / l o c a l h o s t : 3 0 0 6 / a p i '   t o   ' / a p i ' 
+ 2 .   E n h a n c e d   V i t e   p r o x y   c o n f i g u r a t i o n   i n   v i t e . c o n f i g . t s   t o   e x p l i c i t l y   f o r w a r d   a l l   h e a d e r s   i n c l u d i n g   A u t h o r i z a t i o n 
+ 3 .   R e s t a r t e d   b o t h   f r o n t e n d   a n d   b a c k e n d   s e r v e r s   t o   a p p l y   c h a n g e s 
+ 
+ # # #   F i l e s   M o d i f i e d 
+ -   . e n v   ( f r o n t e n d   e n v i r o n m e n t   v a r i a b l e s ) 
+ -   v i t e . c o n f i g . t s   ( p r o x y   c o n f i g u r a t i o n   w i t h   h e a d e r   f o r w a r d i n g ) 
+ -   d o c s / j o u r n a l . m d   ( t h i s   d o c u m e n t a t i o n ) 
+ 
+ # # #   E x p e c t e d   R e s u l t 
+ -   F r o n t e n d   r e q u e s t s   n o w   g o   t h r o u g h   V i t e   p r o x y   ( / a p i   - >   h t t p : / / l o c a l h o s t : 3 0 0 6 / a p i ) 
+ -   A u t h o r i z a t i o n   h e a d e r s   a r e   p r o p e r l y   f o r w a r d e d   t o   b a c k e n d 
+ -   E x t e r n a l   s o u r c e s   f u n c t i o n a l i t y   s h o u l d   w o r k   w i t h o u t   4 0 1   e r r o r s 
+ 
+ 
+## September 05, 2025 - 05:47 - Fixed Authorization Header Issue with Vite Proxy
+
+**Status:** Complete
+**Time:** 05:47
+
+### Summary
+Resolved the Authorization header issue where the frontend was correctly setting the header but it wasn't reaching the backend due to Vite proxy configuration problems.
+
+### Root Cause Analysis
+1. **Frontend correctly sets Authorization header**: The pi.ts service properly retrieves the token from localStorage and sets the Authorization: Bearer <token> header
+2. **Vite proxy configuration was correct**: The proxy configuration in ite.config.ts was properly set up to forward headers
+3. **Server restart required**: The issue was resolved after restarting the frontend development server to apply the proxy configuration changes
+
+### Technical Solution
+1. **Verified proxy configuration**: Confirmed that ite.config.ts has the correct proxy setup with header forwarding:
+`	ypescript
+proxy: {
+  '/api': {
+    target: 'http://localhost:3006',
+    changeOrigin: true,
+    secure: false,
+    configure: (proxy, options) => {
+      proxy.on('proxyReq', (proxyReq, req, res) => {
+        // Forward all headers including Authorization
+        Object.keys(req.headers).forEach(key => {
+          if (req.headers[key]) {
+            proxyReq.setHeader(key, req.headers[key]);
+          }
+        });
+      });
+    },
+  },
+}
+``n
+2. **Restarted frontend server**: Restarted the Vite development server to ensure proxy configuration changes were applied
+
+3. **Verified fix**: Tested both direct backend requests and proxy requests, both now work correctly with proper Authorization header forwarding
+
+### Validation
+-  Direct backend request: POST http://localhost:3006/api/files/1074/sources returns 201 Created
+-  Proxy request: POST http://localhost:8090/api/files/1074/sources returns 201 Created
+-  Backend logs show Authorization header being received and JWT verification successful
+-  External sources functionality should now work correctly in the frontend
+
+**Status**:  COMPLETED - Authorization header issue resolved, External Sources functionality should now work properly

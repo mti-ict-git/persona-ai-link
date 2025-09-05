@@ -1,6 +1,6 @@
 import { Message, Session } from '../utils/database';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3006/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 // Authentication types
 export interface User {
@@ -52,20 +52,20 @@ class ApiService {
       ...options.headers as Record<string, string>,
     };
 
-    // Only set Content-Type if not already specified (important for FormData)
-    if (!headers['Content-Type']) {
+    // Only set Content-Type for non-FormData requests
+    // For FormData, let the browser set Content-Type with boundary
+    if (!headers['Content-Type'] && !(options.body instanceof FormData)) {
       headers['Content-Type'] = 'application/json';
     }
 
-    // Add auth token if available
     const token = this.getAuthToken();
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
     const config: RequestInit = {
-      headers,
       ...options,
+      headers,
     };
 
     try {
@@ -76,7 +76,8 @@ class ApiService {
         throw new ApiError(response.status, errorData.message || `HTTP ${response.status}`);
       }
 
-      return await response.json();
+      const data = await response.json();
+      return data;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
@@ -239,45 +240,49 @@ class ApiService {
   }
 
   async post<T = unknown>(endpoint: string, data?: unknown, options?: { headers?: Record<string, string> }): Promise<{success: boolean, data: T}> {
-    const headers: Record<string, string> = {
-      ...options?.headers,
-    };
-
-    // Don't set Content-Type for FormData, let the browser set it with boundary
-    if (!(data instanceof FormData)) {
-      headers['Content-Type'] = 'application/json';
-    }
-    // For FormData, explicitly avoid setting Content-Type
-    else {
-      delete headers['Content-Type'];
-    }
-
-    return this.request(endpoint, {
+    const requestOptions: RequestInit = {
       method: 'POST',
       body: data instanceof FormData ? data : JSON.stringify(data),
-      headers,
-    });
+    };
+
+    // Only add headers if we need to override defaults or add custom headers
+    if (options?.headers || !(data instanceof FormData)) {
+      const headers: Record<string, string> = {
+        ...options?.headers,
+      };
+
+      // Don't set Content-Type for FormData, let the browser set it with boundary
+      if (!(data instanceof FormData)) {
+        headers['Content-Type'] = 'application/json';
+      }
+
+      requestOptions.headers = headers;
+    }
+
+    return this.request(endpoint, requestOptions);
   }
 
   async put<T = unknown>(endpoint: string, data?: unknown, options?: { headers?: Record<string, string> }): Promise<{success: boolean, data: T}> {
-    const headers: Record<string, string> = {
-      ...options?.headers,
-    };
-
-    // Don't set Content-Type for FormData, let the browser set it with boundary
-    if (!(data instanceof FormData)) {
-      headers['Content-Type'] = 'application/json';
-    }
-    // For FormData, explicitly avoid setting Content-Type
-    else {
-      delete headers['Content-Type'];
-    }
-
-    return this.request(endpoint, {
+    const requestOptions: RequestInit = {
       method: 'PUT',
       body: data instanceof FormData ? data : JSON.stringify(data),
-      headers,
-    });
+    };
+
+    // Only add headers if we need to override defaults or add custom headers
+    if (options?.headers || !(data instanceof FormData)) {
+      const headers: Record<string, string> = {
+        ...options?.headers,
+      };
+
+      // Don't set Content-Type for FormData, let the browser set it with boundary
+      if (!(data instanceof FormData)) {
+        headers['Content-Type'] = 'application/json';
+      }
+
+      requestOptions.headers = headers;
+    }
+
+    return this.request(endpoint, requestOptions);
   }
 
   async delete<T = unknown>(endpoint: string): Promise<{success: boolean, data?: T}> {

@@ -74,6 +74,47 @@ async function uploadFileToSftp(localFilePath, remoteFilePath) {
 }
 
 /**
+ * Upload buffer or stream directly to SFTP server without local storage
+ * @param {Buffer|Stream} source - Buffer or readable stream containing file data
+ * @param {string} remoteFilePath - Remote file path on SFTP server
+ * @param {string} originalFilename - Original filename for logging
+ * @returns {Promise<boolean>} Success status
+ */
+async function uploadBufferToSftp(source, remoteFilePath, originalFilename) {
+  let sftp = null;
+  try {
+    // Create SFTP connection
+    sftp = await createSftpConnection();
+
+    // Ensure remote directory exists
+    const remoteDir = path.dirname(remoteFilePath).replace(/\\/g, '/');
+    try {
+      await sftp.mkdir(remoteDir, true);
+    } catch (mkdirError) {
+      // Directory might already exist, continue
+      console.log(`Remote directory handling: ${mkdirError.message}`);
+    }
+
+    // Upload buffer/stream directly to SFTP
+    await sftp.put(source, remoteFilePath);
+    console.log(`Buffer uploaded successfully: ${originalFilename} -> ${remoteFilePath}`);
+    
+    return true;
+  } catch (error) {
+    console.error('SFTP buffer upload failed:', error.message);
+    throw error;
+  } finally {
+    if (sftp) {
+      try {
+        await sftp.end();
+      } catch (closeError) {
+        console.error('Error closing SFTP connection:', closeError.message);
+      }
+    }
+  }
+}
+
+/**
  * Test SFTP connection
  * @returns {Promise<boolean>} Connection test result
  */
@@ -149,6 +190,7 @@ function generateRemoteFilePath(filename) {
 
 module.exports = {
   uploadFileToSftp,
+  uploadBufferToSftp,
   deleteFileFromSftp,
   testSftpConnection,
   generateRemoteFilePath,

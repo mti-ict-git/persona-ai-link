@@ -70,9 +70,21 @@ app.use('/api/', limiter);
 // Logging
 app.use(morgan('combined'));
 
-// Body parsing
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true }));
+// Body parsing - conditionally apply to exclude upload routes
+app.use((req, res, next) => {
+  // Skip body parsing for upload routes to allow multer to handle multipart data
+  if (req.path.startsWith('/api/upload')) {
+    return next();
+  }
+  express.json({ limit: '10mb' })(req, res, next);
+});
+app.use((req, res, next) => {
+  // Skip URL encoding for upload routes
+  if (req.path.startsWith('/api/upload')) {
+    return next();
+  }
+  express.urlencoded({ extended: true })(req, res, next);
+});
 
 // Health check endpoint
 app.get('/health', (req, res) => {

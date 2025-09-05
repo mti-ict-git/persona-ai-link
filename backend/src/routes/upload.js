@@ -3,7 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const { processedFilesManager } = require('../utils/processedFilesManager');
-const { uploadFileToSftp, generateRemoteFilePath } = require('../utils/sftp');
+const { uploadFileToSftp, uploadBufferToSftp, generateRemoteFilePath } = require('../utils/sftp');
 const router = express.Router();
 
 // Configure multer for file uploads
@@ -39,6 +39,15 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({
   storage: storage,
+  fileFilter: fileFilter,
+  limits: {
+    fileSize: 20 * 1024 * 1024 // 20MB limit
+  }
+});
+
+// Configure multer for memory storage (direct SFTP upload)
+const memoryUpload = multer({
+  storage: multer.memoryStorage(),
   fileFilter: fileFilter,
   limits: {
     fileSize: 20 * 1024 * 1024 // 20MB limit
@@ -185,6 +194,96 @@ router.get('/file/:filename', (req, res) => {
       success: false,
       error: 'Failed to serve file',
       message: error.message
+    });
+  }
+});
+
+// POST /api/upload/direct - Handle direct SFTP upload without local storage
+router.post('/direct', memoryUpload.single('file'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        error: 'No file uploaded'
+      });
+    }
+
+    const { originalname, buffer, size, mimetype } = req.file;
+    
+    // Check if file with same original name already exists in database
+    const existingFile = await processedFilesManager.getFileByName(originalname);
+    
+    if (existingFile) {
+      return res.status(409).json({
+        success: false,
+        error: 'File already exists',
+        message: `A file named "${originalname}" already exists. Please delete it first or rename your file.`,
+        existingFile: {
+          id: existingFile.id,
+          filename: existingFile.filename,
+          created_at: existingFile.created_at
+        }
+      });
+    }
+
+    // Generate remote SFTP path
+    const remotePath = generateRemoteFilePath(originalname);
+    
+    // Upload buffer directly to SFTP server
+    let sftpUploadSuccess = false;
+    try {
+      await uploadBufferToSftp(buffer, remotePath, originalname);
+      sftpUploadSuccess = true;
+      console.log(`File uploaded directly to SFTP: ${remotePath}`);
+    } catch (sftpError) {
+      console.error('Direct SFTP upload failed:', sftpError.message);
+      return res.status(500).json({
+        success: false,
+        error: 'SFTP upload failed',
+        message: 'Failed to upload file directly to SFTP server. Please try the regular upload method.'
+      });
+    }
+
+    // Create file record in database (no local file path since we're not storing locally)
+    const fileRecord = await processedFilesManager.createFile(
+      originalname,
+      null, // No local file path
+      {
+        originalName: originalname,
+        size: size,
+        type: mimetype,
+        uploadedAt: new Date().toISOString(),
+        sftpPath: remotePath,
+        sftpUploadedAt: new Date().toISOString(),
+        directUpload: true // Flag to indicate this was a direct upload
+      }
+    );
+
+    console.log(`File uploaded directly to SFTP: ${originalname} -> ${remotePath}`);
+
+    res.status(201).json({
+      success: true,
+      data: {
+        id: fileRecord.id,
+        filename: originalname,
+        file_path: null, // No local file path
+        sftp_path: remotePath,
+        size: size,
+        type: mimetype,
+        created_at: fileRecord.created_at,
+        processed: fileRecord.processed,
+        direct_upload: true
+      },
+      message: 'File uploaded successfully directly to SFTP server'
+    });
+
+  } catch (error) {
+    console.error('Error in direct SFTP upload:', error);
+    
+    res.status(500).json({
+      success: false,
+      error: 'Internal server error',
+      message: 'An error occurred while processing the direct upload'
     });
   }
 });
