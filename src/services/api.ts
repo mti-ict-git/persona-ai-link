@@ -24,6 +24,23 @@ export interface AuthValidationResponse {
   user: User;
 }
 
+// User preferences types
+export interface UserPreferences {
+  language?: string;
+  theme?: string;
+  timezone?: string;
+  [key: string]: string | undefined;
+}
+
+export interface PreferenceUpdateRequest {
+  key: string;
+  value: string;
+}
+
+export interface BulkPreferenceUpdateRequest {
+  preferences: PreferenceUpdateRequest[];
+}
+
 class ApiError extends Error {
   constructor(public status: number, message: string) {
     super(message);
@@ -352,7 +369,49 @@ class ApiService {
     return response.blob();
   }
 
+  // User Preferences Methods
+  async getUserPreferences(): Promise<UserPreferences> {
+    const response = await this.request<UserPreferences>('/preferences', {
+      method: 'GET'
+    });
+    return response;
+  }
 
+  async getUserPreference(key: string): Promise<{ key: string; value: string }> {
+    const response = await this.request<{ key: string; value: string }>(`/preferences/${key}`, {
+      method: 'GET'
+    });
+    return response;
+  }
+
+  async updateUserPreference(key: string, value: string): Promise<{ success: boolean; message: string }> {
+    const response = await this.request<{ success: boolean; message: string }>(`/preferences/${key}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ value })
+    });
+    return response;
+  }
+
+  async updateUserPreferencesBulk(preferences: PreferenceUpdateRequest[]): Promise<{ success: boolean; message: string; updated: number }> {
+    const response = await this.request<{ success: boolean; message: string; updated: number }>('/preferences/bulk', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ preferences })
+    });
+    return response;
+  }
+
+  async deleteUserPreference(key: string): Promise<{ success: boolean; message: string }> {
+    const response = await this.request<{ success: boolean; message: string }>(`/preferences/${key}`, {
+      method: 'DELETE'
+    });
+    return response;
+  }
 
 }
 

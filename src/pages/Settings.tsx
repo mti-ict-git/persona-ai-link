@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -24,6 +24,8 @@ import {
 import { toast } from '@/hooks/use-toast';
 import ThemeToggle from '@/components/ThemeToggle';
 import TrainingContent from '@/components/TrainingContent';
+import { useUserPreferences } from '@/hooks/useUserPreferences';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 type SettingsSection = 'general' | 'personalization' | 'speech' | 'data-controls' | 'builder-profile' | 'connected-apps' | 'security' | 'training';
 
@@ -38,10 +40,21 @@ const Settings: React.FC = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const { preferences, loading: prefsLoading, updatePreference } = useUserPreferences();
+  const { currentLanguage, changeLanguage, t } = useLanguage();
   const [activeSection, setActiveSection] = useState<SettingsSection>('general');
   const [showFollowUpSuggestions, setShowFollowUpSuggestions] = useState(true);
   const [alwaysShowCode, setAlwaysShowCode] = useState(false);
-  const [language, setLanguage] = useState('English (US)');
+
+  // Sync preferences with local state
+  useEffect(() => {
+    if (preferences.showFollowUpSuggestions !== undefined) {
+      setShowFollowUpSuggestions(preferences.showFollowUpSuggestions === 'true');
+    }
+    if (preferences.alwaysShowCode !== undefined) {
+      setAlwaysShowCode(preferences.alwaysShowCode === 'true');
+    }
+  }, [preferences]);
 
   const sidebarItems: SettingsSidebarItem[] = [
     { id: 'general', label: 'General', icon: SettingsIcon },
@@ -75,6 +88,43 @@ const Settings: React.FC = () => {
     });
   };
 
+  // Preference handlers
+  const handleLanguageChange = async (newLanguage: string) => {
+    try {
+      await changeLanguage(newLanguage);
+    } catch (error) {
+      console.error('Failed to update language preference:', error);
+    }
+  };
+
+  const handleShowCodeChange = async (checked: boolean) => {
+    setAlwaysShowCode(checked);
+    try {
+      await updatePreference('alwaysShowCode', checked.toString());
+    } catch (error) {
+      console.error('Failed to update show code preference:', error);
+    }
+  };
+
+  const handleFollowUpChange = async (checked: boolean) => {
+    setShowFollowUpSuggestions(checked);
+    try {
+      await updatePreference('showFollowUpSuggestions', checked.toString());
+    } catch (error) {
+      console.error('Failed to update follow-up suggestions preference:', error);
+    }
+  };
+
+  const handleThemeToggle = async () => {
+    toggleTheme();
+    try {
+      const newTheme = theme === 'light' ? 'dark' : 'light';
+      await updatePreference('theme', newTheme);
+    } catch (error) {
+      console.error('Failed to update theme preference:', error);
+    }
+  };
+
   const isAdmin = user?.role === 'admin' || user?.role === 'superadmin';
 
   const renderContent = () => {
@@ -83,17 +133,24 @@ const Settings: React.FC = () => {
         return (
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-medium mb-4">General Settings</h3>
+              <h3 className="text-lg font-medium mb-4">{t('settings.general')}</h3>
               
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label htmlFor="theme">Theme</Label>
+                    <Label htmlFor="theme">{t('settings.theme')}</Label>
                     <p className="text-sm text-muted-foreground">Choose your preferred theme</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-sm capitalize">{theme}</span>
-                    <ThemeToggle />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleThemeToggle}
+                      disabled={prefsLoading}
+                    >
+                      {theme === 'light' ? '🌙' : '☀️'}
+                    </Button>
                   </div>
                 </div>
 
@@ -101,13 +158,14 @@ const Settings: React.FC = () => {
 
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label htmlFor="code-analyst">Always show code when using data analyst</Label>
+                    <Label htmlFor="code-analyst">{t('settings.alwaysShowCode')}</Label>
                     <p className="text-sm text-muted-foreground">Display code blocks by default in data analysis</p>
                   </div>
                   <Switch
                     id="code-analyst"
                     checked={alwaysShowCode}
-                    onCheckedChange={setAlwaysShowCode}
+                    onCheckedChange={handleShowCodeChange}
+                    disabled={prefsLoading}
                   />
                 </div>
 
@@ -115,13 +173,14 @@ const Settings: React.FC = () => {
 
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label htmlFor="follow-up">Show follow up suggestions in chats</Label>
+                    <Label htmlFor="follow-up">{t('settings.followUpSuggestions')}</Label>
                     <p className="text-sm text-muted-foreground">Display suggested follow-up questions</p>
                   </div>
                   <Switch
                     id="follow-up"
                     checked={showFollowUpSuggestions}
-                    onCheckedChange={setShowFollowUpSuggestions}
+                    onCheckedChange={handleFollowUpChange}
+                    disabled={prefsLoading}
                   />
                 </div>
 
@@ -129,20 +188,16 @@ const Settings: React.FC = () => {
 
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label htmlFor="language">Language</Label>
+                    <Label htmlFor="language">{t('settings.language')}</Label>
                     <p className="text-sm text-muted-foreground">Select your preferred language</p>
                   </div>
-                  <Select value={language} onValueChange={setLanguage}>
+                  <Select value={currentLanguage} onValueChange={handleLanguageChange} disabled={prefsLoading}>
                     <SelectTrigger className="w-40">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="English (US)">English (US)</SelectItem>
-                      <SelectItem value="English (UK)">English (UK)</SelectItem>
-                      <SelectItem value="Spanish">Spanish</SelectItem>
-                      <SelectItem value="French">French</SelectItem>
-                      <SelectItem value="German">German</SelectItem>
-                      <SelectItem value="Indonesian">Indonesian</SelectItem>
+                      <SelectItem value="en">English</SelectItem>
+                      <SelectItem value="zh">中文</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

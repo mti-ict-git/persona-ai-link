@@ -4,6 +4,7 @@ import ChatMain from "@/components/ChatMain";
 import SuggestionsPanel from "@/components/SuggestionsPanel";
 // import WebhookConfig from "@/components/WebhookConfig"; // Hidden - N8N configured via env vars
 import { useSessionManager } from "@/hooks/useSessionManager";
+import { useUserPreferences } from "@/hooks/useUserPreferences";
 import { apiService } from "@/services/api";
 import { Message as DatabaseMessage } from "@/utils/database";
 
@@ -27,9 +28,14 @@ const Index = () => {
   const [currentMessages, setCurrentMessages] = useState<Message[]>([]);
   // const [isConfigOpen, setIsConfigOpen] = useState(false); // Removed - WebhookConfig hidden
   const [isTyping, setIsTyping] = useState(false);
-  const [showSuggestions, setShowSuggestions] = useState(false);
   const [showSidebar, setShowSidebar] = useState(true);
   const [newMessageIds, setNewMessageIds] = useState<Set<string>>(new Set()); // Track messages that should have typewriter animation
+  
+  // Get user preferences
+  const { preferences } = useUserPreferences();
+  
+  // Derive showSuggestions from user preferences
+  const showSuggestions = preferences.showFollowUpSuggestions === 'true';
 
   // Handle typewriter animation completion
   const handleTypewriterComplete = (messageId: string) => {
@@ -118,7 +124,6 @@ const Index = () => {
     // New session will be created when first message is sent
     setCurrentMessages([]);
     selectSession(''); // Clear active session
-    setShowSuggestions(true); // Show suggestions for new chat
   };
 
   const handleCreateNewSession = async (initialMessage?: string) => {
@@ -155,7 +160,6 @@ const Index = () => {
       isNewSession = true;
       // Update local state immediately but after optimistic message is set
       selectSession(sessionId);
-      setShowSuggestions(false); // Hide suggestions once chat starts
     }
     try { 
       
@@ -219,8 +223,6 @@ const Index = () => {
   };
 
   const handleSuggestionSelect = async (prompt: string) => {
-    setShowSuggestions(false); // Hide suggestions immediately
-    
     // Create optimistic user message for immediate display
     const optimisticUserMessage: Message = {
       id: `temp-${Date.now()}`,
@@ -316,7 +318,6 @@ const Index = () => {
         isTyping={isTyping}
         sessionId={activeSessionId}
         showSuggestions={showSuggestions}
-        onToggleSuggestions={() => setShowSuggestions(!showSuggestions)}
         showSidebar={showSidebar}
         onToggleSidebar={() => setShowSidebar(!showSidebar)}
         newMessageIds={newMessageIds}

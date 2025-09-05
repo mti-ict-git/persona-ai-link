@@ -1,0 +1,54 @@
+{
+  "navigation": {
+    "home": "Home",
+    "settings": "Settings",
+    "admin": "Admin",
+    "training": "Training",
+    "logout": "Logout"
+  },
+  "settings": {
+    "title": "Settings",
+    "general": "General Settings",
+    "personalization": "Personalization",
+    "speech": "Speech",
+    "dataControls": "Data controls",
+    "builderProfile": "Builder profile",
+    "connectedApps": "Connected apps",
+    "security": "Security",
+    "training": "Training",
+    "language": "Language",
+    "theme": "Theme",
+    "notifications": "Notifications",
+    "followUpSuggestions": "Show follow up suggestions in chats",
+    "alwaysShowCode": "Always show code when using data analyst",
+    "archiveAllChats": "Archive all chats",
+    "deleteAllChats": "Delete all chats",
+    "close": "Close"
+  },
+  "chat": {
+    "newChat": "New Chat",
+    "suggestions": "Suggestions",
+    "typeMessage": "Type your message...",
+    "send": "Send",
+    "thinking": "Thinking...",
+    "error": "Something went wrong. Please try again."
+  },
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "username": "Username",
+    "password": "Password",
+    "loginButton": "Sign In",
+    "loginError": "Invalid credentials"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "confirm": "Confirm"
+  }
+}

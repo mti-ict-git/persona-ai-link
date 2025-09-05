@@ -182,5 +182,34 @@ BEGIN
 END
 GO
 
+-- User preferences table for storing user settings
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='user_preferences' AND xtype='U')
+BEGIN
+    CREATE TABLE user_preferences (
+        id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+        user_id UNIQUEIDENTIFIER NOT NULL,
+        preference_key NVARCHAR(50) NOT NULL,
+        preference_value NVARCHAR(MAX) NULL,
+        created_at DATETIME2 DEFAULT GETDATE(),
+        updated_at DATETIME2 DEFAULT GETDATE(),
+        
+        -- Foreign key to chat_Users table
+        CONSTRAINT FK_user_preferences_user_id 
+        FOREIGN KEY (user_id) REFERENCES chat_Users(id) ON DELETE CASCADE
+    );
+    
+    -- Indexes for user_preferences table
+    CREATE INDEX IX_user_preferences_user_id ON user_preferences(user_id);
+    CREATE INDEX IX_user_preferences_key ON user_preferences(preference_key);
+    CREATE UNIQUE INDEX IX_user_preferences_unique ON user_preferences(user_id, preference_key);
+    
+    PRINT 'Created user_preferences table with indexes and foreign key';
+END
+ELSE
+BEGIN
+    PRINT 'user_preferences table already exists';
+END
+GO
+
 PRINT 'Database schema creation completed successfully';
 GO

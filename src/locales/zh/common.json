@@ -1,0 +1,54 @@
+{
+  "navigation": {
+    "home": "首页",
+    "settings": "设置",
+    "admin": "管理",
+    "training": "训练",
+    "logout": "退出登录"
+  },
+  "settings": {
+    "title": "设置",
+    "general": "常规设置",
+    "personalization": "个性化",
+    "speech": "语音",
+    "dataControls": "数据控制",
+    "builderProfile": "构建者档案",
+    "connectedApps": "已连接应用",
+    "security": "安全",
+    "training": "训练",
+    "language": "语言",
+    "theme": "主题",
+    "notifications": "通知",
+    "followUpSuggestions": "在聊天中显示后续建议",
+    "alwaysShowCode": "使用数据分析师时始终显示代码",
+    "archiveAllChats": "归档所有聊天",
+    "deleteAllChats": "删除所有聊天",
+    "close": "关闭"
+  },
+  "chat": {
+    "newChat": "新聊天",
+    "suggestions": "建议",
+    "typeMessage": "输入您的消息...",
+    "send": "发送",
+    "thinking": "思考中...",
+    "error": "出现错误，请重试。"
+  },
+  "auth": {
+    "login": "登录",
+    "logout": "退出登录",
+    "username": "用户名",
+    "password": "密码",
+    "loginButton": "登录",
+    "loginError": "凭据无效"
+  },
+  "common": {
+    "save": "保存",
+    "cancel": "取消",
+    "delete": "删除",
+    "edit": "编辑",
+    "loading": "加载中...",
+    "error": "错误",
+    "success": "成功",
+    "confirm": "确认"
+  }
+}

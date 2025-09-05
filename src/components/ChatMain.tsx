@@ -26,14 +26,13 @@ interface ChatMainProps {
   isTyping?: boolean;
   sessionId?: string;
   showSuggestions?: boolean;
-  onToggleSuggestions?: () => void;
   showSidebar?: boolean;
   onToggleSidebar?: () => void;
   newMessageIds?: Set<string>; // Track which messages should have typewriter animation
   onTypewriterComplete?: (messageId: string) => void; // Callback when typewriter animation completes
 }
 
-const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false, sessionId, showSuggestions = true, onToggleSuggestions, showSidebar = true, onToggleSidebar, newMessageIds = new Set(), onTypewriterComplete }: ChatMainProps) => {
+const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false, sessionId, showSuggestions = true, showSidebar = true, onToggleSidebar, newMessageIds = new Set(), onTypewriterComplete }: ChatMainProps) => {
   // Motivational HR messages
   const motivationalMessages = [
     "Empowering your HR journey",
@@ -217,16 +216,7 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
             <RefreshCw className="w-4 h-4" />
           </Button>
           
-          {onToggleSuggestions && (
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={onToggleSuggestions}
-              className="h-9 w-9 rounded-xl hover:bg-muted/80 transition-all duration-200"
-            >
-              {showSuggestions ? <PanelRightClose className="w-4 h-4" /> : <PanelRightOpen className="w-4 h-4" />}
-            </Button>
-          )}
+
           
 
         </div>
