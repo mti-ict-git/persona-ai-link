@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Eye, EyeOff, AlertCircle, Building, User } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Eye, EyeOff, AlertCircle, Building, User, Globe } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { ApiError } from "@/services/api";
@@ -16,6 +17,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [authMethod, setAuthMethod] = useState<'local' | 'ldap'>('ldap');
+  const [selectedLanguage, setSelectedLanguage] = useState('en');
   const [formData, setFormData] = useState({
     email: "",
     password: ""
@@ -23,8 +25,17 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuth();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { toast } = useToast();
+
+  // Load saved language preference on component mount
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem('selectedLanguage');
+    if (savedLanguage) {
+      setSelectedLanguage(savedLanguage);
+      i18n.changeLanguage(savedLanguage);
+    }
+  }, [i18n]);
   
   // Get the intended destination from location state
   const from = location.state?.from?.pathname || '/';
@@ -36,6 +47,15 @@ const Login = () => {
 
     try {
       await login(formData.email, formData.password, authMethod);
+      
+      // Save language preference to user preferences after successful login
+      try {
+        const { apiService } = await import('@/services/api');
+        await apiService.updateUserPreference('language', selectedLanguage);
+        console.log('Language preference saved successfully:', selectedLanguage);
+      } catch (error) {
+        console.warn('Error saving language preference:', error);
+      }
       
       // Redirect to intended destination or home page
       navigate(from, { replace: true });
@@ -68,10 +88,42 @@ const Login = () => {
     }));
   };
 
+  const handleLanguageChange = (language: string) => {
+    setSelectedLanguage(language);
+    i18n.changeLanguage(language);
+    // Store language preference in localStorage for non-authenticated users
+    localStorage.setItem('selectedLanguage', language);
+  };
+
+  const languages = [
+    { code: 'en', name: 'English', flag: '🇺🇸' },
+    { code: 'zh', name: '中文', flag: '🇨🇳' }
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-primary/5 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-
+        {/* Language Selector */}
+        <div className="flex justify-end mb-4">
+          <Select value={selectedLanguage} onValueChange={handleLanguageChange}>
+            <SelectTrigger className="w-40 bg-card/80 backdrop-blur-sm border-border">
+              <div className="flex items-center gap-2">
+                <Globe className="h-4 w-4" />
+                <SelectValue />
+              </div>
+            </SelectTrigger>
+            <SelectContent>
+              {languages.map((lang) => (
+                <SelectItem key={lang.code} value={lang.code}>
+                  <div className="flex items-center gap-2">
+                    <span>{lang.flag}</span>
+                    <span>{lang.name}</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
         <Card className="border border-border shadow-elegant bg-card/80 backdrop-blur-sm">
           <CardHeader className="text-center space-y-4">

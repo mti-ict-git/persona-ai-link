@@ -63,7 +63,7 @@ const SuggestionsPanel = ({ onSuggestionSelect }: SuggestionsPanelProps) => {
   ];
 
   return (
-    <div data-tour="suggestions-panel" className="w-80 bg-chat-suggestions border-l border-border flex flex-col h-full">
+    <div className="w-80 bg-chat-suggestions border-l border-border flex flex-col h-full">
       {/* Header */}
       <div className="p-4 border-b border-border">
         <div className="flex items-center gap-3">

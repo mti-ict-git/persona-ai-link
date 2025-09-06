@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   Dialog,
   DialogContent,
@@ -16,15 +16,11 @@ interface LanguageSelectionDialogProps {
   onLanguageSelect: (language: string) => void;
 }
 
-const LanguageSelectionDialog: React.FC<LanguageSelectionDialogProps> = ({ open, onLanguageSelect }) => {
+const LanguageSelectionDialog: React.FC<LanguageSelectionDialogProps> = ({
+  open,
+  onLanguageSelect,
+}) => {
   const { t } = useTranslation();
-  
-  useEffect(() => {
-    console.log('🌐 LanguageSelectionDialog render state:', {
-      open,
-      timestamp: new Date().toISOString()
-    });
-  }, [open]);
   const [selectedLanguage, setSelectedLanguage] = React.useState<string>('en');
 
   const languages = [
@@ -48,7 +44,7 @@ const LanguageSelectionDialog: React.FC<LanguageSelectionDialogProps> = ({ open,
 
   return (
     <Dialog open={open} onOpenChange={() => {}}>
-      <DialogContent data-tour="language-toggle" className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md">
         <DialogHeader className="text-center">
           <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900">
             <Globe className="h-6 w-6 text-blue-600 dark:text-blue-400" />

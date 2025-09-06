@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { useUserPreferences } from '../hooks/useUserPreferences';
 import { useTheme } from '../contexts/ThemeContext';
-import { useLanguage } from '../contexts/LanguageContext';
 
 interface OnboardingTourProps {
   isOpen: boolean;
@@ -15,48 +14,9 @@ interface OnboardingTourProps {
 const OnboardingTour: React.FC<OnboardingTourProps> = ({ isOpen, onClose, onComplete }) => {
   const { t } = useTranslation();
   const { theme } = useTheme();
-  const { user, isAuthenticated } = useAuth();
-  const { updatePreference, preferences, loading } = useUserPreferences();
-  const { shouldStartTour } = useLanguage();
+  const { user } = useAuth();
+  const { updatePreference } = useUserPreferences();
   const [stepIndex, setStepIndex] = useState(0);
-
-  useEffect(() => {
-    console.log('🎪 OnboardingTour render state:', {
-      isOpen,
-      stepIndex,
-      shouldStartTour,
-      user: user ? { id: user.id, role: user.role } : null,
-      preferences: {
-        onboardingCompleted: preferences.onboardingCompleted?.value,
-        firstTimeLogin: preferences.firstTimeLogin?.value,
-        language: preferences.language?.value
-      },
-      isAuthenticated,
-      loading
-    });
-  }, [isOpen, stepIndex, shouldStartTour, user, preferences, isAuthenticated, loading]);
-
-  // Handle shouldStartTour trigger
-  useEffect(() => {
-    console.log('🎪 OnboardingTour shouldStartTour effect:', {
-      shouldStartTour,
-      isOpen,
-      isAuthenticated,
-      loading,
-      onboardingCompleted: preferences.onboardingCompleted?.value,
-      firstTimeLogin: preferences.firstTimeLogin?.value
-    });
-    
-    if (shouldStartTour && !isOpen && isAuthenticated && !loading) {
-      console.log('🚀 OnboardingTour: shouldStartTour is TRUE, opening tour');
-      // The tour should be opened by the parent component (Index.tsx)
-      // This is just for logging the state
-    } else if (shouldStartTour && isOpen) {
-      console.log('🎪 OnboardingTour: Tour already open, shouldStartTour is TRUE');
-    } else if (!shouldStartTour) {
-      console.log('🚫 OnboardingTour: shouldStartTour is FALSE');
-    }
-  }, [shouldStartTour, isOpen, isAuthenticated, loading, preferences]);
 
   // Define tour steps based on user role
   const getTourSteps = (): Step[] => {

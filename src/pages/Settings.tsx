@@ -577,7 +577,7 @@ const Settings: React.FC = () => {
   };
 
   return (
-    <div data-tour="settings" className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background">
       <div className="flex h-screen">
         {/* Sidebar */}
         <div className="w-64 border-r bg-card">

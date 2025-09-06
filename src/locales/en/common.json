@@ -182,6 +182,8 @@
     "enterPassword": "Enter your password",
     "signingIn": "Signing In...",
     "signIn": "Sign In",
+    "username": "Username",
+    "password": "Password",
     "usernamePlaceholder": "mti.user@merdekabattery.com",
     "usernameExample": "Example: mti.user@merdekabattery.com",
     "enterDomainPassword": "Enter your domain password",
@@ -620,6 +622,10 @@
       "title": "Chat Input",
       "content": "This is where you'll type your questions or requests to the AI assistant."
     },
+    "suggestions": {
+      "title": "Quick Suggestions",
+      "content": "Use these pre-built suggestions to quickly access common topics like company policies and IT guidelines."
+    },
     "language": {
       "title": "Language Selection",
       "content": "Change the application language to your preference."
@@ -637,8 +643,8 @@
       "content": "As an administrator, you can manage users, view analytics, and configure system settings here."
     },
     "completion": {
-      "title": "🎉 Welcome Aboard!",
-      "content": "Fantastic! You're all set to explore the amazing world of AI conversations. Let's start exploring and happy chatting! 🚀✨"
+      "title": "Tour Complete!",
+      "content": "You're all set! You can restart this tour anytime by clicking the 'Start Tour' button."
     },
     "buttons": {
       "next": "Next",

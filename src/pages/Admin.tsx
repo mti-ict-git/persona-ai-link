@@ -497,7 +497,7 @@ const Admin: React.FC = () => {
   };
 
   return (
-    <div data-tour="admin-panel" className="flex h-screen bg-background">
+    <div className="flex h-screen bg-background">
       {/* Sidebar */}
       <div className="w-64 bg-card border-r border-border flex flex-col">
         <div className="p-6 border-b border-border">

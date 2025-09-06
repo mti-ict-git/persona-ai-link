@@ -378,7 +378,6 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
         <div className="max-w-4xl mx-auto">
           <div className="relative bg-background/90 border border-border/60 rounded-2xl shadow-lg backdrop-blur-sm hover:shadow-xl transition-all duration-300">
             <Textarea
-              data-tour="chat-input"
               ref={textareaRef}
               value={inputMessage}
               onChange={handleInputChange}

@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { useUserPreferences } from '@/hooks/useUserPreferences';
 import { apiService } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
-import LanguageSelectionDialog from '@/components/LanguageSelectionDialog';
 
 interface LanguageContextType {
   currentLanguage: string;
@@ -22,107 +21,105 @@ interface LanguageProviderProps {
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
   const { i18n, t } = useTranslation();
   const { isAuthenticated, user } = useAuth();
-  const { preferences, updatePreference, loading, refreshPreferences } = useUserPreferences();
-  const [showLanguageDialog, setShowLanguageDialog] = useState(false);
-  const [isFirstTimeUser, setIsFirstTimeUser] = useState(false);
+  const { preferences, updatePreference, loading } = useUserPreferences();
   const [shouldStartTour, setShouldStartTour] = useState(false);
+  const [isChangingLanguage, setIsChangingLanguage] = useState(false);
+  const [lastProcessedLanguage, setLastProcessedLanguage] = useState<string | null>(null);
 
-  // Check if user is first-time using the firstTimeLogin flag
+  // Initialize language for non-authenticated users
   useEffect(() => {
-    console.log('🔍 LanguageContext useEffect triggered', {
-      isAuthenticated,
-      user: user?.id,
-      loading,
-      preferences: {
-        firstTimeLogin: preferences.firstTimeLogin?.value,
-        language: preferences.language?.value,
-        onboardingCompleted: preferences.onboardingCompleted?.value
-      },
-      showLanguageDialog,
-      isFirstTimeUser,
-      shouldStartTour
-    });
-    
-    // Only check preferences if user is authenticated
-    if (!isAuthenticated || !user) {
-        console.log('❌ User not authenticated or user object missing');
-        return;
+    if (!isAuthenticated && !isChangingLanguage) {
+      const savedLanguage = localStorage.getItem('selectedLanguage') || 'en';
+      if (savedLanguage !== i18n.language) {
+        console.log('LanguageContext: Setting language for non-authenticated user:', savedLanguage);
+        setIsChangingLanguage(true);
+        i18n.changeLanguage(savedLanguage).finally(() => setIsChangingLanguage(false));
       }
-    
-    if (!loading) {
-      // Show language dialog if first time login OR if language is not set
-      const shouldShowDialog = preferences.firstTimeLogin?.value === 'true' || !preferences.language?.value;
-      console.log('🎯 Language dialog decision:', {
-          firstTimeLogin: preferences.firstTimeLogin?.value,
-          language: preferences.language?.value,
-          onboardingCompleted: preferences.onboardingCompleted?.value,
-          shouldShowDialog,
-          currentShowState: showLanguageDialog,
-          isFirstTimeUser,
-          shouldStartTour,
-          currentI18nLanguage: i18n.language
-        });
-        
-        if (shouldShowDialog) {
-          console.log('✅ Setting language dialog to show - FIRST TIME USER DETECTED');
-          setIsFirstTimeUser(true);
-          setShowLanguageDialog(true);
-        } else if (preferences.language?.value && preferences.language.value !== i18n.language) {
-          console.log('🌐 Changing language to:', preferences.language.value, 'from:', i18n.language);
-          i18n.changeLanguage(preferences.language.value);
-        } else {
-          console.log('🚫 No language dialog needed - user already configured');
-        }
     }
-  }, [isAuthenticated, user, preferences.language, preferences.firstTimeLogin, i18n, loading, showLanguageDialog, isFirstTimeUser, shouldStartTour]);
+  }, [isAuthenticated, i18n, isChangingLanguage]);
+
+  // Handle authenticated user language preferences
+  useEffect(() => {
+    if (!isAuthenticated || !user || loading || isChangingLanguage) {
+      return;
+    }
+
+    const dbLanguage = preferences.language?.value;
+    const currentLanguage = i18n.language;
+    
+    // Skip if we've already processed this exact language preference
+    if (lastProcessedLanguage === dbLanguage && dbLanguage === currentLanguage) {
+      return;
+    }
+
+    if (dbLanguage) {
+      // User has a database preference - use it
+      if (dbLanguage !== currentLanguage) {
+        console.log('LanguageContext: Applying database language preference:', dbLanguage);
+        localStorage.setItem('selectedLanguage', dbLanguage);
+        setIsChangingLanguage(true);
+        i18n.changeLanguage(dbLanguage).finally(() => {
+          setIsChangingLanguage(false);
+          setLastProcessedLanguage(dbLanguage);
+        });
+      } else {
+        // Language matches, just sync localStorage
+        localStorage.setItem('selectedLanguage', dbLanguage);
+        setLastProcessedLanguage(dbLanguage);
+      }
+    } else {
+      // No database preference - check localStorage and save to database
+      const localLanguage = localStorage.getItem('selectedLanguage');
+      if (localLanguage && localLanguage !== 'en' && localLanguage !== lastProcessedLanguage) {
+        console.log('LanguageContext: Saving localStorage language to database:', localLanguage);
+        updatePreference('language', localLanguage).catch(error => {
+          console.error('Failed to save language preference to database:', error);
+        });
+        setLastProcessedLanguage(localLanguage);
+      }
+    }
+  }, [isAuthenticated, user, preferences.language?.value, i18n.language, loading, isChangingLanguage, lastProcessedLanguage, updatePreference]);
+
+  // Handle onboarding tour
+  useEffect(() => {
+    if (isAuthenticated && !loading && preferences.firstTimeLogin?.value === 'true' && preferences.onboardingCompleted?.value !== 'true') {
+      setShouldStartTour(true);
+    }
+  }, [isAuthenticated, loading, preferences.firstTimeLogin?.value, preferences.onboardingCompleted?.value]);
+
+  // Reset tracking when user changes
+  useEffect(() => {
+    setLastProcessedLanguage(null);
+  }, [isAuthenticated, user?.id]);
 
   const changeLanguage = async (language: string) => {
+    // Prevent multiple simultaneous language changes
+    if (isChangingLanguage) {
+      return;
+    }
+    
     try {
+      setIsChangingLanguage(true);
       await i18n.changeLanguage(language);
-      await updatePreference('language', language);
+      
+      // Always update localStorage
+      localStorage.setItem('selectedLanguage', language);
+      
+      // Only update database if user is authenticated
+      if (isAuthenticated && user) {
+        await updatePreference('language', language);
+        console.log('LanguageContext: Language preference saved to database:', language);
+      } else {
+        console.log('LanguageContext: Language preference saved to localStorage:', language);
+      }
     } catch (error) {
       console.error('Failed to change language:', error);
+    } finally {
+      setIsChangingLanguage(false);
     }
   };
 
-  const handleLanguageSelection = async (language: string) => {
-    console.log('🎯 handleLanguageSelection called with:', {
-      language,
-      isFirstTimeUser,
-      currentShouldStartTour: shouldStartTour,
-      showLanguageDialog,
-      preferences: {
-        firstTimeLogin: preferences.firstTimeLogin?.value,
-        onboardingCompleted: preferences.onboardingCompleted?.value
-      }
-    });
-    
-    try {
-      console.log('📝 Changing language and updating preferences...');
-      await changeLanguage(language);
-      await updatePreference('firstTimeLogin', 'false');
-      
-      console.log('🔄 Force refreshing preferences...');
-      // Force refresh preferences to ensure updated values are loaded
-      await refreshPreferences();
-      
-      console.log('❌ Hiding language dialog');
-      setShowLanguageDialog(false);
-      setIsFirstTimeUser(false);
-      
-      // Trigger tour for first-time users after language selection
-      if (isFirstTimeUser && preferences.onboardingCompleted?.value !== 'true') {
-        console.log('🚀 Setting shouldStartTour to TRUE for first-time user');
-        setShouldStartTour(true);
-      } else {
-        console.log('🚫 Not setting shouldStartTour - user is not first-time or onboarding completed');
-      }
-      
-      console.log('✅ Language selection completed successfully');
-    } catch (error) {
-      console.error('❌ Failed to set initial language:', error);
-    }
-  };
+
 
   const value: LanguageContextType = {
     currentLanguage: i18n.language,
@@ -135,10 +132,6 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
   return (
     <LanguageContext.Provider value={value}>
       {children}
-      <LanguageSelectionDialog
-        open={showLanguageDialog}
-        onLanguageSelect={handleLanguageSelection}
-      />
     </LanguageContext.Provider>
   );
 };

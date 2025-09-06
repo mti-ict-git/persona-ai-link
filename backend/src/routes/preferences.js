@@ -23,13 +23,6 @@ const bulkPreferencesSchema = Joi.object({
 // GET /api/preferences - Get all user preferences
 router.get('/', authenticateToken, async (req, res) => {
   try {
-    // Set cache-control headers to prevent caching
-    res.set({
-      'Cache-Control': 'no-cache, no-store, must-revalidate',
-      'Pragma': 'no-cache',
-      'Expires': '0'
-    });
-    
     const pool = await dbManager.getConnection();
     const request = pool.request();
     

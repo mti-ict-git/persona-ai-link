@@ -126,31 +126,6 @@ router.post('/login', async (req, res) => {
         { expiresIn: JWT_EXPIRES_IN }
       );
 
-      // Check and create default preferences if they don't exist
-      const prefsResult = await pool.request()
-        .input('userId', dbUser.id)
-        .query('SELECT COUNT(*) as count FROM user_preferences WHERE user_id = @userId');
-      
-      if (prefsResult.recordset[0].count === 0) {
-        console.log('Creating default preferences for user:', dbUser.id);
-        // Create default preferences for existing user
-        const defaultPreferences = [
-          { key: 'firstTimeLogin', value: 'true' },
-          { key: 'onboardingCompleted', value: 'false' },
-          { key: 'language', value: 'en' },
-          { key: 'theme', value: 'light' },
-          { key: 'notifications', value: 'true' }
-        ];
-        
-        for (const pref of defaultPreferences) {
-          await pool.request()
-            .input('userId', dbUser.id)
-            .input('key', pref.key)
-            .input('value', pref.value)
-            .query('INSERT INTO user_preferences (user_id, preference_key, preference_value) VALUES (@userId, @key, @value)');
-        }
-      }
-
       // Prepare user data
       user = {
         id: dbUser.id,

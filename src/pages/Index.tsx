@@ -45,8 +45,8 @@ const Index = () => {
   const { changeLanguage, shouldStartTour, setShouldStartTour } = useLanguage();
   const { t } = useTranslation();
   
-  // Derive showSuggestions from user preferences
-  const showSuggestions = preferences.showFollowUpSuggestions?.value === 'true';
+  // Hide suggestions panel for all users
+  const showSuggestions = false; // preferences.showFollowUpSuggestions?.value === 'true';
 
   // Handle typewriter animation completion
   const handleTypewriterComplete = (messageId: string) => {
@@ -125,7 +125,7 @@ const Index = () => {
     } else {
       console.log('⏸️ Index.tsx: No tour action needed - shouldStartTour:', shouldStartTour, 'showOnboardingTour:', showOnboardingTour);
     }
-  }, [shouldStartTour, showOnboardingTour, user, preferences.firstTimeLogin?.value, preferences.language?.value, preferences.onboardingCompleted?.value, preferencesLoading]);
+  }, [shouldStartTour, showOnboardingTour, user]);
 
   // Load messages for active session
   useEffect(() => {
@@ -430,15 +430,15 @@ const Index = () => {
         }}
       />
       
-      {/* Start Tour Button - Test Button */}
-      <Button
+      {/* Start Tour Button - Hidden for now */}
+      {/* <Button
         data-tour="completion"
         onClick={() => setShowOnboardingTour(true)}
         className="fixed bottom-4 right-4 z-50 bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg"
         size="sm"
       >
         Start Tour
-      </Button>
+      </Button> */}
     </div>
   );
 };

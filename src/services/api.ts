@@ -50,10 +50,6 @@ export interface UserPreferences {
     value: string;
     updatedAt: string;
   };
-  onboardingCompleted?: {
-    value: string;
-    updatedAt: string;
-  };
   [key: string]: {
     value: string;
     updatedAt: string;
@@ -329,15 +325,13 @@ class ApiService {
       requestOptions.headers = headers;
     }
 
-    const responseData = await this.request<T>(endpoint, requestOptions);
-    return { success: true, data: responseData };
+    return this.request(endpoint, requestOptions);
   }
 
   async delete<T = unknown>(endpoint: string): Promise<{success: boolean, data?: T}> {
-    const responseData = await this.request<T>(endpoint, {
+    return this.request(endpoint, {
       method: 'DELETE',
     });
-    return { success: true, data: responseData };
   }
 
   // Message feedback methods
@@ -403,10 +397,10 @@ class ApiService {
 
   // User Preferences Methods
   async getUserPreferences(): Promise<UserPreferences> {
-    const response = await this.request<UserPreferences>('/preferences', {
+    const response = await this.request<{success: boolean, preferences: UserPreferences}>('/preferences', {
       method: 'GET'
     });
-    return response;
+    return response.preferences;
   }
 
   async getUserPreference(key: string): Promise<{ key: string; value: string }> {

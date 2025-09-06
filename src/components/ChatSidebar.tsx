@@ -156,7 +156,6 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
         
         {/* New Chat Button */}
         <Button 
-          data-tour="new-chat"
           onClick={onNewChat}
           className="w-full bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary hover:shadow-lg hover:scale-[1.02] transition-all duration-200 rounded-xl font-medium"
         >
@@ -273,7 +272,6 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
             variant="ghost"
             onClick={() => navigate('/settings')}
             className="w-full justify-start text-left hover:bg-chat-sidebar-hover/60 transition-all duration-200 rounded-xl"
-            data-tour="settings"
           >
             <Settings className="w-4 h-4 mr-3" />
             {t('sidebar.settings')}
