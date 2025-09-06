@@ -7,14 +7,14 @@ const router = express.Router();
 
 // Validation schemas
 const preferenceSchema = Joi.object({
-  key: Joi.string().valid('language', 'theme', 'timezone', 'notifications', 'dateFormat', 'timeFormat').required(),
+  key: Joi.string().valid('language', 'theme', 'timezone', 'notifications', 'dateFormat', 'timeFormat', 'onboardingCompleted', 'showFollowUpSuggestions', 'firstTimeLogin').required(),
   value: Joi.string().max(500).required()
 });
 
 const bulkPreferencesSchema = Joi.object({
   preferences: Joi.array().items(
     Joi.object({
-      key: Joi.string().valid('language', 'theme', 'timezone', 'notifications', 'dateFormat', 'timeFormat').required(),
+      key: Joi.string().valid('language', 'theme', 'timezone', 'notifications', 'dateFormat', 'timeFormat', 'onboardingCompleted', 'showFollowUpSuggestions', 'firstTimeLogin').required(),
       value: Joi.string().max(500).required()
     })
   ).min(1).max(20).required()
@@ -23,6 +23,13 @@ const bulkPreferencesSchema = Joi.object({
 // GET /api/preferences - Get all user preferences
 router.get('/', authenticateToken, async (req, res) => {
   try {
+    // Set cache-control headers to prevent caching
+    res.set({
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0'
+    });
+    
     const pool = await dbManager.getConnection();
     const request = pool.request();
     
@@ -63,7 +70,7 @@ router.get('/:key', authenticateToken, async (req, res) => {
     const { key } = req.params;
     
     // Validate preference key
-    const validKeys = ['language', 'theme', 'timezone', 'notifications', 'dateFormat', 'timeFormat'];
+    const validKeys = ['language', 'theme', 'timezone', 'notifications', 'dateFormat', 'timeFormat', 'onboardingCompleted', 'showFollowUpSuggestions', 'firstTimeLogin'];
     if (!validKeys.includes(key)) {
       return res.status(400).json({
         error: 'Invalid preference key',
@@ -237,7 +244,7 @@ router.delete('/:key', authenticateToken, async (req, res) => {
     const { key } = req.params;
     
     // Validate preference key
-    const validKeys = ['language', 'theme', 'timezone', 'notifications', 'dateFormat', 'timeFormat'];
+    const validKeys = ['language', 'theme', 'timezone', 'notifications', 'dateFormat', 'timeFormat', 'onboardingCompleted', 'showFollowUpSuggestions', 'firstTimeLogin'];
     if (!validKeys.includes(key)) {
       return res.status(400).json({
         error: 'Invalid preference key',

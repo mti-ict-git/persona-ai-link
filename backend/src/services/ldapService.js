@@ -168,7 +168,9 @@ class LDAPService {
                             VALUES 
                                 (@userId, 'language', 'en', GETDATE(), GETDATE()),
                                 (@userId, 'theme', 'light', GETDATE(), GETDATE()),
-                                (@userId, 'firstTimeLogin', 'true', GETDATE(), GETDATE())
+                                (@userId, 'firstTimeLogin', 'true', GETDATE(), GETDATE()),
+                                (@userId, 'onboardingCompleted', 'false', GETDATE(), GETDATE()),
+                                (@userId, 'showFollowUpSuggestions', 'true', GETDATE(), GETDATE())
                         `);
                     console.log(`Created default preferences for user: ${ldapUserData.username}`);
                 } catch (prefError) {

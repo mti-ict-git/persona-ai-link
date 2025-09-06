@@ -9,6 +9,7 @@ const ThemeToggle = () => {
 
   return (
     <Button
+      data-tour="theme-toggle"
       variant="ghost"
       size="icon"
       onClick={toggleTheme}

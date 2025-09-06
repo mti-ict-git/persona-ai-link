@@ -1,5 +1,247 @@
 # Development Journal
 
+## 2025-09-06 17:07:03 - 🐛 ENHANCED DEBUGGING SYSTEM FOR LANGUAGE DIALOG & TOUR ISSUES
+
+**Problem**: 
+Language selection dialog and onboarding tour still appearing simultaneously despite previous fixes. Need detailed logging to diagnose the exact flow and timing issues.
+
+**Solution Implemented**:
+1. ✅ **Enhanced LanguageContext Logging**: Added comprehensive console logging for all decision points
+   - Language dialog show/hide logic with all relevant state variables
+   - shouldStartTour state changes and triggers
+   - handleLanguageSelection step-by-step process tracking
+
+2. ✅ **Enhanced OnboardingTour Logging**: Fixed imports and added detailed state tracking
+   - Added missing imports: useAuth, useUserPreferences, useLanguage
+   - Added shouldStartTour effect with detailed logging
+   - Enhanced render state logging with all relevant variables
+
+3. ✅ **Enhanced Index.tsx Logging**: Added comprehensive tour flow tracking
+   - Detailed tour opening/closing decision logic
+   - Tour completion and close handler logging
+   - State change tracking with timestamps
+
+**Debug Log Categories**:
+- 🌍 LanguageContext: Dialog logic and shouldStartTour state
+- 🎪 OnboardingTour: Component state and tour triggers
+- 🏠 Index.tsx: Tour flow management
+- ✅ Success actions (completions, updates)
+- ❌ Error/close actions
+- 🚀 Tour opening triggers
+
+**Files Modified**:
+- `src/contexts/LanguageContext.tsx` - Enhanced logging throughout
+- `src/components/OnboardingTour.tsx` - Fixed imports, added detailed logging
+- `src/pages/Index.tsx` - Enhanced tour flow logging
+
+**Next Steps**: 
+1. Open browser Developer Tools (F12) → Console tab
+2. Refresh page and observe the detailed log flow
+3. Look for timing conflicts between language dialog and tour triggers
+4. Identify exact sequence causing simultaneous appearance
+
+**Current Status**: Enhanced debugging system deployed. Ready for console log analysis.
+
+## 2025-09-06 17:23:10 - 🔧 TYPESCRIPT ERRORS FIXED
+
+**Problem**: 
+TypeScript compilation errors in Index.tsx after adding enhanced logging:
+- Missing `isAuthenticated` variable in scope
+- Missing `preferencesLoading` variable  
+- Missing dependencies in useEffect dependency array
+
+**Solution Implemented**:
+1. ✅ **Fixed Missing Variables**: Added `isAuthenticated` and `preferencesLoading` to destructured imports
+   - Updated `useAuth()` to include `isAuthenticated`
+   - Updated `useUserPreferences()` to include `loading: preferencesLoading`
+
+2. ✅ **Fixed Dependency Array**: Added missing dependencies to useEffect
+   - Added `preferences.firstTimeLogin?.value`
+   - Added `preferences.language?.value` 
+   - Added `preferences.onboardingCompleted?.value`
+   - Added `preferencesLoading`
+
+**Files Modified**:
+- `src/pages/Index.tsx` - Fixed imports and dependency array
+
+**Current Status**: All TypeScript errors resolved. Application compiling and running successfully.
+
+---
+
+## 2025-09-06 12:01:40 - 🔧 LANGUAGE SELECTION DIALOG FIXES
+
+**Problem**: 
+1. Missing translations for `languageSelection.welcomeChooseLanguage` and `languageSelection.continue` keys causing display issues
+2. Language selection dialog appearing every time user visits home page instead of only for first-time users
+
+**Root Cause**: 
+1. Translation keys were not added to both English and Chinese locale files
+2. Logic was checking `!preferences.language?.value` instead of `firstTimeLogin` flag, causing dialog to show whenever language preference was missing (including existing users)
+
+**Solution Implemented**:
+1. ✅ **Added Missing Translations**: Added `welcomeChooseLanguage` and `continue` keys to English locale
+2. ✅ **Added Chinese Translations**: Added complete `languageSelection` section to Chinese locale with proper translations
+3. ✅ **Fixed Dialog Logic**: Updated trigger condition to check `preferences.firstTimeLogin?.value === 'true'` AND `!preferences.language?.value`
+4. ✅ **Updated Handler**: Modified `handleLanguageSelect` to set `firstTimeLogin` to 'false' after language selection
+5. ✅ **Fixed Dependencies**: Updated `useEffect` dependency array to include `preferences.firstTimeLogin`
+
+**Technical Changes**:
+- Added missing translation keys to `src/locales/en/common.json`
+- Added complete languageSelection section to `src/locales/zh/common.json`
+- Updated dialog trigger logic in `src/pages/Index.tsx` to use `firstTimeLogin` flag
+- Added `updatePreference('firstTimeLogin', 'false')` call in language selection handler
+
+**Files Modified**:
+- `src/locales/en/common.json` - Added missing translation keys
+- `src/locales/zh/common.json` - Added complete languageSelection section
+- `src/pages/Index.tsx` - Fixed dialog trigger logic and handler
+
+**Current Status**: Translation and first-time user logic fixes completed. Ready for testing.
+
+---
+
+## 2025-09-06 11:53:13 - ✅ LANGUAGE SELECTION DIALOG IMPLEMENTATION
+
+**Problem**: Newly created users (both LDAP and local) were not receiving the language selection dialog on first login.
+
+**Root Cause Found**: The LanguageSelectionDialog component was not imported or rendered in the Index.tsx file, despite being available in the components directory.
+
+**Solution Implemented**:
+1. ✅ **Added LanguageSelectionDialog Import**: Imported the component in `src/pages/Index.tsx`
+2. ✅ **Added Language Context**: Imported `useLanguage` hook for language management
+3. ✅ **Implemented Dialog Logic**: Added state and useEffect to show dialog for users without language preference
+4. ✅ **Added Language Handler**: Created `handleLanguageSelect` function to save preference and change app language
+5. ✅ **Rendered Dialog Component**: Added LanguageSelectionDialog to JSX with proper props
+6. ✅ **Priority Logic**: Language dialog shows first (500ms delay), onboarding tour shows after language is set
+
+**Technical Changes**:
+- Modified `src/pages/Index.tsx` to include language selection functionality
+- Dialog triggers when `preferences.language?.value` is undefined/empty
+- Language selection updates both database preference and app language context
+- Proper sequencing: Language dialog → Onboarding tour
+
+**Files Modified**:
+- `src/pages/Index.tsx`
+
+**Current Status**: Language selection dialog implemented and ready for testing with new users.
+
+---
+
+## 2025-09-06 11:30:34 - 🔍 DEBUGGING USER PREFERENCES ISSUE
+
+**Problem**: Newly created users through admin panel are still not receiving language selection dialog and onboarding tour despite previous fix.
+
+**Investigation Steps**:
+1. ✅ Verified admin route has all 5 default preferences (language, theme, firstTimeLogin, onboardingCompleted, showFollowUpSuggestions)
+2. ✅ Added debug logging to admin user creation process
+3. ✅ Backend server running successfully with database connections established
+4. ✅ Admin panel accessible and loading correctly
+5. 🔄 Need to test actual user creation process to verify preferences insertion
+
+**Current Status**: Ready to test user creation with enhanced logging
+
+---
+
+## 2025-09-06 11:10:20 - 🔧 NEW USER PREFERENCES INITIALIZATION FIX
+
+**Problem**: New users created through admin panel were missing essential preferences (`onboardingCompleted` and `showFollowUpSuggestions`), causing:
+- No language selection dialog (CN/EN) on first login
+- No first-time system tour/onboarding experience
+- Inconsistent user experience compared to LDAP-created users
+
+**Root Cause**: Admin user creation route in `backend/src/routes/admin.js` was only creating 3 default preferences while LDAP service was creating 5 preferences.
+
+**Solution**: Updated admin user creation to include all necessary default preferences:
+- `language`: 'en'
+- `theme`: 'light' 
+- `firstTimeLogin`: 'true' (triggers language selection)
+- `onboardingCompleted`: 'false' (triggers tour)
+- `showFollowUpSuggestions`: 'true'
+
+**Implementation**:
+- Modified `backend/src/routes/admin.js` line ~356
+- Added missing preference entries to match LDAP service behavior
+- Ensures consistent onboarding experience for all new users
+
+**Files Modified**:
+- `backend/src/routes/admin.js`
+
+**Impact**: New users will now properly see language selection dialog and onboarding tour on first login.
+
+**Status**: ✅ Fixed - Backend updated, ready for testing
+
+---
+
+## 2025-09-06 10:44:49 - 🔧 API SERVICE RESPONSE WRAPPING FIX
+
+**Problem**: API service methods (`get`, `post`, `put`, `delete`) had type signatures promising `{success: boolean, data: T}` but were returning raw data directly, causing TypeScript errors and runtime issues in components.
+
+**Root Cause**: 
+- The `request()` method returns raw backend response data
+- HTTP methods like `get()`, `post()`, etc. were calling `this.request()` directly without wrapping the response
+- Type signatures promised wrapped responses but implementation didn't match
+- This caused "Cannot read properties of undefined (reading 'users')" errors when components expected `response.data`
+
+**Solution**: Updated all HTTP methods to properly wrap responses in `{success: boolean, data: T}` format to match their type signatures.
+
+**Implementation**:
+
+1. **Fixed get() method**:
+   - Changed from `return this.request(endpoint, {...})` 
+   - To `const data = await this.request<T>(endpoint, {...}); return { success: true, data };`
+
+2. **Fixed post() method**:
+   - Added response wrapping: `const responseData = await this.request<T>(...); return { success: true, data: responseData };`
+
+3. **Fixed put() method**:
+   - Added response wrapping: `const responseData = await this.request<T>(...); return { success: true, data: responseData };`
+
+4. **Fixed delete() method**:
+   - Added response wrapping: `const responseData = await this.request<T>(...); return { success: true, data: responseData };`
+
+**Files Modified**:
+- `src/services/api.ts`: Updated all HTTP methods to properly wrap responses
+
+**Impact**: 
+- Eliminates TypeScript errors in components using the API service
+- Provides consistent response structure across all HTTP methods
+- Maintains backward compatibility with existing code expecting `response.data` access pattern
+- Fixes Admin panel and other components that rely on the API service
+
+**Status**: ✅ Resolved - API service now consistently returns wrapped responses matching type signatures
+
+## September 5, 2025 - 🔧 SUPER ADMIN API RESPONSE STRUCTURE FIX
+
+**Problem**: Super admin dashboard was failing to load users and statistics with error "Cannot read properties of undefined (reading 'users')" at Admin.tsx:108:30. Users could not access dashboard or user management functionality.
+
+**Root Cause**: The Admin component was incorrectly accessing API response data. The API service's get method returns `{success: boolean, data: T}` structure, but the component was trying to access `response.users` and `response` directly instead of `response.data.users` and `response.data`.
+
+**Solution**: Fixed the Admin component to properly access the nested data structure returned by the API service.
+
+**Implementation**:
+
+1. **Fixed fetchUsers method**:
+   - Changed `setUsers(response.users || [])` to `setUsers(response.data.users || [])`
+   - Properly accesses the users array from the nested response structure
+
+2. **Fixed fetchStats method**:
+   - Changed `setStats(response)` to `setStats(response.data)`
+   - Properly accesses the stats object from the nested response structure
+
+**Files Modified**:
+- `src/pages/Admin.tsx` (lines 108 and 118)
+
+**Testing**: 
+- TypeScript compilation check passed (npx tsc --noEmit)
+- Frontend and backend servers running successfully
+- API endpoints returning correct data structure
+
+**Impact**: 
+- Super admin dashboard now loads correctly
+- User management functionality restored
+- Statistics display working properly
+- Resolved TypeScript type errors
+
 ## September 5, 2025 - 🔧 CHAT SUGGESTIONS & SIDEBAR TRANSLATION FIXES
 
 **Problem**: Missing translation keys for chat suggestions (gradePolicy, companyRules, employeeBenefits, itPolicy) and sidebar.adminPanel causing untranslated text to appear in the UI.
@@ -310,7 +552,94 @@
 - **Component Cleanup**: Updated `ChatMain.tsx` to remove suggestion toggle button and related props
 - **State Management**: Replaced local state variables with preference-driven visibility logic
 
+---
+
+## September 6, 2025 - Onboarding Tour Data Attributes Fix
+
+**Issue**: "Start Tour" button was not working - onboarding tour was not starting when clicked.
+
+**Root Cause**: Missing `data-tour` attributes on key UI elements that the onboarding tour targets.
+
+**Solution**: Added required `data-tour` attributes to all tour target elements:
+
 **Files Modified**:
+1. **ChatMain.tsx**: Added `data-tour="chat-input"` to the Textarea component
+2. **SuggestionsPanel.tsx**: Added `data-tour="suggestions-panel"` to main container div
+3. **LanguageSelectionDialog.tsx**: Added `data-tour="language-toggle"` to DialogContent
+4. **Settings.tsx**: Added `data-tour="settings"` to main container div
+5. **Admin.tsx**: Added `data-tour="admin-panel"` to main container div
+6. **Index.tsx**: Added `data-tour="completion"` to the "Start Tour" button
+
+**Tour Steps Configured**:
+- Chat input area
+- Suggestions panel
+- Language toggle dialog
+- Theme toggle (already had attribute)
+- Settings page
+- Admin panel (for admin users)
+- Completion step (Start Tour button)
+
+**Status**: ✅ All required data-tour attributes have been added. The onboarding tour should now work properly when the "Start Tour" button is clicked.
+
+---
+
+## September 6, 2025 1:40 PM - Additional Onboarding Tour Fixes
+
+**Issue**: Start Tour button still not working after adding data-tour attributes.
+
+**Root Cause Analysis**:
+1. Missing `data-tour="welcome"` attribute on main container
+2. Translation key mismatch - component looking for 'content' but translations using 'description'
+3. Missing translation keys for several tour steps
+4. JSON syntax error in Chinese translations due to unescaped quotation marks
+
+**Additional Fixes Applied**:
+1. **Index.tsx**: Added `data-tour="welcome"` to main container div
+2. **English Translations** (`en/common.json`):
+   - Changed 'description' to 'content' for all onboarding steps
+   - Added missing translation keys: `newChat`, `chatInput`, `language`, `theme`, `completion`
+   - Added 'close' button translation
+3. **Chinese Translations** (`zh/common.json`):
+   - Updated structure to match English translations
+   - Added all missing translation keys with Chinese translations
+   - Fixed JSON syntax error by escaping quotation marks in completion message
+
+**Tour Steps Now Fully Configured**:
+- ✅ Welcome (main container)
+- ✅ Sidebar navigation
+- ✅ New chat button
+- ✅ Chat input area
+- ✅ Suggestions panel
+- ✅ Language selection
+- ✅ Theme toggle
+- ✅ Settings page
+- ✅ Admin panel (admin users only)
+- ✅ Completion step
+
+**Status**: ✅ All data-tour attributes and translations are now properly configured. The Start Tour button should work correctly.
+
+---
+
+## September 6, 2025 1:49 PM - Enhanced Welcome Message
+
+**Enhancement**: Updated onboarding tour welcome message to be more creative and engaging.
+
+**Changes Made**:
+1. **English Translation** (`en/common.json`):
+   - Title: "Welcome to Persona AI Link!" → "🚀 Welcome to Your AI Journey!"
+   - Content: Enhanced with more engaging and inspiring language about unlocking AI power
+
+2. **Chinese Translation** (`zh/common.json`):
+   - Title: "欢迎使用 Persona AI Link！" → "🚀 欢迎开启您的AI之旅！"
+   - Content: Updated with equivalent engaging Chinese text about exploring AI capabilities
+
+**Impact**: The onboarding tour now has a more welcoming and exciting first impression that better captures user attention and sets an enthusiastic tone for the platform experience.
+
+**Status**: ✅ Creative welcome message successfully implemented in both languages.
+
+**Files Modified**:
+- `src/locales/en/common.json` - Updated welcome title and content
+- `src/locales/zh/common.json` - Updated welcome title and content
 - `src/pages/Index.tsx` - Integrated useUserPreferences, removed manual setShowSuggestions calls
 - `src/components/ChatMain.tsx` - Removed onToggleSuggestions prop and toggle button
 
@@ -6521,3 +6850,261 @@ CREATE TABLE user_preferences (
 - Production environment supports personalized user settings
 
 **Status**: ✅ **COMPLETED** - Database migration executed successfully, user preferences system fully operational
+
+---
+
+## 2025-09-06 14:49:57 - 🎯 Theme Toggle Tour Fix & Completion Message Update
+
+### Changes Made
+1. **Enhanced Theme Toggle Tour Step**
+   - Added `disableBeacon: false` and `spotlightClicks: true` to theme toggle step
+   - Improved element targeting and interaction for better tour flow
+   - Fixed formatting in OnboardingTour.tsx
+
+2. **Updated Completion Messages**
+   - English: Changed from "Tour Complete!" to "🎉 Welcome Aboard!"
+   - Content: "Fantastic! You're all set to explore the amazing world of AI conversations. Let's start exploring and happy chatting! 🚀✨"
+   - Chinese: Changed from "导览完成！" to "🎉 欢迎加入！"
+   - Content: "太棒了！您已经准备好探索精彩的AI对话世界了。让我们开始探索，愉快聊天吧！🚀✨"
+
+### Files Modified
+- `src/components/OnboardingTour.tsx` - Enhanced theme toggle step configuration
+- `src/locales/en/common.json` - Updated completion message
+- `src/locales/zh/common.json` - Updated completion message
+
+### Testing
+- Dev server running on http://localhost:8090
+- Tour should now properly include theme toggle step
+- Completion message is more engaging and fun
+
+**Status**: ✅ **COMPLETED** - Theme toggle tour step enhanced and completion messages updated
+
+---
+
+## 2025-09-06 14:59:58 - 🔧 Onboarding Tour Debugging and Fixes
+
+### Issue Investigation
+- **Problem:** Onboarding tour was ending prematurely after chat input step, not showing theme toggle and completion steps
+- **Root Cause:** Tour steps targeting elements not available on the main page (language toggle in dialog, settings on different page)
+
+### Changes Made
+1. **Removed Problematic Steps:**
+   - Commented out language toggle step (element in dialog, not always visible)
+   - Commented out settings step (element on different page)
+
+2. **Enhanced Tour Robustness:**
+   - Added debugging capabilities to track tour progression
+   - Improved error handling for missing target elements
+   - Simplified tour configuration for better reliability
+
+3. **Updated Tour Flow:**
+   - Welcome → Sidebar → New Chat → Chat Input → Theme Toggle → Admin Panel (if admin) → Completion
+   - All remaining steps target elements available on main chat page
+
+### Files Modified
+- `src/components/OnboardingTour.tsx` - Removed problematic steps, enhanced error handling
+
+### Testing Status
+- ✅ Tour configuration cleaned up
+- ✅ Problematic steps removed
+- 🔄 Ready for user testing of complete tour flow
+
+**Status**: ✅ **COMPLETED** - Tour debugging completed, problematic steps identified and removed
+
+---
+
+## 2025-09-06 15:05:27 - ➕ Settings Step Added to Onboarding Tour
+
+### Enhancement Details
+- **Added:** Settings step back to the onboarding tour
+- **Solution:** Added `data-tour="settings"` attribute to the settings button in ChatSidebar
+- **Fixed:** TypeScript error by removing invalid `disableBeacon` prop from Joyride component
+
+### Changes Made
+- Added `data-tour="settings"` to settings button in sidebar
+- Uncommented and enabled settings tour step
+- Removed invalid `disableBeacon` prop from main Joyride component
+- Settings step now properly targets the sidebar settings button
+
+### Tour Flow Updated
+1. Welcome → Sidebar → New Chat → Chat Input → Theme Toggle → **Settings** → Admin Panel (if admin) → Completion
+
+### Files Modified
+- `src/components/ChatSidebar.tsx` - Added data-tour attribute to settings button
+- `src/components/OnboardingTour.tsx` - Uncommented settings step, fixed TypeScript error
+
+### Testing Status
+- ✅ TypeScript compilation successful
+- ✅ Hot module reloading working
+- ✅ Settings step integrated into tour flow
+- 🔄 Ready for user testing of complete tour with settings
+
+**Status**: ✅ **COMPLETED** - Settings step successfully added to onboarding tour
+
+---
+
+## 2025-09-06 15:37:10 - Auto-Start Onboarding Tour Implementation
+
+### Enhancement Overview
+Implemented automatic onboarding tour triggering after first-time language selection to improve user onboarding experience.
+
+### Changes Made
+1. **UserPreferences Interface** (`src/services/api.ts`)
+   - Added `onboardingCompleted` preference field to track tour completion status
+
+2. **LanguageContext Enhancement** (`src/contexts/LanguageContext.tsx`)
+   - Added `shouldStartTour` state and `setShouldStartTour` function to context
+   - Modified `handleLanguageSelection` to trigger tour for first-time users
+   - Tour automatically starts after language selection if user hasn't completed it
+
+3. **Index Page Integration** (`src/pages/Index.tsx`)
+   - Updated to use `shouldStartTour` from LanguageContext instead of manual preference checking
+   - Added `setShouldStartTour` to reset tour trigger state after completion
+   - Simplified tour triggering logic using context-based approach
+
+4. **OnboardingTour Component** (`src/components/OnboardingTour.tsx`)
+   - Already had `onboardingCompleted` preference update on tour completion
+   - No changes needed - existing implementation was sufficient
+
+### Auto-Start Flow
+1. New user opens application
+2. `firstTimeLogin` preference triggers language selection dialog
+3. User selects language
+4. `LanguageContext` sets `shouldStartTour` to true for first-time users
+5. `Index.tsx` detects `shouldStartTour` and automatically starts onboarding tour
+6. Tour completion updates `onboardingCompleted` preference and resets trigger state
+
+### Files Modified
+- `src/services/api.ts` - Added onboardingCompleted to UserPreferences interface
+- `src/contexts/LanguageContext.tsx` - Added tour triggering logic after language selection
+- `src/pages/Index.tsx` - Updated to use context-based tour triggering
+
+### Testing Status
+- ✅ TypeScript compilation successful
+- ✅ Hot module reloading working
+- ✅ Auto-start tour logic implemented
+- ✅ Context integration completed
+- ✅ No compilation errors
+- 🔄 Ready for first-time user testing
+
+**Status**: ✅ **COMPLETED** - Auto-start onboarding tour implementation completed successfully
+
+---
+
+## 2025-09-06 15:49:00 - First-Time User Detection Fix
+
+### Issue Identified
+The language selection and tour guide were not working for existing local users because:
+- LDAP authentication creates default preferences including `firstTimeLogin: true`
+- Local authentication did not create any default preferences for existing users
+- Migration scripts only set up the table structure but didn't add `firstTimeLogin` preference
+- Existing users (like admin) had no preferences, so `firstTimeLogin` was undefined
+
+### Root Cause Analysis
+- **LDAP users**: Get default preferences created automatically via `ldapService.js`
+- **Local users**: No preference initialization on login
+- **Database migration**: Only creates table structure, doesn't populate preferences for existing users
+- **Frontend logic**: Checks for `firstTimeLogin === 'true'` but gets `undefined` for users without preferences
+
+### Solution Implemented
+Updated local authentication in `src/routes/auth.js` to:
+1. Check if user has any preferences after successful login
+2. If no preferences exist, create default preferences including:
+   - `firstTimeLogin: 'true'`
+   - `onboardingCompleted: 'false'`
+   - `language: 'en'`
+   - `theme: 'light'`
+   - `notifications: 'true'`
+
+### Files Modified
+- `backend/src/routes/auth.js` - Added preference initialization logic for existing users
+
+### Testing Status
+- ✅ Backend server restarted successfully
+- ✅ Frontend compilation without errors
+- ✅ Both servers running on correct ports
+- 🔄 Ready for user testing with existing admin account
+
+### Expected Behavior
+When an existing local user (like admin) logs in:
+1. System detects missing preferences
+2. Creates default preferences with `firstTimeLogin: true`
+3. Frontend detects first-time user status
+4. Shows language selection dialog
+5. After language selection, automatically starts onboarding tour
+
+**Status**: ✅ **COMPLETED** - First-time user detection fix implemented successfully
+
+---
+
+## 2025-09-06 16:09:23 - Authentication Timing Fix for First-Time User Detection
+
+**Issue**: Despite the `firstTimeLogin` preference being set to `true`, users were not receiving the language selection dialog and onboarding tour after login. Investigation revealed a 401 error when loading user preferences.
+
+**Root Cause**: The `LanguageProvider` was positioned above the `AuthProvider` in the component hierarchy, causing it to attempt loading user preferences before the user was authenticated. This resulted in:
+- 401 Unauthorized errors when calling `/api/preferences`
+- Preferences never loading properly
+- First-time user detection failing
+
+**Solution**: Restructured the provider hierarchy to ensure proper authentication flow:
+1. **App.tsx**: Moved `LanguageProvider` inside `AuthProvider` to ensure authentication happens first
+2. **LanguageContext.tsx**: Added authentication checks before loading preferences
+3. **useUserPreferences.ts**: Modified to only load preferences when user is authenticated
+
+**Files Modified**:
+- `src/App.tsx` - Restructured provider hierarchy
+- `src/contexts/LanguageContext.tsx` - Added auth dependency and checks
+- `src/hooks/useUserPreferences.ts` - Added authentication guards
+
+**Testing Status**:
+- ✅ Frontend compilation successful
+- ✅ Backend running without errors
+- ✅ No more 401 errors on preference loading
+- ✅ Authentication flow properly sequenced
+- 🔄 Ready for first-time user flow testing
+
+**Expected Behavior**: 
+- User logs in → Authentication completes → Preferences load → First-time detection works → Language dialog appears → Tour starts
+
+**Status**: ✅ **COMPLETED** - Authentication timing issue resolved, ready for complete flow testing
+
+---
+
+## 2025-09-06 16:41:31 - Database State Issue Fix
+
+**Issue**: User state from database not properly handled at login
+- `firstTimeLogin` remained 'true' even after user completed onboarding
+- `language` preference was empty string, preventing proper language loading
+- Language dialog wasn't showing for users with incomplete preferences
+
+**Root Cause**: 
+- Language dialog condition only checked `firstTimeLogin === 'true'`
+- Empty language preference (`''`) wasn't triggering language selection dialog
+- Users could complete onboarding without setting language preference
+
+**Database State Found**:
+```
+test.user4 preferences:
+- firstTimeLogin: 'true' (should be 'false' after first login)
+- language: '' (empty, should have value)
+- onboardingCompleted: 'true' (tour completed)
+- theme: 'light'
+- showFollowUpSuggestions: 'true'
+```
+
+**Solution**:
+- Updated LanguageContext logic to show language dialog if `firstTimeLogin === 'true'` OR `language` is empty/unset
+- This ensures users with incomplete preferences get prompted to complete setup
+
+**Modified Files**:
+- `src/contexts/LanguageContext.tsx` - Enhanced language dialog trigger logic
+- `check-user-prefs.cjs` - Database inspection script (temporary)
+
+**Expected Behavior**:
+1. User logs in with incomplete preferences
+2. Language dialog appears automatically
+3. After language selection, `firstTimeLogin` is set to 'false'
+4. Language preference is properly saved
+5. Tour starts if `onboardingCompleted !== 'true'`
+
+**Status**: ✅ **COMPLETED** - Database state handling fix completed, language dialog now shows for incomplete preferences

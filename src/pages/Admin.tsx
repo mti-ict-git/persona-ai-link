@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -91,28 +91,21 @@ const Admin: React.FC = () => {
     { id: 'back-to-chat', label: t('admin.backToChat'), icon: ArrowLeft },
   ];
 
-  useEffect(() => {
-    if (canManageUsers && activeSection === 'user-management') {
-      fetchUsers();
-    }
-    if (activeSection === 'dashboard') {
-      fetchStats();
-    }
-  }, [canManageUsers, activeSection]);
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     if (!canManageUsers) return;
     
     try {
-      const response = await apiService.get<{ users: User[] }>('/admin/users');
+      const response = await apiService.get<{ users: User[]; pagination: { page: number; limit: number; total: number; totalPages: number; hasNext: boolean; hasPrev: boolean; } }>('/admin/users');
+      // The backend returns {users: User[], pagination: {...}} directly
+      // The API service returns the raw response, not wrapped in {success, data}
       setUsers(response.data.users || []);
     } catch (error: unknown) {
       console.error('Error fetching users:', error);
       toast.error('Error fetching users');
     }
-  };
+  }, [canManageUsers]);
 
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
       const response = await apiService.get<SystemStats>('/admin/stats');
       setStats(response.data);
@@ -122,7 +115,16 @@ const Admin: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (canManageUsers && activeSection === 'user-management') {
+      fetchUsers();
+    }
+    if (activeSection === 'dashboard') {
+      fetchStats();
+    }
+  }, [canManageUsers, activeSection, fetchUsers, fetchStats]);
 
   const handleUpdateUser = async (userId: string, updates: Partial<User>) => {
     try {
@@ -201,9 +203,12 @@ const Admin: React.FC = () => {
   };
 
   const handleSidebarClick = (itemId: string) => {
+    console.log('🔍 Sidebar clicked:', itemId);
+    console.log('🔍 Current activeSection:', activeSection);
     if (itemId === 'back-to-chat') {
       navigate('/');
     } else {
+      console.log('🔍 Setting activeSection to:', itemId);
       setActiveSection(itemId as AdminSection);
     }
   };
@@ -286,15 +291,17 @@ const Admin: React.FC = () => {
     );
   }
 
-  const renderDashboard = () => (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">{t('admin.adminDashboard')}</h1>
-      </div>
+  const renderDashboard = () => {
+    console.log('🔍 renderDashboard called, stats:', stats, 'loading:', loading);
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h1 className="text-3xl font-bold">{t('admin.adminDashboard')}</h1>
+        </div>
 
-      {/* Statistics Cards */}
-      {stats && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Statistics Cards */}
+        {stats && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">{t('admin.totalUsers')}</CardTitle>
@@ -333,18 +340,21 @@ const Admin: React.FC = () => {
           </Card>
         </div>
       )}
-    </div>
-  );
-
-  const renderUserManagement = () => (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">{t('admin.userManagement')}</h1>
-        <Button onClick={() => setIsCreateDialogOpen(true)}>
-          <UserPlus className="h-4 w-4 mr-2" />
-          {t('admin.createUser')}
-        </Button>
       </div>
+    );
+  };
+
+  const renderUserManagement = () => {
+    console.log('🔍 renderUserManagement called, users:', users, 'users.length:', users.length);
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h1 className="text-3xl font-bold">{t('admin.userManagement')}</h1>
+          <Button onClick={() => setIsCreateDialogOpen(true)}>
+            <UserPlus className="h-4 w-4 mr-2" />
+            {t('admin.createUser')}
+          </Button>
+        </div>
 
       <Card>
         <CardHeader>
@@ -423,7 +433,8 @@ const Admin: React.FC = () => {
       </CardContent>
     </Card>
     </div>
-  );
+    );
+  };
 
   const renderTrainingManagement = () => (
     <div className="space-y-6">
@@ -451,34 +462,42 @@ const Admin: React.FC = () => {
   );
 
   const renderContent = () => {
+    console.log('🔍 renderContent called with activeSection:', activeSection);
+    console.log('🔍 User permissions - isSuperAdmin:', isSuperAdmin, 'canManageUsers:', canManageUsers, 'isAdmin:', isAdmin);
+    
     switch (activeSection) {
       case 'dashboard':
+        console.log('🔍 Rendering dashboard');
         return renderDashboard();
       case 'user-management':
+        console.log('🔍 Rendering user management, canManageUsers:', canManageUsers);
         return canManageUsers ? renderUserManagement() : (
           <div className="text-center py-8">
             <p className="text-muted-foreground">{t('admin.noPermissionUserManagement')}</p>
           </div>
         );
       case 'feedback-export':
+        console.log('🔍 Rendering feedback export, isAdmin:', isAdmin);
         return isAdmin ? renderFeedbackExport() : (
           <div className="text-center py-8">
             <p className="text-muted-foreground">{t('admin.noPermissionFeedbackExport')}</p>
           </div>
         );
       case 'training-management':
+        console.log('🔍 Rendering training management, canManageTraining:', canManageTraining);
         return canManageTraining ? renderTrainingManagement() : (
           <div className="text-center py-8">
             <p className="text-muted-foreground">{t('admin.noPermissionTrainingManagement')}</p>
           </div>
         );
       default:
+        console.log('🔍 Rendering default (dashboard)');
         return renderDashboard();
     }
   };
 
   return (
-    <div className="flex h-screen bg-background">
+    <div data-tour="admin-panel" className="flex h-screen bg-background">
       {/* Sidebar */}
       <div className="w-64 bg-card border-r border-border flex flex-col">
         <div className="p-6 border-b border-border">
@@ -523,8 +542,6 @@ const Admin: React.FC = () => {
           {renderContent()}
         </div>
       </div>
-
-
 
       {/* Edit User Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>

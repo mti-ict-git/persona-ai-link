@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { apiService, UserPreferences } from '@/services/api';
 import { toast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 
 export interface UserPreferencesHook {
   preferences: UserPreferences;
@@ -12,6 +13,7 @@ export interface UserPreferencesHook {
 }
 
 export const useUserPreferences = (): UserPreferencesHook => {
+  const { isAuthenticated, user } = useAuth();
   const [preferences, setPreferences] = useState<UserPreferences>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -86,9 +88,14 @@ export const useUserPreferences = (): UserPreferencesHook => {
     await loadPreferences();
   };
 
+  // Load preferences on mount, but only when authenticated
   useEffect(() => {
-    loadPreferences();
-  }, []);
+    if (isAuthenticated && user) {
+      loadPreferences();
+    } else {
+      setLoading(false);
+    }
+  }, [isAuthenticated, user]);
 
   return {
     preferences,

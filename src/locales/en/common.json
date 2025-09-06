@@ -403,6 +403,7 @@
     "searchConversations": "Search conversations...",
     "settings": "Settings",
     "adminPanel": "Admin Panel",
+    "superAdminPanel": "Super Admin Panel",
     "logout": "Logout"
   },
   "training": {
@@ -535,6 +536,8 @@
   },
   "languageSelection": {
     "welcome": "Welcome! Choose Your Language",
+    "welcomeChooseLanguage": "Choose your preferred language",
+    "continue": "Continue",
     "description": "Select your preferred language to get started. You can change this later in settings."
   },
   "webhook": {
@@ -599,5 +602,50 @@
     "accountType": "Account Type",
     "created": "Created",
     "actions": "Actions"
+  },
+  "onboarding": {
+    "welcome": {
+      "title": "Welcome to Tsindeka AI",
+      "content": "Your journey with Intelligence HR AI starts here. Let's explore the powerful features that will transform your HR experience."
+    },
+    "sidebar": {
+      "title": "Navigation Sidebar",
+      "content": "Access your chat history, create new conversations, and navigate to different sections of the app."
+    },
+    "newChat": {
+      "title": "New Chat",
+      "content": "Click here to start a new conversation with the AI assistant."
+    },
+    "chatInput": {
+      "title": "Chat Input",
+      "content": "This is where you'll type your questions or requests to the AI assistant."
+    },
+    "language": {
+      "title": "Language Selection",
+      "content": "Change the application language to your preference."
+    },
+    "theme": {
+      "title": "Theme Toggle",
+      "content": "Click this button to switch between dark and light themes. Currently in dark mode? Click once to switch to light mode for a brighter interface."
+    },
+    "settings": {
+      "title": "Settings",
+      "content": "Customize your experience by changing language, theme, and other preferences."
+    },
+    "adminPanel": {
+      "title": "Admin Panel",
+      "content": "As an administrator, you can manage users, view analytics, and configure system settings here."
+    },
+    "completion": {
+      "title": "🎉 Welcome Aboard!",
+      "content": "Fantastic! You're all set to explore the amazing world of AI conversations. Let's start exploring and happy chatting! 🚀✨"
+    },
+    "buttons": {
+      "next": "Next",
+      "back": "Back",
+      "skip": "Skip Tour",
+      "finish": "Finish Tour",
+      "close": "Close"
+    }
   }
 }

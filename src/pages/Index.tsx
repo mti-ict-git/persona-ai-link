@@ -2,9 +2,15 @@ import { useState, useEffect } from "react";
 import ChatSidebar from "@/components/ChatSidebar";
 import ChatMain from "@/components/ChatMain";
 import SuggestionsPanel from "@/components/SuggestionsPanel";
+import OnboardingTour from "@/components/OnboardingTour";
+import LanguageSelectionDialog from "@/components/LanguageSelectionDialog";
+import { Button } from "@/components/ui/button";
 // import WebhookConfig from "@/components/WebhookConfig"; // Hidden - N8N configured via env vars
 import { useSessionManager } from "@/hooks/useSessionManager";
 import { useUserPreferences } from "@/hooks/useUserPreferences";
+import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useTranslation } from "react-i18next";
 import { apiService } from "@/services/api";
 import { Message as DatabaseMessage } from "@/utils/database";
 
@@ -30,9 +36,14 @@ const Index = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [showSidebar, setShowSidebar] = useState(true);
   const [newMessageIds, setNewMessageIds] = useState<Set<string>>(new Set()); // Track messages that should have typewriter animation
+  const [showOnboardingTour, setShowOnboardingTour] = useState(false);
+  const [showLanguageDialog, setShowLanguageDialog] = useState(false);
   
-  // Get user preferences
-  const { preferences } = useUserPreferences();
+  // Get user preferences and auth context
+  const { preferences, updatePreference, loading: preferencesLoading } = useUserPreferences();
+  const { user, isAuthenticated } = useAuth();
+  const { changeLanguage, shouldStartTour, setShouldStartTour } = useLanguage();
+  const { t } = useTranslation();
   
   // Derive showSuggestions from user preferences
   const showSuggestions = preferences.showFollowUpSuggestions?.value === 'true';
@@ -73,6 +84,48 @@ const Index = () => {
     }));
     setSessions(uiSessions);
   }, [dbSessions]);
+
+  // Check if user should see language selection dialog (first priority)
+  useEffect(() => {
+    if (user && preferences.firstTimeLogin?.value === 'true' && !preferences.language?.value) {
+      // Show language dialog for first-time users without language preference
+      const timer = setTimeout(() => {
+        setShowLanguageDialog(true);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [user, preferences.firstTimeLogin, preferences.language]);
+
+  // Check if user should see onboarding tour (using shouldStartTour from LanguageContext)
+  useEffect(() => {
+    console.log('🏠 Index.tsx tour effect triggered:', {
+      shouldStartTour,
+      showOnboardingTour,
+      isAuthenticated,
+      user: user ? { id: user.id, role: user.role } : null,
+      preferences: {
+        firstTimeLogin: preferences.firstTimeLogin?.value,
+        onboardingCompleted: preferences.onboardingCompleted?.value,
+        language: preferences.language?.value
+      },
+      loading: preferencesLoading
+    });
+    
+    if (shouldStartTour && !showOnboardingTour) {
+      console.log('🚀 Index.tsx: Opening onboarding tour because shouldStartTour is TRUE');
+      // Small delay to ensure the page is fully loaded
+      const timer = setTimeout(() => {
+        setShowOnboardingTour(true);
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else if (shouldStartTour && showOnboardingTour) {
+      console.log('🎪 Index.tsx: Tour already showing, shouldStartTour is TRUE');
+    } else if (!shouldStartTour && showOnboardingTour) {
+      console.log('🔄 Index.tsx: shouldStartTour is FALSE but tour is showing');
+    } else {
+      console.log('⏸️ Index.tsx: No tour action needed - shouldStartTour:', shouldStartTour, 'showOnboardingTour:', showOnboardingTour);
+    }
+  }, [shouldStartTour, showOnboardingTour, user, preferences.firstTimeLogin?.value, preferences.language?.value, preferences.onboardingCompleted?.value, preferencesLoading]);
 
   // Load messages for active session
   useEffect(() => {
@@ -293,8 +346,23 @@ const Index = () => {
     }
   };
 
+  const handleLanguageSelect = async (language: string) => {
+    try {
+      // Update language preference in database
+      await updatePreference('language', language);
+      // Mark first time login as completed
+      await updatePreference('firstTimeLogin', 'false');
+      // Change language in the app
+      changeLanguage(language);
+      // Close the dialog
+      setShowLanguageDialog(false);
+    } catch (error) {
+      console.error('Failed to set language preference:', error);
+    }
+  };
+
   return (
-    <div className="h-screen flex bg-background">
+    <div data-tour="welcome" className="h-screen flex bg-background">
       {/* Sidebar with conditional rendering and animations */}
       <div className={`transition-all duration-300 ease-in-out flex-shrink-0 ${
         showSidebar ? 'w-80 opacity-100' : 'w-0 opacity-0 overflow-hidden'
@@ -335,6 +403,42 @@ const Index = () => {
       </div>
 
       {/* WebhookConfig hidden - N8N is now configured via environment variables */}
+      
+      {/* Language Selection Dialog */}
+      <LanguageSelectionDialog
+        open={showLanguageDialog}
+        onLanguageSelect={handleLanguageSelect}
+      />
+      
+      {/* Onboarding Tour */}
+      <OnboardingTour
+        isOpen={showOnboardingTour}
+        onClose={() => {
+          console.log('❌ Index.tsx: Tour closed by user (not completed)');
+          setShowOnboardingTour(false);
+        }}
+        onComplete={() => {
+          console.log('✅ Index.tsx: Tour completed, updating preferences');
+          updatePreference('onboardingCompleted', 'true').then(() => {
+            console.log('✅ Index.tsx: onboardingCompleted preference updated to true');
+          }).catch((error) => {
+            console.error('❌ Index.tsx: Failed to update onboarding completion:', error);
+          });
+          setShowOnboardingTour(false);
+          setShouldStartTour(false);
+          console.log('✅ Index.tsx: Tour closed after completion');
+        }}
+      />
+      
+      {/* Start Tour Button - Test Button */}
+      <Button
+        data-tour="completion"
+        onClick={() => setShowOnboardingTour(true)}
+        className="fixed bottom-4 right-4 z-50 bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg"
+        size="sm"
+      >
+        Start Tour
+      </Button>
     </div>
   );
 };

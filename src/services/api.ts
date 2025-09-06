@@ -50,6 +50,10 @@ export interface UserPreferences {
     value: string;
     updatedAt: string;
   };
+  onboardingCompleted?: {
+    value: string;
+    updatedAt: string;
+  };
   [key: string]: {
     value: string;
     updatedAt: string;
@@ -275,9 +279,10 @@ class ApiService {
 
   // Generic HTTP methods for file operations
   async get<T = unknown>(endpoint: string): Promise<{success: boolean, data: T}> {
-    return this.request(endpoint, {
+    const data = await this.request<T>(endpoint, {
       method: 'GET',
     });
+    return { success: true, data };
   }
 
   async post<T = unknown>(endpoint: string, data?: unknown, options?: { headers?: Record<string, string> }): Promise<{success: boolean, data: T}> {
@@ -300,7 +305,8 @@ class ApiService {
       requestOptions.headers = headers;
     }
 
-    return this.request(endpoint, requestOptions);
+    const responseData = await this.request<T>(endpoint, requestOptions);
+    return { success: true, data: responseData };
   }
 
   async put<T = unknown>(endpoint: string, data?: unknown, options?: { headers?: Record<string, string> }): Promise<{success: boolean, data: T}> {
@@ -323,13 +329,15 @@ class ApiService {
       requestOptions.headers = headers;
     }
 
-    return this.request(endpoint, requestOptions);
+    const responseData = await this.request<T>(endpoint, requestOptions);
+    return { success: true, data: responseData };
   }
 
   async delete<T = unknown>(endpoint: string): Promise<{success: boolean, data?: T}> {
-    return this.request(endpoint, {
+    const responseData = await this.request<T>(endpoint, {
       method: 'DELETE',
     });
+    return { success: true, data: responseData };
   }
 
   // Message feedback methods

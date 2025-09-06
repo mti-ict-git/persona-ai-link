@@ -352,16 +352,20 @@ router.post('/users', (req, res, next) => {
     
     // Create default preferences for new user
     try {
+      console.log(`Creating default preferences for user ID: ${newUser.id}, username: ${newUser.username}`);
       await request.query(`
         INSERT INTO user_preferences (user_id, preference_key, preference_value, created_at, updated_at)
         VALUES 
           (${newUser.id}, 'language', 'en', GETDATE(), GETDATE()),
           (${newUser.id}, 'theme', 'light', GETDATE(), GETDATE()),
-          (${newUser.id}, 'firstTimeLogin', 'true', GETDATE(), GETDATE())
+          (${newUser.id}, 'firstTimeLogin', 'true', GETDATE(), GETDATE()),
+          (${newUser.id}, 'onboardingCompleted', 'false', GETDATE(), GETDATE()),
+          (${newUser.id}, 'showFollowUpSuggestions', 'true', GETDATE(), GETDATE())
       `);
-      console.log(`Created default preferences for user: ${newUser.username}`);
+      console.log(`✅ Successfully created default preferences for user: ${newUser.username}`);
     } catch (prefError) {
-      console.error('Error creating default preferences:', prefError);
+      console.error('❌ Error creating default preferences:', prefError);
+      console.error('User ID:', newUser.id, 'Username:', newUser.username);
       // Don't throw error here as user creation was successful
     }
     

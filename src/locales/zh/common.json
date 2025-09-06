@@ -403,6 +403,7 @@
     "searchConversations": "搜索对话...",
     "settings": "设置",
     "adminPanel": "管理面板",
+    "superAdminPanel": "超级管理面板",
     "logout": "登出"
   },
   "training": {
@@ -577,5 +578,56 @@
     "testSuccessful": "测试成功",
     "connectionError": "连接错误",
     "unexpectedError": "意外错误"
+  },
+  "onboarding": {
+    "welcome": {
+      "title": "欢迎使用 Tsindeka AI",
+      "content": "您的智能人力资源AI之旅从这里开始。让我们探索将改变您HR体验的强大功能。"
+    },
+    "sidebar": {
+      "title": "导航侧边栏",
+      "content": "访问您的聊天历史记录，创建新对话，并导航到应用程序的不同部分。"
+    },
+    "newChat": {
+      "title": "新建聊天",
+      "content": "点击这里开始与AI助手的新对话。"
+    },
+    "chatInput": {
+      "title": "聊天输入",
+      "content": "这里是您向AI助手输入问题或请求的地方。"
+    },
+    "language": {
+      "title": "语言选择",
+      "content": "将应用程序语言更改为您的偏好。"
+    },
+    "theme": {
+      "title": "主题切换",
+      "content": "点击此按钮在深色和浅色主题之间切换。当前是深色模式？点击一次即可切换到浅色模式，获得更明亮的界面。"
+    },
+    "settings": {
+      "title": "设置",
+      "content": "通过更改语言、主题和其他偏好设置来自定义您的体验。"
+    },
+    "adminPanel": {
+      "title": "管理面板",
+      "content": "作为管理员，您可以在这里管理用户、查看分析数据和配置系统设置。"
+    },
+    "completion": {
+      "title": "🎉 欢迎加入！",
+      "content": "太棒了！您已经准备好探索精彩的AI对话世界了。让我们开始探索，愉快聊天吧！🚀✨"
+    },
+    "buttons": {
+      "next": "下一步",
+      "back": "返回",
+      "skip": "跳过导览",
+      "finish": "完成导览",
+      "close": "关闭"
+    }
+  },
+  "languageSelection": {
+    "welcome": "欢迎！选择您的语言",
+    "welcomeChooseLanguage": "选择您的首选语言",
+    "continue": "继续",
+    "description": "选择您的首选语言以开始使用。您可以稍后在设置中更改此选项。"
   }
 }
