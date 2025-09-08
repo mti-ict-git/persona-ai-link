@@ -63,7 +63,11 @@ interface ApiResponse {
 }
 
 interface FileApiResponse {
-  data: FileData[];
+  success: boolean;
+  data: {
+    data: FileData[];
+    count: number;
+  };
 }
 
 interface ApiError {
@@ -106,9 +110,17 @@ const TrainingContent: React.FC = () => {
   const fetchFiles = async () => {
     try {
       const response = await apiService.get('/files') as FileApiResponse;
-      setFiles(response.data);
+      // Handle nested response structure: {success: true, data: {data: Array, count: number}}
+      const filesData = response?.data?.data || response?.data;
+      if (Array.isArray(filesData)) {
+        setFiles(filesData);
+      } else {
+        console.warn('API response data is not an array:', response);
+        setFiles([]);
+      }
     } catch (error) {
       console.error('Error fetching files:', error);
+      setFiles([]); // Reset to empty array on error
       toast({
         title: t('common.error'),
         description: "Failed to fetch files. Please try again.",
@@ -136,7 +148,7 @@ const TrainingContent: React.FC = () => {
     }
 
     // Check if file already exists
-    const existingFile = files.find(f => f.filename === file.name);
+    const existingFile = Array.isArray(files) ? files.find(f => f.filename === file.name) : undefined;
     if (existingFile) {
       setFileToDelete(existingFile);
       setPendingFile(file);
@@ -306,7 +318,7 @@ const TrainingContent: React.FC = () => {
   };
 
   const handleBatchProcess = async () => {
-    const unprocessedFiles = files.filter(f => !f.processed);
+    const unprocessedFiles = Array.isArray(files) ? files.filter(f => !f.processed) : [];
     if (unprocessedFiles.length === 0) {
       toast({
         title: t('training.noFilesToProcess'),
@@ -342,7 +354,7 @@ const TrainingContent: React.FC = () => {
   };
 
   const handleTrainModel = async () => {
-    const processedFiles = files.filter(f => f.processed);
+    const processedFiles = Array.isArray(files) ? files.filter(f => f.processed) : [];
     if (processedFiles.length === 0) {
       toast({
         title: t('training.noProcessedFiles'),
@@ -405,7 +417,7 @@ const TrainingContent: React.FC = () => {
     return filename.split('.').pop()?.toUpperCase() || 'Unknown';
   };
 
-  const processedFilesCount = files.filter(f => f.processed).length;
+  const processedFilesCount = Array.isArray(files) ? files.filter(f => f.processed).length : 0;
 
   return (
     <div className="space-y-6">
@@ -490,7 +502,7 @@ const TrainingContent: React.FC = () => {
                   Manage your training data files • {processedFilesCount} processed, {files.length - processedFilesCount} pending
                 </CardDescription>
               </div>
-              {files.filter(f => !f.processed).length > 0 && (
+              {Array.isArray(files) && files.filter(f => !f.processed).length > 0 && (
                 <Button
                   onClick={handleBatchProcess}
                   disabled={isProcessing || isTraining}
@@ -527,7 +539,7 @@ const TrainingContent: React.FC = () => {
               </div>
             ) : (
               <div className="space-y-3">
-                {files.map((file) => (
+                {Array.isArray(files) && files.map((file) => (
                   <div
                     key={file.id}
                     className="flex items-center justify-between p-4 rounded-lg border border-border hover:bg-accent/50 transition-colors"

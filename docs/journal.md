@@ -1,5 +1,55 @@
 # Development Journal
 
+## 2025-09-08 13:52:29 - Dynamic Chat Layout Width for Wide Content
+
+### Context
+User requested the ability to dynamically adjust chat layout width according to table or other wide content. The current fixed max-width of 4xl (896px) was limiting the display of wide tables and code blocks.
+
+### Implementation
+Added intelligent content width detection and dynamic layout adjustment:
+
+**Key Features:**
+1. **Content Detection**: Automatically detects wide content including:
+   - Tables with scrollWidth > 600px
+   - Code blocks with scrollWidth > 600px
+   - Long text lines (>100 characters or scrollWidth > 600px)
+
+2. **Dynamic Width Adjustment**:
+   - Normal content: max-width 4xl (896px)
+   - Wide content detected: max-width 90% of viewport
+   - Smooth transitions with 300ms duration
+
+3. **Responsive Table Handling**:
+   - Tables wrapped in horizontal scroll containers
+   - Improved table styling with min-width and full-width
+   - Better overflow handling
+
+**Files Modified:**
+- `src/components/ChatMain.tsx`: Added content detection logic and dynamic width states
+
+**Technical Implementation:**
+```typescript
+// Content detection function
+const detectWideContent = useCallback(() => {
+  const tables = container.querySelectorAll('table');
+  const codeBlocks = container.querySelectorAll('pre, code:not(code:not([class]))');
+  const longLines = container.querySelectorAll('p, li');
+  
+  // Check dimensions and set hasWideContent state
+}, []);
+
+// Dynamic width classes
+hasWideContent ? "max-w-[90%]" : "max-w-4xl"
+```
+
+**Expected Results:**
+- Chat layout automatically expands for wide tables and content
+- Better readability of tabular data and code blocks
+- Maintains compact layout for normal text conversations
+- Smooth visual transitions between width states
+
+---
+
 ## 2025-09-06 20:34:37 - Comprehensive Fix for Persistent Language Flickering
 
 ### Context

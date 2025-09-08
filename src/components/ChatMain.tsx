@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Send, Paperclip, RefreshCw, PanelRightOpen, PanelRightClose, Menu, X, Brain } from "lucide-react";
@@ -35,6 +35,8 @@ interface ChatMainProps {
 
 const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false, sessionId, showSuggestions = true, showSidebar = true, onToggleSidebar, newMessageIds = new Set(), onTypewriterComplete }: ChatMainProps) => {
   const { t } = useLanguage();
+  const [hasWideContent, setHasWideContent] = useState(false);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
   
   // Motivational HR messages
   const motivationalMessages = [
@@ -63,7 +65,40 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
-
+  // Function to detect wide content like tables
+  const detectWideContent = useCallback(() => {
+    if (!messagesContainerRef.current) return;
+    
+    const tables = messagesContainerRef.current.querySelectorAll('table');
+    const codeBlocks = messagesContainerRef.current.querySelectorAll('pre, code:not(code:not([class]))');
+    const longLines = messagesContainerRef.current.querySelectorAll('p, li');
+    
+    let hasWide = false;
+    
+    // Check for tables
+    tables.forEach(table => {
+      if (table.scrollWidth > 600) {
+        hasWide = true;
+      }
+    });
+    
+    // Check for wide code blocks
+    codeBlocks.forEach(block => {
+      if (block.scrollWidth > 600) {
+        hasWide = true;
+      }
+    });
+    
+    // Check for long text lines
+    longLines.forEach(element => {
+      const text = element.textContent || '';
+      if (text.length > 100 || element.scrollWidth > 600) {
+        hasWide = true;
+      }
+    });
+    
+    setHasWideContent(hasWide);
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -71,7 +106,13 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+    // Detect wide content after messages update
+    const timer = setTimeout(() => {
+      detectWideContent();
+    }, 100); // Small delay to ensure DOM is updated
+    
+    return () => clearTimeout(timer);
+  }, [messages, detectWideContent]);
 
   const handleSend = () => {
     if (!inputMessage.trim()) return;
@@ -229,7 +270,7 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
       {messages.length === 0 ? (
         <WelcomeScreen />
       ) : (
-        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+        <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-6 space-y-6">
           {messages.map((message, index) => {
             // Find the previous user question for AI responses
             const previousQuestion = message.role === 'assistant' && index > 0 
@@ -238,7 +279,8 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
             
             return (
             <div key={message.id} className={cn(
-              "flex gap-4 max-w-4xl",
+              "flex gap-4 transition-all duration-300",
+              hasWideContent ? "max-w-[90%]" : "max-w-4xl",
               message.role === "user" ? "ml-auto flex-row-reverse" : "mr-auto"
             )}>
               <div className={cn(
@@ -253,7 +295,8 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
               </div>
               
               <div className={cn(
-                "p-5 rounded-2xl max-w-[85%] shadow-sm",
+                "p-5 rounded-2xl shadow-sm transition-all duration-300",
+                hasWideContent ? "max-w-[95%]" : "max-w-[85%]",
                 message.role === "user"
                   ? "bg-gradient-to-br from-primary to-primary/90 text-primary-foreground"
                   : "bg-gradient-to-br from-background to-muted/30 text-foreground border border-border/50 backdrop-blur-sm"
@@ -310,9 +353,11 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
                             </a>
                           ),
                           table: ({ children }) => (
-                            <table className="border-collapse border border-border/50 mb-3 rounded-lg overflow-hidden">
-                              {children}
-                            </table>
+                            <div className="overflow-x-auto mb-3 rounded-lg border border-border/50">
+                              <table className="border-collapse w-full min-w-max">
+                                {children}
+                              </table>
+                            </div>
                           ),
                           th: ({ children }) => (
                             <th className="border border-border/50 px-3 py-2 bg-muted/60 font-semibold text-left">
@@ -359,7 +404,10 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
           })}
           
           {(isLoading || isTyping) && (
-            <div className="flex gap-4 max-w-4xl mr-auto">
+            <div className={cn(
+              "flex gap-4 mr-auto transition-all duration-300",
+              hasWideContent ? "max-w-[90%]" : "max-w-4xl"
+            )}>
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-muted to-muted/80 flex items-center justify-center shadow-sm border border-border/50">
                 <span className="text-sm font-bold text-muted-foreground">AI</span>
               </div>
@@ -375,7 +423,10 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
 
       {/* Input Area */}
       <div className="p-6 border-t border-border/50 bg-gradient-to-b from-background/80 to-background backdrop-blur-sm">
-        <div className="max-w-4xl mx-auto">
+        <div className={cn(
+          "mx-auto transition-all duration-300",
+          hasWideContent ? "max-w-[90%]" : "max-w-4xl"
+        )}>
           <div className="relative bg-background/90 border border-border/60 rounded-2xl shadow-lg backdrop-blur-sm hover:shadow-xl transition-all duration-300">
             <Textarea
               ref={textareaRef}
