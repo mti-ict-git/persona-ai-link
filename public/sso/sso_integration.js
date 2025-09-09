@@ -1,14 +1,11 @@
 (function() {
     'use strict';
 
-    // Force development mode for testing - change to auto-detect for production
-    const CHATBOT_BASE_URL = 'http://localhost:3006'; // dev mode - backend API port
-    
-    // For production deployment, use:
-    // const isProduction = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
-    // const CHATBOT_BASE_URL = isProduction 
-    //     ? 'https://tsindeka.merdekabattery.com' // production backend
-    //     : 'http://localhost:3006'; // dev mode - backend API port
+    // Auto-detect production environment
+    const isProduction = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+    const CHATBOT_BASE_URL = isProduction 
+        ? 'https://tsindeka.merdekabattery.com' // production backend
+        : 'http://localhost:3006'; // dev mode - backend API port
 
     // Ambil email user (support modern & classic)
     async function getCurrentUserEmail() {
