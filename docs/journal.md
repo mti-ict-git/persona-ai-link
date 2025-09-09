@@ -8554,3 +8554,128 @@ User reported that SSO redirection was successful but not redirecting to the cha
 4. Monitor logs for any remaining configuration issues
 
 **Status**: ✅ Production Docker configuration fixed, localhost redirect issue resolved.
+
+---
+
+## Redis Configuration Addition
+**Date**: 2025-09-09 10:09:16
+
+**Context**: User asked where Redis configuration is stored. Upon investigation, found that Redis environment variables were missing from both development and production environment files.
+
+**Issue**: 
+- Redis configuration was missing from `.env` and `.env.production` files
+- RedisService was using default fallback `redis://localhost:6379`
+- This could cause SSO functionality issues in production
+
+**Solution**:
+Added Redis configuration to both environment files:
+```bash
+# Redis Configuration
+REDIS_URL=redis://localhost:6379
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_PASSWORD=
+```
+
+**Files Modified**:
+- `backend/.env` - Added Redis configuration section
+- `backend/.env.production` - Added Redis configuration section
+- `docs/journal.md` - Documented the configuration addition
+
+**Redis Service Details**:
+- Located in: `backend/src/services/redisService.js`
+- Used for: SSO token storage and validation
+- Default connection: `redis://localhost:6379` (via REDIS_URL env var)
+- Features: Token generation, validation, cleanup, health checks
+
+**Status**: ✅ Redis configuration properly documented and added to environment files
+
+**Next Steps**:
+1. Ensure Redis server is running in production environment
+2. Configure Redis authentication if needed for production
+3. Test SSO functionality with Redis integration
+
+---
+
+## Production Backend Deployment Issue
+**Date**: 2025-09-09 10:51:04
+
+**Context**: SharePoint SSO integration is failing with CORS errors and 404 responses when trying to access the production backend at `https://tsindeka.merdekabattery.com/api/sso/start`.
+
+**Issue Analysis**:
+- **CORS Error**: `Access to fetch at 'https://tsindeka.merdekabattery.com/api/sso/start' from origin 'https://merdekabattery.sharepoint.com' has been blocked by CORS policy`
+- **404 Error**: Production backend endpoint returns "Route /api/sso/start not found"
+- **Root Cause**: Backend server is not deployed or running on production domain
+
+**Current Status**:
+- ✅ CORS configuration in `backend/src/server.js` includes SharePoint domain
+- ✅ SSO integration script updated to use production URL
+- ✅ Environment files created with production configuration
+- ❌ Backend server not accessible at production URL
+
+**Required Actions**:
+1. **Deploy Backend to Production**:
+   - Build and deploy backend Docker container to production server
+   - Ensure backend runs on port 3006 behind reverse proxy
+   - Configure SSL/TLS termination for HTTPS
+
+2. **Infrastructure Setup**:
+   - Set up reverse proxy (Nginx/Apache) to route `/api/*` to backend:3006
+   - Configure SSL certificates for `tsindeka.merdekabattery.com`
+   - Ensure Redis service is running for SSO token storage
+
+3. **Deployment Commands** (for production server):
+   ```bash
+   # Build production images
+   docker-compose -f docker-compose.yml build
+   
+   # Deploy with production environment
+   docker-compose -f docker-compose.yml up -d
+   
+   # Verify services
+   docker-compose ps
+   curl -I https://tsindeka.merdekabattery.com/api/health
+   ```
+
+**Status**: ❌ Production backend deployment required
+
+**Next Steps**:
+1. Contact infrastructure team to deploy backend to production
+2. Verify SSL certificates and reverse proxy configuration
+3. Test SSO endpoint accessibility from SharePoint
+4. Monitor backend logs for CORS and authentication issues
+
+## Backend Environment Configuration Fix
+**Date**: 2025-09-09 12:39:22
+
+**Context**: User reported that SSO redirection was still going to localhost:3006 instead of tsindeka.merdekabattery.com, despite having correct settings in `.env.production`.
+
+**Root Cause Found**: Backend was loading wrong environment file
+- **Problem**: `backend/src/server.js` line 7 had `require('dotenv').config()` which always loads `.env` (development) by default
+- **Impact**: Even with `NODE_ENV=production`, backend was using development FRONTEND_URL (localhost:8090)
+- **Result**: SSO redirects pointed to localhost instead of production domain
+
+**Solution Applied**:
+Modified `backend/src/server.js` to conditionally load environment files:
+```javascript
+// Before (line 7):
+require('dotenv').config();
+
+// After (lines 7-9):
+// Load environment variables based on NODE_ENV
+const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env';
+require('dotenv').config({ path: envFile });
+```
+
+**Expected Impact**:
+- When deployed with `NODE_ENV=production`, backend will load `.env.production`
+- `FRONTEND_URL=https://tsindeka.merdekabattery.com` will be used for redirects
+- SSO flow will redirect to correct production domain
+
+**Status**: ✅ Environment file loading fixed
+
+**Next Steps**:
+1. Deploy updated backend code to production Docker container
+2. Verify NODE_ENV=production is set in Docker deployment
+3. Test SSO redirection points to correct domain
+4. Install Redis for SSO token storage
