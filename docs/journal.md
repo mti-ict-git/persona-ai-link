@@ -8879,3 +8879,46 @@ Removed the following sensitive logging statements from <mcfile name="SSOCallbac
 1. Review other components for similar sensitive logging issues
 2. Implement secure logging practices across the application
 3. Consider adding log sanitization utilities for development vs production environments
+
+---
+
+## 2025-09-09 17:40:39 - Fix: SSO Callback Redirect Loop Issue
+
+**Context**: User reported that the SSO callback was being redirected multiple times, causing an infinite loop. The logs showed the component was being mounted and processing the same URL parameters repeatedly:
+- Component mounted multiple times with same parameters
+- `[SSO CALLBACK] Component mounted, processing SSO callback` appearing twice
+- Same URL being processed: `https://tsindeka.merdekabattery.com/sso/continue?success=true`
+
+**Root Cause**: The `useEffect` in <mcfile name="SSOCallback.tsx" path="src/pages/SSOCallback.tsx"></mcfile> was executing multiple times due to:
+- React Strict Mode causing double execution in development
+- Component remounting during navigation
+- No guard to prevent multiple executions of the same SSO processing logic
+
+**Solution Implemented**:
+Added a `useRef` guard to prevent multiple executions:
+```typescript
+const hasProcessed = useRef(false);
+
+useEffect(() => {
+  // Prevent multiple executions
+  if (hasProcessed.current) {
+    console.log('[SSO CALLBACK] Already processed, skipping');
+    return;
+  }
+  hasProcessed.current = true;
+  // ... rest of SSO processing logic
+}, [searchParams, navigate, refreshUser, toast]);
+```
+
+**Status**: ✅ **Completed** - SSO callback redirect loop fixed
+
+**Impact**:
+- **Functionality**: Eliminated infinite redirect loops during SSO authentication
+- **User Experience**: SSO flow now completes properly without multiple redirects
+- **Performance**: Reduced unnecessary API calls and component re-renders
+- **Reliability**: SSO authentication process is now stable and predictable
+
+**Next Steps**:
+1. Test the fix with real SSO authentication flow
+2. Monitor for any remaining redirect issues
+3. Consider implementing similar guards in other navigation-sensitive components

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Loader2, CheckCircle, XCircle } from 'lucide-react';
@@ -14,8 +14,15 @@ const SSOCallback: React.FC = () => {
   const { toast } = useToast();
   const [status, setStatus] = useState<'processing' | 'success' | 'error'>('processing');
   const [message, setMessage] = useState('Processing SSO authentication...');
+  const hasProcessed = useRef(false);
 
   useEffect(() => {
+    // Prevent multiple executions
+    if (hasProcessed.current) {
+      console.log('[SSO CALLBACK] Already processed, skipping');
+      return;
+    }
+    hasProcessed.current = true;
     const handleSSOCallback = async () => {
       console.log('[SSO CALLBACK] Component mounted, processing SSO callback');
       
