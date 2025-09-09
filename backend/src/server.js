@@ -3,6 +3,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
 const sessionRoutes = require('./routes/sessions');
@@ -15,8 +16,10 @@ const feedbackRoutes = require('./routes/feedback');
 const trainingRoutes = require('./routes/training');
 const adminRoutes = require('./routes/admin');
 const { router: authRoutes } = require('./routes/auth');
+const ssoRoutes = require('./routes/sso');
 const preferencesRoutes = require('./routes/preferences');
 const { initializeDatabase } = require('./utils/database');
+const redisService = require('./services/redisService');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -30,6 +33,7 @@ app.use(cors({
     'http://10.60.10.59:8090',
     'http://127.0.0.1:8090',
     'https://tsindeka.merdekabattery.com',
+    'https://merdekabattery.sharepoint.com',  // SharePoint SSO origin
     'http://frontend:8090',  // Docker service name
     'http://persona-ai-frontend-prod:8090'  // Docker container name
   ],
@@ -46,9 +50,11 @@ app.options('*', (req, res) => {
   const allowedOrigins = [
     process.env.FRONTEND_URL || 'http://localhost:8090',
     'http://localhost:8090',
+    'http://localhost:3000',
     'http://10.60.10.59:8090',
     'http://127.0.0.1:8090',
-    'https://tsindeka.merdekabattery.com'
+    'https://tsindeka.merdekabattery.com',
+    'https://merdekabattery.sharepoint.com'  // SharePoint SSO origin
   ];
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
@@ -69,6 +75,9 @@ const limiter = rateLimit({
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
 app.use('/api/', limiter);
+
+// Cookie parsing middleware
+app.use(cookieParser());
 
 // Logging
 app.use(morgan('combined'));
@@ -105,6 +114,7 @@ app.get('/health', (req, res) => {
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/sso', ssoRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/sessions', sessionRoutes);
 app.use('/api/messages', messageRoutes);
@@ -156,6 +166,14 @@ async function startServer() {
     await initializeDatabase();
     console.log('Database initialized successfully');
     
+    // Initialize Redis for SSO
+    try {
+      await redisService.connect();
+      console.log('Redis service initialized successfully');
+    } catch (redisError) {
+      console.warn('Redis connection failed - SSO features will be unavailable:', redisError.message);
+    }
+    
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
       console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
@@ -168,13 +186,23 @@ async function startServer() {
 }
 
 // Graceful shutdown
-process.on('SIGTERM', () => {
+process.on('SIGTERM', async () => {
   console.log('SIGTERM received, shutting down gracefully');
+  try {
+    await redisService.disconnect();
+  } catch (error) {
+    console.error('Error disconnecting Redis:', error);
+  }
   process.exit(0);
 });
 
-process.on('SIGINT', () => {
+process.on('SIGINT', async () => {
   console.log('SIGINT received, shutting down gracefully');
+  try {
+    await redisService.disconnect();
+  } catch (error) {
+    console.error('Error disconnecting Redis:', error);
+  }
   process.exit(0);
 });
 

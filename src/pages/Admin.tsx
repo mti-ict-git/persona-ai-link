@@ -345,7 +345,7 @@ const Admin: React.FC = () => {
   };
 
   const renderUserManagement = () => {
-    console.log('🔍 renderUserManagement called, users:', users, 'users.length:', users.length);
+    console.log('🔍 renderUserManagement called');
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-between">

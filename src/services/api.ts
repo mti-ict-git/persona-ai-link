@@ -74,16 +74,57 @@ class ApiError extends Error {
 
 class ApiService {
   private getAuthToken(): string | null {
-    const token = localStorage.getItem('authToken');
-    return token;
+    console.log('[API SERVICE] Getting auth token...');
+    
+    // First check localStorage (for regular login)
+    const localToken = localStorage.getItem('authToken');
+    console.log('[API SERVICE] LocalStorage token:', localToken ? 'present' : 'missing');
+    
+    if (localToken) {
+      console.log('[API SERVICE] Using localStorage token');
+      return localToken;
+    }
+    
+    // Then check for JWT cookie (for SSO login)
+    console.log('[API SERVICE] Checking for SSO cookie token...');
+    const cookieToken = this.getCookieToken();
+    console.log('[API SERVICE] Cookie token result:', cookieToken ? 'found' : 'not found');
+    
+    return cookieToken;
+  }
+
+  private getCookieToken(): string | null {
+    console.log('[API SERVICE] Checking for JWT cookie');
+    console.log('[API SERVICE] Checking browser cookies for authentication');
+    console.log('[API SERVICE] Note: httpOnly cookies are not accessible via JavaScript');
+    
+    const cookies = document.cookie.split(';');
+    console.log('[API SERVICE] Parsing browser cookies for authentication');
+    
+    for (const cookie of cookies) {
+      const [name, value] = cookie.trim().split('=');
+      // Check for JWT token cookie (skip logging third-party tracking cookies)
+      
+      if (name === 'token') {
+        console.log('[API SERVICE] JWT token found in cookies');
+        return value;
+      }
+    }
+    
+    console.log('[API SERVICE] No JWT token cookie found (httpOnly cookies not visible to JS)');
+    return null;
   }
 
   private setAuthToken(token: string): void {
+    console.log('[API SERVICE] Setting auth token in localStorage');
     localStorage.setItem('authToken', token);
+    console.log('[API SERVICE] Auth token stored successfully');
   }
 
   private removeAuthToken(): void {
+    console.log('[API SERVICE] Removing auth token from localStorage');
     localStorage.removeItem('authToken');
+    console.log('[API SERVICE] Auth token removed successfully');
   }
 
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
@@ -107,6 +148,7 @@ class ApiService {
     const config: RequestInit = {
       ...options,
       headers,
+      credentials: 'include', // Include cookies in requests
     };
 
     try {
@@ -129,37 +171,92 @@ class ApiService {
 
   // Authentication
   async login(email: string, password: string, authMethod: 'local' | 'ldap' = 'local'): Promise<LoginResponse> {
+    console.log('[API SERVICE] Login request initiated');
+    console.log('[API SERVICE] Attempting login with provided credentials');
+    console.log('[API SERVICE] Auth method:', authMethod);
+    
     const response = await this.request<LoginResponse>('/auth/login', {
       method: 'POST',
       body: JSON.stringify({ email, password, authMethod }),
     });
     
+    console.log('[API SERVICE] Login response received:', response);
+    
     // Store the token
     this.setAuthToken(response.token);
+    console.log('[API SERVICE] Token stored successfully');
+    
     return response;
   }
 
   async logout(): Promise<void> {
+    console.log('[API SERVICE] Logout request initiated');
+    console.log('[API SERVICE] Current token present:', this.getAuthToken() ? 'yes' : 'no');
+    
     try {
       await this.request('/auth/logout', {
         method: 'POST',
       });
+      console.log('[API SERVICE] Logout request successful');
+    } catch (error) {
+      console.error('[API SERVICE] Logout request failed:', error);
     } finally {
       // Always remove token, even if request fails
       this.removeAuthToken();
+      console.log('[API SERVICE] Token removed from storage');
     }
   }
 
   async validateSession(): Promise<AuthValidationResponse> {
-    return await this.request<AuthValidationResponse>('/auth/validate');
+    console.log('[API SERVICE] Session validation request initiated');
+    console.log('[API SERVICE] Current token present:', this.getAuthToken() ? 'yes' : 'no');
+    
+    const response = await this.request<AuthValidationResponse>('/auth/validate');
+    console.log('[API SERVICE] Session validation response:', response);
+    
+    return response;
   }
 
   async getCurrentUser(): Promise<{ user: User }> {
-    return await this.request<{ user: User }>('/auth/profile');
+    console.log('[API SERVICE] Get current user request initiated');
+    console.log('[API SERVICE] Current token present:', this.getAuthToken() ? 'yes' : 'no');
+    
+    const response = await this.request<{ user: User }>('/auth/profile');
+    console.log('[API SERVICE] Current user data retrieved');
+    
+    return response;
   }
 
-  isAuthenticated(): boolean {
-    return this.getAuthToken() !== null;
+  async isAuthenticated(): Promise<boolean> {
+    console.log('[API SERVICE] Starting authentication check');
+    
+    // First check localStorage token
+    const hasLocalToken = this.getAuthToken() !== null;
+    if (hasLocalToken) {
+      console.log('[API SERVICE] Authentication check: authenticated via localStorage');
+      return true;
+    }
+    
+    // If no localStorage token, check httpOnly cookie via server validation
+    console.log('[API SERVICE] No localStorage token, checking httpOnly cookie');
+    const hasCookieAuth = await this.isAuthenticatedViaCookie();
+    console.log('[API SERVICE] Final authentication result:', hasCookieAuth ? 'authenticated via cookie' : 'not authenticated');
+    return hasCookieAuth;
+  }
+
+  // Check if user is authenticated via SSO cookie
+  async isAuthenticatedViaCookie(): Promise<boolean> {
+    console.log('[API SERVICE] Checking authentication via cookie (server validation)');
+    try {
+      // Since httpOnly cookies can't be read by JS, we validate by making a server request
+      const response = await this.getCurrentUser();
+      const isAuth = !!response;
+      console.log('[API SERVICE] Cookie authentication result:', isAuth);
+      return isAuth;
+    } catch (error) {
+      console.log('[API SERVICE] Cookie authentication failed:', error);
+      return false;
+    }
   }
 
   // Session Management

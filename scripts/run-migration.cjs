@@ -28,7 +28,7 @@ async function runMigration() {
     console.log('Database connected successfully');
 
     // Read the migration script
-    const migrationPath = path.join(__dirname, '..', 'database', 'migrations', '004_add_user_preferences.sql');
+    const migrationPath = path.join(__dirname, '..', 'database', 'migrations', '005_add_sso_support.sql');
     const migrationScript = fs.readFileSync(migrationPath, 'utf8');
     
     console.log('Executing migration script...');

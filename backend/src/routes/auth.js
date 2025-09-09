@@ -25,23 +25,51 @@ const resetPasswordSchema = Joi.object({
 
 // Middleware to verify JWT token
 const authenticateToken = (req, res, next) => {
+  console.log(`[AUTH] ${req.method} ${req.path} - Authentication check started`);
+  console.log('[AUTH] Request IP:', req.ip);
+  console.log('[AUTH] User-Agent:', req.headers['user-agent']);
+  
+  // Check for token in Authorization header first (Bearer TOKEN)
   const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+  let token = authHeader && authHeader.split(' ')[1];
+  
+  console.log('[AUTH DEBUG] Auth header:', authHeader ? 'present' : 'missing');
+  console.log('[AUTH DEBUG] Cookies present:', req.cookies ? Object.keys(req.cookies) : 'none');
+  console.log('[AUTH DEBUG] Token from header:', token ? 'present' : 'missing');
+  
+  // If no Authorization header token, check for cookie (SSO authentication)
+  if (!token && req.cookies && req.cookies.token) {
+    token = req.cookies.token;
+    console.log('[AUTH DEBUG] Token from cookie:', token ? 'present' : 'missing');
+    console.log('[AUTH DEBUG] Using SSO cookie authentication');
+  } else if (token) {
+    console.log('[AUTH DEBUG] Using Bearer token authentication');
+  }
 
   if (!token) {
+    console.log('[AUTH ERROR] No token found in header or cookies');
+    console.log('[AUTH ERROR] Available headers:', Object.keys(req.headers));
     return res.status(401).json({ error: 'Access token required' });
   }
+  
+  console.log('[AUTH DEBUG] Token validation starting...');
 
   try {
     jwt.verify(token, JWT_SECRET, (err, user) => {
       if (err) {
+        console.log('[AUTH ERROR] Token verification failed:', err.message);
+        console.log('[AUTH ERROR] Token type:', typeof token);
+        console.log('[AUTH ERROR] Token length:', token.length);
         return res.status(403).json({ error: 'Invalid or expired token' });
       }
       
+      console.log('[AUTH SUCCESS] Token verified successfully');
+      console.log('[AUTH SUCCESS] User authenticated with valid role');
       req.user = user;
       next();
     });
   } catch (error) {
+    console.log('[AUTH ERROR] Token verification exception:', error.message);
     return res.status(401).json({
       error: 'Authentication failed',
       message: 'Invalid or expired token'
@@ -59,7 +87,7 @@ router.post('/login', async (req, res) => {
     }
 
     const { email, password, authMethod } = value;
-    console.log('Login attempt for:', email, 'using method:', authMethod);
+    console.log('Login attempt using method:', authMethod);
 
     let user, token;
 
@@ -72,7 +100,7 @@ router.post('/login', async (req, res) => {
         if (ldapResult.success) {
           user = ldapResult.user;
           token = await ldapService.generateToken(user);
-          console.log('LDAP authentication successful for:', user.username);
+          console.log('LDAP authentication successful');
         } else {
           return res.status(401).json({ error: 'LDAP authentication failed' });
         }
@@ -91,12 +119,12 @@ router.post('/login', async (req, res) => {
 
       console.log('User query result:', result.recordset.length, 'users found');
       if (result.recordset.length === 0) {
-        console.log('No user found with email:', email);
+        console.log('No user found with provided email');
         return res.status(401).json({ error: 'Invalid email or password' });
       }
 
       const dbUser = result.recordset[0];
-      console.log('Found user:', { id: dbUser.id, email: dbUser.email, active: dbUser.active });
+      console.log('User found in database, checking credentials');
 
       // Check if user is active
       if (!dbUser.active) {
@@ -144,7 +172,7 @@ router.post('/login', async (req, res) => {
       user: user
     });
 
-    console.log('Login successful for user:', user.username, 'via', user.authMethod || authMethod);
+    console.log('Login successful via', user.authMethod || authMethod);
 
   } catch (error) {
     console.error('Login error:', error);
@@ -234,7 +262,7 @@ router.post('/reset-password', async (req, res) => {
     }
 
     const { email, newPassword } = value;
-    console.log('Password reset attempt for email:', email);
+    console.log('Password reset attempt initiated');
     const pool = await dbManager.getConnection();
 
     // Find user by email
@@ -243,16 +271,16 @@ router.post('/reset-password', async (req, res) => {
       .query('SELECT id, email, active, authMethod FROM chat_Users WHERE email = @email');
 
     if (userResult.recordset.length === 0) {
-      console.log('No user found with email:', email);
+      console.log('No user found for password reset');
       return res.status(404).json({ error: 'User not found' });
     }
 
     const user = userResult.recordset[0];
-    console.log('Found user for password reset:', { id: user.id, email: user.email, authMethod: user.authMethod });
+    console.log('User found for password reset, checking auth method');
     
     // Prevent password reset for LDAP accounts
     if (user.authMethod === 'ldap') {
-      console.log('Password reset blocked for LDAP account:', user.email);
+      console.log('Password reset blocked for LDAP account');
       return res.status(400).json({ 
         error: 'Cannot reset password for LDAP accounts. Password must be changed through Active Directory.' 
       });

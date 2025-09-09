@@ -13,6 +13,7 @@ import Training from "./pages/Training";
 import Settings from "./pages/Settings";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
+import SSOCallback from "./pages/SSOCallback";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,14 @@ const App = () => (
               element={
                 <ProtectedRoute requireAuth={false}>
                   <Login />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/sso/continue" 
+              element={
+                <ProtectedRoute requireAuth={false}>
+                  <SSOCallback />
                 </ProtectedRoute>
               } 
             />

@@ -138,7 +138,7 @@ class LDAPService {
                         WHERE id = @id
                     `);
                     
-                console.log(`Updated existing user: ${ldapUserData.username}`);
+                console.log('Updated existing LDAP user');
             } else {
                 // Create new user
                 const insertResult = await pool.request()
@@ -157,7 +157,7 @@ class LDAPService {
                     `);
                     
                 user = insertResult.recordset[0];
-                console.log(`Created new user: ${ldapUserData.username}`);
+                console.log('Created new LDAP user');
                 
                 // Create default preferences for new user
                 try {
@@ -172,7 +172,7 @@ class LDAPService {
                                 (@userId, 'onboardingCompleted', 'false', GETDATE(), GETDATE()),
                                 (@userId, 'showFollowUpSuggestions', 'true', GETDATE(), GETDATE())
                         `);
-                    console.log(`Created default preferences for user: ${ldapUserData.username}`);
+                    console.log('Created default preferences for LDAP user');
                 } catch (prefError) {
                     console.error('Error creating default preferences:', prefError);
                     // Don't throw error here as user creation was successful

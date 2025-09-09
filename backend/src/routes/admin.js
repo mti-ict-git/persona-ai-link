@@ -361,7 +361,7 @@ router.post('/users', (req, res, next) => {
           (${newUser.id}, 'onboardingCompleted', 'false', GETDATE(), GETDATE()),
           (${newUser.id}, 'showFollowUpSuggestions', 'true', GETDATE(), GETDATE())
       `);
-      console.log(`Created default preferences for user: ${newUser.username}`);
+      console.log('Created default preferences for new user');
     } catch (prefError) {
       console.error('Error creating default preferences:', prefError);
       // Don't throw error here as user creation was successful
