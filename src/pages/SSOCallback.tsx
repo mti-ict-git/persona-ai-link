@@ -18,16 +18,10 @@ const SSOCallback: React.FC = () => {
   useEffect(() => {
     const handleSSOCallback = async () => {
       console.log('[SSO CALLBACK] Component mounted, processing SSO callback');
-      console.log('[SSO CALLBACK] Current URL:', window.location.href);
-      console.log('[SSO CALLBACK] Search params:', Object.fromEntries(searchParams));
       
       try {
         const code = searchParams.get('code');
         const success = searchParams.get('success');
-        
-        console.log('[SSO CALLBACK] Extracted parameters:');
-        console.log('[SSO CALLBACK] - code:', code);
-        console.log('[SSO CALLBACK] - success:', success);
         
         // Handle both old flow (with code) and new flow (with success)
         if (!code && !success) {
@@ -46,11 +40,9 @@ const SSOCallback: React.FC = () => {
 
         if (success) {
           console.log('[SSO CALLBACK] Processing success flow');
-          console.log('[SSO CALLBACK] Checking cookies:', document.cookie);
           
           // New flow: backend has already processed and set JWT cookie
           // We just need to refresh the user data to update the auth context
-          console.log('[SSO CALLBACK] Refreshing user data from context');
           await refreshUser();
           
           console.log('[SSO CALLBACK] User refresh completed, setting success status');

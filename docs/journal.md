@@ -8679,3 +8679,203 @@ require('dotenv').config({ path: envFile });
 2. Verify NODE_ENV=production is set in Docker deployment
 3. Test SSO redirection points to correct domain
 4. Install Redis for SSO token storage
+
+---
+
+## 2025-09-09 13:41:16 - SSO Backend URL Configuration Fix
+
+**Context**: After fixing the environment file loading, SSO was still redirecting to `localhost:3006` instead of the production domain. Investigation revealed that the SSO route uses `BACKEND_URL` environment variable to generate login links.
+
+**Root Cause**: The `.env.production` file was missing the `BACKEND_URL` variable, causing the SSO route to fall back to the default `http://localhost:3006` when generating login links.
+
+**Solution**: Added `BACKEND_URL=https://tsindeka.merdekabattery.com` to `.env.production` file.
+
+**Code Location**: `backend/src/routes/sso.js` line 93
+```javascript
+const backendUrl = process.env.BACKEND_URL || 'http://localhost:3006';
+const loginLink = `${backendUrl}/api/sso/continue?code=${code}`;
+```
+
+**Expected Impact**:
+- SSO login links will now use the correct production domain
+- SharePoint SSO flow should redirect properly to production backend
+- No more localhost references in production SSO tokens
+
+**Status**: ✅ Environment variable added to `.env.production`
+
+**Next Steps**:
+1. Deploy updated `.env.production` configuration
+2. Restart backend service with production environment
+3. Test SSO flow end-to-end
+4. Verify login links use correct domain
+
+---
+
+## 2025-09-09 13:46:29 - Production Backend Testing Results
+
+**Context**: Testing the production backend endpoints after applying the environment configuration fixes.
+
+**Test Results**:
+
+1. **SSO Status Endpoint** ✅
+   - URL: `https://tsindeka.merdekabattery.com/api/sso/status`
+   - Response: `{"status":"ok","redis":{"connected":true,"ping":true}}`
+   - Backend is running and Redis is connected
+
+2. **SSO Start Endpoint** ✅
+   - URL: `https://tsindeka.merdekabattery.com/api/sso/start`
+   - Test payload: `{"email":"test@merdekabattery.com","source":"sharepoint"}`
+   - **SUCCESS**: Login link now uses production domain!
+   - Generated link: `https://tsindeka.merdekabattery.com/api/sso/continue?code=...`
+   - **Previous issue RESOLVED**: No more localhost URLs
+
+3. **SSO Continue Endpoint** ✅
+   - Expected LDAP error for test user (normal behavior)
+   - Endpoint is accessible and processing requests correctly
+
+**Status**: ✅ Backend environment configuration fix confirmed working in production
+
+**Impact**:
+- SSO redirection issue completely resolved
+- Production backend now generates correct domain URLs
+- SharePoint SSO integration ready for real user testing
+
+**Next Steps**:
+1. Test with real company email addresses
+2. Verify end-to-end SharePoint integration
+3. Monitor production logs for any issues
+
+---
+
+## 2025-09-09 14:04:16 - AI-Based Security Tools for Traffic Analysis and Application Hardening
+
+**Context**: User requested information about AI-based tools that can analyze application traffic and perform security hardening.
+
+**AI-Based Security Tools Overview**:
+
+### 1. Network Traffic Analysis & Threat Detection
+- **Fortinet FortiGuard AI** <mcreference link="https://owasp.org/www-community/Vulnerability_Scanning_Tools" index="1">1</mcreference> - AI-powered threat intelligence and traffic analysis
+- **Vectra Cognito** <mcreference link="https://owasp.org/www-community/Vulnerability_Scanning_Tools" index="1">1</mcreference> - AI-driven network detection and response
+- **Darktrace** <mcreference link="https://owasp.org/www-community/Vulnerability_Scanning_Tools" index="1">1</mcreference> - Self-learning AI for cyber defense and traffic anomaly detection
+- **Microsoft Security Copilot** <mcreference link="https://owasp.org/www-community/Vulnerability_Scanning_Tools" index="1">1</mcreference> - AI-powered security analysis and response
+
+### 2. Web Application Security Scanners (DAST)
+- **Acunetix** <mcreference link="https://owasp.org/www-community/Vulnerability_Scanning_Tools" index="1">1</mcreference> - AI-enhanced vulnerability scanning
+- **Burp Suite Professional** <mcreference link="https://owasp.org/www-community/Vulnerability_Scanning_Tools" index="1">1</mcreference> - Advanced web security testing with AI-assisted analysis
+- **Contrast Security** <mcreference link="https://owasp.org/www-community/Vulnerability_Scanning_Tools" index="1">1</mcreference> - Interactive Application Security Testing (IAST) with AI
+- **Aikido Security** <mcreference link="https://owasp.org/www-community/Free_for_Open_Source_Application_Security_Tools" index="2">2</mcreference> - Developer-friendly platform combining multiple scanners
+
+### 3. Static Application Security Testing (SAST) with AI
+- **Corgea** <mcreference link="https://owasp.org/www-community/Free_for_Open_Source_Application_Security_Tools" index="2">2</mcreference> - AI-native SAST scanner with automatic fix generation
+- **GitHub CodeQL** <mcreference link="https://owasp.org/www-community/Free_for_Open_Source_Application_Security_Tools" index="2">2</mcreference> - AI-powered static analysis for multiple languages
+- **HCL AppScan CodeSweep** <mcreference link="https://owasp.org/www-community/Free_for_Open_Source_Application_Security_Tools" index="2">2</mcreference> - AI-enhanced code scanning with auto-fix capabilities
+
+### 4. API Security Tools
+- **APIsec** <mcreference link="https://owasp.org/www-community/api_security_tools" index="3">3</mcreference> - AI-powered API security testing
+- **Akto** <mcreference link="https://owasp.org/www-community/Vulnerability_Scanning_Tools" index="1">1</mcreference> - 500+ automated API security tests
+- **42Crunch** <mcreference link="https://owasp.org/www-community/Source_Code_Analysis_Tools" index="5">5</mcreference> - REST API security platform with AI analysis
+
+### 5. Free/Open Source Options
+- **Arachni** <mcreference link="https://owasp.org/www-community/Free_for_Open_Source_Application_Security_Tools" index="2">2</mcreference> - Free web application security scanner
+- **OWASP ZAP** <mcreference link="https://owasp.org/www-community/Vulnerability_Scanning_Tools" index="1">1</mcreference> - Open source web application security scanner
+- **Arnica** <mcreference link="https://owasp.org/www-community/Free_for_Open_Source_Application_Security_Tools" index="2">2</mcreference> - Freemium SAST/SCA with AI-powered analysis
+
+**Recommendations for Your Application**:
+
+### For Traffic Analysis:
+1. **Burp Suite Professional** - Excellent for intercepting and analyzing HTTP/HTTPS traffic
+2. **OWASP ZAP** - Free alternative for basic traffic analysis
+3. **Contrast Security** - Real-time application security monitoring
+
+### For Automated Hardening:
+1. **Corgea** - AI-powered vulnerability detection with automatic fixes
+2. **GitHub CodeQL** - Integrate into CI/CD for continuous security scanning
+3. **Aikido Security** - Comprehensive security platform with multiple scanners
+
+### Implementation Strategy:
+1. Start with free tools (OWASP ZAP, GitHub CodeQL) for initial assessment
+2. Implement SAST tools in CI/CD pipeline for continuous scanning
+3. Use DAST tools for runtime security testing
+4. Consider commercial solutions for advanced AI-powered analysis
+
+**Status**: ✅ **Completed** - Comprehensive research on AI-based security tools
+
+**Impact**:
+- Provided detailed overview of available AI-powered security tools
+- Categorized tools by functionality (DAST, SAST, API security, traffic analysis)
+- Included both commercial and free/open source options
+- Specific recommendations for the persona-ai-link application
+
+**Next Steps**:
+1. Consider implementing security scanning tools from the research above
+2. Start with free tools for initial security assessment
+3. Integrate SAST tools into development workflow
+
+---
+
+## 2025-09-09 14:40:35 - SSO Flow End-to-End Testing Success
+
+**Context**: User reported successful SSO callback with cookies being processed in the frontend, indicating the complete SSO flow is working.
+
+**Test Results**:
+
+### Frontend SSO Callback Processing ✅
+- **SSO Integration Script**: Successfully detects production environment and uses correct backend URL
+- **Authentication Flow**: User successfully redirected from SharePoint → Backend → Frontend
+- **Cookie Processing**: Authentication cookies properly set and processed
+- **Frontend Logs**: Show successful callback processing:
+  ```
+  [SSO CALLBACK] Checking cookies: [encrypted cookies present]
+  [SSO CALLBACK] Refreshing user data from context
+  ```
+
+### Complete Flow Verification ✅
+1. **SharePoint Integration**: <mcfile name="sso_integration.js" path="public/sso/sso_integration.js"></mcfile> correctly detects production environment
+2. **Backend SSO Start**: Generates proper production login links
+3. **Backend SSO Continue**: Processes authentication and sets JWT cookies
+4. **Frontend Callback**: <mcfile name="SSOCallback.tsx" path="src/pages/SSOCallback.tsx"></mcfile> successfully processes success flow
+5. **User Context Refresh**: Authentication context updated with user data
+
+**Status**: ✅ **Completed** - End-to-end SSO flow fully functional
+
+**Impact**:
+- SharePoint users can now seamlessly access the AI chatbot
+- No more localhost redirection issues
+- Production SSO integration is fully operational
+- Authentication cookies properly managed across domains
+
+**Next Steps**:
+1. Monitor production usage and user feedback
+2. Consider implementing additional security scanning tools
+3. Document SSO troubleshooting procedures for support team
+
+---
+
+## 2025-09-09 15:31:11 - Security Fix: Remove Sensitive Logging from SSO Callback
+
+**Context**: User identified a critical security issue where the SSO callback component was logging sensitive information including:
+- Authentication codes and tokens
+- Complete cookie strings containing JWT tokens
+- URL parameters with sensitive data
+- Search parameters that could contain authentication details
+
+**Changes Made**:
+Removed the following sensitive logging statements from <mcfile name="SSOCallback.tsx" path="src/pages/SSOCallback.tsx"></mcfile>:
+- `console.log('[SSO CALLBACK] Current URL:', window.location.href)`
+- `console.log('[SSO CALLBACK] Search params:', Object.fromEntries(searchParams))`
+- `console.log('[SSO CALLBACK] - code:', code)`
+- `console.log('[SSO CALLBACK] - success:', success)`
+- `console.log('[SSO CALLBACK] Checking cookies:', document.cookie)`
+- `console.log('[SSO CALLBACK] Refreshing user data from context')`
+
+**Status**: ✅ **Completed** - Sensitive logging removed from SSO callback component
+
+**Impact**:
+- **Security**: Eliminated exposure of JWT tokens, authentication codes, and cookies in application logs
+- **Compliance**: Reduced risk of sensitive data exposure in log aggregation systems
+- **Production Safety**: Logs no longer contain authentication credentials that could be exploited
+
+**Next Steps**:
+1. Review other components for similar sensitive logging issues
+2. Implement secure logging practices across the application
+3. Consider adding log sanitization utilities for development vs production environments
