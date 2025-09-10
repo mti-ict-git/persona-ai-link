@@ -126,7 +126,7 @@ class LDAPService {
                     .input('email', sql.NVarChar, ldapUserData.email)
                     .input('firstName', sql.NVarChar, ldapUserData.firstName)
                     .input('lastName', sql.NVarChar, ldapUserData.lastName)
-                    .input('employeeId', sql.NVarChar, ldapUserData.employeeId)
+                    .input('employeeId', sql.NVarChar, ldapUserData.employeeId || '') // Convert null to empty string
                     .query(`
                         UPDATE chat_Users 
                         SET email = @email, 
@@ -146,7 +146,7 @@ class LDAPService {
                     .input('email', sql.NVarChar, ldapUserData.email)
                     .input('firstName', sql.NVarChar, ldapUserData.firstName)
                     .input('lastName', sql.NVarChar, ldapUserData.lastName)
-                    .input('employeeId', sql.NVarChar, ldapUserData.employeeId)
+                    .input('employeeId', sql.NVarChar, ldapUserData.employeeId || '') // Convert null to empty string
                     .input('passwordHash', sql.NVarChar, await bcrypt.hash('ldap_user', 10)) // Placeholder password
                     .input('role', sql.NVarChar, 'user') // Default role
                     .input('authMethod', sql.NVarChar, 'ldap')

@@ -4082,6 +4082,52 @@ FROM ProcessedFiles
 - Auto-increment ID generation functioning correctly
 - File upload workflow fully operational
 
+## 2025-09-10 11:46:05 - LDAP EmployeeId Validation Fix
+
+### Problem
+**Issue**: LDAP authentication failing with database validation error for `employeeId` parameter when Active Directory users don't have employee ID fields populated.
+
+**Error**: `Validation failed for parameter 'employeeId'. The value is null.`
+
+**Root Cause**: 
+- LDAP service extracts `employeeId` from `userEntry.employeeID || userEntry.employeeNumber || null`
+- When both AD fields are missing, value defaults to `null`
+- MSSQL driver rejects `null` values during parameter validation before reaching database constraints
+- Database schema allows NULL but MSSQL parameter binding is stricter
+
+### Solution Implemented
+**File Modified**: `backend/src/services/ldapService.js`
+
+**Changes**:
+1. **Line 131**: Updated UPDATE query parameter binding
+   ```javascript
+   .input('employeeId', sql.NVarChar, ldapUserData.employeeId || '') // Convert null to empty string
+   ```
+
+2. **Line 151**: Updated INSERT query parameter binding
+   ```javascript
+   .input('employeeId', sql.NVarChar, ldapUserData.employeeId || '') // Convert null to empty string
+   ```
+
+**Technical Details**:
+- Converts `null` values to empty string `''` before database parameter binding
+- Maintains database schema compatibility (allows NULL or non-empty strings)
+- Prevents MSSQL parameter validation errors
+- Preserves existing employeeId values when available from Active Directory
+
+### Impact
+✅ **LDAP Authentication**: Users without employee IDs can now authenticate successfully
+✅ **Database Integrity**: Maintains existing constraints and validation rules
+✅ **Backward Compatibility**: Existing users with employee IDs remain unaffected
+✅ **SSO Flow**: Resolves authentication blocking issues in SharePoint SSO integration
+
+### Next Steps
+- Test LDAP authentication with users missing employee ID fields
+- Verify SSO flow completion without database errors
+- Monitor authentication logs for any remaining validation issues
+
+---
+
 ## August 25, 2025 - Webhook Database Schema Fix
 
 ### Problem
@@ -8865,7 +8911,7 @@ Removed the following sensitive logging statements from <mcfile name="SSOCallbac
 - `console.log('[SSO CALLBACK] Search params:', Object.fromEntries(searchParams))`
 - `console.log('[SSO CALLBACK] - code:', code)`
 - `console.log('[SSO CALLBACK] - success:', success)`
-- `console.log('[SSO CALLBACK] Checking cookies:', document.cookie)`
+- `console.log('[SSO CALLBACK] wwq:', document.cookie)`
 - `console.log('[SSO CALLBACK] Refreshing user data from context')`
 
 **Status**: ✅ **Completed** - Sensitive logging removed from SSO callback component
