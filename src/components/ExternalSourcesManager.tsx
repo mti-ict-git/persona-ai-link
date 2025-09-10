@@ -44,6 +44,11 @@ interface ExternalSourcesManagerProps {
 }
 
 const ExternalSourcesManager = ({ fileId, sources = [], onSourcesChange, onClose }: ExternalSourcesManagerProps) => {
+
+  
+  // Ensure sources is always an array
+  const safeSources = Array.isArray(sources) ? sources : [];
+  
   const { t } = useLanguage();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingSource, setEditingSource] = useState<ExternalSource | null>(null);
@@ -118,9 +123,7 @@ const ExternalSourcesManager = ({ fileId, sources = [], onSourcesChange, onClose
         type: formData.type === 'view' && formData.url ? detectSourceType(formData.url) : formData.type
       };
       
-      console.log('🔍 [FRONTEND DEBUG] Form data before processing:', formData);
-      console.log('🔍 [FRONTEND DEBUG] Source data being sent:', sourceData);
-      console.log('🔍 [FRONTEND DEBUG] Detected type from URL:', formData.url ? detectSourceType(formData.url) : 'N/A');
+
 
       if (editingSource) {
         // Update existing source
@@ -131,7 +134,7 @@ const ExternalSourcesManager = ({ fileId, sources = [], onSourcesChange, onClose
         }
 
         const updatedSource = response.data as ExternalSource;
-        const updatedSources = sources.map(s => 
+        const updatedSources = safeSources.map(s => 
           s.id === editingSource.id ? updatedSource : s
         );
         
@@ -149,7 +152,7 @@ const ExternalSourcesManager = ({ fileId, sources = [], onSourcesChange, onClose
         }
 
         const newSource = response.data as ExternalSource;
-        const updatedSources = [...sources, newSource];
+        const updatedSources = [...safeSources, newSource];
         
         onSourcesChange(updatedSources);
         toast({
@@ -180,7 +183,7 @@ const ExternalSourcesManager = ({ fileId, sources = [], onSourcesChange, onClose
         throw new Error('Failed to delete external source');
       }
 
-      const updatedSources = sources.filter(s => s.id !== sourceId);
+      const updatedSources = safeSources.filter(s => s.id !== sourceId);
       
       onSourcesChange(updatedSources);
       toast({
@@ -305,13 +308,14 @@ const ExternalSourcesManager = ({ fileId, sources = [], onSourcesChange, onClose
         </div>
       </CardHeader>
       <CardContent>
-        {sources.length === 0 ? (
+
+        {safeSources.length === 0 ? (
           <p className="text-xs text-muted-foreground text-center py-4">
             No external sources linked yet. Add links to related files or resources.
           </p>
         ) : (
           <div className="space-y-2">
-            {sources.map((source) => (
+            {safeSources.map((source) => (
               <div key={source.id} className="flex items-center justify-between p-2 border rounded-md">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">

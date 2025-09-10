@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -54,6 +54,7 @@ interface FileMetadata {
   type?: string;
   uploadedAt?: string;
   lastModified?: number;
+  externalSources?: ExternalSource[];
 }
 
 interface ApiResponse {
@@ -103,11 +104,7 @@ const TrainingContent: React.FC = () => {
   const [externalSources, setExternalSources] = useState<ExternalSource[]>([]);
   const { toast } = useToast();
 
-  useEffect(() => {
-    fetchFiles();
-  }, []);
-
-  const fetchFiles = async () => {
+  const fetchFiles = useCallback(async () => {
     try {
       const response = await apiService.get('/files') as FileApiResponse;
       // Handle nested response structure: {success: true, data: {data: Array, count: number}}
@@ -129,7 +126,11 @@ const TrainingContent: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [setFiles, setLoading, toast, t]);
+
+  useEffect(() => {
+    fetchFiles();
+  }, [fetchFiles]);
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -263,29 +264,15 @@ const TrainingContent: React.FC = () => {
     setSelectedFileForSources(file);
     setExternalSourcesOpen(true);
     
-    // Fetch external sources for this file
-    try {
-      const response = await apiService.get<ExternalSource[]>(`/files/${file.id}/sources`);
-      if (response.success) {
-        setExternalSources(response.data || []);
-      } else {
-        setExternalSources([]);
-      }
-    } catch (error) {
-      console.error('Error fetching external sources:', error);
-      toast({
-        title: "Error",
-        description: "Failed to fetch external sources. Please try again.",
-        variant: "destructive",
-      });
-      setExternalSources([]);
-    }
+    // Extract external sources from file metadata
+    const fileExternalSources = file.metadata?.externalSources || [];
+    setExternalSources(fileExternalSources);
   };
 
   const handleCloseExternalSources = () => {
     setExternalSourcesOpen(false);
     setSelectedFileForSources(null);
-    setExternalSources([]);
+    // Don't clear external sources - keep them for when dialog reopens
   };
 
   const handleProcessFile = async (fileId: string) => {
