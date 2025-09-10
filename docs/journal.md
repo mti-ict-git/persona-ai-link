@@ -4082,6 +4082,95 @@ FROM ProcessedFiles
 - Auto-increment ID generation functioning correctly
 - File upload workflow fully operational
 
+## 2025-09-10 13:19:06 - LDAP EmployeeId Array Handling Fix
+
+**Context**: The LDAP authentication was failing with "Validation failed for parameter 'employeeId'. Invalid string" error, even after the previous null handling fix.
+
+**Root Cause Analysis**:
+- The employeeId field from LDAP was returning as an empty array `[]` instead of null/undefined
+- The previous fix `|| ''` was converting the array to an empty string, but MSSQL driver still saw it as an invalid object
+- Database has CHECK constraint: `employeeId IS NULL OR LEN(TRIM(employeeId)) > 0` which prevents empty strings
+
+**Solution Implemented**:
+1. **Added `extractEmployeeId()` method** in `ldapService.js`:
+   ```javascript
+   extractEmployeeId(userEntry) {
+       let employeeId = userEntry.employeeID || userEntry.employeeNumber || userEntry.employeeId;
+       
+       // Handle array case from LDAP
+       if (Array.isArray(employeeId)) {
+           employeeId = employeeId.length > 0 ? employeeId[0] : null;
+       }
+       
+       // Return null instead of empty string to satisfy CHECK constraint
+       return employeeId ? String(employeeId).trim() : null;
+   }
+   ```
+
+2. **Updated userData extraction** to use the new method:
+   ```javascript
+   employeeId: this.extractEmployeeId(userEntry),
+   ```
+
+3. **Removed redundant `|| ''` conversions** in SQL parameter binding since the method handles this properly
+
+**Testing Results**:
+- LDAP authentication now works successfully
+- employeeId properly handled as `null` when not available
+- Database CHECK constraint satisfied
+- Login returns 200 status with valid JWT token
+
+**Technical Details**:
+- Debug logging showed: `"employeeId": [], "type": "object"`
+- Fixed by properly detecting and handling array case
+- Ensures compliance with database constraint requirements
+
+---
+
+## 2025-09-10 13:09:05 - Training Menu Structure Documentation
+
+**Context**: User requested to learn about the training menu settings and navigation structure.
+
+**Training Menu Access Paths**:
+
+1. **Direct Route**: `/training`
+   - Standalone Training page (`src/pages/Training.tsx`)
+   - Full-featured interface with comprehensive file management
+   - Accessible via direct URL navigation
+
+2. **Settings Integration**: Settings > Training Tab
+   - Embedded within Settings page (`src/pages/Settings.tsx`)
+   - Uses `TrainingContent` component (`src/components/TrainingContent.tsx`)
+   - Admin-only access (requires admin/superadmin role)
+   - Located at line 67 in Settings.tsx: `{ id: 'training', label: t('settings.training'), icon: Brain, adminOnly: true }`
+
+3. **Navigation Structure**:
+   - **Main Chat Interface** (`src/pages/Index.tsx`): Primary chat interface
+   - **Sidebar Navigation** (`src/components/ChatSidebar.tsx`): Contains Settings button (line 270)
+   - **Settings Page** (`src/pages/Settings.tsx`): Contains Training tab for admin users
+   - **Admin Panel** (`src/pages/Admin.tsx`): Contains training management section (line 439)
+
+**Key Features**:
+- **File Upload**: Support for PDF, DOCX, TXT, DOC files
+- **File Processing**: Integration with n8n webhook pipeline
+- **External Sources**: Link management for external documents
+- **Batch Operations**: Process multiple files simultaneously
+- **Model Training**: AI model training with processed files
+- **File Management**: View, reprocess, and delete uploaded files
+
+**Technical Implementation**:
+- **Routing**: Defined in `src/App.tsx` with protected routes
+- **Components**: Separate Training page and TrainingContent component
+- **API Integration**: Backend endpoints for file management and processing
+- **Role-based Access**: Admin/superadmin restrictions for certain features
+
+**User Access Flow**:
+1. Main Chat → Sidebar → Settings → Training (Admin only)
+2. Direct URL: `/training` (All authenticated users)
+3. Admin Panel → Training Management (Admin only)
+
+---
+
 ## 2025-09-10 11:46:05 - LDAP EmployeeId Validation Fix
 
 ### Problem

@@ -74,7 +74,7 @@ class LDAPService {
                 displayName: userEntry.displayName || userEntry.givenName + ' ' + userEntry.sn,
                 firstName: userEntry.givenName || '',
                 lastName: userEntry.sn || '',
-                employeeId: userEntry.employeeID || userEntry.employeeNumber || null,
+                employeeId: this.extractEmployeeId(userEntry),
                 groups: Array.isArray(userEntry.memberOf) ? userEntry.memberOf : [userEntry.memberOf].filter(Boolean),
                 distinguishedName: userEntry.distinguishedName
             };
@@ -100,10 +100,25 @@ class LDAPService {
         }
     }
 
+    extractEmployeeId(userEntry) {
+        // Handle various employeeId field formats from LDAP
+        let employeeId = userEntry.employeeID || userEntry.employeeNumber || userEntry.employeeId;
+        
+        // If it's an array (which can happen with LDAP), take the first element
+        if (Array.isArray(employeeId)) {
+            employeeId = employeeId.length > 0 ? employeeId[0] : null;
+        }
+        
+        // Convert to string if exists, otherwise return null (not empty string)
+        // This satisfies the CHECK constraint: employeeId IS NULL OR LEN(TRIM(employeeId)) > 0
+        return employeeId ? String(employeeId).trim() : null;
+    }
+
     async createOrUpdateLocalUser(ldapUserData) {
         try {
             const pool = await sql.connect();
             
+
             // Check if user exists
             const existingUserResult = await pool.request()
                 .input('username', sql.NVarChar, ldapUserData.username)
@@ -126,7 +141,7 @@ class LDAPService {
                     .input('email', sql.NVarChar, ldapUserData.email)
                     .input('firstName', sql.NVarChar, ldapUserData.firstName)
                     .input('lastName', sql.NVarChar, ldapUserData.lastName)
-                    .input('employeeId', sql.NVarChar, ldapUserData.employeeId || '') // Convert null to empty string
+                    .input('employeeId', sql.NVarChar, ldapUserData.employeeId)
                     .query(`
                         UPDATE chat_Users 
                         SET email = @email, 
@@ -146,7 +161,7 @@ class LDAPService {
                     .input('email', sql.NVarChar, ldapUserData.email)
                     .input('firstName', sql.NVarChar, ldapUserData.firstName)
                     .input('lastName', sql.NVarChar, ldapUserData.lastName)
-                    .input('employeeId', sql.NVarChar, ldapUserData.employeeId || '') // Convert null to empty string
+                    .input('employeeId', sql.NVarChar, ldapUserData.employeeId)
                     .input('passwordHash', sql.NVarChar, await bcrypt.hash('ldap_user', 10)) // Placeholder password
                     .input('role', sql.NVarChar, 'user') // Default role
                     .input('authMethod', sql.NVarChar, 'ldap')
