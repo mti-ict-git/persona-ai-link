@@ -653,5 +653,11 @@
       "finish": "Finish Tour",
       "close": "Close"
     }
+  },
+  "originalText": {
+    "title": "Original Source Text",
+    "description": "This is the original text retrieved from the knowledge base that was used to generate the response.",
+    "noDataAvailable": "No original text available.",
+    "viewOriginalText": "View original source text"
   }
 }

@@ -19,6 +19,14 @@ interface Message {
   content: string;
   role: "user" | "assistant";
   timestamp: string;
+  metadata?: {
+    original_retrieved_text?: string;
+    n8n_response?: {
+      original_retrieved_text?: string;
+      [key: string]: unknown;
+    };
+    [key: string]: unknown;
+  };
 }
 
 interface ChatSession {
@@ -160,7 +168,8 @@ const Index = () => {
         id: msg.id,
         content: msg.content,
         role: msg.role,
-        timestamp: new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        timestamp: new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        metadata: msg.metadata
       }));
       
       setCurrentMessages(uiMessages);

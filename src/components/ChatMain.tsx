@@ -11,11 +11,22 @@ import TypingAnimation from "@/components/TypingAnimation";
 import TypewriterText from "@/components/TypewriterText";
 import MessageFeedback from "@/components/MessageFeedback";
 
+
+import RetrievedTextTooltip from "@/components/RetrievedTextTooltip";
+
 interface Message {
   id: string;
   content: string;
   role: "user" | "assistant";
   timestamp: string;
+  metadata?: {
+    original_retrieved_text?: string;
+    n8n_response?: {
+      original_retrieved_text?: string;
+      [key: string]: unknown;
+    };
+    [key: string]: unknown;
+  };
 }
 
 
@@ -302,17 +313,21 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
                   : "bg-gradient-to-br from-background to-muted/30 text-foreground border border-border/50 backdrop-blur-sm"
               )}>
                 {message.role === "assistant" ? (
-                  <div className="markdown-content">
-                    {newMessageIds.has(message.id) ? (
-                      <TypewriterText 
-                        text={message.content}
-                        speed={30}
-                        isMarkdown={true}
-                        className=""
-                        onComplete={() => onTypewriterComplete?.(message.id)}
-                      />
-                    ) : (
-                      <ReactMarkdown 
+                  <RetrievedTextTooltip 
+                    messageContent={message.content}
+                    originalRetrievedText={message.metadata?.original_retrieved_text || message.metadata?.n8n_response?.original_retrieved_text}
+                  >
+                    <div className="markdown-content">
+                      {newMessageIds.has(message.id) ? (
+                        <TypewriterText 
+                          text={message.content}
+                          speed={30}
+                          isMarkdown={true}
+                          className=""
+                          onComplete={() => onTypewriterComplete?.(message.id)}
+                        />
+                      ) : (
+                        <ReactMarkdown 
                         remarkPlugins={[remarkGfm]}
                         components={{
                           p: ({ children }) => <p className="mb-3 last:mb-0 leading-relaxed">{children}</p>,
@@ -342,16 +357,20 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
                           pre: ({ children }) => <pre className="mb-3 overflow-x-auto">{children}</pre>,
                           strong: ({ children }) => <strong className="font-semibold text-foreground">{children}</strong>,
                           em: ({ children }) => <em className="italic">{children}</em>,
-                          a: ({ children, href }) => (
-                            <a 
-                              href={href} 
-                              className="text-primary hover:text-primary/80 underline decoration-primary/30 hover:decoration-primary/60 transition-colors" 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                            >
-                              {children}
-                            </a>
-                          ),
+                          a: ({ href, children }) => {
+                            // All links are now handled as regular links since we have reference tooltips
+                            return (
+                              <a
+                                href={href}
+                                className="text-primary hover:text-primary/80 underline decoration-primary/30 hover:decoration-primary/60 transition-colors"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {children}
+                              </a>
+                            );
+                          },
+
                           table: ({ children }) => (
                             <div className="overflow-x-auto mb-3 rounded-lg border border-border/50">
                               <table className="border-collapse w-full min-w-max">
@@ -374,14 +393,16 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
                         {message.content}
                       </ReactMarkdown>
                     )}
-                    <MessageFeedback
-                      messageId={message.id}
-                      messageContent={message.content}
-                      sessionId={sessionId || 'default'}
-                      previousQuestion={previousQuestion}
-                      className="mt-2"
-                    />
-                  </div>
+                      <MessageFeedback
+                        messageId={message.id}
+                        messageContent={message.content}
+                        sessionId={sessionId || 'default'}
+                        previousQuestion={previousQuestion}
+                        className="mt-2"
+                        originalText={message.metadata?.original_retrieved_text || message.metadata?.n8n_response?.original_retrieved_text || ''}
+                      />
+                    </div>
+                  </RetrievedTextTooltip>
                 ) : (
                   newMessageIds.has(message.id) ? (
                     <TypewriterText 

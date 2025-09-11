@@ -1,0 +1,1330 @@
+# PT Merdeka Tsingshan Indonesia — Peraturan Perusahaan (Bilingual)
+
+
+<a id="bab-i-umum"></a>
+# BAB I. UMUM
+<a id="第一章总则"></a>
+## 第一章总则
+
+<a id="pasal-1-istilah-istilah"></a>
+### Pasal 1. Istilah-Istilah
+<a id="第一条-定义"></a>
+#### 第一条 定义
+
+Dalam Peraturan Perusahaan ini, yang dimaksud dengan:
+本公司制度名词解释如下：
+1. Perusahaan adalah PT Merdeka Tsingshan Indonesia, berkedudukan di Kota Adminstrasi Jakarta Selatan, didirikan berdasarkan Akta Notaris No. 30, tanggal 14 Desember 2021 Notaris Darmawan Tjoa, SH., SE., di Jakarta Pusat, Surat Pengesahan AHU-0220690.AH.01.11.Tahun 2021.  <br><span lang="zh">公司为PT Merdeka Tsingshan Indonesia，注册地位于南雅加达行政城，根据第11号公证书成立。 2021 年 12 月 14 日，公证人 Darmawan Tjoa, SH., SE.，雅加达中部，证明书 AHU-0220690.AH.01.11.Year 2021。</span>
+2. Lingkungan Perusahaan adalah keseluruhan tempat yang berada di bawah penguasaan Perusahaan yang digunakan untuk menunjang kegiatan operasional Perusahaan, termasuk kantor pusat dan kantor perwakilan.  <br><span lang="zh">公司环境是指公司控制下用于支持公司经营活动的所有场所，包括总部和代表处。</span>
+3. Pimpinan Perusahaan adalah orang yang karena jabatannya mempunyai tugas memimpin Perusahaan.  <br><span lang="zh">公司领导是指因职位本身具有领导公司事务的人员</span>
+4. Direksi adalah anggota direksi dari Perusahaan sebagaimana tercantum dalam Akta Perusahaan.  <br><span lang="zh">董事是指公司章程所束的董事会成员</span>
+5. Perjanjian Kerja adalah perjanjian tertulis antara Karyawan dengan Perusahaan yang memuat syarat-syarat kerja, hak dan kewajiban para pihak yang persyaratannya dilaksanakan sesuai dengan peraturan perundang-undangan yang berlaku.  <br><span lang="zh">劳动合同是指公司和员工以书面形式达成的协议，其中包括雇佣条款，双方的权利和义务，其条款根据现行的法律法规执行。</span>
+6. Perjanjian Kerja Waktu Tertentu (PKWT) adalah perjanjian kerja antara Karyawan dengan Perusahaan, untuk mengadakan hubungan kerja dalam waktu tertentu atau untuk pekerjaan tertentu dengan berpedoman pada peraturan perundang-undangan yang berlaku.  <br><span lang="zh">固定期限劳动合同是指根据现行的法律法规，公司与员工因特定的工作时间或特定工作存在劳动关系而签订的劳动合同</span>
+7. Perjanjian Kerja Waktu Tidak Tertentu (PKWTT) adalah perjanjian kerja yang belum ditentukan kapan berakhirnya dengan status karyawan sebagai karyawan tetap.  <br><span lang="zh">不固定期限劳动合同是指未明确协议终止日期的劳动合同，此协议中的员工状态为固定员工或终身员工</span>
+8. Masa Percobaan adalah periode selama waktu kerja 3 bulan sebagai masa penilaian kinerja sebelum perusahaan resmi mengangkat karyawan secara permanen.  <br><span lang="zh">试用期是公司正式聘任员工前的3个月工作期间，作为绩效考核期。</span>
+9. Karyawan adalah seseorang yang mempunyai hubungan kerja dengan Perusahaan berdasarkan perjanjian kerja dan menerima upah.  <br><span lang="zh">员工是指与公司基于书面劳动合同而确立的劳动关系，并接受工资的人</span>
+
+10. Istri Karyawan adalah 1 (satu) orang istri dari perkawinan yang sah berdasarkan hukum dan peraturan perundang-undangan dan terdaftar pada Perusahaan.  <br><span lang="zh">员工妻子是指根据印度尼西亚共和国相关法律法规以及在公司登记备案的 1（一）名合法妻子</span>
+11. Suami Karyawan adalah 1 (satu) orang suami dari perkawinan yang sah berdasarkan hukum dan peraturan perundang-undangan dan terdaftar pada Perusahaan.  <br><span lang="zh">员工丈夫是指根据印度尼西亚共和国相关法律法规以及在公司登记备案的 1（一）名合法丈夫</span>
+12. Anak Karyawan adalah anak pertama, kedua dan ketiga karyawan dari istri yang terikat taliperkawinan yang sah yang menjadi tanggungannya, belum bekerja, masih menempuh Pendidikan formal dan belum menikah serta berusia di bawah 18 (delapan belas) tahun.  <br><span lang="zh">雇员子女是指雇员合法结婚妻子的第一个、第二个和第三个孩子，他们是其受抚养人，尚未工作，仍在接受正规教育，未婚且未满 18岁。</span>
+13. Keluarga Karyawan adalah suami/istri dan anak.  <br><span lang="zh">员工家人是指丈夫/妻子和子女。</span>
+14. Ahli Waris adalah janda/duda, anak, wali yang sah atau orang lain yang ditunjuk oleh karyawan untuk menjadi ahli warisnya dan terdaftar pada Perusahaan. Dalam hal tidak ada penunjukan sebagai ahli waris, ahli waris akan ditetapkan sesuai hukum dan peraturan perundang-undangan yang berlaku.  <br><span lang="zh">继承人是指寡妇/鳏夫，子女，法定监护人或由员工指定为其继承人并在公司登记的其他人。 如果没有指定继承人，则继承人将根据现行的法律法规确定。</span>
+15. Pekerjaan adalah kegiatan yang dijalankan oleh Karyawan untuk Perusahaan dalam suatu hubungan kerja tertentu yang telah disepakati bersama dalam suatu ikatan hubungan kerja.  <br><span lang="zh">工作是指员工在公司中根据劳动关系中相互约定的特定劳动关系执行的活动。</span>
+16. Masa Kerja adalah periode waktu tertentu sejak karyawan terikat kontrak kerja Perjanjian Kerja Waktu Tertentu (PKWT) atau Perjanjian Kerja Waktu Tidak Tertentu (PKWTT) dengan Perusahaan.  <br><span lang="zh">工作年期是指算出开始员工自与公司建立固定期限劳动合同或不固定期限劳动合同关系的工作时间。</span>  <br><span lang="zh">Pemindahan Karyawan adalah memindah tugaskan Karyawan dari satu pekerjaan ke pekerjaan lainnya di dalam Perusahaan atau ke Perusahaan lain dalam satu kelompok usaha atau group Perusahan dengan berpedoman pada peraturan perundang-undangan yang berlaku. 员工调动是指将员工在同公司内进行岗位异动或跨公司异动，并遵循现行的法律规定执行。</span>
+17. Waktu Kerja adalah periode waktu yang ditetapkan Perusahaan untuk karyawan berada di tempat kerja dan melakukan pekerjaannya.  <br><span lang="zh">工作时间是指公司规定的员工上班和执行工作的时间段。</span>  <br><span lang="zh">Fasilitas kerja adalah peralatan kerja atau barang inventaris milik perusahaan yang disediakan oleh perusahaan untuk dipakai karyawan dalam melaksanakan pekerjaan sesuai kegunaannya. 工作设施是指为实现工作目标，由公司提供的工作设备或物品。</span>
+18. Pelatihan Kerja adalah keseluruhan kegiatan untuk memberi, memperoleh, meningkatkan, serta mengembangkan kompetensi kerja, produktivitas, disiplin, sikap dan etos kerja pada tingkat keterampilan dan keahlian tertentu sesuai dengan jenjang dan kualifikasi jabatan dan pekerjaan.  <br><span lang="zh">工作培训是指根据员工职位和工作的水平能力，以提高其专业技能和知识，持续开发和改善工作能力，生产力，纪律，态度和职业道德的所有活动。</span>
+19. Program Pelatihan Kerja adalah keseluruhan isi pelatihan yang tersusun secara sistematis dan memuat tentang kompetensi kerja yang ingin dicapai, materi pelatihan teori dan praktek, jangka waktu pelatihan, metode dan sarana pelatihan, persyaratan peserta dan tenaga kepelatihan serta
+  <br>evaluasi dan penetapan kelulusan peserta pelatihan.  <br><span lang="zh">工作培训计划是指系统性的安排整个培训内容，包含要实现的工作能力，理论和实践培训材料，培训时间，培训方法和形式，参与者和培训人员的要求，以及培训效果评估。</span>
+20. Penilaian Prestasi Kerja adalah penilaian kinerja Karyawan dalam menjalankan pekerjaannya yang dilakukan oleh atasan kepada bawahan.  <br><span lang="zh">工作绩效评估是指员工上级根据客观规则对员工工作的绩效进行评估。</span>
+21. Promosi adalah kenaikan jabatan Karyawan yang ditentukan berdasarkan kebutuhan Perusahaan dan kompetensi serta prestasi kerja Karyawan.  <br><span lang="zh">晋升是指根据公司的需求，对符合条件且工作表现优异的员工进行晋升。</span>
+22. Demosi adalah penurunan kepangkatan atau jabatan.  <br><span lang="zh">降职是指军衔或职位的降低。</span>
+23. Penghargaan Khusus adalah penghargaan yang diberikan atas prestasi atau perbuatan khusus/istimewa yang ditunjukkan Karyawan selama bekerja dan diatur terpisah dalam peraturan pelaksanaan.  <br><span lang="zh">特殊奖励是指对员工在工作中表现出的特殊成就或特殊行为给予的奖励，并在实施条例中另行规定。</span>
+24. Surat Peringatan (SP) adalah sanksi yang diberikan Perusahaan kepada Karyawan secara tertulis yang tergantung pada jenis, frekuensi, bobot dan ada tidaknya unsur kesengajaan atas pelanggaran yang dilakukan.  <br><span lang="zh">警告单是指根据所犯违规行为的类型、频率、严重程度，以书面形式给予员工的处罚。</span>
+25. Ganti Rugi adalah kewajiban Karyawan untuk mengganti kerugian yang ditimbulkan apabila terjadi kerusakan barang atau kerugian lainnya baik milik Perusahaan maupun milik pihak ketiga akibat kesengajaan atau kelalaian Karyawan.  <br><span lang="zh">损失赔偿是指员工因故意或过失造成公司物品损坏或其他损失（包括公司和第三方的财产）的情况下，员工有义务承担相应损失并进行赔偿。</span>
+26. Denda adalah sanksi yang dikenakan kepada Karyawan berupa pemotongan gaji atas kesengajaan atau kelalaian Karyawan sehingga melanggar peraturan dan atau tidak mencapai kinerja yang ditetapkan Perusahaan, yang hasil dendanya dikumpulkan untuk kepentingan Karyawan.  <br><span lang="zh">罚款是指对员工的处罚，因有意或过失违反相关规定和/或未达到公司所设定的业绩目标而给予的考核，并其罚款将用于员工利益。</span>
+27. Skorsing adalah memberhentikan Karyawan sementara dari pekerjaannya atau melepaskan Karyawan dari kewajibannya untuk datang bekerja ketika sedang dalam proses penanganan kasus pelanggaran tata tertib dan Peraturan Perusahaan menunggu hasil proses dengan upah beserta hak-hak lainnya yang biasa diterima Karyawan tetap dibayarkan.  <br><span lang="zh">停职查办是指因违反公司规定和纪律，在配合调查等待处理结果，暂时终止员工的工作或解除其上班的义务，而在该期间员工照常享有工资和其他权利。</span>
+28. Accident adalah suatu kejadian yang tidak diinginkan yang menyebabkan kematian, sakit, cidera, kerusakan dan/atau kerugian lainnya.  <br><span lang="zh">意外事故是指导致死亡，疾病，伤害，损坏和/或其他损失的意外事件</span>
+29. Kecelakaan Ringan (kelas 3) adalah kecelakaan kerja yang menimbulkan kehilangan hari kerja.  <br><span lang="zh">轻微事故（第三级）是指导致工作日损失的工作事故。</span>
+30. Kecelakaan Sedang (kelas 2) adalah kasus kecelakaan kerja yang menyebabkan pekerja mengalami ketidakmampuan fisik/fungsi sebagian dan bersifat non permanen (dapat   disembuhkan) sehingga menyebabkan jumlah hari hilang tidak lebih dari 21 (dua puluh satu) hari kalender.  <br><span lang="zh">中等事故（第二级）是指工作事故导致工人部分身体/功能丧失，并且是非永久性的（可以治愈），因此导致的工作日损失不超过21天。</span>
+31. Kecelakaan Berat (kelas 1) adalah kasus kecelakaan kerja yang menyebabkan ketidakmampuan fisik/fungsi sebagian atau seluruh dan bersifat non permanen (dapat disembuhkan) atau permanen (tidak dapat disembuhkan/pulih seperti semula) yang menyebabkan jumlah hari hilang lebih dari 21 (dua puluh satu) hari kalender berdasarkan perhitungan kerugian hari kerja karena cacat pada lampiran II SK Dirjen Pembinaan Hubungan Industrial dan Pengawasan Ketenagakerjaan Nomor 84 Tahun 1998.  <br><span lang="zh">严重事故（第一级）是指工作事故导致工人部分或全部身体/功能丧失，并且是非永久性（可以治愈）或永久性（无法恢复至原状），因此导致的工作日损失超过21天，根据工业关系和劳工监管总局第84号1998年附件II的工作日损失计算。</span>
+32. Kematian (Fatality) adalah kasus kecelakaan yang menyebabkan kematian pada pekerja dengan perhitungan berdasarkan lampiran II SK Dirjen Pembinaan Hubungan Industrial dan Pengawasan Ketenagakerjaan Nomor 84 Tahun 1998 menyebabkan 6000 (enam ribu) hari hilang per kematian.  <br><span lang="zh">死亡（致命性）是指导致工人死亡的事故，根据 1998 年第 84 号劳资关系和劳动监察总局法令的附件 II 进行计算，每起死亡造成 6000（六千）天的损失。</span>
+33. Non-Fatality adalah terminologi Kesehatan dan Keselamatan Kerja yang bermakna kejadian yang merugikan/membahayakan sebagai akibat perilaku yang tidak aman tanpa adanya korban jiwa.  <br><span lang="zh">非致命性是指职业健康与安全的术语，表示没有造成人员伤亡的不安全行为而导致的不良/危险事件。</span>
+34. 5S adalah Seiri (Sortir), Saiton (Susun), Seiso (Sapu), Seiketsu (Standarisasi), Sitsuke (Swa Disiplin) adalah memanfaatkan tempat kerja yang mencakup peralatan, dokumen, bangunan dan ruang serta sistem untuk melatih kebiasaan para pekerja dalam usaha meningkatkan disiplin kerja.  <br><span lang="zh">五常法（常组织、常整顿、常清洁、常规范、常自律）是利用工作场所包括包括设备、文件、建筑物和空间以及系统培养工人的工作习惯为努力提升工作纪律。</span>
+35. Penurunan Upah adalah menurunkan upah Karyawan serendah-rendahnya tidak lebih rendah dari upah minimum yang berlaku yang disebabkan karena adanya penyesuaian jabatan atau pelanggaran atau tidak tercapainya kinerja yang diharapkan.  <br><span lang="zh">降薪是指因岗位调整、违反纪律或未达到预期绩效目标而导致员工的工资降低，降薪后工资应不低于法定最低工资标准。</span>  <br><span lang="zh">Pendapatan Non Upah adalah pendapatan yang diterima oleh Karyawan dari Perusahaan dalam bentuk uang, barang atau fasilitas lainnya namun bukan termasuk dalam golongan upah. 非工资收入是指员工从公司所获得但不属于常规工资范围内的金钱、物品或其他福利。</span>
+36. Upah adalah hak Karyawan yang diterima dan dinyatakan dalam bentuk uang sebagai imbalan dari Perusahaan kepada karyawan yang diterapkan dan dibayarkan menurut suatu Perjanjian Kerja, kesepakatan, atau peraturan perundang-undangan, termasuk tunjangan bagi karyawan dan keluarganya atas suatu pekerjaan dan/atau jasa yang telah atau akan dilakukan.  <br><span lang="zh">工资是指公司根据雇佣协议、协议或法定规定向员工提供的以金钱形式补偿的员工权利，包括为员工及其家庭提供已完或将完的工作和/或服务的津贴。</span>
+37. Tunjangan Hari Raya (THR) adalah pendapatan non upah yang diberikan oleh Perusahaan kepada Karyawan sesuai dengan ketentuan undang-undang yang berlaku.  <br><span lang="zh">宗教津贴是指公司根据法律法规发放给员工的非工资性收入。</span>
+38. Upah Tidak Dibayar adalah upah yang tidak diberikan kepada karyawan karena tidak melakukan pekerjaan.  <br><span lang="zh">不支付工资是指因员工没有工作而不支付工资。</span>
+39. Lembur adalah pekerjaan yang dilakukan melebihi jam kerja normal yang telah ditetapkan sesuai dengan ketentuan peraturan perundang-undangan yang berlaku.  <br><span lang="zh">加班是指符合现行法律法规的正常工作时间之外的工作时间。</span>
+40. BPJS Ketenagakerjaan adalah program asuransi ketenagakerjaan yang disediakan oleh pemerintah melalui Badan Penyelenggara Jaminan Sosial Ketenagakerjaan (BP-Jamsostek) berupa perlindungan bagi karyawan dalam bentuk santunan sebagai akibat peristiwa atau keadaan yang dialami oleh karyawan berupa kecelakaan kerja, jaminan hari tua, jaminan kehilangan pekerjaan, program pensiun dan meninggal dunia yang pembayaran iurannya sesuai dengan Peraturan perundang-undangan yang berlaku.  <br><span lang="zh">劳动保险是由印度尼西亚政府通过社会保障管理机构（BP-Jamsostek）提供的劳工保险计划，旨在为雇员提供保障，包括因工作事故、老年保障、失业保障、退休金计划以及死亡赔偿金等所导致的赔偿。其缴费按照适用的法律法规进行。</span>
+41. BPJS kesehatan adalah program asuransi kesehatan yang disediakan oleh pemerintah melalui Badan Penyelenggara Jaminan Sosial Kesehatan (BPJS-Kes) berupa perlindungan kesehatan dalam bentuk pembiayaan layanan kesehatan kepada Karyawan dan anggota keluarga Karyawan dengan iurannya ditanggung bersama oleh Perusahaan.  <br><span lang="zh">健康保险是由印度尼西亚政府通过社会保障管理机构（BPJS-Kes）提供的健康保险计划，旨在为雇员及其家庭成员提供医疗保障，包括医疗服务的资助。其费用由公司与雇员共同承担。</span>
+42. Cuti adalah Istirahat bagi karyawan yang diberikan oleh Perusahaan setelah melaksanakan pekerjaan memenuhi periode waktu yang telah ditentukan oleh Perusahaan.  <br><span lang="zh">休假是指根据公司规定在工作指定时间期满后给予的员工休息。</span>
+43. Cuti Tahunan adalah hak istirahat kerja dengan tidak hadir di tempat kerja sebanyak 12 (dua belas) hari kerja dengan upah tetap dibayar sebagaimana yang ditetapkan oleh peraturan perundang-undangan yang berlaku.  <br><span lang="zh">年假是指根据适用法律法规享有的休假，该假共计 12（十二）天，并根据适用法律法规的规定享有固定的工资。</span>
+44. Cuti Kunjungan Keluarga (Family Visit) adalah kebijakan cuti yang diberikan oleh perusahaan yang diluar ketentuan peraturan perundang-undangan, dilaksanakan melalui Teknis Pelaksanaan.  <br><span lang="zh">探亲假是公司提供的不属于法定规定的休假政策，并通过技术方式实施。</span>
+45. Izin Sakit adalah izin meninggalkan pekerjaan karena Karyawan terganggu kesehatannya dan tidak dapat melakukan pekerjaan secara normal atau penyakitnya dinyatakan berbahaya bagi dirinya dan bagi kesehatan orang lain yang diberikan berdasarkan Surat Keterangan yang dikeluarkan oleh dokter atau tenaga kesehatan yang berwenang sesuai peraturan perundang- undangan yang berlaku yang dapat diberikan apabila Karyawan mengajukan izin sakit sesuai ketentuan perusahaan.  <br><span lang="zh">病假 是指因为员工的健康受损无法正常履行工作需要休息和/或疾病被宣布对自己和他人的健康有害，根据现行法律规定所授权的医生或卫生人员出具诊断证明后，按照公司相关规定申请才可休息 。</span>
+46. Izin Dengan Upah Dibayar adalah izin meninggalkan pekerjaan di luar cuti dan dengan upah tetap dibayar sebagaimana ketentuan yang diatur dalam peraturan perundang-undangan yang berlaku.  <br><span lang="zh">带薪请假 是指适用于法律所规定的需要支付固定工资的请假。</span>
+47. Izin Dengan Upah Tidak Dibayar adalah izin meninggalkan pekerjaan dengan alasan di luar yang ditentukan oleh peraturan perundang-undangan yang berlaku dengan ketentuan upah tidak dibayarkan pada hari izin yang diambil.  <br><span lang="zh">无薪假是指除法律规定带薪请假之外的请假，并在请假期间不支付工资。</span>
+48. Pemogokan Kerja adalah tindakan Karyawan yang direncanakan dan dilaksanakan secara bersama-sama yang sah dengan cara menghentikan atau memperlambat pekerjaan setelah melalui persetujuan sesuai dengan ketentuan peraturan perundang-undangan yang berlaku.  <br><span lang="zh">罢工是职工依照有关法律、法规的规定，经批准后，共同策划、实施的停止或者减慢工作的法律行为。</span>
+49. Pengunduran Diri adalah pengakhiran hubungan kerja antara Karyawan dengan Perusahaan selama masa bekerja atau sebelum berakhirnya kontrak yang dikehendaki oleh Karyawan secara suka rela maupun karena melakukan pelanggaran tertentu sesuai peraturan perundang- undangan yang berlaku sehingga dianggap mengundurkan diri.  <br><span lang="zh">自请离职是指在任职期内或合同期满前，员工按照流程主动提出解除劳动关系的行为。</span>
+50. Pemutusan Hubungan Kerja (PHK) adalah Pengakhiran hubungan kerja karena suatu hal tertentu yang mengakibatkan berakhirnya hak dan kewajiban antara pekerja/buruh dan pengusaha.  <br><span lang="zh">解雇离职是指由于某种原因终止雇佣关系导致工人/劳工与雇主之间的权利和义务终止。</span>
+51. Uang Pesangon adalah pembayaran berupa uang dari Perusahaan kepada Karyawan sebagai akibat adanya pemutusan hubungan kerja yang diberikan kepada Karyawan yang memenuhi persyaratan.  <br><span lang="zh">遣散费是指公司根据解雇条件向员工支付的款项。</span>
+52. Uang Penghargaan Masa Kerja adalah uang jasa sebagai penghargaan Perusahaan kepada Karyawan yang dikaitkan dengan lamanya masa kerja sebagai akibat berakhirnya hubungan kerja yang diberikan kepada Karyawan yang memenuhi persyaratan.  <br><span lang="zh">工龄奖金是指公司终止劳动关系后，提供给满足条件的员工与工龄相关的服务费。</span>
+53. Uang Penggantian Hak adalah uang yang dibayarkan sebagai pengganti hak-hak Karyawan yang belum diambil ketika berakhir hubungan kerjanya dengan Perusahaan.  <br><span lang="zh">补偿金是指与公司解除劳动关系时补偿给员工的款项</span>
+54. Uang Kompensasi adalah uang yang dibayarkan ketika berakhirnya hubungan kerja waktu tertentu.  <br><span lang="zh">补偿金是指雇佣关系终止固定期限时支付的款项。</span>
+55. Uang Pisah adalah uang yang diberikan perusahaan kepada karyawan sesuai peraturan perundang-undangan yang berlaku.  <br><span lang="zh">离职金是公司按照法律、法规规定向员工支付的费用。</span>
+56. Uang Duka adalah Santunan yang diberikan oleh Perusahaan kepada Ahli waris karena karyawan meninggal dunia.  <br><span lang="zh">"Uang Duka" 是指公司向员工遗属支付的抚恤金，因为员工死亡。</span>
+57. Pensiun adalah berakhirnya hubungan kerja antara karyawan dengan perusahaan karena faktor usia atau ketentuan lain sesuai peraturan perundang-undangan yang berlaku.  <br><span lang="zh">退休是指根据适现行法律法规，由于达到退休年龄或其他符合退休的条件，员工与公司之间解除劳动关系。</span>
+  <br><a id="pasal-2-maksud-tujuan-dan-ruang-lingkup"></a>
+### Pasal 2. Maksud, Tujuan dan Ruang Lingkup
+<a id="第二条目的宗旨和适用范围"></a>
+#### 第二条目的，宗旨和适用范围
+1. Maksud Peraturan Perusahaan ini merupakan peraturan tertulis mengenai hak dan kewajiban pengusaha/pemberi kerja dan karyawan.  <br><span lang="zh">公司的规章制度是关于雇主/用人单位和员工权利与义务的书面规定。</span>
+
+
+2. Peraturan Perusahaan ini bertujuan untuk:  <br><span lang="zh">公司的规章制度旨在：</span>
+3. Mewujudkan adanya perlindungan, ketentraman, ketenagakerjaan, dan membangun sikap memelihara serta mempertahankan kelangsungan usaha.  <br><span lang="zh">实现保护、安宁、劳动保障，并培养维护和保持业务连续性的态度。</span>
+4. Mencapai peningkatan produksi, produktivitas kerja, dan peningkatan kesejahteraan pekerja/buruh.  <br><span lang="zh">提高生产、工作效率和工人/劳动者的福利。</span>
+5. Menjamin tertibnya penyelenggaraan kegiatan di Perusahaan sehingga terwujud kenyamanan kerja, profesionalitas kerja dan produktivitas kerja yang optimal.  <br><span lang="zh">确保公司活动的有序进行，从而实现工作舒适、工作专业化和最佳工作生产力。</span>
+6. Ruang Lingkup Peraturan Perusahaan ini berlaku untuk semua Karyawan dan di seluruh wilayah Perusahaan PT Merdeka Tsingshan Indonesia.  <br><span lang="zh">本公司的规章制度适用于所有员工，并默迪卡青山有限公司的场所。</span>
+  <br><a id="pasal-3-interpretasi-dan-ketentuan-perubahan"></a>
+### Pasal 3. Interpretasi dan Ketentuan Perubahan
+<a id="第三条解释和变更规定"></a>
+#### 第三条解释和变更规定
+
+1. Ketentuan-ketentuan didalam Peraturan Perusahaan ini berlaku bagi pengusaha dan pekerja. Perusahaan berhak untuk menafsirkan semua ketentuan-ketentuan yang termuat di dalam pasal- pasal maupun ayat-ayat dari Peraturan Perusahaan ini sesuai dengan makna, arti dan maksud tujuannya dalam pembinaan hubungan industrial Pancasila.  <br><span lang="zh">本公司规章适用于雇主和雇佣。公司有权根据建国五项原则的目的及含义，从而解释本公司法规的条款和段落中的所有规定。</span>
+2. Peraturan Perusahaan ini mengatur hal-hal yang bersifat umum, untuk hal-hal yang bersifat khusus dan yang belum diatur di dalam Peraturan Perusahaan ini akan ditetapkan melalui Teknis Pelaksanaan yang tidak bertentangan dengan peraturan perundang-undangan yang berlaku.  <br><span lang="zh">本公司的规章制度规定了一般事项，对于特殊事项和本规章制度中尚未规定的事项，将通过不违反现行法律法规的实施细则进行规定。</span>
+3. Dalam hal terjadinya perubahan ketentuan hukum dan peraturan perundang-perundangan yang berlaku, maka Peraturan Perusahaan ini akan disesuaikan dan diubah sesuai dengan ketentuan hukum dan peraturan perundangan-undangan yang berlaku dengan cara membuat addendum (penambahan) atau amandemen (perubahan) yang berlaku dengan segera setelah disampaikan secara tertulis oleh perusahaan kepada seluruh Karyawan.  <br><span lang="zh">若现行的法律规定发生变更，则本公司制度将根据现行的法律法规进行调整和修订，做出附录（添加）或修订（变更），由公司以书面形式向所有员工告知后立即实行。</span>
+  <br><a id="bab-ii-hak-dan-kewajiban"></a>
+# BAB II. HAK DAN KEWAJIBAN
+<a id="第二章权利和义务"></a>
+## 第二章权利和义务
+<a id="pasal-4-kewajiban-perusahaan"></a>
+### Pasal 4. Kewajiban Perusahaan
+<a id="第四条-公司义务"></a>
+#### 第四条 公司义务
+1. Perusahaan wajib untuk membagikan dan menjelaskan Peraturan Perusahaan ini kepada Karyawan.  <br><span lang="zh">公司有义务向员工分发和解释此公司制度。</span>
+2. Perusahaan wajib menyelenggarakan sistem manajemen kerja dan membayar upah sesuai yang diperjanjikan kepada Karyawan.  <br><span lang="zh">公司有义务执行工作管理体系并按劳动合同向员工支付工资。</span>
+3. Perusahaan wajib menyesuaikan sistem manajemen kinerja, struktur dan skala upah apabila terdapat perubahan upah pada setiap tahunnya.  <br><span lang="zh">每年工资发生变化时，公司有义务调整绩效管理制度、结构和工资标准。</span>
+4. Perusahaan wajib mengikatkan diri sepenuhnya pada Peraturan Perusahaan ini.  <br><span lang="zh">公司有义务遵守本公司制度。</span>
+5. Perusahaan wajib memberikan seragam kerja yang layak kepada Karyawan.  <br><span lang="zh">公司有义务为员工提供适当的工作服。</span>
+6. Perusahaan wajib memberikan fasilitas kerja yang layak kepada Karyawan.  <br><span lang="zh">公司有义务为员工提供适当的工作设施。</span>
+7. Perusahaan wajib mengatur waktu kerja dan istirahat kerja.  <br><span lang="zh">公司有义务调整工作时间和休息时间。</span>
+8. Perusahaan wajib menetapkan standar prestasi kerja untuk setiap jabatan atau pekerjaan dalam perusahaan yang digunakan sebagai penilaian prestasi kerja.  <br><span lang="zh">公司有义务为公司内的每个工作岗位设定绩效标准，用于绩效评估。</span>
+9. Perusahaan wajib memberikan perlindungan Kesehatan dan Keselamatan Kerja (K3).  <br><span lang="zh">公司有义务提供职业健康和安全保护（K3）。</span>
+10. Perusahaan wajib memberikan jaminan sosial ketenagakerjaan dan kesehatan bagi Karyawan.  <br><span lang="zh">公司有义务给员工提供劳动和健康保险。</span>
+11. Perusahaan wajib melaksanakan peraturan perundang-undangan di bidang ketenagakerjaan.  <br><span lang="zh">公司有义务执行劳动领域的法律法规。</span>
+  <br><a id="pasal-5-hak-perusahaan"></a>
+### Pasal 5. Hak Perusahaan
+<a id="第五条-公司权利"></a>
+#### 第五条 公司权利
+1. Perusahaan berhak memberikan perintah kerja kepada Karyawan.  <br><span lang="zh">公司有权向员工下达工作指令。</span>
+2. Perusahaan berhak menentukan peraturan atau tata tertib kerja.  <br><span lang="zh">公司有权建立与工作相关的规定或规则。</span>
+3. Perusahaan berhak menetapkan hari dan jam kerja serta waktu istirahat kerja.  <br><span lang="zh">公司有权制定工作日和作息时间。</span>
+4. Perusahaan berhak memerintahkan kerja lembur kepada Karyawan sesuai dengan peraturan perundang-undangan yang berlaku.  <br><span lang="zh">公司有权根据现行的法律法规给员工安排加班。</span>
+5. Perusahaan berhak mengatur penggunaan waktu cuti dan izin meninggalkan pekerjaan bagi Karyawan.  <br><span lang="zh">公司有权给员工调整休假和请假（离岗）的使用时间。</span>
+6. Perusahaan berhak memeriksa, menyelidiki, menggeledah setiap Karyawan dengan menunjuk petugas yang berwenang sesuai dengan tugas dan tuntutan pekerjaan dengan mengacu pada prosedur yang telah ditetapkan oleh Perusahaan berdasarkan peraturan perundang-undangan yang berlaku.  <br><span lang="zh">公司有权根据工作职责和要求以及公司制定的流程并遵守现行的法律法规，由指定人员对每位员工进行检查、调查或搜查。</span>
+7. Perusahaan berhak melakukan peninjauan upah Karyawan dan menyesuaikannya sesuai dengan kemampuan Perusahaan dengan berpedoman pada peraturan perundang-undangan.  <br><span lang="zh">公司有权审查评估员工工资，并遵守法律法规，根据公司的能力进行调整。</span>
+8. Perusahaan berhak memutus hubungan kerja dengan Karyawan sesuai ketentuan perundang- undangan yang berlaku.  <br><span lang="zh">公司有权根据现行的法律法规来跟员工解除劳动关系。</span>
+9. Perusahaan berhak melaksanakan pemberian sanksi atas pelanggaran Peraturan Perusahaan yang dilakukan oleh Karyawan.  <br><span lang="zh">公司有权利对违反公司制度的员工进行处理。</span>
+10. Perusahaan berhak memindahkan Karyawan dari suatu jabatan ke jabatan lainnya atau dari satu jenis pekerjaan ke jenis pekerjaan lainnya atau dari satu lokasi ke lokasi lainnya atau ke perusahaan lainnya yang masih dalam satu group perusahaan dengan berpedoman pada ketentuan peraturan perundang-undangan.  <br><span lang="zh">公司有权根据法律法规将处于同一集团下的员工进行跨公司异动，岗位异动或工种异动，或从一个工作地点调到另一个工作地点。</span>
+11. Perusahaan berhak memiliki Hak atas Kekayaan Intelektual dari seluruh hasil pekerjaan yang dihasilkan Karyawan selama bekerja di Perusahaan, baik yang dibuat atas dasar perintah dari Perusahaan maupun yang dibuat secara mandiri oleh Karyawan yang dalam pengerjaan atau pembuatannya dibiayai oleh atau menggunakan fasilitas Perusahaan.  <br><span lang="zh">公司有权对员工在公司工作期间制作的所有工作成果（无论是按公司命令制作的作品还是由公司出资或使用公司设施自发完成的作品）拥有知识产权。</span>
+  <br><a id="pasal-6-kewajiban-karyawan"></a>
+### Pasal 6. Kewajiban Karyawan
+<a id="第六条-员工义务"></a>
+#### 第六条 员工义务
+1. Karyawan wajib tunduk dan mengikatkan diri pada Peraturan Perusahaan ini.  <br><span lang="zh">员工必须服从并完全遵守本公司制度。</span>
+2. Karyawan wajib menaati instruksi, perintah, dan peraturan yang dikeluarkan oleh Perusahaan baik lisan maupun tertulis, termasuk namun tidak terbatas pada peraturan atau tata tertib yang ada pada Peraturan Perusahaan ini, sepanjang tidak bertentangan dengan peraturan perundang- undangan yang berlaku.  <br><span lang="zh">员工有义务遵守公司口头和书面的指示，命令和规定，包括但不限于本规章制度，只要不与现行法律法规冲突即可。</span>
+3. Karyawan wajib hadir di waktu kerja dan lokasi kerja yang ditetapkan dan diperlukan oleh Perusahaan.  <br><span lang="zh">员工有义务在公司指定的工作时间和地点上班。</span>
+4. Karyawan wajib melindungi kepentingan Perusahaan dan tidak diperkenankan mengungkapkan kepada pihak manapun setiap keterangan berkaitan dengan usaha, rencana usaha, perencanaan pajak, keuangan, penjualan dan pemasaran, pelanggan dan rahasia dagang perusahaan, strategi keseluruhan Perusahaan, termasuk setiap keterangan internal, pengungkapan mana yang dapat merugikan Perusahaan termasuk merugikan usaha Perusahaan, juga tidak diperkenankan membantu dan memberikan nasihat kepada pihak lainnya dalam cara yang sedemikian rupa sehingga merugikan, mengancam atau bersaing dengan usaha Perusahaan.  <br><span lang="zh">员工必须保护公司的利益，不得向任何人透露与业务、商业计划、税务筹划、财务、销售与市场、客户和商业秘密、公司整体战略有关的任何信息，包括任何内部信息，这些信息的泄露可能会损害公司或其业务。此外，员工不得以任何可能损害、威胁或与公司业务竞争的方式帮助或向其他方提供建议。</span>
+5. Karyawan wajib menjaga kerahasiaan upah yang diterimanya.  <br><span lang="zh">员工有义务对收取的工资保密。</span>
+6. Karyawan wajib memberitahukan ke Perusahaan apabila ada perubahan data pribadi dan keluarga termasuk kontak telepon, status pernikahan, anggota keluarga dan alamat.  <br><span lang="zh">员工须通知公司，如有员工个人及家庭资料变化，包括电话联络、婚姻状况、家庭成员及地址等。</span>
+7. Karyawan wajib menggunakan Alat Pelindung Diri (APD) sesuai dengan potensi bahaya dan resiko.  <br><span lang="zh">员工根据潜在的危险和风险必须佩戴着个人防护用品。</span>
+8. Karyawan wajib menggunakan seragam kerja saat memasuki dan berada dalam Kawasan IMIP.  <br><span lang="zh">员工进入和停留IMIP区域时必须穿着工作服。</span>
+9. Karyawan wajib melaksanakan Breafing 15 menit sebelum waktu kerja dimulai.  <br><span lang="zh">员工必须工作前15分钟进行早会。</span>
+10. Karyawan wajib menggunakan tanda pengenal diri berupa Id Card atau Keterangan bentuk lainnya yang dikeluarkan oleh Perusahaan saat memasuki dan berada dalam Kawasan IMIP.  <br><span lang="zh">员工进入及停留IMIP区域时，须佩戴着身份工号或公司签发其他形式的个人身份信息。</span>
+11. Karyawan wajib melakukan tugas dan pekerjaan sesuai dengan posisinya yang ditetapkan oleh Perusahaan.  <br><span lang="zh">员工应当按照公司确定的岗位职责履行职责并开展工作。</span>
+12. Karyawan wajib menjaga dan tidak membocorkan semua data dan keterangan yang dianggap sebagai rahasia Perusahaan.  <br><span lang="zh">员工有义务保护且不泄露所有被视为公司机密的数据和信息。</span>
+13. Karyawan wajib menjaga nama baik Perusahaan.  <br><span lang="zh">员工有义务维护公司的良好声誉。</span>
+  <br><a id="pasal-7-hak-karyawan"></a>
+### Pasal 7. Hak Karyawan
+<a id="第七条-员工权利"></a>
+#### 第七条 员工权利
+
+1. Karyawan berhak mendapatkan imbal jasa berupa upah atau yang lainnya atas pekerjaan yang dilakukannya.  <br><span lang="zh">员工有权获得劳动报酬，以工资或其他形式获得相应报酬。</span>
+2. Karyawan berhak mendapatkan waktu istirahat kerja dan cuti sebagaimana diatur dalam Peraturan Perusahaan ini.  <br><span lang="zh">员工有权享有本制度规定的休息和休假。</span>
+3. Karyawan	berhak	mendapatkan	bantuan	dari	Perusahaan	ketika	mendapat permasalahan/ancaman dalam rangka menjalankan tugas yang diberikan oleh Perusahaan  <br><span lang="zh">员工在正常合法执行公司给予的任务过程中，若遇见问题/威胁时有权获得公司的协助。</span>
+4. Karyawan berhak menyampaikan keluh kesah dan saran yang rasional kepada Perusahaan.  <br><span lang="zh">员工有权向公司提出合理的意见和建议。</span>
+5. Karyawan berhak mengikuti pelatihan dan atau pendidikan yang diselenggarakan untuk mengembangkan kemampuan Karyawan sesuai dengan kebutuhan Perusahaan  <br><span lang="zh">员工有权参加公司为提升员工能力所安排的培训或教育。</span>
+6. Karyawan berhak mendapatkan kesempatan yang sama untuk mengembangkan diri dan karier berlandaskan kebutuhan Perusahaan dan kompetensi.  <br><span lang="zh">员工有权根据公司的需求和能力获得同等的机会和职业发展。</span>
+7. Karyawan berhak mengundurkan diri dengan menjalankan prosedur pengunduran diri sesuai dengan prosedur peraturan Perusahaan ini.  <br><span lang="zh">员工有权根据本现行公司规定办理申请离职程序。</span>
+8. Karyawan beserta keluarga Karyawan berhak diikutsertakan dalam program BPJS Kesehatan.  <br><span lang="zh">员工和家庭成员有权利参与健康社保。</span>
+9. Karyawan berhak diikutsertakan dalam program BPJS Ketenagakerjaan, meliputi jaminan kecelakaan kerja, jaminan kematian, jaminan hari tua dan jaminan pensiun serta Jaminan Kehilangan Pekerjaan (JKP).  <br><span lang="zh">员工有权利参与劳动社保，包括工伤保险，死亡保险，养老保险和退休保险以及失业保险。</span>
+10. Karyawan berhak untuk pensiun sesuai dengan ketentuan yang diatur dalam Peraturan Perusahaan ini.  <br><span lang="zh">员工有权按照本制度的规定退休。</span>
+11. Karyawan berhak atas fasilitas kesejahteraan dengan memperhatikan kebutuhan pekerja/buruh dengan menyesuaikan kemampuan perusahaan sesuai dengan yang tertuang  dalam Peraturan Perusahaan ini.  <br><span lang="zh">员工有权根据本公司规章制度中所述，在考虑员工需求并结合公司能力的情况下，享受福利设施。</span>
+
+  <br><a id="pasal-8-kewajiban-para-pihak"></a>
+### Pasal 8. Kewajiban Para Pihak
+第八条 各方的义务
+1. Pengusaha/Pemberi Kerja, dan Pekerja berkewajiban untuk menaati, mematuhi dan melaksanakan Peraturan Perusahaan ini dengan benar, teliti, dan penuh tanggungjawab.  <br><span lang="zh">雇主/用人单位和员工有义务正确、认真、负责地遵守、服从并执行本公司的规章制度。</span>
+2. Pengusaha/Pemberi Kerja berkewajiban untuk memberikan penjelasan mengenai Peraturan Perusahaan ini kepada pekerja.  <br><span lang="zh">雇主/用人单位有义务向员工解释本公司的规章制度。</span>
+3. Dalam hal terjadi perubahan nama, penggabungan, atau kepemilikan perusahaan maka ketentuan Peraturan Perusahaan ini tetap berlaku hingga berakhir masa berlakunya.  <br><span lang="zh">在公司名称变更、合并或所有权变更的情况下，本公司的规章制度仍然有效，直至其有效期结束。</span>
+  <br><a id="bab-iii-penerimaan-karyawan"></a>
+# BAB III. PENERIMAAN KARYAWAN
+<a id="第三章员工录用"></a>
+## 第三章员工录用
+
+<a id="pasal-9-penerimaan-karyawan"></a>
+### Pasal 9. Penerimaan Karyawan
+<a id="第九条-员工招聘"></a>
+#### 第九条 员工招聘
+
+1. Perusahaan melakukan penerimaan karyawan sesuai dengan kebutuhan perusahaan dengan syarat dan prosedur yang ditentukan oleh Perusahaan melalui Teknis Pelaksanaan dengan mengindahkan peraturan perundang-undangan yang berlaku.  <br><span lang="zh">公司根据需求进行员工招聘，并按照通过实施细则确定的条件和程序进行，同时遵守现行法律法规。</span>
+2. Perusahaan tidak menerima karyawan yang termasuk dalam kategori Anak sesuai dengan peraturan perundang-undangan yang berlaku, dan tidak menerima karyawan pada jabatan tertentu yang memiliki usia dibawah yang dipersyaratkan dalam peraturan perundang-undangan yang berlaku untuk jabatan tersebut.  <br><span lang="zh">公司不接受现行法律法规所规定的童工，并且不接受不符合特殊岗位法律年龄要求的人员。</span>
+3. Perusahaan menerima karyawan penyandang disabilitas sepanjang memenuhi syarat-syarat jabatan yang dipersyaratkan.  <br><span lang="zh">公司接受符合职业要求的残疾员工。</span>
+4. Penerimaan karyawan dilaksanakan berdasarkan azas terbuka bebas objektif serta adil dan setara tanpa diskriminasi.  <br><span lang="zh">员工招聘遵循公开、自由、客观、公平、平等、无歧视的原则。</span>
+  <br><a id="bab-iv-hubungan-kerja"></a>
+# BAB IV. HUBUNGAN KERJA
+<a id="第四章-劳动关系"></a>
+## 第四章 劳动关系
+
+<a id="pasal-10-perjanjian-kerja"></a>
+### Pasal 10. Perjanjian Kerja
+<a id="第十条-劳动合同"></a>
+#### 第十条 劳动合同
+
+1. Perjanjian Kerja adalah perjanjian tertulis antara Karyawan dengan Perusahaan yang memuat syarat-syarat kerja, hak dan kewajiban para pihak yang persyaratannya dilaksanakan sesuai dengan peraturan perundang-undangan yang berlaku.  <br><span lang="zh">劳动合同是指员工与公司之间的书面协议，其中包含工作条款，符合现行法律法规要求的双方的权利和义务。</span>
+2. Perjanjian kerja terdiri dari dua jenis, yaitu Perjanjian Kerja Waktu Tertentu (PKWT) dan Perjanjian Kerja Waktu Tidak Tertentu (PKWTT).  <br><span lang="zh">劳动合同分为两种，即固定期限劳动合同和不固定期限劳动合同。</span>
+3. Apabila dibutuhkan, Pekerjaan Borongan akan diatur terpisah dalam Ketentuan Alih Daya dan implementasinya sesuai dengan peraturan perundang-undangan yang berlaku.  <br><span lang="zh">需求时，承包工作将在《外包规定》中单独规定，并按照有效法规的规定执行。</span>
+  <br><a id="pasal-11-perjanjian-kerja-waktu-tertentu"></a>
+### Pasal 11. Perjanjian Kerja Waktu Tertentu
+<a id="第十一条固定期限劳动合同"></a>
+#### 第十一条固定期限劳动合同
+
+1. Perjanjian Kerja Waktu Tertentu adalah perjanjian kerja antara Karyawan dengan Perusahaan, untuk mengadakan hubungan kerja dalam waktu tertentu atau untuk pekerjaan tertentu dengan berpedoman pada peraturan perundang-undangan yang berlaku.  <br><span lang="zh">固定期限劳动合同是指员工和公司之间的劳动合同，根据现行的法律法规在一定时间内或针对特定项目建立的劳动关系。</span>
+2. Apabila Perusahaan bermaksud memperpanjang Perjanjian Kerja Waktu Tertentu maka Perusahaan memberitahukan maksudnya secara tertulis kepada Karyawan selambat-lambatnya 7 (tujuh) hari sebelum masa Perjanjian Kerja Waktu Tertentu berakhir.  <br><span lang="zh">如果公司打算延长固定期限劳动合同，则公司应在固定期限劳动合同结束前至少 7（七） 天以书面形式告知员工。</span>
+  <br><a id="pasal-12-perjanjian-kerja-waktu-tidak-tertentu"></a>
+### Pasal 12. Perjanjian Kerja Waktu Tidak Tertentu
+<a id="第十二条-不固定期限劳动合同"></a>
+#### 第十二条 不固定期限劳动合同
+
+1. Perjanjian Kerja Waktu Tidak Tertentu adalah perjanjian kerja yang belum ditentukan kapan berakhirnya dengan status sebagai karyawan tetap.  <br><span lang="zh">不固定期限劳动合同是未确定到期日期且员工状态为正式员工身份的劳动合同。</span>
+2. Perjanjian kerja waktu tidak tertentu (PKWTT) mensyaratkan adanya masa percobaan kerja selama 3 bulan.  <br><span lang="zh">未固定期限劳动合同要求具有3个月的试用期。</span>
+3. Apabila karyawan dalam Perjanjian Kerja Waktu Tertentu (PKWT) telah memasuki akhir waktu perjanjian, perusahaan dapat mengangkat karyawan dengan Perjanjian Waktu Kerja Tidak Tertentu (PKWTT) sepanjang memenuhi persyaratan berdasarkan hasil evaluasi.  <br><span lang="zh">只要根据评估结果符合要求，如果固定期限劳动合同（PKWT）已达到协议期限，则公司可给予员工任命未固定期限劳动合同（PKWTT）。</span>
+  <br><a id="pasal-13-pemindahan-karyawan"></a>
+### Pasal 13. Pemindahan Karyawan
+<a id="第十三条-员工异动"></a>
+#### 第十三条 员工异动
+
+1. Perusahaan berhak memindahtugaskan Karyawan dari suatu jabatan ke jabatan lainnya atau dari satu jenis pekerjaan ke jenis pekerjaan lainnya atau dari satu lokasi ke lokasi lainnya sesuai dengan kebutuhan Perusahaan.  <br><span lang="zh">公司有权根据公司的需求，将员工从个职位调到另个职位、从个工种调到另个工种、从个工位调到另个工位。</span>
+2. Perusahaan berhak memindahkan karyawan dari perusahaan ke Perusahaan lainnya atas kesepakatan karyawan yang dituangkan dalam bentuk perjanjian kerja.  <br><span lang="zh">公司有权根据雇员协议形式提出的协议，将员工从本公司调动到其他公司。</span>
+3. Perusahaan berhak melakukan demosi jabatan atau memberhentikan/melepaskan Karyawan dari suatu jabatan tertentu di dalam Perusahaan berdasarkan kepentingan perusahaan dan atau penilaian prestasi kerja karyawan  <br><span lang="zh">公司有权根据公司需要或对员工的绩效评估，将其降职或免职。</span>
+  <br><a id="bab-v-peraturan-kerja"></a>
+# BAB V. PERATURAN KERJA
+<a id="第五章-工作规定"></a>
+## 第五章 工作规定
+
+<a id="pasal-14-ketentuan-umum-tentang-peraturan-kerja"></a>
+### Pasal 14. Ketentuan Umum Tentang Peraturan Kerja
+<a id="第十四条-工作规定的总则"></a>
+#### 第十四条 工作规定的总则
+
+1. Peraturan Kerja adalah tata tertib atau aturan perilaku kerja yang wajib dipatuhi Karyawan dan Perusahan untuk menciptakan ketertiban dan kedisiplinan kerja.  <br><span lang="zh">工作规定是员工和公司必须遵守的工作规则或行为准则，以建立工作秩序和纪律。</span>
+2. Pelanggaran atas Peraturan Kerja diberikan sanksi yang sesuai yang dimaksudkan untuk mengarahkan perilaku Karyawan agar tertib dan disiplin dalam bekerja sehingga tercipta lingkungan kerja yang baik dan produktif.  <br><span lang="zh">违反工作规定的行为将受到适当的惩罚，目的是引导员工在工作中有条理和有纪律地举止行为，以营造良好有序的工作环境。</span>
+3. Peraturan Kerja meliputi:  <br><span lang="zh">工作规定包含：</span>
+4. Peraturan kerja tentang Waktu kerja  <br><span lang="zh">关于工作时间的规定</span>
+5. Peraturan kerja tentang Absensi/Kehadiran  <br><span lang="zh">关于考勤/出勤的规定</span>
+6. Peraturan kerja tentang Lembur  <br><span lang="zh">关于加班的规定</span>
+7. Peraturan kerja tentang Perjalanan Dinas  <br><span lang="zh">关于出差的规定</span>
+8. Peraturan kerja tentang Tanda Pengenal Karyawan  <br><span lang="zh">关于员工识别卡的规定</span>
+9. Peraturan kerja tentang Pemakaian Alat Pelindung Diri  <br><span lang="zh">关于劳保用品的穿戴规定</span>
+10. Peraturan kerja tentang Peralatan Kerja  <br><span lang="zh">关于工作设备物品的规定</span>
+11. Peraturan kerja tentang Pelatihan Kerja  <br><span lang="zh">关于培训的规定</span>
+12. Peraturan kerja tentang Perilaku, Etika dan Integritas Kerja  <br><span lang="zh">关于工作行为，道德和廉政的工作规定</span>
+13. Peraturan kerja tentang Perekaman dan Publikasi  <br><span lang="zh">关于信息记录和发布的规定</span>
+14. Peraturan kerja tentang Kebersihan Lingkungan Kerja  <br><span lang="zh">关于工作环境卫生的工作规定</span>
+15. Peraturan kerja tentang Anggota Keluarga Bekerja  <br><span lang="zh">关于家庭成员的工作规定</span>
+16. Peraturan kerja tentang Keamanan dan Ketenteraman  <br><span lang="zh">关于安全与和平的工作规定</span>
+17. Peraturan kerja tentang Kesehatan dan Keselamatan Kerja; dan  <br><span lang="zh">关于职业健康与安全的工作规定</span>
+18. Peraturan tentang Pengaduan dan Saran.  <br><span lang="zh">关于合理化建议与投诉的管理</span>
+  <br><a id="pasal-15-waktu-kerja"></a>
+### Pasal 15. Waktu Kerja
+<a id="第十五条-工作时间"></a>
+#### 第十五条 工作时间
+
+1. Waktu Kerja ditetapkan oleh Perusahaan disesuaikan dengan kondisi operasional perusahaan dengan mengindahkan peraturan perundang-undangan yang berlaku.  <br><span lang="zh">工作时间由公司根据公司的运营条件并考虑现行法律法规来确定。</span>
+2. Waktu Kerja Normal adalah periode waktu kerja karyawan yang berdurasi 7 (tujuh) jam kerja sehari untuk 6 (enam) hari kerja dalam seminggu atau 8 (delapan) jam kerja sehari untuk 5 (lima) hari kerja dalam seminggu dengan total 40 (empat puluh) jam kerja seminggu.  <br><span lang="zh">正常工作时间是指员工一周内每天工作 7（七）个小时，持续 6（六）个工作日，或者一周内每天工作 8（八）个小时，持续 5（五）个工作日，每周总共工作 40（四十）个小时。</span>
+3. Waktu Kerja Lembur adalah periode waktu kerja di luar Waktu Kerja Normal termasuk periode waktu kerja di Hari Libur.  <br><span lang="zh">加班时间是正常工作时间以外（包括节假日）工作的时间。</span>
+4. Hari Libur :  <br><span lang="zh">假日：</span>
+5. Hari libur nasional adalah hari-hari libur berdasarkan Ketetapan Pemerintah.  <br><span lang="zh">法定假日是根据政府规定的休息日。</span>
+6. Hari libur Perusahaan adalah hari libur yang ditetapkan oleh perusahaan sebagai hari libur.  <br><span lang="zh">公司假日是公司规定的休息日。</span>
+7. Upah bagi karyawan yang diperintah bekerja pada hari libur seperti tercantum dalam huruf (a) dan (b) di atas dibayar penuh sesuai dengan ketentuan perundang-undangan yang berlaku.  <br><span lang="zh">若安排员工在（A）款和（B）款规定的休息日上班 ，将按法律法规支付报酬。</span>
+
+8. Waktu Kerja Shift adalah waktu kerja yang diatur bergiliran sesuai dengan kebutuhan operasional perusahaan yang pengaturannya dilakukan oleh perusahaan dengan mengindahkan peraturan perundang-undangan yang berlaku.  <br><span lang="zh">倒班工作时间是指根据现行法律法规和公司运营需求，安排轮流上班的工作时间。</span>
+9. Waktu Istirahat Kerja adalah periode waktu di antara waktu kerja yang digunakan untuk istirahat dan tidak termasuk waktu kerja yang pengaturannya dilakukan oleh perusahaan dengan mengindahkan peraturan perundang-undangan yang berlaku.  <br><span lang="zh">休息时间是指公司根据现行法律法规而制定的属于工作时间外的休息时间。</span>
+10. Perusahaan berhak memerintahkan karyawan yang pada dasarnya menjalankan waktu kerja Normal untuk dipindahkan ke waktu kerja shift atau sebaliknya guna memenuhi kebutuhan operasional Perusahaan.  <br><span lang="zh">公司有权根据运营需求将正在执行长白班的员工调换至倒班或相反。</span>
+11. Ketentuan waktu kerja normal dan waktu kerja shift (jam masuk kerja, istirahat, pulang kerja), diatur oleh perusahaan sebagai berikut :  <br><span lang="zh">正常工作及班组时间（上班、休息、下班）由公司规定如下：</span>
+| JENIS SHIFT
+班组分类 | WAKTU KERJA WAKTU ISTIRAHAT
+工作及休息时间 | WAKTU KERJA WAKTU ISTIRAHAT
+工作及休息时间 | WAKTU KERJA WAKTU ISTIRAHAT
+工作及休息时间 |
+| --- | --- | --- | --- |
+| JENIS SHIFT
+班组分类 | Masuk Kerja
+上班 | Pulang Kerja
+下班 | Istirahat
+休息 |
+| Regular
+白班 | 07:00 | 17:00 | 11:30 – 13:30 |
+| Regular
+白班 | 07:30 | 17:30 | 11:30 – 13:30 |
+| 2 Shift 3 Regu
+2班3组 | 07:00 | 19:00 | 11:30 – 13:30 |
+| 2 Shift 3 Regu
+2班3组 | 19:00 | 07:00 | 23:30 – 01:30 |
+| 2 Shift 3 Regu
+2班3组 | 06:00 | 18:00 | 11:30 – 13:30 |
+| 2 Shift 3 Regu
+2班3组 | 18:00 | 06:00 | 23:30 – 01:30 |
+| 3 Shift 3 Regu
+3班3组 | 07:00 | 15:00 |  |
+| 3 Shift 3 Regu
+3班3组 | 08:00 | 16:00 |  |
+| 3 Shift 3 Regu
+3班3组 | 15:00 | 23:00 |  |
+| 3 Shift 3 Regu
+3班3组 | 16:00 | 00:00 |  |
+| 3 Shift 3 Regu
+3班3组 | 23:00 | 07:00 |  |
+| 3 Shift 3 Regu
+3班3组 | 00:00 | 08:00 |  |
+
+
+1. Pengaturan Waktu Kerja Normal dan Waktu Kerja Shift sewaktu-waktu dapat berubah berdasarkan kebutuhan operasional perusahaan melalui Surat Keputusan Direksi.  <br><span lang="zh">正常工作时间和倒班工作时间可根据公司运营需求通过董事令随时更改。</span>
+  <br><a id="pasal-16-absensi-karyawan"></a>
+### Pasal 16. Absensi Karyawan
+<a id="第十六条-员工考勤"></a>
+#### 第十六条 员工考勤
+
+1. Setiap karyawan wajib melakukan absensi sidik jari (finger print) atau sidik wajah (face print) dan/atau absensi manual sebagaimana ditentukan oleh perusahaan.  <br><span lang="zh">每位员工都必须按照公司的规定进行指纹或面部识别考勤和/或手动考勤。</span>
+2. Absensi dilakukan sekurang-kurangnya pada waktu sebelum masuk kerja dan setelah pulang kerja, yang jika dipertengahan jam kerja terdapat jam istirahat maka harus melakukan absensi sebelum dan setelah jam istirahat .  <br><span lang="zh">执行考勤打卡需在上班之前和下班之后，若中途有休息则需在开始休息时间之后和结束之前各打卡一次。</span>
+3. Karyawan yang melakukan Perjalanan Dinas dikecualikan dari kewajiban melakukan absensi, dan pelaksanaannya akan diatur terpisah dalam peraturan pelaksanaan.  <br><span lang="zh">员工在出差期间内可免除考勤打卡，其具体实施由实施细则另行规定。</span>
+4. Karyawan yang tidak hadir ke tempat kerja karena berhalangan wajib menyampaikan pengajuan izin terlebih dahulu sesuai prosedur pengajuan izin.  <br><span lang="zh">员工若有事情不能正常出勤上班则必须根据请假流程提前办理请假单。</span>
+5. Karyawan yang tidak hadir di tempat kerja sesuai hari kerja yang telah ditetapkan oleh Perusahaan atau prosedur izin belum mendapatkan persetujuan dari atasan, maka dianggap sebagai mangkir.  <br><span lang="zh">员工没有按照公司设定的工作日出勤上班或请假手续未经上级领导批准，当天视为旷工。</span>
+6. Ketentuan absensi Karyawan diatur lebih detail melalui Surat Keputusan Direksi.  <br><span lang="zh">具体员工考勤管理制度通过董事令另行规定</span>
+  <br><a id="pasal-17-lembur"></a>
+### Pasal 17. Lembur
+<a id="第十七条-加班"></a>
+#### 第十七条 加班
+
+1. Perusahaan dapat memerintahkan Karyawan untuk bekerja lembur apabila diperlukan dengan mengindahkan persyaratan yang berkenaan dengan kerja lembur sesuai dengan peraturan perundang-undangan yang berlaku.  <br><span lang="zh">根据现行法律法规和公司业务需要，可安排员工执行加班，加班必须符合加班条件。</span>
+2. Kerja yang melebihi waktu kerja normal dikategorikan sebagai kerja lembur hanya apabila berdasarkan perintah dan atau persetujuan penanggung jawab departemen atau yang diberi kuasa yang dibuktikan melalui Surat Perintah Lembur.  <br><span lang="zh">由部门负责人或其授权人命令/批准超出正常工作时间的工作视为加班。</span>
+3. Karyawan tidak dapat menolak perintah kerja lembur tanpa suatu alasan yang sah yang dapat diterima dan dibenarkan oleh perusahaan, terutama apabila perusahaan menghadapi hal-hal sebagai berikut:  <br><span lang="zh">若无公司领导/上司可接受和合理的理由，员工不可拒绝加班，尤其是公司遇到以下情况：</span>
+4. Dalam hal force majeur atau keadaan darurat seperti kebakaran, gempa bumi, banjir, huru hara, dan sebagainya.  <br><span lang="zh">不可抗力或紧急情况，列如：火灾，地震，洪水，暴乱，等等。</span>
+5. Dalam hal bertumpuknya pekerjaan yang apabila tidak diselesaikan pada saat itu akan mendatangkan bahaya/kerugian terhadap perusahaan atau orang lain.  <br><span lang="zh">若该工作不及时完成，将带来公司或他人的损失或危险。</span>
+6. Dalam hal ada pekerjaan yang apabila tidak diselesaikan akan merugikan serta mengganggu kelancaran produksi dan/atau operasional perusahaan.  <br><span lang="zh">若该工作不及时完成，给公司生产和/或运营带来阻碍。</span>
+7. Dalam hal apabila pekerjaan itu menyangkut kepentingan nasional atau pemerintah.  <br><span lang="zh">若该工作涉及到有关国家或政府利益。</span>
+8. Jam kerja lembur dihitung mengikuti peraturan perundang-undangan yang berlaku yakni sesuai jumlah jam kerja lembur yang sesungguhnya dengan pembulatan sebagai berikut:  <br><span lang="zh">根据现行法律法规和按照实际加班时间来计算加班时间，取整如下：</span>
+9. Kurang dari 30 (tiga puluh) menit tidak dihitung.  <br><span lang="zh">少于 30 分钟不算加班。</span>
+10. Lebih dari 30 (tiga puluh) menit di bawah 1 (satu) jam dihitung 1 (satu) jam.  <br><span lang="zh">大于 30 分钟小于 1 小时按照 1 小时计算。</span>
+
+11. Perhitungan upah kerja lembur mengikuti peraturan perundang-undangan yang berlaku.  <br><span lang="zh">根据现行法律法规计算加班工资。</span>
+12. Karyawan dengan pangkat dan jabatan tertentu seperti Superintendent dan diatasnya tidak memperoleh upah lembur, namun pada jabatan Superintendent dibawahnya pada bagian- bagian khusus tidak memperoleh upah lembur.  <br><span lang="zh">某些特定主管以上职级的职工不另计加班费，但特殊主管以下职级的职工不领取加班费。</span>
+13. Perusahaan berhak mengatur waktu lembur berdasarkan kebutuhan operasional dan berhak mengatur waktu lembur khusus bagi karyawan yang sering mengalami sakit atau memiliki kondisi tubuh yang kurang fit untuk memberikan waktu yang memadai untuk istirahat dan memulihkan kondisi tubuh.  <br><span lang="zh">公司有权根据实际运营情况安排加班时间，以及对经常生病、身体状况欠佳的员工， 公司有权调整其加班，以便让员工有充分的时间调养身体，恢复健康。</span>
+14. Standar Upah Lembur (SUL) per jam kerja lembur adalah upah pokok ditambah tunjangan tetap yang ditentukan oleh Perusahaan dengan nominal tidak lebih rendah dari upah minimum yang berlaku dibagi 173 (seratus tujuh puluh tiga).  <br><span lang="zh">加班工资标准（SUL）每小时加班是指基本工资加公司确定的固定津贴，其额度不低于最低工资除以 173。</span>
+15. Tarif dan perhitungan upah lembur adalah sebagai berikut:  <br><span lang="zh">加班工资计算方法如下：</span>
+
+| HARI
+天 | JAM
+小时 | PERHITUNGAN PEMBAYARAN LEMBUR
+加班费计算 |
+| --- | --- | --- |
+| Hari Kerja Biasa
+正常工作日 | Ke-1
+第一小时 | 150% x SUL perjam |
+| Hari Kerja Biasa
+正常工作日 | Ke-2 dan seterusnya
+第二小时之后 | 200% x SUL perjam |
+| Hari Minggu/Libur/Hari Raya
+周日/假日/节日 | Ke-1 s/d ke-7
+第一至第七小时 | 200% x SUL perjam |
+| Hari Minggu/Libur/Hari Raya
+周日/假日/节日 | Ke-8
+第八小时 | 300% x SUL perjam |
+|  | Ke-9 dan seterusnya
+第九小时之后 | 400% x SUL perjam |
+
+
+1. Karyawan harus menaati jam kerja lembur yang telah disepakati, yang apabila karyawan tidak hadir atau terlambat datang atau pulang lebih cepat tanpa alasan yang dapat diterima maka dapat dikategorikan tidak menaati perintah atasan dan dianggap melanggar ketentuan absensi serta dapat diberikan sanksi sesuai Peraturan yang berlaku dalam Perusahaan.  <br><span lang="zh">已安排好加班计划的员工必须执行，如果员工在不可接受或合理的理由下矿工或迟到或早退加班则视为不遵从领导安排和违反考勤规定并将根据现行规定给予惩罚。</span>
+2. Bagi karyawan yang bekerja melebihi jam kerja yang telah di tentukan dan masih perlu bekerja lembur selama jam makan maka Perusahaan akan menyediakan 1 (satu) kali makan.  <br><span lang="zh">对于加班时间遇到饭点的员工，则公司提供相应餐食。</span>
+
+  <br><a id="pasal-18-perjalanan-dinas"></a>
+### Pasal 18. Perjalanan Dinas
+<a id="第十八条-出差"></a>
+#### 第十八条 出差
+
+1. Untuk kepentingan Perusahaan seorang Karyawan dapat ditugaskan melakukan Perjalanan Dinas ke luar site atau ke luar negeri berdasarkan Surat Perintah Perjalanan Dinas.  <br><span lang="zh">因为公司需要，可以将员工派遣到外地或国外出差。</span>
+2. Karyawan wajib bersedia untuk ditugaskan melakukan Perjalanan Dinas.  <br><span lang="zh">员工有义务接受被指派执行出差。</span>
+3. Karyawan yang melakukan Perjalanan Dinas tidak memperoleh upah lembur namun mendapatkan Tunjangan Perjalanan Dinas yang besarnya diatur dalam Teknis Pelaksanaan.  <br><span lang="zh">员工出差时不计算加班费，但根据《技术实施例》中规定可享受出差的补贴。</span>
+4. Prosedur Perjalanan Dinas diatur lebih detail melalui Teknis Pelaksanaan.  <br><span lang="zh">员工出差程序更详细规定实施。</span>
+  <br><a id="pasal-19-tanda-pengenal-karyawan"></a>
+### Pasal 19. Tanda Pengenal Karyawan
+<a id="第十九条-员工识别卡"></a>
+#### 第十九条 员工识别卡
+
+1. Perusahaan memberikan Tanda Pengenal Karyawan kepada Karyawan yang merupakan inventaris Perusahaan yang penggunaan dan masa berlakunya diatur dan ditetapkan oleh Perusahaan.  <br><span lang="zh">公司为每位员工办理员工识别卡，该识别卡视为公司的财产，其使用与有效期限由公司调整和确定。</span>
+2. Tanda Pengenal Karyawan wajib dipakai oleh setiap Karyawan ketika memasuki lingkungan Perusahaan atau selama bekerja.  <br><span lang="zh">员工在进入公司区域或工作期间有义务佩戴识别卡。</span>
+3. Karyawan yang tidak membawa Tanda Pengenal Karyawan saat masuk ke dalam lingkungan perusahaan dapat dilarang masuk oleh petugas keamanan.  <br><span lang="zh">员工若在进入公司区域时未佩戴员工识别卡则保安可禁止其进入。</span>
+4. Tanda Pengenal Karyawan wajib dikembalikan ke perusahaan ketika karyawan sudah tidak lagi bekerja di perusahaan.  <br><span lang="zh">当员工离职时，必须归还员工识别卡。</span>
+5. Karyawan tidak diperkenankan meminjamkan Tanda Pengenal Karyawan kepada orang lain apapun alasannya dan sebaliknya tidak diperkenankan menggunakan Tanda Pengenal Karyawan milik Karyawan lain.  <br><span lang="zh">禁止员工出于任何原因将员工识别卡借给他人，反之亦然，不允许使用属于其他员工的员工识别卡。</span>
+6. Karyawan yang kehilangan kartu tanda pengenal ataupun karena keperluan tertentu dari perusahaan kartu pengenalnya ditahan, maka harus memiliki surat ijin masuk sementara di lingkungan perusahaan yang diterbitkan oleh perusahaan.  <br><span lang="zh">丢失识别卡或由于公司的某些规定导致其识别卡而被扣押的员工，则必须有在公司环境中临时出入的许可证（由公司签发）。</span>
+7. Tanda Pengenal Karyawan diatur lebih detail melalui Teknis Pelaksanaan.  <br><span lang="zh">员工身份工号更详细规定实施</span>
+  <br><span lang="zh"><a id="pasal-20-alat-pelindung-diri-apd-第二十条劳保用品"></a></span>
+### Pasal 20. Alat Pelindung Diri （APD） 第二十条劳保用品
+
+1. Perusahaan wajib memberikan alat pelindung diri (APD) yang merupakan inventaris perusahaan kepada Karyawan sesuai dengan jenis pekerjaan dan potensi bahaya yang ada di tempat kerja masing-masing.  <br><span lang="zh">公司必须根据工作类和工厂所的危害提供相应员工劳保用品，并该劳保用品视为公司财产。</span>
+2. Karyawan wajib menggunakan alat pelindung diri (APD) yang diberikan sesuai dengan ketentuan mengenai alat pelindung diri (APD) yang dikeluarkan oleh perusahaan dengan tetap memperhatikan jenis pekerjaan dan potensi bahaya yang ada di tempat kerja masing-masing.  <br><span lang="zh">员工必须按照劳保用品规定穿戴公司提供的劳保用品。</span>  <br>员工必须按照劳保用品规定穿戴公司提供的劳保用品，关注工作类和工场所存在的危险/风险。
+3. Karyawan tidak diperbolehkan merubah/memodifikasi dan/atau mencorat-coret alat pelindung diri atas inisiatif diri sendiri.  <br><span lang="zh">员工不得私自更换/修改，和/或对劳保用品上涂鸦。</span>
+4. Karyawan tidak diperboleh memperjualbelikan alat pelindung diri yang didapatkan dari Perusahaan kepada pihak lain untuk menghasilkan keuntungan pribadi.  <br><span lang="zh">员工不得将从公司获得的劳保用品交易给其他方以谋取私利。</span>
+5. Alat Pelindung Diri （APD）diatur lebih detail melalui Teknis Pelaksanaan.  <br><span lang="zh">劳保用品更详细规定实施。</span>
+  <br><a id="pasal-21-peralatan-kerja"></a>
+### Pasal 21. Peralatan Kerja
+<a id="第二十一条-工作设备"></a>
+#### 第二十一条 工作设备
+
+1. Perusahaan memberikan peralatan kerja berupa barang habis pakai maupun tidak habis pakai kepada Karyawan untuk menunjang pekerjaan Karyawan sesuai dengan tugas dan jabatannya. 公司提供工作设备包含消耗品或非消耗品，使员工可以根据自己的职责和职位进行工作。
+2. Peralatan kerja merupakan barang inventaris perusahaan untuk dipakai pada saat bekerja dan untuk keperluan dinas Karyawan yang wajib dikembalikan oleh Karyawan kepada Perusahaan pada saat hubungan kerja berakhir.  <br><span lang="zh">工作设备是公司物品用于在工作中使用和用于出差中使用，当劳动关系终止或解除时则必须退还给公司。</span>
+3. Karyawan wajib menjaga dan memelihara peralatan yang dipercayakan kepadanya dan/atau digunakan dalam melaksanakan pekerjaannya.  <br><span lang="zh">员工必须保持和维护托付给他们和/或用于工作的设备。</span>
+4. Karyawan tidak diperkenankan meminjamkan atau mengkaryakan peralatan milik Perusahaan yang dipercayakan kepadanya.  <br><span lang="zh">员工不得将公司委托给他们的设备转借给他人使用。</span>
+  <br><a id="pasal-22-pelatihan-kerja"></a>
+### Pasal 22. Pelatihan Kerja
+<a id="第二十二条-工作培训"></a>
+#### 第二十二条 工作培训
+
+1. Perusahaan membuat perencanaan dan melaksanakan program pelatihan kerja bagi Karyawan.  <br><span lang="zh">公司为员工制定并执行职业培训计划。</span>
+2. Pelatihan bersifat internal yakni pengadaannya dilakukan oleh instruktur internal Perusahaan sendiri dan pelatihan bersifat eksternal yang pengadaannya dilakukan dengan menghadirkan instruktur dari luar Perusahaan ke dalam Perusahaan dan atau mengikutsertakan Karyawan pada penyelenggara pelatihan di luar lingkungan Perusahaan.  <br><span lang="zh">公司内部培训是由公司内部的讲师进行，外部培训是通过聘请外部讲师进行培训和/或让员工参加公司外部组织的培训。</span>
+3. Karyawan wajib dengan sungguh-sungguh menjalani pelatihan yang diperintahkan oleh Perusahaan.  <br><span lang="zh">员工有义务认真地参加公司举办的培训。</span>
+4. Untuk pelatihan yang dilakukan di luar site maka biaya berangkat dan dari tempat pelatihan mengikuti ketentuan Perjalanan Dinas yang diatur oleh Perusahaan.  <br><span lang="zh">因公司安排外出参加培训的人员，往返培训地点的费用参照公司规定的出差管理制度</span>
+5. Perusahaan menanggung semua biaya yang berhubungan dengan pelatihan.  <br><span lang="zh">公司安排的相关培训，费用由公司承担。</span>
+6. Karyawan yang mengikuti pelatihan wajib memberikan laporan secara tertulis dan melakukan presentasi mengenai pelatihan yang diikutinya.  <br><span lang="zh">参加培训的员工有义务提交书面形式的培训报告，并解说相关培训内容和心得。</span>
+7. Apabila pelatihan dilakukan di hari libur maka Karyawan tidak bisa mengajukan pengganti hari liburnya yang hilang tersebut ke Perusahaan karena telah dibayarkan upahnya oleh      Perusahaan.  <br><span lang="zh">若培训在红日子执行，员工不可向公司索要假期补贴因公司已支付相应工资。</span>
+8. Karyawan yang ikut dalam pelatihan eksternal maupun internal yang dibiayai oleh Perusahaan maka harusmenandatangani surat ikatan dinas.  <br><span lang="zh">参与公司资助的外部或内部培训，员工必须签署正式承诺函。</span>
+9. Kontrak Ikatan Dinas berisi hak dan kewajiban Karyawan, termasuk tentang persetujuan karyawan mengenai durasi waktu kerja yang wajib dipenuhi Karyawan sebagai pengganti dari biaya yang dikeluarkan oleh Perusahaan untuk pelatihan yang dijalaninya yang diatur sebagai berikut:  <br><span lang="zh">培训协议包含员工的权利和义务，包括员工必须履行的工作时间期限的协定，以代替公司为员工出资参加培训所产生的费用，其规定如下：</span>
+
+| Biaya Pelatihan
+培训费用 | Periode Minimum Bekerja
+至少工作年限 |
+| --- | --- |
+| ≥ Rp 100.000.000 | 5 Tahun 年 |
+| ≥ Rp 60.000.000 &lt; Rp 100.000.000 | 3 Tahun 年 |
+| ≥ Rp 20.000.000 &lt; Rp 60.000.000 | 2 Tahun 年 |
+| ≤ Rp 20.000.000 | 1 Tahun 年 |
+
+
+1. Karyawan dalam masa ikatan dinas, jika mengikuti pelatihan yang kategorinya sama, maka ikatan dinas sebelumnya dinyatakan batal, dan menjalankan ikatan dinas yang baru, namun jika mengikuti pelatihan yang kategorinya berbeda, maka periode ikatan dinas akan diakumulasikan.  <br><span lang="zh">在服务期内的员工，如果参加的培训类别相同，则之前的服务期无效，需执行新的服务期；如果参加的培训类别不同，则服务期将累计计算。</span>
+2. Apabila hubungan kerja berakhir antara Karyawan dengan Perusahaan sebelum durasi kerja wajib Ikatan Dinas selesai dilaksanakan, maka Karyawan wajib mengganti biaya pelatihan dalam bentuk uang yang dihitung secara proporsional.  <br><span lang="zh">如果员工与公司之间的劳动关系在服务期结束前终止，则员工必须以按比例计算的金额偿还培训费用。</span>
+3. Ketentuan pelatihan kerja diatur lebih detail melalui Teknis Pelaksanaan.  <br><span lang="zh">工作培训的具体规定将通过实施细则详细说明。</span>
+  <br><a id="pasal-23-perilaku-etika-dan-integritas-kerja"></a>
+### Pasal 23. Perilaku, Etika dan Integritas Kerja
+<a id="第二十三条-工作行为道德与诚信"></a>
+#### 第二十三条 工作行为，道德与诚信
+
+1. Karyawan berperilaku sesuai dengan standar tertinggi kualitas, etika dan integritas kerja menaati peraturan perundang-undangan.  <br><span lang="zh">员工要保持高尚的道德情操，诚实守信，遵守法律，尊重公序良俗。</span>
+2. Karyawan menaati instruksi, perintah, dan peraturan yang dikeluarkan oleh Perusahaan baik lisan maupun tertulis, termasuk namun tidak terbatas pada tata tertib yang ada pada Peraturan Perusahaan ini.  <br><span lang="zh">员工要遵守公司发布的口头和书面指示、命令和规章，包括但不限于本公司制度中的规则。</span>
+3. Karyawan berperilaku kerja sesuai dengan standar tertinggi kualitas, diantaranya termasuk namun tidak terbatas pada:  <br><span lang="zh">要求员工严格遵守，包括但不限于：</span>
+4. Menyelesaikan instruksi atasan atau perintah kerja yang memiliki batas waktu sesuai dengan tenggat waktunya.  <br><span lang="zh">在规定时间/截止日期前完成上司的指示或工作指令。</span>
+5. Memberikan kinerja terbaiknya dan meminimalkan keluhan/komplain terkait tugas dan tanggungjawabnya.  <br><span lang="zh">提供最佳的工作效率并减少投诉/抱怨关于工作和责任。</span>
+6. Melaporkan pekerjaannya kepada atasannya dengan segera, baik pekerjaan yang tidak dapat diselesaikan maupun yang dapat diselesaikan sesuai target.  <br><span lang="zh">及时向上司汇报工作，无论是无法完成的工作，还是可以完成目标的工作。</span>
+7. Melaporkan dengan segera informasi yang potensial bisa mencegah terjadinya kerugian Perusahaan.  <br><span lang="zh">及时报告可以防止公司损失的信息。</span>
+8. Tidak memboroskan sumber daya yang ada di Perusahaan dan harus sedapat mungkin melakukan penghematan dalam berbagai hal yang dapat mengurangi biaya-biaya yang dikeluarkan oleh Perusahaan.  <br><span lang="zh">不浪费公司的资源，必须以各种方式尽可能节省以减少公司的成本。</span>
+9. Melakukan pengendalian dokumen dan data sesuai dengan prosedur pengendalian dokumen dan data yang ditetapkan oleh Perusahaan.  <br><span lang="zh">按照公司制定的文件和数据管控程序管控文件和数据。</span>
+10. Mematuhi peraturan khusus di tempat-tempat khusus misalnya peraturan di ruang arsip, ruang ibadah, ruang kesehatan, ruang baca/perpustakaan dan lainnya.  <br><span lang="zh">遵守特殊场所的特殊规定，例如档案室，祷告室，医务室，阅览室或图书馆等的规定;</span>
+11. Mengikuti Standar Prosedur Kerja yang ditetapkan oleh Perusahaan dalam melaksanakan pekerjaannya.  <br><span lang="zh">遵循公司制定的工作标准流程进行工作。</span>
+
+12. Karyawan tidak diperkenankan melakukan tindakan-tindakan tidak beretika dalam bekerja, diantaranya termasuk namun tidak terbatas pada:  <br><span lang="zh">员工不得在工作时间中做以下行为，包括但不限于：</span>
+13. Pada saat jam kerja bermain game, menonton video, bermain/mendengar musik, dan membuka laman web yang tidak berkaitan dengan pekerjaan, atau melakukan hal lain yang tidak ada hubungannya dengan pekerjaannya.  <br><span lang="zh">在工作时间玩游戏、看视频、播放音乐和浏览无关网站等，或做其他与工作无关的事情。</span>
+14. Menerima tamu pribadi selama jam kerja tanpa seizin atasan.  <br><span lang="zh">在没有告知领导的情况下用工作时间接待私人客人。</span>
+15. Makan selama jam kerja kecuali atas seizin atasan.  <br><span lang="zh">在没有得到领导同意下在上班时间吃东西。</span>
+16. Tidur selama jam kerja, termasuk tidur di dalam tempat ibadah.  <br><span lang="zh">在工作时间睡觉，包括在祷告的地方睡觉。</span>
+17. Mencorat-coret, mencabut, merusak dan/atau merobek pengumuman yang dikeluarkan atau ditempelkan oleh perusahaan.  <br><span lang="zh">涂鸦，拆除，损坏和/或撕毁公司发布或粘贴的公告。</span>
+18. Memalsukan tandatangan orang lain.  <br><span lang="zh">伪造别人的签名。</span>
+19. Memalsukan dokumen.  <br><span lang="zh">伪造文件。</span>
+20. Memalsukan atau memodifikasi absensi/daftar hadir kerja.  <br><span lang="zh">伪造或修改工作考勤。</span>
+21. Melakukan kecurangan dalam tes-tes yang diselenggarakan oleh Perusahaan.  <br><span lang="zh">在公司进行的测试中作弊。</span>
+22. Melakukan tindakan asusila dalam segala bentuknya.  <br><span lang="zh">做出各种不道德的行为。</span>
+23. Melakukan pelecehan seksual dalam segala bentuknya.  <br><span lang="zh">做出各种性骚扰的行为。</span>
+24. Berperilaku tidak sopan atau buruk atau melawan atasan; dan  <br><span lang="zh">对上司无礼或态度恶劣或违抗上司。</span>
+25. Berperilaku tidak sopan atau buruk dan semena-mena pada rekan kerja dan bawahan.  <br><span lang="zh">对同事和下属做出无礼或恶劣的行为。</span>
+26. Karyawan tidak diperkenankan berperilaku melanggar standar integritas tertinggi yang dapat menimbulkan kerugian finansial dan reputasi kepada Perusahaan, diantaranya termasuk namun tidak terbatas pada:  <br><span lang="zh">员工不得做出损害公司利益和声誉的行为，包括但不限于：</span>
+27. Menggunakan jabatan/wewenang untuk kepentingan pribadi  <br><span lang="zh">滥用职权，以权谋私。</span>
+28. Menggunakan jabatan/wewenang untuk menutupi pelanggaran peraturan yang dilakukannya atau dilakukan oleh bawahan dan teman, atau untuk melakukan kesewenang-wenangan terhadap karyawan lain dan bawahan.  <br><span lang="zh">滥用职权违反规定隐瞒或包庇自己的下属和朋友，或欺凌其他员工和下属的行为。</span>
+29. Menghasut teman sekerja atau atasan untuk melakukan perbuatan yang bertentangan dengan peraturan perundang-undangan.  <br><span lang="zh">蛊惑同事或上司/管理者做出违反法律法规的行为。</span>
+
+
+30. Tidak melaporkan dengan segera kepada atasan tertinggi apabila ada konflik kepentingan yang timbul berkaitan dengan tanggungjawab Karyawan terhadap pekerjaannya dengan kepentingan keluarga atau kerabat ataupun orang dekat Karyawan lainnya.  <br><span lang="zh">因员工的工作与家人或亲戚或熟人的利益而引起冲突，没有立即向领导汇报。</span>
+31. Bekerja untuk dan/atau pada perusahaan lain, baik sebagai tenaga kerja harian, karyawan kontrak, karyawan tetap maupun konsultan.  <br><span lang="zh">在其他公司上班，无论是日薪员工，合同员工，正式员工还是咨询师/顾问。</span>
+32. Meminta atau menerima hadiah komisi atau kupon dalam bentuk apapun atas setiap jenis jasa ataupun kegiatan yang diberikan atau diterima kepada dan oleh pihak manapun sehubungan dengan kegiatan usaha Perusahaan.  <br><span lang="zh">索要或接受与公司业务活动相关的任何礼物、佣金、代金券，以及其他服务和礼品。</span>
+33. Memberikan kemudahan kepada pemasok/supplier, kontraktor atau pihak luar lainnya yang karena kemudahan tersebut dapat menyebabkan kerugian pada Perusahaan.  <br><span lang="zh">给予供应商，承包商或其他方提供便利，损害公司利益。</span>
+34. Terlibat atau ikut serta dalam setiap kegiatan yang bersaing dengan usaha Perusahaan atau yang merugikan kepentingan Perusahaan.  <br><span lang="zh">参与或涉及与公司业务竞争或损害公司利益的任何活动。</span>
+35. Memberikan atau membuat keterangan/laporan/pengakuan palsu untuk tujuan apapun termasuk untuk tujuan menutupi kesalahan atasan atau departemen sehingga berakibat merugikan Perusahaan.  <br><span lang="zh">出于任何目的提供或作出虚假说明/报告/供述，包括隐瞒上级或部门的错误， 导致对公司造成不利影响。</span>
+36. Menggunakan nama perusahaan untuk melakukan tindak kejahatan, seperti penipuan, pengintimidasian, pemerasan, pengancaman, dan lainnya.  <br><span lang="zh">利用公司名义进行犯罪，例如欺诈，恐吓，勒索，威胁或其他。</span>
+37. Memfitnah, menghasut, dan menyebarkan rumor yang merugikan Perusahaan.  <br><span lang="zh">诬蔑，造谣和散布谣言造成公司损失。</span>
+38. Dengan sengaja atau lalai sehingga mengakibatkan dirinya dalam keadaan sedemikian rupa sehingga tidak dapat menjalankan pekerjaan yang diberikan kepadanya.  <br><span lang="zh">故意或因个人粗心大意造成自己无法执行所交代的任务。</span>
+39. Melakukan kegiatan politik selama jam kerja atau di dalam lingkungan perusahaan, dan menggunakan kedudukannya untuk mempromosikan partai politik atau kepentingan politik.  <br><span lang="zh">在工作时间或在公司区域内进行政治活动，以及利用职务之便为某个政党或政治利益做宣传。</span>
+40. Menyebarkan dan/atau menjual informasi rahasia dan/atau hak paten ke pihak luar perusahaan.  <br><span lang="zh">传播和/或出售公司专利权和机密信息给公司之外的人。</span>
+41. Mencuri dan atau menjarah/merambah illegal barang/aset milik Perusahaan atau orang lain.  <br><span lang="zh">窃取或抢劫，非法侵占公司或他人的物品和财产。</span>
+42. Menduplikat dan memperbanyak program komputer milik Perusahaan untuk kepentingan diri sendiri atau pihak lain di luar Perusahaan  <br><span lang="zh">为自己或公司以外的其他方的利益而复制公司的计算机程序。</span>
+43. Melakukan korupsi harta benda milik Perusahaan.  <br><span lang="zh">贪污公司财产。</span>
+
+44. Memberikan informasi yang merugikan nama baik Perusahaan baik secara lisan, tulisan, gambar dan video melalui seluruh platform media.  <br><span lang="zh">通过社交媒体平台以口头、书面、图片和视频的形式发布损害公司声誉的信息。</span>
+45. Menyebarluaskan informasi negatif yang berisi tuduhan, fitnah, berita palsu atau bernuansa SARA ke dalam media sosial dan lainnya.  <br><span lang="zh">故意在社交网站公布/宣传负面信息，如：诬陷，诬蔑，散播谣言或与宗教相关的问题。</span>
+46. Merekam, menyebarluaskan atau mengunggah/mempublikasikan gambar-gambar atau video-video tentang Perusahaan dan Kawasan IMIP tanpa seizin Pimpinan Perusahaan, seperti : rekaman video/gambar atau tulisan tentang perkembangan proyek, blueprint, kerusakan peralatan atau korban akibat kecelakaan kerja dan informasi lainnya.  <br><span lang="zh">未经公司管理层许可，录制、转发、上传或发布有关公司和 IMIP 区域的图片或视频（如转发、上传或发布工程进度、厂区布局、工作事故所致的设备损坏或受害者有关的图片、文字、视频等信息）。</span>
+47. Karyawan tidak diperkenankan dalam lingkungan perusahaan menyebarkan edaran- edaran tanpa seizin Pimpinan Perusahaan.  <br><span lang="zh">未经公司管理层允许，员工不得在公司区域内散发传单。</span>
+  <br><a id="pasal-24-kebersihan-lingkungan-kerja"></a>
+### Pasal 24. Kebersihan Lingkungan Kerja
+<a id="第二十四条-工作环境卫生"></a>
+#### 第二十四条 工作环境卫生
+
+1. Karyawan wajib mematuhi aturan tentang 5S di tempat kerja dan alat kerjanya serta lingkungan Perusahaan.  <br><span lang="zh">员工有义务遵守关于公司内工作场所、工具和工作环境的五常法规定。</span>
+2. Karyawan tidak diperkenankan membuang sampah bukan pada tempatnya dan membuang ludah sembarangan.  <br><span lang="zh">员工不得乱丢垃圾，随地吐痰。</span>
+3. Karyawan tidak diperkenankan mengotori lingkungan Perusahaan, baik tempat kerja, mess area publik, dan lainnya.  <br><span lang="zh">员工不得污染公司的环境，无论是工作场所，公共场所还是其他地方。</span>
+  <br><a id="pasal-25-anggota-keluarga-bekerja"></a>
+### Pasal 25. Anggota Keluarga Bekerja
+<a id="第二十五条-家人亲属上班"></a>
+#### 第二十五条 家人/亲属上班
+
+1. Perusahaan mengizinkan keberadaan anggota keluarga karyawan (suami, istri, anak, menantu, mertua, kakak, adik, ipar) yang memenuhi syarat untuk bekerja di dalam Perusahaan sepanjang bukan merupakan hubungan atasan dan bawahan dalam satu departemen, dan tidak menimbulkan konflik kepentingan,  <br><span lang="zh">公司允许符合条件的员工家属（丈夫，妻子，儿女，儿媳/女婿，亲家/公婆，兄弟姐妹及其伴侣）在公司内工作，只要他们不是同部门的上下级关系且不会引起利益冲突即可（原则上不安排在同一个部门工作）。</span>
+2. Karyawan yang menikah dengan rekan kerja di departemen yang sama atau yang pekerjaannya bisa menimbulkan konflik kepentingan maka salah satunya tidak berhak menolak untuk dipindahkan ke unit kerja atau pekerjaan lain sesuai dengan kebutuhan Perusahaan.  <br><span lang="zh">与同部门工作的同事或工作可能造成利益冲突的员工结婚，其中一位无权拒绝根据公司需求将其调动到另一个工作单位或岗位。</span>
+
+  <br><a id="pasal-26-keamanan-dan-ketenteraman"></a>
+### Pasal 26. Keamanan dan Ketenteraman
+<a id="第二十六条-安全与和平"></a>
+#### 第二十六条 安全与和平
+
+1. Perusahaan menetapkan peraturan keamanan dan ketenteraman di lingkungan perusahaan.  <br><span lang="zh">公司在公司范围内建立安全与和平规定。</span>
+2. Perusahaan melakukan pencegahan permasalahan keamanan dan ketenteraman dengan menugaskan petugas keamanan untuk menjalankan prosedur pengamanan.  <br><span lang="zh">公司通过指派安全人员执行安全程序来预防安全与和平问题。</span>
+3. Karyawan wajib menaati peraturan keamanan dan ketenteraman yang diberlakukan di lingkungan perusahaan.  <br><span lang="zh">员工必须遵守公司范围内的的安全与和平规定。</span>
+4. Karyawan wajib dengan segera memberitahukan kepada pimpinan departemen atau petugas keamanan apabila terdapat potensi gangguan terhadap keamanan dan ketenteraman seperti adanya potensi terjadinya bahaya kebakaran, pencurian, penjarahan, perkelahian, keributan dan lainnya.  <br><span lang="zh">如果对安全与和平有潜在的威胁，例如火灾，盗窃，抢劫，斗殴，骚乱等，员工必须立即通知部门领导或安全员。</span>
+5. Karyawan tidak diperkenankan melakukan segala macam bentuk tindak pidana di lingkungan perusahaan.  <br><span lang="zh">员工禁止在公司内进行任何犯罪行为。</span>
+6. Ketentuan umum tentang keluar masuk lingkungan perusahaan adalah sebagai berikut:  <br><span lang="zh">关于公司范围内进出的规定如下：</span>
+7. Perusahaan melalui petugas keamanan berhak melakukan pemeriksaan dan atau penggeledahan kepada Karyawan saat masuk dan keluar lingkungan perusahaan.  <br><span lang="zh">在进入和离开公司范围内时，公司有权通过安全人员对员工进行检查和/或搜身。</span>
+8. Karyawan wajib menunjukkan Kartu Tanda Pengenal Karyawan saat masuk ke dalam lingkungan perusahaan.  <br><span lang="zh">员工进入公司时必须出示识别卡。</span>
+9. Karyawan hanya diperbolehkan masuk dan keluar lingkungan perusahaan melalui pintu-pintu resmi yang ditetapkan Perusahaan.  <br><span lang="zh">员工只能通过公司设立的正式大门进入和离开公司范围内。</span>
+10. Karyawan tidak diperkenankan membawa orang selain karyawan untuk masuk ke dalam lingkungan perusahaan tanpa seizin Pimpinan Perusahaan.  <br><span lang="zh">未经公司管理层允许，员工禁止将非公司员工的其他人员带入公司范围内。</span>
+11. Karyawan tidak diperkenankan masuk ke dalam lingkungan perusahaan dalam keadaan mabuk dan atau dalam kondisi lainnya yang membahayakan dirinya, orang lain, dan Perusahaan.  <br><span lang="zh">禁止员工在醉酒或处于其他可造成自身、他人和公司危险情况下进入公司范围内。</span>
+12. Karyawan tidak diperkenankan keluar dari lingkungan perusahaan dengan membawa asset/barang yang berasal dari dalam perusahaan tanpa adanya izin tertulis dari Pimpinan Perusahaan.  <br><span lang="zh">未经公司管理层的书面许可，员工禁止携带公司内部的资产/物品离开公司。</span>
+
+13. Ketentuan umum tentang tindakan menjaga kondisi aman dan tenteram adalah sebagai berikut:  <br><span lang="zh">关于维持安全与和平环境的规定如下：</span>
+14. Karyawan tidak diperkenankan tanpa izin memasuki ruangan atau wilayah kerja lain yang bukan tempat kerjanya dan tidak ada hubungan dengan pekerjaannya.  <br><span lang="zh">未经许可，禁止员工进入非工作区域或与工作无关的场所或其他工作区域。</span>
+15. Karyawan tidak diperkenankan meletakkan benda berharga pada tempat yang tidak terkunci atau rawan pencurian/kehilangan.  <br><span lang="zh">禁止员工将贵重物品放在未上锁或容易被盗/丢失的地方。</span>
+16. Karyawan wajib menjaga dan mengamankan barang atau aset yang dipertanggungjawabkan kepadanya  <br><span lang="zh">员工必须保护自己负责的资产/物品。</span>
+17. Karyawan tidak diperkenankan melakukan perkelahian dan hal-hal yang bisa menyebabkan timbulnya perkelahian seperti mengancam, mengejek, memaki atau melakukan tindakan lain yang bisa mengundang perkelahian.  <br><span lang="zh">禁止员工打架或做出可能引起打架的事情，例如威胁、嘲笑、谩骂或做出其他可能引起打架的动作或行为。</span>
+18. Karyawan tidak diperkenankan menyerang, menganiaya, mengancam, atau mencelakai siapapun.  <br><span lang="zh">禁止员工攻击、逼迫、恐吓或伤害任何人。</span>
+19. Karyawan tidak diperkenankan melakukan tindakan-tindakan yang berpotensi menimbulkan keonaran seperti berkumpul massal membuat keributan, menyebarkan desas-desus /rumor (hoax) , menghasut dan atau memprovokasi Karyawan lain untuk melawan hukum dan atau Perusahaan.  <br><span lang="zh">禁止员工做出可能引起喧嚣/骚乱的行为，例如聚众闹事，散布谣言，欺骗、煽动或蛊惑其他员工违反法律或公司制度。</span>
+20. Karyawan tidak diperkenankan membawa senjata api, bom/peledak, senjata tajam atau barang-barang yang membahayakan ke dalam lingkungan perusahaan kecuali sebagai alat kerja dan atas izin Pimpinan Perusahaan.  <br><span lang="zh">禁止员工将枪支、弹药、刀具或危险物品带入公司范围内，除非是作为工作工具并获得公司管理层的许可。</span>
+21. Karyawan tidak diperkenankan membawa, menyimpan, mengonsumsi atau mengedarkan narkotika dan obat-obatan terlarang lainnya.  <br><span lang="zh">禁止员工携带、储存、消费或分发毒品及其他非法药物。</span>
+22. Karyawan tidak diperkenankan membawa dan/atau minum minuman keras pada saat jam kerja.  <br><span lang="zh">禁止员工在上班期间饮用或携带酒精类饮品。</span>
+23. Karyawan tidak diperkenankan membawa barang selundupan ke dalam lingkungan perusahaan.  <br><span lang="zh">禁止员工将走私的物品带入公司区域内。</span>
+24. Karyawan tidak diperkenankan untuk melakukan segala macam bentuk perjudian di waktu dan lokasi kerja serta di lingkungan perusahaan.  <br><span lang="zh">禁止员工在工作时间、工作地点或在公司区域内进行任何形式的赌博。</span>
+25. Karyawan tidak diperkenankan menyelenggarakan/menghadiri rapat/pertemuan atau mengedarkan/menempelkan poster, plakat, surat edaran, selebaran, brosur atau sejenisnya yang tidak ada kaitannya dengan kepentingan Perusahaan dan tanpa seizin Pimpinan Perusahaan.  <br><span lang="zh">未经公司管理层允许，员工不得私自举行/参加会议，或分发/附上与公司利益无关的海报，标语牌，通函，传单，小册子等。</span>
+
+  <br><a id="pasal-27-keselamatan-dan-kesehatan-kerja"></a>
+### Pasal 27. Keselamatan dan Kesehatan Kerja
+<a id="第二十七条-职业健康与安全"></a>
+#### 第二十七条 职业健康与安全
+
+1. Perusahaan menetapkan dan mendokumentasikan peraturan dan persyaratan Keselamatan dan Kesehatan Kerja (K3) di lingkungan perusahaan sesuai dengan ketentuan perundang-undangan yang berlaku.  <br><span lang="zh">公司根据适用的法规，在公司内部制定并记录职业安全与健康 (K3) 法规和要求。</span>
+2. Perusahaan melakukan pencegahan terjadinya kecelakaan kerja di seluruh lingkungan perusahaan dengan mengadakan pengendalian, pelatihan dan sosialisasi Keselamatan dan Kesehatan Kerja (K3) sesuai dengan kebutuhan posisi pekerjaan di tempat kerja masing-masing Karyawan serta menyediakan alat-alat perlindungan keselamatan kerja yang sesuai lingkungan tempat karyawan tersebut bekerja.  <br><span lang="zh">为预防公司范围内出现工作事故，公司根据每个岗位的需求进行职业健康与安全（K3</span>  <br>）管理、培训和宣传，并根据员工所在的工作场所提供相应的安全防护用品和工具。
+3. Perusahaan melakukan pencegahan penyakit akibat kerja dengan memeriksa kondisi kerja dan kesehatan kerja Karyawan dan melakukan perbaikan kondisi kerja serta memberikan layanan kesehatan jika diperlukan sesuai dengan peraturan yang berlaku.  <br><span lang="zh">公司通过检查员工的工作条件和职业健康状况，并根据现行法律法规改善工作条件和提供卫生服务，以预防与工作有关的疾病。</span>
+4. Perusahaan menyelenggarakan safety-talk yakni sosialisasi tentang Keselamatan dan Kesehatan Kerja (K3) yang tujuan utamanya menginformasikan bahaya yang terdapat dalam suatu pekerjaan dan cara mengantisipasinya.  <br><span lang="zh">为宣导工作中的潜在危险以及如何预防，公司举行关于职业健康与安全（K3）的安全讲座。</span>
+5. Karyawan diwajibkan mengikuti safety-talk di area kerja masing-masing.  <br><span lang="zh">员工有义务在各自的工作区域参加安全讲座。</span>
+6. Karyawan wajib menaati ketentuan-ketentuan Keselamatan dan Kesehatan Kerja (K3) yang diberlakukan di dalam Perusahaan, termasuk wajib ikut serta dalam pelatihan dan sosialisasi apabila ditunjuk oleh Perusahaan.  <br><span lang="zh">员工有义务遵守公司现行的健康与安全（K3）规定，包括参加由公司指定的培训和活动。</span>
+7. Karyawan wajib mencegah secepat mungkin timbulnya tindakan atau keadaan yang tidak aman， jika menemukan adanya tindakan atau keadaan tidak aman harus segera melaporkan kepada atasannya atau penanggung jawab Keselamatan dan Kesehatan Kerja (K3) untuk mencegah timbulnya kecelakaan kerja dan penyakit akibat kerja yang berdampak terhadap manusia atau kerusakan terhadap barang milik Perusahaan.  <br><span lang="zh">员工有义务及时阻止不安全的行为，若发现有安全隐患的行为或情况应立即向上司或负责安全的工作人员报告，以防止发生工作事故和工作疾病导致人身伤害或财产损失的事故。</span>
+8. Karyawan yang kompeten wajib dengan segera melakukan tindakan pertolongan saat terjadi kecelakaan kerja dengan memastikan kondisi area telah aman dan terkendali dari potensi bahaya lain di sekitarnya.  <br><span lang="zh">如果附近发生工作事故，在确认区域安全且已经控制其他危险的情况下，胜任的员工有义务立即采取救援行动。</span>
+9. Karyawan tidak diperkenankan memakai alat komunikasi selain yang diperintahkan Perusahaan dalam menjalankan pekerjaannya, seperti misalnya termasuk tidak terbatas berupa handphone/smart-phone, tab, mini laptop, dan sejenisnya yang dapat menimbulkan bahaya kecelakan kerja.  <br><span lang="zh">禁止员工在工作中使用公司指定之外的通讯设备，例如包括但不限于使用手机/智能手机，平板电脑，迷你笔记本电脑等其他可能导致工作事故的设备。</span>
+10. Karyawan tidak diperkenankan meminum minuman beralkohol pada saat jam kerja dan dilarang masuk ke lingkungan perusahaan setelah meminum minuman beralkohol.  <br><span lang="zh">禁止员工在工作时间内饮酒或含有酒精类的饮品，并禁止饮酒后进入公司区域。</span>
+11. Karyawan tidak diperkenankan memakai, menyimpan, membawa dan/atau mengedarkan narkotika, psikotropika, dan zat adiktif lainnya pada saat jam kerja di lingkungan perusahaan.  <br><span lang="zh">员工在工作时间内不得使用、储存、携带和/或分发麻醉药品、精神药物和其他成瘾物质。</span>
+12. Ketentuan umum tentang pemakaian alat-alat keselamatan kerja adalah sebagai berikut:  <br><span lang="zh">关于使用安全设备的规定如下：</span>
+13. Perusahaan wajib melakukan pemeriksaan dan pengecekan alat-alat keselamatan kerja secara berkala untuk memastikan alat-alat tersebut berfungsi dengan baik.  <br><span lang="zh">公司有义务定期检查安全生产设备，以确保设备能正常运行。</span>  <br><span lang="zh">Karyawan wajib memelihara dengan baik semua fasilitas dan alat-alat kerja keselamatan kerja termasuk alat-alat pelindung diri yang telah disediakan Perusahaan 员工有义务妥善维护所有安全设备，包括公司提供的劳保用品。</span>
+14. Karyawan tidak diperkenankan memberikan kepada orang lain setiap alat pelindung diri atau alat-alat keselamatan kerja lainnya yang telah diterima dari Perusahaan.  <br><span lang="zh">禁止员工将从公司获得的劳保用品或其他安全设备给他人。</span>
+15. Karyawan wajib melakukan pekerjaan dengan menggunakan alat-alat keselamatan kerja yang diperlukan untuk menjalankan pekerjaannya.  <br><span lang="zh">员工有义务使用岗位需要的安全设备进行工作。</span>
+16. Ketentuan umum tentang pencegahan bahaya kebakaran dan ledakan adalah sebagai berikut:  <br><span lang="zh">关于预防火灾和爆炸危险的规则如下：</span>
+17. Karyawan tidak diperkenankan melakukan tindakan-tindakan yang berpotensi menimbulkan bahaya kebakaran dan ledakan di lingkungan kerja.  <br><span lang="zh">禁止员工进行可能导致工作场所发生火灾或爆炸的行为或举措。</span>
+18. Karyawan tidak diperkenankan merokok di tempat atau area yang tidak diizinkan untuk merokok dan di seluruh area yang terdapat bahan mudah terbakar seperti bahan bakar dan bahan kimia, serta tidak diperkenankan membuang puntung rokok di sembarang tempat.  <br><span lang="zh">禁止员工在不允许吸烟的地方/区域以及所有含有易燃材料（例如燃料和化学物质）的区域吸烟，也不允许在任何地方乱扔烟头。Karyawan tidak diperkenankan membawa segala jenis barang yang berisiko tinggi mudah terbakar dan meledak ke dalam lingkungan perusahaan termasuk ke dalam unit kendaraan dan alat berat yang dimiliki perusahaan.</span>  <br>禁止员工将任何易燃易爆的高风险物品带入公司区域，或放入公司车辆和重型设备。
+19. Karyawan tidak diperkenankan melakukan pekerjaan pengelasan bukan pada tempatnya tanpa persetujuan atasan yang berwenang serta tanpa kesediaan alat pemadam kebakaran yang memadai.  <br><span lang="zh">禁止员工在未经过直接领导的允许及没有足够的灭火用具的情况下进行焊接工作。</span>
+20. Karyawan tidak diperkenankan memasang sambungan atau peralatan listrik ke colokan/sirkuit listrik tanpa izin.  <br><span lang="zh">未经过允许，禁止员工私拉电线或安装电气设备。</span>
+21. Karyawan tidak diperkenankan menghalangi akses dan menyalahgunakan fungsi dari alat proteksi kebakaran.  <br><span lang="zh">员工不得阻碍消防设备的通行和滥用消防设备的功能。</span>
+22. Ketentuan umum tentang Pemeriksaan Kesehatan Berkala adalah sebagai berikut:  <br><span lang="zh">关于定期健康检查的规则如下：</span>
+23. Perusahaan menyelenggarakan Pemeriksaan Kesehatan Berkala secara tahunan bagi Karyawan yang telah bekerja sekurang-kurangnya 1 (satu) tahun.  <br><span lang="zh">公司每年为工龄至少一年的员工进行年度健康检查。</span>
+24. Karyawan wajib mengikuti Pemeriksaan Kesehatan Berkala sesuai dengan jadwal yang ditentukan Perusahaan  <br><span lang="zh">员工有义务按照公司制定的时间参与定期健康检查。</span>
+25. Karyawan yang tidak dapat mengikuti pemeriksaan Kesehatan Berkala pada jadwal yang telah ditentukan oleh Perusahaan karena mengambil hak cuti atau izin meninggalkan pekerjaan maka diwajibkan untuk berkoordinasi dengan Perusahaan guna melakukan penjadwalan ulang Pemeriksaan Kesehatan Berkala tersebut selambat-lambatnya 6 (enam) hari setelah masuk kerja kembali.  <br><span lang="zh">若员工因休假或请假无法参与已安排好的健康检查，则员工必须在返岗后 6</span>  <br>（六）天内与公司协调重新安排体检。
+26. Ketentuan umum tentang pemakaian kendaraan milik Perusahaan adalah sebagai berikut:  <br><span lang="zh">关于使用公司车辆的规定如下：</span>
+27. Karyawan tidak diperkenankan mengemudikan alat/unit kendaraan milik Perusahaan tanpa memiliki Surat Izin Mengemudi (SIM) dan Surat Izin Mengemudi Perusahaan (Simper) dan tanpa wewenang menjalankannya kecuali dalam kondisi darurat.  <br><span lang="zh">除紧急情况外，禁止员工在没有公司驾驶证的情况下驾驶公司车辆或重型设备。</span>
+28. Karyawan tidak diperkenankan menginstruksikan dan atau mengijinkan karyawan lain yang tidak memiliki Surat Izin Mengemudi Perusahaan (SIMPER) untuk mengemudikan unit kendaraan atau alat berat milik Perusahaan, kecuali dalam kondisi darurat.  <br><span lang="zh">除紧急情况外，禁止员工指使或允许没有公司驾驶证的其他员工驾驶公司车辆或重型设备。</span>
+29. Karyawan tidak diperkenankan memberikan tumpangan dan atau menumpang kendaraan dan alat berat yang dilarang membawa penumpang kecuali dalam kondisi darurat.  <br><span lang="zh">除紧急情况外，禁止员工使用不允许载客的车辆和重型设备载客和/或乘坐。</span>
+30. Karyawan tidak diperkenankan mengoperasikan alat komunikasi selain yang diperintahkan Perusahaan ketika mengemudikan kendaraan dan alat berat.  <br><span lang="zh">员工驾驶车辆和重型设备时，不允许使用除公司指定之外的通讯设备。</span>
+31. Karyawan tidak diperkenankan melanggar Sign/rambu-rambu keselamatan saat mengoperasikan unit kendaraan.  <br><span lang="zh">员工在开车时不得违反安全警告/标志。</span>
+
+32. Ketentuan umum tentang kondisi sakit adalah sebagai berikut:  <br><span lang="zh">关于疾病情况的规定如下：</span>
+33. Karyawan tidak diperkenankan melakukan tindakan-tindakan yang berpotensi menyebarluaskan penyakit kepada sesama rekan Karyawan.  <br><span lang="zh">禁止员工进行可能将疾病传播给其他员工的行为。</span>
+34. Karyawan harus mengajukan istirahat dan tidak diperkenankan datang ke tempat kerja apabila Karyawan dinyatakan oleh Dokter mengidap penyakit menular atau kondisi medis lainnya yang berbahaya bagi dirinya, sesama karyawan dan lingkungan kerjanya.  <br><span lang="zh">若员工被医院诊断患有传染病或其他危害社会的病种，该病对员工自身、其他员工或工作环境造成危害，则该员工应提出申请休息禁止出勤。</span>
+
+  <br><a id="pasal-28-pengaduan-dan-saran"></a>
+### Pasal 28. Pengaduan dan Saran
+<a id="第二十八条-合理化建议与投诉"></a>
+#### 第二十八条 合理化建议与投诉
+
+1. Karyawan berhak menyampaikan pengaduan dan saran kepada Perusahaan melalui prosedur sebagai berikut:  <br><span lang="zh">员工有权通过以下程序向公司提出合理化的建议与投诉：</span>
+2. Setiap pengaduan dan saran karyawan disampaikan kepada atasan langsung.  <br><span lang="zh">员工的投诉与建议需向直属领导传达。</span>
+3. Apabila pengaduan dan saran belum dapat ditindaklanjuti/diselesaikan oleh atasan langsung maka disampaikan kepada atasan dari atasan langsung.  <br><span lang="zh">如果所反映的投诉与建议未得到直接领导的处理/解决，则反馈给直属领导的上级</span>
+4. Apabila pengaduan dan saran belum dapat ditindaklanjuti/diselesaikan oleh atasan dari atasan langsung maka disampaikan kepada kepala departemen masing-masing atau ke departemen yang terkait.  <br><span lang="zh">若通过直属领导的上级所反映的投诉与建议未得到处理/解决，则反映给部门负责人或相关部门进行调解。</span>
+5. Karyawan bisa menyampaikan pengaduan dan saran melalui kotak saran yang disediakan oleh Perusahaan.  <br><span lang="zh">员工可以通过公司提供的意见箱传达合理化的建议与投诉。</span>
+6. Selama dalam proses penyelesaian pengaduan, para pihak wajib menjaga supaya kegiatan produksi/operasional tetap berlangsung dengan lancar dan aman.  <br><span lang="zh">解决投诉过程中，双方有义务保持生产/运营的顺利和安全。</span>
+7. Karyawan tidak diperkenankan melakukan aksi pemogokan kerja tanpa melalui prosedur/tata cara peraturan sesuai dengan perundang-undangan yang berlaku.  <br><span lang="zh">禁止员工未遵守现行法律法规程序的情况下进行罢工活动。</span>
+  <br><a id="bab-vi-pencegahan-dan-penanganan-kekerasan-seksual"></a>
+# BAB VI. PENCEGAHAN DAN PENANGANAN KEKERASAN SEKSUAL
+<a id="第六章-性暴力的预防和处理措施"></a>
+# 第六章  性暴力的预防和处理措施
+
+<a id="pasal-29-pencegahan-kekerasan-dan-pelecehan-seksual-di-tempat-kerja"></a>
+# Pasal 29. Pencegahan Kekerasan dan Pelecehan Seksual di Tempat Kerja
+<a id="第二十九条-工作场所暴力和性骚扰的预防措施"></a>
+# 第二十九条 工作场所暴力和性骚扰的预防措施
+<a id="perusahaan-menyediakan-sarana-pengaduan-atas-kekerasan-seksual-yang-disediakan-p"></a>
+# Perusahaan menyediakan sarana pengaduan atas kekerasan seksual yang disediakan perusahaan.
+<a id="公司提供有关性暴力的投诉设施"></a>
+# 公司提供有关性暴力的投诉设施。
+<a id="perusahaan-menjaga-kerahasiaan-korban-pelapor-dan-saksi"></a>
+# Perusahaan menjaga kerahasiaan korban, pelapor dan saksi.
+<a id="公司为受害人举报人和证人保密"></a>
+# 公司为受害人、举报人和证人保密。
+<a id="perusahaan-memastikan-tidak-ada-toleransi-terhadap-tindakan-pelecehan-dan-kekera"></a>
+# Perusahaan memastikan tidak ada toleransi terhadap tindakan pelecehan dan kekerasan seksual di tempat kerja.
+<a id="公司确保对工作场所性骚扰和暴力行为零容忍"></a>
+# 公司确保对工作场所性骚扰和暴力行为零容忍。
+
+<a id="pasal-30-penanganan-kekerasan-dan-pelecehan-seksual-di-tempat-kerja"></a>
+# Pasal 30. Penanganan Kekerasan dan Pelecehan Seksual di Tempat Kerja
+<a id="第三十条-工作场所暴力和性骚扰的处理措施"></a>
+# 第三十条 工作场所暴力和性骚扰的处理措施
+<a id="penanganan-dan-pelecehan-seksual-dilingkungan-perusahaan-berdasarkan-prinsip"></a>
+# Penanganan dan pelecehan seksual dilingkungan perusahaan berdasarkan prinsip:
+<a id="公司内部性骚扰的处理基于以下原则"></a>
+# 公司内部性骚扰的处理基于以下原则：
+<a id="a-keadilan-bagi-korban-dan-pelaku-为受害者和肇事者伸张正义"></a>
+# a. Keadilan bagi korban dan pelaku. 为受害者和肇事者伸张正义。
+<a id="b-kerahasiaan-保密"></a>
+# b. Kerahasiaan. 保密
+<a id="c-mencegah-agar-tidak-terulang-防止再次发生"></a>
+# c. Mencegah agar tidak terulang. 防止再次发生。
+<a id="d-menyelesaikan-secara-tuntas-彻底完成它"></a>
+# d. Menyelesaikan secara tuntas. 彻底完成它。
+<a id="perusahaan-karyawan-dan-pekerja-buruh-menjaga-kerahasiaan-aduan"></a>
+# Perusahaan, karyawan dan pekerja /buruh menjaga kerahasiaan aduan.
+<a id="公司雇员和工人劳动者对投诉保密"></a>
+# 公司、雇员和工人/劳动者对投诉保密。
+<a id="perusahaan-dan-karyawan-melindungi-korban"></a>
+# Perusahaan dan karyawan melindungi korban.
+<a id="公司和员工保护受害人"></a>
+# 公司和员工保护受害人。
+
+<a id="bab-vii-penilaian-kerja-dan-penghargaan"></a>
+# BAB VII. PENILAIAN KERJA DAN PENGHARGAAN
+<a id="第六章-工作评估和奖励"></a>
+## 第六章 工作评估和奖励
+<a id="pasal-31-ketentuan-umum-tentang-penilaian-kerja-dan-penghargaan"></a>
+### Pasal 31. Ketentuan Umum Tentang Penilaian Kerja dan Penghargaan
+<a id="第三十一条-关于绩效评估和奖励的总则"></a>
+#### 第三十一条 关于绩效评估和奖励的总则
+
+1. Perusahaan melakukan penilaian prestasi kerja Karyawan secara berkala.  <br><span lang="zh">公司定期对员工进行工作绩效评估。</span>
+2. Hasil penilaian prestasi kerja digunakan sebagai pertimbangan bagi perencanaan pelatihan dan pengembangan Karyawan, serta dalam pemberian penghargaan dan sanksi.  <br><span lang="zh">工作绩效评估的结果可作为该员工培养和发展计划以及奖惩的依据。</span>
+3. Hasil penilaian prestasi kerja yang baik dapat dijadikan sebagai dasar untuk promosi, kenaikan upah khusus, serta pemberian penghargaan khusus dari Perusahaan, sedangkan hasil penilaian prestasi kerja yang kurang baik dapat dijadikan sebagai dasar untuk penurunan upah, demosi, pemindahan jabatan, penundaan kenaikan upah dan jabatan, mutasi, dan sanksi lainnya.  <br><span lang="zh">良好的绩效评估结果可作为该员工晋升，调薪以及公司给予特殊奖励的依据；而不好的绩效评估结果可作为该员工降薪，降职，异岗，延迟加薪和晋升的依据。</span>
+4. Pelaksanaan penilaian prestasi kerja diatur melalui Teknis Pelaksanaan tentang Manajemen Kinerja.  <br><span lang="zh">工作绩效评估的实施将通过绩效管理实施细则进行规定。</span>
+  <br><a id="pasal-32-promosi-dan-kenaikan-upah"></a>
+### Pasal 32. Promosi dan Kenaikan Upah
+<a id="第三十二条-晋升和调薪"></a>
+#### 第三十二条 晋升和调薪
+
+1. Perusahaan dapat memberikan penghargaan kepada karyawan atas prestasi kerjanya berupa promosi dan/atau kenaikan upah.  <br><span lang="zh">公司可以通过晋升或调薪的形式奖励员工的工作表现。</span>
+2. Persyaratan secara rinci terkait prosedur promosi dan Kenaikan Upah diatur lebih detail Teknis Pelaksanaan.  <br><span lang="zh">有关晋升和工资增长程序更详细实施</span>
+  <br><a id="pasal-33-penghargaan-khusus"></a>
+### Pasal 33. Penghargaan Khusus
+<a id="第三十三条-特殊奖励"></a>
+#### 第三十三条 特殊奖励
+
+1. Penghargaan khusus diberikan oleh perusahaan kepada karyawan atas prestasi atau konstribusi yang ditunjukkan Karyawan selama bekerja.  <br><span lang="zh">若员工在工作中做出特殊贡献与成就，公司可给予特殊奖励。</span>
+2. Penghargaan khusus bisa diberikan untuk individu maupun kelompok.  <br><span lang="zh">特殊奖励可给予个人或团体。</span>
+3. Penghargaan prestasi kerja untuk kelompok dapat diberikan kepada tim kerja (kelompok),  <br>workshop (divisi), departemen atau kelompok fungsional yang dibentuk atas suatu program tertentu.  <br><span lang="zh">对团体的奖励，可授予班组（组别）、车间（科室）、部门或为某种项目而成立的功能性小组。</span>
+4. Penghargaan khusus yang diperoleh Karyawan dapat dijadikan salah satu pertimbangan dalam pemberian kenaikan upah dan atau promosi.  <br><span lang="zh">员工获得的特殊奖励可用作加薪和/或晋升的考量因素之一</span>
+5. Penghargaan khusus dibedakan menjadi 5 (lima) kategori sebagai berikut:  <br><span lang="zh">具体特殊奖励分为以下 5（五）种：</span>
+6. Penghargaan Mendapat Pujian  <br><span lang="zh">通报表扬</span>
+7. Penghargaan Tingkat 1  <br><span lang="zh">一级奖励</span>
+8. Penghargaan Tingkat 2  <br><span lang="zh">二级奖励</span>
+9. Penghargaan Tingkat 3  <br><span lang="zh">三级奖励</span>
+10. Penghargaan Karyawan Terbaik Tahunan  <br><span lang="zh">年度优秀员工奖</span>
+11. Bagi Karyawan yang memiliki prestasi unggul dalam setahun berhak dinominasikan sebagai Karyawan Terbaik Tahunan sesuai dengan prosedur pemilihan karyawan terbaik tahunan.  <br><span lang="zh">对于年度表现优异或出色的员工，可按照年度优秀员工评选流程，提名为年度优秀员工。</span>
+12. Karyawan yang mendapatkan penghargaan dari Perusahaan menerima penghargaan berupa sejumlah uang dengan nominal tertentu yang ditetapkan oleh Pimpinan Perusahaan.  <br><span lang="zh">得到公司奖励的员工将获得由公司领导确定的金额发放奖金。</span>
+13. Penetapan Karyawan yang mendapatkan penghargaan khusus didasarkan pada penilaian yang dilakukan oleh Perusahaan yang hasilnya menjadi kewenangan Perusahaan dan tidak dapat diganggu gugat.  <br><span lang="zh">确定获得特殊奖励的员工是由公司进行评估确定，该评估结果是公司权利，不可置疑。</span>  <br><a id="pasal-34-penghargaan-mendapat-pujian"></a>
+### Pasal 34. Penghargaan Mendapat Pujian
+<a id="第三十四条-书面通报表扬"></a>
+#### 第三十四条 书面通报表扬
+
+1. Penghargaan Mendapat Pujian dapat diberikan kepada Karyawan yang memenuhi kriteria sebagai berikut:  <br><span lang="zh">符合以下条件的员工可获得书面通报表扬：</span>
+2. Mematuhi peraturan-peraturan yang dikeluarkan oleh Perusahaan, bekerja dengan hati-hati dan teliti, melaksanakan tugasnya dengan penuh tanggung jawab, dan menjadi teladan bagi Karyawan lainnya  <br><span lang="zh">遵守公司规章制度，工作兢兢业业，恪尽职守，起到模范带头作用者。</span>
+3. Memiliki karakter yang baik, jujur, berusaha untuk menyelesaikan berbagai perbedaan/konflik yang timbul, dan menjaga suasana kerja yang baik dalam lingkungan Perusahaan  <br><span lang="zh">品行优良，树立正气，努力化解各种矛盾，维护公司正常工作氛围者。</span>
+4. Memiliki rasa kerja sama tim yang baik, dapat bekerja sama secara aktif dengan karyawan lain dan departemen dalam menyelesaikan masalah dalam pekerjaan, dan mendapat penilaian/evaluasi yang baik dari departemen dan karyawan lain  <br><span lang="zh">具有良好团队合作意识，能积极主动配合其他员工、部门解决工作问题，受到其他部门和员工好评者。</span>
+
+5. Kinerja kerja yang konsisten, diakumulasikan 6 bulan atau 3 bulan berturut-turut menyelesaikan tugas pekerjaan melebihi batas;  <br><span lang="zh">一贯工作业绩突出、年度内累计 6 个月或连续 3 个月超额完成工作任务者</span>
+6. Dengan aktif berupaya mempelajari pengetahuan baru, teknologi baru, dan menerapkannya dalam pekerjaannya untuk mencapai hasil yang lebih baik  <br><span lang="zh">努力学习新知识、新技术，并应用到实际工作中取得良好成效者。</span>
+7. Bersedia membagikan pengetahuan dan keterampilannya kepada Karyawan lain, termasuk secara aktif memberikan pelatihan dan bimbingan ke Karyawan lain dengan hasil yang baik.  <br><span lang="zh">乐于将自己的知识、技能传授给其他员工，积极举办培训讲座并获得良好效果者。</span>
+8. Memiliki etika moral yang baik dan diakui integritasnya oleh Karyawan lain dan masyarakat.  <br><span lang="zh">具有良好社会道德风范，受到社会表彰者。</span>
+9. Melakukan tindakan-tindakan lain yang memberikan manfaat nyata bagi Perusahaan dan atau Karyawan, dan memiliki bukti nyata.  <br><span lang="zh">其他对公司或员工有益的行为，具有事实证明者。</span>
+10. Karyawan yang melakukan tindakan sebagaimana yang dimaksud dalam ayat 1 (satu) diatas dapat memperoleh Penghargaan Mendapat Pujian apabila departemen mengajukan permohonan Pemberian Penghargaan Kepada Karyawan sesuai dengan prosedur dan disetujui oleh Pimpinan Perusahaan.  <br><span lang="zh">有上述第 1（一）款所指行为的员工，可由部门按照流程提交奖励员工的申请并获得公司领导的批准，则员工可获得通报表扬奖。</span>
+11. Karyawan yang memperoleh Penghargaan Pujian akan dinominasikan dalam pemilihan Karyawan Terbaik Tahunan.  <br><span lang="zh">对于获得通报表扬奖的员工，可提名为年度优秀员工。</span>
+  <br><a id="pasal-35-penghargaan-tingkat-1"></a>
+### Pasal 35. Penghargaan Tingkat 1
+<a id="第三十五条-一级奖励"></a>
+#### 第三十五条 一级奖励
+
+1. Penghargaan Tingkat 1 (satu) dapat diberikan kepada karyawan yang memenuhi kriteria sebagai berikut:  <br><span lang="zh">符合以下条件的员工可获得一级奖励：</span>
+2. Menemukan barang-barang berharga dan mengembalikannya kepada yang berhak.  <br><span lang="zh">拾获贵重物品而不昧者。</span>  <br><span lang="zh">Menemukan adanya masalah yang bukan tanggungjawabnya namun melaporkannya dan atau menyelesaikannya dengan benar untuk menghindari kerugian Perusahaan. 发现职责外的问题，予以速报或妥善处理避免公司损失者。</span>
+3. Melakukan penghematan dalam berbagai hal sehingga menghemat biaya yang dikeluarkan Perusahaan seperti dalam penghematan bahan-bahan habis pakai atau bahan baku, pemanfaatan limbah, melakukan perawatan peralatan/mesin dengan cermat dan seksama, dan lainnya.  <br><span lang="zh">对于原材料、工具等节约或废物利用，细心维护公司设备等，节省成本成效显著者。</span>
+4. Secara aktif berpartisipasi dalam berbagai kegiatan Perusahaan dan mencapai unjuk kerja yang sangat baik.  <br><span lang="zh">各项活动积极参与，取得优良成绩者。</span>
+5. Memiliki prestasi kerja lainnya yang menonjol.  <br><span lang="zh">有其它突出成绩者。</span>
+6. Karyawan yang melakukan tindakan sebagaimana yang dimaksud dalam ayat 1 (Satu) di atas dapat memperoleh Penghargaan Tingkat 1 (Satu) apabila departemen mengajukan permohonan Pemberian Penghargaan Kepada Karyawan sesuai dengan prosedur dan disetujui oleh Pimpinan Perusahaan .  <br><span lang="zh">有上述第 1（一）款所指行为的员工，可由部门按照流程提交奖励员工的申请并获得公司领导的批准，则员工可获得一级奖励。</span>
+7. Karyawan yang memperoleh Penghargaan Tingkat 1 (Satu) akan dinominasikan dalam pemilihan Karyawan Terbaik Tahunan.  <br><span lang="zh">对于获得一级奖励的员工，可提名为年度优秀员工。</span>
+8. Karyawan yang memperoleh Penghargaan Tingkat 1 (Satu) mendapatkan uang penghargaan sebesar antara Rp 400.000 (empat ratus ribu rupiah) sampai dengan Rp 1.000.000 (satu juta rupiah).  <br><span lang="zh">对于获得一级奖励的员工，可获得 400.000-1.000.000 印尼盾的奖金。</span>
+  <br><a id="pasal-36-penghargaan-tingkat-2"></a>
+### Pasal 36. Penghargaan Tingkat 2
+<a id="第三十六条-二级奖励"></a>
+#### 第三十六条 二级奖励
+
+1. Penghargaan Tingkat 2 (Dua) dapat diberikan kepada karyawan yang memenuhi kriteria sebagai berikut:  <br><span lang="zh">符合以下条件的员工可获得二级奖励：</span>
+2. Memberikan usulan perbaikan dalam operasional teknis perusahaan yang setelah diterapkan menghasilkan efek positif signifikan bagi Perusahaan, seperti usulan dalam hal strategi operasional, proses produksi, pengontrolan bahan produksi, program layanan yang lebih baik, dan lainnya.  <br><span lang="zh">对于营运策略、生产流程、物料管制、服务项目等提出改进建议或方案，经采纳实施有显著成效者。</span>
+3. Mengajukan usulan memperbaiki produk dan metode pemrosesan, mengurangi biaya, atau menerapkan manajemen pengontrolan kualitas yang menghasilkan efek positif bagi Perusahaan.  <br><span lang="zh">提案改善产品与加工方法、降低成本，或实施质量管理卓有成效者。</span>
+4. Melakukan penghematan dalam berbagai hal sehingga menghemat signifikan biaya yang dikeluarkan Perusahaan dan berdampak sangat positif bagi operasional Perusahaan seperti dalam penghematan bahan-bahan habis pakai atau bahan baku, serta pemanfaatan limbah dan bahan sisa.  <br><span lang="zh">对于原材料节约或废物利用，取得重大成效者。</span>
+5. Menghasilkan temuan atau ide kreatif dan berhasil baik ketika diterapkan.  <br><span lang="zh">有小创造发明、小改革，经施行有显著成效者。</span>
+6. Menunjukkan tanggung jawab, kesigapan dan kecekatan menangani masalah tepat pada waktunya dan berhasil menghindarkan kerugian Perusahaan ketika terjadi bencana, kecelakaan, atau dalam kondisi ditemukannya potensi masalah besar yang bisa menghentikan pengoperasian peralatan-peralatan atau mesin-mesin utama dalam perusahaan.  <br><span lang="zh">发生非常事故或灾害或发现重大隐患、重大质量问题或重大机械设备故障时</span>  <br>（因工作疏忽造成的除外），勇于负责，及时处理，避免公司损失者。
+
+
+7. Berkontribusi besar dalam menaikkan citra dan nama baik Perusahaan serta menjaga kehormatan Perusahaan dan mendapatkan pujian atau pengakuan dari perusahaan lain dan masyarakat luas.  <br><span lang="zh">对维护公司荣誉、塑造企业形象方面有较大贡献且受到其他企业或个人公开表扬者。</span>
+8. Melaporkan kasus pencurian, malpraktek, penyuapan, korupsi, dan tindakan-tindakan yang merusak dan atau merugikan Perusahaan dengan tanpa memikirkan keselamatan diri tetap menjaga agar proses produksi berjalan normal dan agar tetap terjaga tertib kerja dan tertib sosial.  <br><span lang="zh">举报盗窃案件，检举营私舞弊拿回扣等危害公司利益的行为或企图，及时制止或使案件得以及时破获，奋不顾身维护正常的生产秩序和工作秩序以及社会治安者。</span>
+9. Memiliki kinerja istimewa yang sangat menonjol di atas karyawan lainnya  <br><span lang="zh">其他有显著绩效者。</span>
+10. Mendapatkan akumulasi penghargaan 2 (dua) kali Penghargaan Tingkat 1 (satu) dalam setahun.  <br><span lang="zh">全年累计获一级奖励两次者。</span>
+11. Karyawan yang melakukan sebagaimana yang dimaksud dalam ayat 1 (satu) di atas dapat memperoleh Penghargaan Tingkat 2 (Dua) apabila departemen mengajukan permohonan Pemberian Penghargaan Kepada Karyawan sesuai dengan prosedur dan disetujui oleh Pimpinan Perusahaan.  <br><span lang="zh">有上述第 1（一）款所指行为的员工，可由部门按照流程提交奖励员工的申请并获得公司领导的批准，则员工可获得二级奖励。</span>
+12. Karyawan yang memperoleh Penghargaan Tingkat 2 (Dua) akan dinominasikan dalam pemilihan Karyawan Terbaik Tahunan.  <br><span lang="zh">对于获得二级奖励的员工，可提名为年度优秀员工。</span>  <br><span lang="zh">Karyawan yang memperoleh Penghargaan Tingkat 2 (Dua) mendapatkan uang penghargaan sebesar antara Rp 1.000.000 (satu juta rupiah) sampai dengan Rp 2.000.000 (dua juta rupiah). 对于获得二级奖励的员工，可获得 1.000.000-2.000.000 印尼盾的奖金。</span>
+  <br><a id="pasal-37-penghargaan-tingkat-3"></a>
+### Pasal 37. Penghargaan Tingkat 3
+<a id="第三十七条-三级奖励"></a>
+#### 第三十七条 三级奖励
+
+1. Penghargaan Tingkat 3 (Tiga) dapat diberikan kepada karyawan yang memenuhi kriteria sebagai berikut:  <br><span lang="zh">符合以下条件的员工可获得三级奖励：</span>
+2. Menunjukkan tanggung jawab, tidak menghindari bahaya dan tanpa memikirkan keselamatan sendiri berupaya melindungi aset perusahaan atau karyawan lainnya atau demi mengurangi kerugian perusahaan.  <br><span lang="zh">发生意外事故时，不避艰险，为保护公司财产或员工安全，临危不惧，奋不顾身而减少公司损失。</span>
+3. Melakukan inovasi, kreasi penting atau memberikan saran penting yang bermanfaat besar bagi Perusahaan yang hasilnya dapat mengurangi biaya secara signifikan, menurunkan kerugian, meningkatkan keuntungan dan/atau efisiensi Perusahaan.  <br><span lang="zh">对各项生产设备、工艺有重要发明、创造、技术改进或提出合理化建议，取得重大成效者。</span>
+
+
+4. Berhasil mencegah terjadinya masalah besar atau berhasil menyelesaikan proyek perbaikan lebih awal sehingga bisa menghasilkan peningkatan produksi yang signifikan dan atau menghasilkan prestasi/kinerja yang luar biasa.  <br><span lang="zh">预防重大故障隐患或抢修工程提早完成，使产能显著增加，成绩卓著者。</span>
+5. Berhasil meningkatkan kualitas manajemen bisnis dan meningkatkan efisiensi ekonomi Perusahaan.  <br><span lang="zh">在改进企业经营管理，提高经济效益方面作出显著成绩者。</span>
+6. Tanpa memikirkan keselamatan diri melawan orang-orang yang bertindak jahat dan buruk yang merugikan kepentingan Perusahaan dan menunjukkan kinerja menonjol dalam upaya menjaga tertib produksi, tertib kerja dan tertib sosial.  <br><span lang="zh">奋不顾身，同坏人、坏事作斗争，对维护正常的生产秩序和工作秩序方面有显著功绩者。</span>
+7. Berhasil menjaga properti/aset dan kepentingan Perusahaan sehingga menghindarkan Perusahaan mengalami kerugian besar.  <br><span lang="zh">维护公司财产和利益，避免重大损失，事迹突出者。</span>
+8. Mendapatkan akumulasi penghargaan 2 (Dua) kali Penghargaan Tingkat 2 (Dua) dalam setahun.  <br><span lang="zh">全年累计获记二级奖励两次者。</span>
+9. Karyawan yang melakukan sebagaimana yang dimaksud dalam ayat 1 (Satu) di atas dapat memperoleh Penghargaan Tingkat 3 (Tiga) apabila departemen mengajukan permohonan Pemberian Penghargaan Kepada Karyawan sesuai dengan prosedur dan disetujui oleh Pimpinan Perusahaan.  <br><span lang="zh">有上述第 1（一）款所指行为的员工，可由部门按照流程提交奖励员工的申请并获得公司领导的批准，则员工可获得三级奖励。</span>
+10. Karyawan yang memperoleh Penghargaan Tingkat 3 (Tiga) akan dinominasikan dalam pemilihan Karyawan Terbaik Tahunan.  <br><span lang="zh">对于获得三级奖励的员工，可提名为年度优秀员工。</span>  <br><span lang="zh">Karyawan yang memperoleh Penghargaan Tingkat 3 (Tiga) mendapatkan uang penghargaan sebesar antara Rp 2.000.000 (dua juta rupiah) sampai dengan Rp 4.000.000 (empat juta rupiah). 对于获得三级奖励的员工，可获得 2.000.000-4.000.000 印尼盾的奖金。</span>
+  <br><a id="pasal-38-penghargaan-karyawan-terbaik-tahunan"></a>
+### Pasal 38. Penghargaan Karyawan Terbaik Tahunan
+<a id="第三十八条-年度优秀员工奖励"></a>
+#### 第三十八条 年度优秀员工奖励
+
+1. Perusahaan menyelenggarakan pemilihan Karyawan Terbaik yang digelar secara tahunan.  <br><span lang="zh">公司每年举行一次“优秀员工”评选。</span>
+2. Setiap Karyawan berhak dinominasikan sebagai Karyawan Terbaik Tahunan sepanjang memenuhi syarat yang ditetapkan oleh Perusahaan.  <br><span lang="zh">各员工有权被提名为年度优秀员工，只要符合公司设定的要求。</span>
+3. Karyawan yang mendapatkan penghargaan Karyawan Terbaik mendapatkan Piagam Penghargaan.  <br><span lang="zh">获得优秀员工奖励的员工颁发获奖证。</span>
+4. Karyawan Terbaik dan diberikan penghargaan berupa sejumlah uang dengan nominal tertentu yang ditetapkan oleh Pimpinan Perusahaan.  <br><span lang="zh">最优秀的员工将获得公司管理层确定的一定名义金额的奖励。</span>
+  <br><a id="bab-viii-sanksi-sanksi"></a>
+# BAB VIII. SANKSI-SANKSI
+<a id="第七章-处罚"></a>
+## 第七章 处罚
+
+<a id="pasal-39-ketentuan-umum-tentang-sanksi-sanksi"></a>
+### Pasal 39. Ketentuan Umum Tentang Sanksi-Sanksi
+<a id="第三十九条-关于处罚的总则"></a>
+#### 第三十九条 关于处罚的总则
+
+1. Sanksi yang diberikan kepada Karyawan atas pelanggaran-pelanggaran dan atau kinerja yang tidak tercapai diatur oleh perusahaan dengan tidak melanggar ketentuan peraturan perundang- undangan yang berlaku dengan bentuk-bentuk sanksi sebagai berikut:  <br><span lang="zh">在不违反适用法律法规规定的情况下，对违反和/或未履行的处罚规定如下：</span>  <br><span lang="zh">Surat Peringatan yang terdiri dari : 批评警告如下</span>
+2. Surat Peringatan yang diberikan secara berurutan yang terdiri dari Surat Peringatan  Pertama (SP1), Surat Peringatan Kedua (SP2), dan Surat Peringatan Ketiga (SP3).  <br><span lang="zh">批评警告按顺序发出，包括第一批警告（SP1）、第二批警告（SP2）、第三批警告（SP3）。</span>
+3. ii.    Surat Peringatan Pertama dan Terakhir (SPPT).  <br><span lang="zh">第一批和最后的警告（SPPT）</span>  <br><span lang="zh">Pemutusan Hubungan Kerja工作终止</span>  <br><span lang="zh">Ganti Rugi dan Denda. 赔偿和罚款</span>  <br><span lang="zh">Skorsing. 停职</span>  <br><span lang="zh">Demosi dan Penundaan Kenaikan Upah/Jabatan. 降级和推迟加薪/职位。</span>
+4. Karyawan dan atasan langsung dapat diberikan sanksi tanggung bersama apabila terjadi pelanggaran yang timbul sebagai akibat atasan tidak menjalankan tanggungjawabnya sesuai bukti-bukti yang sah.  <br><span lang="zh">若因员工上级领导管理不力导致的违纪行为，在给员工处罚的同时对其上级领导也要处以连带管理责任考核(附有有效的证据）。</span>
+5. Aturan-aturan yang berlaku di masing-masing departemen dan lokasi kerja tertentu yang ditetapkan melalui Teknis Pelaksanaan dapat diberlakukan sepanjang tidak bertentangan dengan Peraturan Perusahaan ini dan peraturan perundang undangan yang berlaku.  <br><span lang="zh">各部门和特定工作地点制定的规则通过实施细则予以规定，只要这些规则不与本公司的规章制度及现行法律法规相抵触，就可以生效。</span>
+  <br><a id="pasal-40-surat-peringatan"></a>
+### Pasal 40. Surat Peringatan
+<a id="第四十条-警告单"></a>
+#### 第四十条 警告单
+1. Surat Peringatan (SP) adalah sanksi yang diberikan Perusahaan kepada Karyawan secara tertulis yang tergantung pada jenis bobot, dan frekuensi pengulangan, dibagi menjadi surat peringatan pertama, surat peringatan kedua, dan surat peringatan ketiga.  <br><span lang="zh">警告信（SP）是公司以书面形式给予员工的处罚，根据行为的严重程度和重复频率，分为第一次警告信、第二次警告信和第三次警告信。</span>
+2. Surat Peringatan Pertama (SP1) berlaku selama 6 (enam) bulan.  <br><span lang="zh">第一次警告信的有效为6个月。</span>
+3. Surat Peringatan Kedua (SP2) berlaku selama 6 (enam) bulan.  <br><span lang="zh">第二次警告信的有效为6个月。</span>
+4. Surat Peringatan Ketiga (SP3) berlaku selama 6 (enam) bulan.  <br><span lang="zh">第三次警告信的有效为6个月。</span>
+5. Surat Peringatan Pertama dan Terakhir (SPPT) berlaku selama 6 (enam) bulan.  <br><span lang="zh">第一次和最后警告信的有效为6个月。</span>
+6. Surat Peringatan Pertama (SP1), Kedua (SP2), dan Ketiga (SP3) harus diberikan mengikuti urutannya satu demi satu yaitu :  <br><span lang="zh">第一次警告信（SP1）、第一次警告信（SP2）和第一次警告信（SP3）警告信必须按顺序发出，即：</span>
+7. Surat Peringatan Pertama (SP I) diberikan manakala karyawan melakukan salah satu jenis pelanggaran yang diatur dalam sanksi SP 1.  <br><span lang="zh">第一次警告信（SP I）在员工违反了规定的第一次警告信处罚条款之一时发出。</span>
+8. Surat Peringatan Kedua (SP 2) diberikan manakala dalam masa berlaku sanksi SP 1, karyawan melakukan salah satu jenis pelanggaran yang diatur dalam sanksi SP 1.  <br><span lang="zh">第二次警告信（SP 2）在第一次警告信有效期内，员工再次违反了规定的第一次警告信处罚条款之一时发出。</span>
+9. Surat Peringatan Ketiga (SP 3) diberikan manakala dalam masa berlaku sanksi SP 2, karyawan melakukan salah satu jenis pelanggaran yang diatur dalam mengulangi melakukan salah satu jenis pelanggaran yang diatur dalam sanksi SP 1.  <br><span lang="zh">第三次警告信（SP 3）在第二次警告信有效期内，员工再次违反了第一次警告信处罚条款之一时发出。</span>
+10. Surat Peringatan Pertama dan Terakhir (SPPT) diberikan manakala karyawan melakukan salah satu jenis pelanggaran yang diatur dalam Surat Peringatan Pertama dan Terakhir (SPPT).  <br><span lang="zh">首次和最后警告信（SPPT）在员工违反了首次和最后警告信处罚条款之一时发出。</span>
+11. Berikut adalah tingkat pelanggaran Surat Peringatan Pertama (SP1):  <br><span lang="zh">以下是第一次警告信（SP1）的违规则级别：</span>
+12. Datang terlambat tanpa izin dari atasan langsung:  <br><span lang="zh">无故迟到，具体情况如下：</span>
+13. 1 (satu) sampai dengan 5 (lima) menit sebanyak 2 (dua) kali dalam satu bulan kalender.  <br><span lang="zh">迟到1至5分钟，且在一个日历月内发生2次。</span>
+14. Lebih dari 5 (lima) menit sampai dengan 1 (satu) jam sebanyak 1 (satu) kali dalam satu bulan kalender.  <br><span lang="zh">迟到超过5至到1小时，且在一个日历月内发生1次。</span>
+15. Mangkir kerja 1 (satu) hari atau 2 (dua) hari.  <br><span lang="zh">矿工1天或2天。</span>
+16. Hadir jam kerja normal tetapi lupa melakukan absensi finger print atau face print sebanyak 3 (tiga) kali dalam satu bulan kalender tanpa alasan yang tidak dapat diterima.  <br><span lang="zh">在正常工作时间内未进行指纹或面部识别考勤，且在一个日历月内发生3（三）次，无合理解释。</span>
+17. Meninggalkan tempat kerja atau pulang awal sebanyak 1 (satu) kali tanpa izin dari atasan.  <br><span lang="zh">离开工作地点或提前离开1（次），未经上级批准。</span>
+18. Tidak mematuhi tata tertib yang berlaku di Departemen.  <br><span lang="zh">不遵守部门的规章制度。</span>
+19. Berhenti atau memarkirkan kendaraan bukan pada tempat yang telah ditentukan tanpa ada alasan yang dapat dibenarkan atau bukan dalam keadaan darurat.  <br><span lang="zh">无正当理由或者非紧急情况，未在指定地点停车、停放车辆的。</span>
+20. Tidak menjalankan kewajiban untuk memberitahukan perubahan informasi tentang identitas diri Karyawan (termasuk nomor kontak, status pernikahan, anggota keluarga, alamat dan lainnya) kepada Perusahaan.  <br><span lang="zh">不承担将员工个人身份信息（包括联系电话、婚姻状况、家庭成员、地址等）变更通知公司的义务。</span>
+21. Menerima tamu pribadi selama jam kerja tanpa seizin atasan atau bukan di tempat yang telah ditentukan.  <br><span lang="zh">未经上级允许或者不在指定地点在工作时间接待私人的客人。</span>
+22. Makan selama jam kerja kecuali atas seizin atasan.  <br><span lang="zh">工作时间内进食，除非得到上级允许。</span>
+23. Membuang sampah bukan pada tempatnya.  <br><span lang="zh">把垃圾扔到不准的地方。</span>
+24. Mengotori lingkungan Perusahaan, baik tempat kerja, mess, area publik, dan lainnya.  <br><span lang="zh">污染公司环境，包括工作场所、宿舍、公共区域等。</span>
+25. Mengganggu ketenangan dan ketertiban dalam lingkungan kerja.  <br><span lang="zh">扰乱工作环境的安宁与秩序。</span>
+26. Tidak mengenakan seragam sesuai dengan ketentuan saat jam kerja.  <br><span lang="zh">上班时间未按规定穿着制服。</span>
+27. Tidak mengenakan kartu Tanda Pengenal Karyawan selama jam kerja dan tidak ada alasan yang dapat diterima.  <br><span lang="zh">工作时间未佩戴员工身份工号且无正当理由。</span>
+28. Mengobrol saat jam kerja, meninggalkan lokasi kerja ke lokasi kerja lain, bermain, gosip/mendiskusikan benar atau salah orang lain.  <br><span lang="zh">工作时间聊天、离开工作地点到另一个工作地点、玩耍、八卦/讨论别人的是非。</span>
+29. Tidak mengambil dokumen yang dikeluarkan oleh perusahaan dengan segera, dan tidak dapat mengumpulkan data/bahan yang dibutuhkan oleh departemen fungsional perusahaan dalam waktu yang ditentukan.  <br><span lang="zh">未立即收集公司下发的文件，未能在规定时间内分发公司职能部门要求的数据/资料。</span>
+30. Tidak menghemat penggunaan air, listrik, makanan yang disediakan oleh kantin sesuai ketentuan dan terjadi pemborosan yang serius.  <br><span lang="zh">不按规定节约食堂提供的水、电、饭菜的利用，导致严重浪费。</span>
+31. Tidak menjalankan prosedur administrasi sesuai dengan persyaratan yang ditentukan.  <br><span lang="zh">未按照规定要求履行行政手续。</span>
+32. Berbicara dengan suara keras atau ribut dalam Kawasan Industri ataupun di asrama  sehingga mengganggu orang yang sedang bekerja atau istirahat.  <br><span lang="zh">在工业区、宿舍内大声喧哗，干扰正在工作或休息的人。</span>
+33. Berpakaian tidak sopan di tempat umum.  <br><span lang="zh">在公共场所穿着不端庄。</span>
+34. Membaca buku, majalah atau mengurus urusan pribadi lainnya selama jam kerja tanpa mengakibatkan accident.  <br><span lang="zh">在工作时间看书、杂志或处理其他个人事务，不会造成意外</span>
+35. Beristirahat tidak pada tempat-tempat yang telah ditentukan.  <br><span lang="zh">非指定地点休息。</span>
+36. Menerima tamu pribadi bukan di tempat yang telah ditentukan.  <br><span lang="zh">非指定地点接待私人客人。</span>
+37. Tidak mengikuti ujian yang dilaksanakan oleh perusahaan tanpa keterangan.  <br><span lang="zh">未经证明理由不参加公司组织的考试。</span>
+38. Melakukan pelecehan dengan cara bersiul terhadap karyawan lainnya apabila karyawan lainnya merasa keberatan.  <br><span lang="zh">如果其他员工反对，则通过吹口哨骚扰其他员工。</span>
+39. Memelihara hewan di area perusahaan secara pribadi (terkecuali hewan hias ikan atau kura-kura) dan harus melakukan penanganan dalam batas waktu tertentu.  <br><span lang="zh">个人在公司区域内饲养动物（观赏鱼、海龟除外），并必须在一定期限内处理。</span>
+40. Mendiskusikan gaji orang lain secara terbuka atau secara pribadi.  <br><span lang="zh">公开或私人讨论他人的工资。</span>
+41. Tidak dapat menyelesaikan instruksi atasan atau perintah kerja sesuai dengan batas waktu yang telah ditentukan dan tidak melaporkannya.  <br><span lang="zh">不能按规定期限完成上级指示或工单且不能提出报告。</span>
+42. Tidak melakukan tindak lanjut/perbaikan atas keluhan/komplain terkait tugas dan tanggungjawabnya dan telah ditegur oleh atasannya atau telah dikomplain oleh pelanggan (user/buyer) atau departemen lain sehingga tetap terjadi teguran/komplain yang berulang dan atau kelalaian tersebut menimbulkan kerugian ringan bagi Perusahaan.  <br><span lang="zh">未能跟进/修复与其职责相关的投诉/投诉而受到上级训诫或被客户（用户/买家）或其他部门投诉以致重复警告/投诉不断发生和/或此情况因疏忽造成公司轻微损失。</span>
+43. Tidak mencapai target kerja minimal dalam jangka waktu yang telah ditentukan.  <br><span lang="zh">未在规定时间内完成最低工作目标。</span>
+44. Berperilaku tidak sopan atau buruk terhadap atasan atau rekan kerja.  <br><span lang="zh">对上级或同事表现粗鲁或恶劣行为。</span>
+45. Tidak melakukan pengendalian dokumen dan data sesuai dengan prosedur pengendalian dokumen dan data, dan atau kehilangan dokumen atau data yang menjadi tanggungjawabnya.  <br><span lang="zh">未能按照文件和数据管理程序控制文件和数据，和/或丢失其负责的文件或数据。</span>
+46. Memasuki area pekerjaan lain yang bukan lingkup kerjanya tanpa alasan yang dapat diterima dan tanpa izin dari Perusahaan.  <br><span lang="zh">无正当理由且未经公司许可，进入工作范围以外的其他工作区域。</span>
+47. Tidak mematuhi peraturan khusus di tempat-tempat khusus (ruang arsip, ruang ibadah, ruang kesehatan, ruang baca dan lainnya) yang telah ditetapkan oleh Perusahaan.  <br><span lang="zh">在公司确定的特殊场所（档案室、祈祷室、医疗室、阅览室等）不遵守规定。</span>
+48. Pada saat jam kerja bermain game, menonton video, bermain/mendengar musik, dan membuka laman web yang tidak berkaitan dengan pekerjaan, atau melakukan hal lain yang tidak ada hubungannya dengan pekerjaannya.  <br><span lang="zh">工作时间玩游戏、看视频、听音乐、打开与工作无关的网页或做其他与工作无关的事情。</span>
+49. Masuk keluar di tempat umum tidak melepaskan sepatu/sandal sesuai dengan peraturan.  <br><span lang="zh">进出公共场所，不按规定脱鞋/凉鞋。</span>
+50. Mempergunakan barang-barang/peralatan milik Perusahaan untuk kepentingan pribadi tanpa izin dari atasan yang berwenang.  <br><span lang="zh">未经授权上级许可，将属于公司的物品/设备用于私人。</span>
+51. Menyebarkan edaran-edaran dalam segala bentuknya dalam lingkungan Perusahaan tanpa seizin Pimpinan Perusahaan.  <br><span lang="zh">未经公司管理层许可，在公司内以各种形式分发通函。</span>
+52. Tidak mematuhi aturan tentang kebersihan dan kerapihan tempat kerja dan alat kerjanya serta lingkungan Perusahaan.  <br><span lang="zh">不遵守有关工作场所、工作工具和公司环境的清洁和整洁的规定。</span>
+53. Masuk dan keluar lingkungan perusahaan tidak melalui pintu-pintu resmi yang ditetapkan oleh Perusahaan.  <br><span lang="zh">进出公司场所不通过公司规定的官方大门。</span>
+54. Menolak pemeriksaan keamanan yang dilakukan sesuai prosedur oleh petugas keamanan Perusahaan.  <br><span lang="zh">拒绝公司保安人员按照程序进行的安全检查。</span>
+55. Tanpa izin memasuki ruangan atau wilayah kerja lain yang bukan tempat kerjanya dan tidak ada hubungan dengan pekerjaannya.  <br><span lang="zh">未经允许，进入非工作场所、与工作无关的房间或者其他工作区域。</span>
+56. Tidak menjaga dan mengamankan barang atau aset yang dipertanggungjawabkan kepadanya.  <br><span lang="zh">不能维护和保护他负责的货物或资产。</span>
+57. Meletakkan benda berharga milik perusahaan pada tempat yang tidak terkunci atau rawan pencurian/kehilangan.  <br><span lang="zh">将属于公司的贵重物品存放在未上锁或容易被盗窃/丢失的地方。</span>
+58. Tidak mengikuti Pemeriksaan Kesehatan Berkala yang dijadwalkan oleh Perusahaan  tanpa alasan yang dapat diterima.  <br><span lang="zh">无正当理由未参与公司安排的定期健康检查。</span>
+59. Pelanggaran prosedur operasi atau sistem manajemen perusahaan, untuk kondisi yang ringan atau kecelakaan yang disebabkan oleh kelalaian pribadi atau karena kurangnya pengarahan dan pengawasan.  <br><span lang="zh">违反操作程序或公司管理制度，因个人疏忽或缺乏指导和监督而造成的轻微情况或事故。</span>
+60. Karyawan penghuni mess Perusahaan membawa siapapun selain penghuni mess lainnya untuk masuk ke dalam mess kecuali atas izin Pimpinan Perusahaan.  <br><span lang="zh">除非公司管理层允许，否则公司宿舍居民的员工不得将其他宿舍占用者以外的任何人带入宿舍。</span>
+61. Mengoperasikan/menggunakan peralatan teknis yang bukan tanggung jawabnya baik berada dilingkungan kerjanya maupun bukan berada di lingkup kerjanya tanpa seizin atasan, tanpa mengakibatkan accident dan tidak menimbulkan kerugian finansial.  <br><span lang="zh">未经上级许可，操作/使用不属于自己责任的技术设备，无论在工作环境内或工作环境外，均未造成事故，也未造成经济损失。</span>
+62. Meminjamkan atau mengkaryakan peralatan milik Perusahaan yang dipercayakan kepadanya tanpa mengakibatkan accident dan tidak menimbulkan kerugian finansial.  <br><span lang="zh">借出或使用委托给他的公司拥有的设备，不会造成事故且不会造成经济损失。</span>
+63. Tidak mengikuti safety-talk di area kerja masing-masing tanpa alasan yang dapat diterima.  <br><span lang="zh">无正理由，未参与各自工作区域的安全早会。</span>
+64. Tidak mengikuti Standar Prosedur Kerja dalam melaksanakan pekerjaannya, baik tanpa mengakibatkan accident dan tidak menimbulkan kerugian finansial maupun mengakibatkan accident yang masuk kategori ringan (kelas 3) berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">根据调查结果的结论，未按照标准工作程序进行工作，未造成事故、未造成经济损失，属于轻微3级事故。</span>
+65. Mencorat-coret, mengubah atau melakukan modifikasi pada Alat Pelindung Diri (APD) seperti helm, sepatu, dan lainnya yang menghilangkan fungsi Alat Pelindung Diri (APD) tersebut.  <br><span lang="zh">对个人防护用品（如头盔、鞋子和其他）进行涂写、更改或修改，造成消除功能。</span>
+66. Melakukan pekerjaan tidak menggunakan Alat Pelindung Diri (APD) yang ditetapkan    di lingkungan kerjanya, baik tanpa mengakibatkan accident maupun mengakibatkan accident yang masuk kategori ringan (kelas 3) berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">根据调查结果的结论，未佩戴工作环境规定的个人防护用品进行工作，无论未造成事故或造成事故属于轻微3级的事故。</span>
+67. Membuang limbah Non Bahan Berbahaya dan Beracun (Non B3) baik padat maupun cair pada lingkungan ataupun pada Fasilitas Pabrik secara sembarangan tanpa mengakibatkan accident berdasarkan hasil investigasi.  <br><span lang="zh">根据调查结果，在环境或工厂设施中扔掉无害和无毒（非 B3）固体和液体废物，不会造成事故。</span>
+68. Berjalan pada jalur yang bukan khusus pejalan kaki (Out Pedestrian) atau melintasi area yang dilarang/berbahaya.  <br><span lang="zh">在不适合行人的道路上走路（行人外）或穿越禁止/危险区域。</span>
+69. Merokok di area umum yang dilarang (bukan area berbahaya) yang ditandai dengan sign larangan merokok.  <br><span lang="zh">在标有禁止吸烟标志的公共区域（非危险区域）吸烟。</span>
+70. Melakukan pekerjaan     dengan     sambil     merokok     dan     atau     mengoperasikan handphone/tab/laptop, baik tanpa mengakibatkan accident maupun mengakibatkan accident yang masuk kategori ringan (kelas 3) berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">工作时吸烟和/或操作手机/平板电脑/笔记本电脑，但未造成事故或根据调查结果的结论，事故属于轻微类别（3 级）。</span>
+71. Memakai alat komunikasi selain yang diperintahkan oleh Perusahaan dalam menjalankan pekerjaannya, seperti telepon genggam/handphone, smart-phone, tab, mini laptop, dan sejenisnya yang dapat menimbulkan bahaya kecelakan kerja berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">在工作中使用公司订购以外的通讯设备，例如手机、智能手机、平板电脑、迷你笔记本电脑等，根据调查结果的结论，这些设备可能会造成工作事故的危险。</span>
+72. Melakukan tindakan tidak aman dan atau membiarkan kondisi tidak aman pada aktivitas pekerjaan, baik tanpa mengakibatkan accident maupun mengakibatkan accident yang masuk kategori ringan (kelas 3) berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">在工作活动中采取不安全的行为和/或允许不安全的情况，但未造成事故或根据调查结果的结论，事故属于轻微类别（3 级）。</span>
+
+73. Mengoperasikan alat/unit (mesin-mesin, kendaraan, dan lainnya) dengan kecepatan yang tidak sesuai peraturan yang berlaku dengan kelebihan kecepatan hingga 20% (dua puluh persen) hingga 50% (lima puluh persen) berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">以不符合适用法规的速度操作设备/单元（机器、车辆等），超速高达 20%（百分之二十）至 50%（百分之五十）。</span>
+74. Memasang sambungan atau peralatan listrik ke colokan/sirkuit listrik tanpa izin dari atasan yang berwenang, baik tanpa mengakibatkan accident maupun mengakibatkan accident yang masuk kategori ringan (kelas 3) berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">未经上级授权许可，将电气连接或设备安装到电气插头/电路中，或者没有造成事故，或者根据调查结果的结论，事故属于轻微类别（3 级）。</span>
+75. Tidak menjalankan Pemeriksaan dan Pengecekan Harian (P2H) unit dan atau tidak melaporkan ataupun menindaklanjuti laporan kerusakan unit, sehingga unit tetap digunakan dalam keadaan rusak baik tanpa mengakibatkan accident maupun mengakibatkan accident yang masuk kategori ringan (kelas 3) berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">不对设备进行日常检查和检查（P2H）和/或没有报告或跟进设备损坏报告，导致设备继续在损坏的条件下使用，或者没有造成事故，或者根据调查结果的结论，事故属于轻微类别（3 级）。</span>
+76. Melakukan pekerjaan dengan menggunakan peralatan/material/bahan yang tidak tepat, baik tanpa mengakibatkan accident maupun mengakibatkan accident yang masuk kategori ringan (kelas 3) berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">使用不适当的设备/材料/成分开展工作，无论是否造成事故，或者导致的事故根据调查结果的结论属于轻微类别（3 级）。</span>
+77. Melakukan pemuatan barang/bahan/material yang tidak tepat atau overload tidak sesuai prosedur, baik yang tidak mengakibatkan accident maupun mengakibatkan accident yang masuk kategori  ringan (kelas 3) berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">错误装载货物/材料/材料或超载不符合程序，无论是否造成事故，或者导致的事故根据调查结果的结论属于轻度（3 级）。</span>
+78. Menghilangkan/merusak Sistem Proteksi/Pengaman (Safety Equipment) pada suatu peralatan Produksi/Pabrik sehingga membuat sistem Proteksi pada peralatan itu terjadi kegagalan atau tidak berfungsi tanpa mengakibatkan accident berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">消除/损坏生产/工厂设备上的保护/安全设备（安全设备），以致该设备上的保护系统失效或发生故障，但未根据调查结果的结论造成事故。</span>
+79. Karyawan dilarang melakukan aktivitas menjual barang dan atau jasa dalam lingkungan perusahaan tanpa izin dari pimpinan perusahaan.  <br><span lang="zh">未经公司领导批准，禁止员工在公司内部从事销售商品和/或服务的活动。</span>
+80. Lalai dalam melakukan pekerjaan sehingga menyebabkan kecelakaan yang menyebabkan kerugian perusahaan kategori ringan (kelas 3) berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">疏忽工作导致事故，根据调查结论，造成公司损失，属于轻度类别（3 级）。</span>
+81. Menghilangkan dokumen perusahaan atas kelalaian pribadi.  <br><span lang="zh">因个人疏忽而销毁公司文件。</span>
+
+
+82. Mencoret-coret, mencabut, merusak dan/atau merobek pengumuman yang dikeluarkan atau ditempelkan oleh perusahaan.  <br><span lang="zh">涂改、移除、损坏和/或撕毁公司发布或张贴的公告。</span>
+83. Tidak menaati instruksi atau perintah yang layak dari atasan sehingga menimbulkan kerugian bagi Perusahaan.  <br><span lang="zh">不服从上级的适当指示或命令，给公司造成损失。</span>
+84. Tidak menaati instruksi atau perintah atasan yang bertujuan mencegah agar tidak terjadi kecelakaan namun belum sampai menimbulkan kerugian.  <br><span lang="zh">不服从上级为防止事故发生但未造成伤害而发出的指示或命令。</span>
+85. Tidur selama jam kerja, termasuk  di dalam tempat ibadah.  <br><span lang="zh">在工作时间睡觉，包括在礼拜场所。</span>
+86. Tidak cakap dalam menjalankan pekerjaan yang menjadi tugas dan tanggungjawabnya.  <br><span lang="zh">无法胜任其职责和责任的工作。</span>
+87. Melakukan kecurangan dalam tes-tes yang diselenggarakan oleh Perusahaan.  <br><span lang="zh">在公司组织的测试中作弊。</span>
+88. Bertindak sengaja menurunkan standar produksi dan atau kualitas tanpa alasan yang bisa diterima seperti misalnya bukan karena faktor kerusakan mekanis atau bahan baku yang tidak mencukupi sehingga menimbulkan kerugian ringan bagi Perusahaan.  <br><span lang="zh">故意降低生产和/或质量标准，且无正当理由，例如机械损坏或原材料不足，导致公司遭受轻微损失。</span>
+89. Mempergunakan peralatan milik Perusahaan untuk membuat atau memperbaiki barang milik pribadi.  <br><span lang="zh">使用公司拥有的设备制造或修理个人财产。</span>
+90. Tidak melaporkan kepada atasan atau ke petugas keamanan apabila terdapat potensi gangguan terhadap keamanan dan ketenteraman seperti potensi terjadinya bahaya kecelakaan, kebakaran, pencurian, penjarahan, perkelahian, keributan dan lainnya.  <br><span lang="zh">不向上级或安全官员报告可能扰乱安全和安宁的情况，例如可能发生的事故、火灾、盗窃、抢劫、打架、骚乱等。</span>
+91. Tidak melaporkan dengan segera informasi atau kondisi yang potensial bisa mengakibatkan terjadinya kerugian Perusahaan.  <br><span lang="zh">不立即报告潜在信息或情况可能给公司带来损失。</span>
+92. Masuk ke lingkungan perusahaan tanpa persetujuan setelah Karyawan dinyatakan oleh Dokter untuk tidak masuk kerja karena mengidap penyakit menular atau kondisi medis lainnya yang berbahaya bagi dirinya, sesama Karyawan dan lingkungan kerjanya.  <br><span lang="zh">未经医生批准进入公司场所，因为员工患有传染病或其他对其本人、同事和工作环境有危险的疾病。</span>
+93. Tidak melaporkan dengan segera kepada perusahaan apabila ada konflik kepentingan yang timbul berkaitan dengan tanggung jawab Karyawan terhadap pekerjaannya dengan kepentingan anggota keluarga atau kerabat ataupun orang dekat Karyawan lainnya.  <br><span lang="zh">如果员工的工作职责与家人或亲属或其他亲近人的利益发生利益冲突，未立即向公司报告。</span>
+94. Dengan sengaja atau lalai sehingga mengakibatkan dirinya dalam keadaan sedemikian rupa sehingga tidak dapat menjalankan pekerjaan yang diberikan kepadanya.  <br><span lang="zh">故意或过失导致自己处于无法完成分配给他的工作的状态。</span>
+95. Melakukan pekerjaan lifting/pengangkatan yang tidak benar ataupun tidak sesuai antara spesifikasi alat dengan beban yang diangkat yang mengakibatkan accident yang masuk kategori ringan (kelas 3)  berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">执行不正确或与所吊起的负载不匹配的设备规格的吊起工作，导致根据调查结论分类为轻度（3 级）的事故。</span>
+96. Salah dalam posisi tubuh saat bekerja atau tidak sesuai kaidah ergonomi yang  mengakibatkan accident yang masuk kategori ringan (kelas 3) berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">工作时身体姿势错误或不遵守人体工程学规则，导致根据调查结论分类为轻度（3 级）的事故。</span>
+97. Berikut adalah tindakan pelanggaran Surat Peringatan Pertama dan Terakhir (SPPT) :  <br><span lang="zh">以下行为违反第一批和最后警告信 (SPPT)：</span>
+98. Mangkir kerja 3 (tiga) hari atau 4 (empat) hari.  <br><span lang="zh">矿工为三天或四天。</span>
+99. Datang terlambat tanpa izin dari atasan langsung:  <br><span lang="zh">未经直属上级允许迟到：</span>
+100. 1 (satu) sampai dengan 5 (lima) menit sebanyak 5 (lima) kali dalam satu bulan kalender.  <br><span lang="zh">一到五分钟，一个日历月内五次。</span>
+101. Lebih dari 5 (lima) menit sampai dengan 1 (satu) jam sebanyak 4 (empat) kali dalam satu bulan kalender.  <br><span lang="zh">五分钟以上至一小时，一个日历月内四次。</span>
+102. Meninggalkan posisi kerja atau pulang awal sebanyak 3 (tiga) kali tanpa izin dari atasan.  <br><span lang="zh">未经上级允许擅自离开工作岗位或早退三次。</span>
+103. Hadir jam kerja normal tetapi lupa melakukan absensi finger print atau face print sebanyak 6 (enam) kali dalam satu bulan kalender tanpa alasan yang tidak dapat diterima.  <br><span lang="zh">正常工作时间上班，但一个月内六次忘记打指纹或刷脸考勤，且无不可抗力。</span>
+104. Tidak menaati penyesuaian jam kerja yang ditentukan oleh perusahaan.  <br><span lang="zh">不服从公司确定的工作时间调整。</span>
+105. Menolak perintah kerja lembur tanpa suatu alasan yang sah sesuai peraturan perundang-undangan yang berlaku yang dapat diterima dan dibenarkan oleh Perusahaan.  <br><span lang="zh">拒绝无正当理由的加班命令，且该等理由符合适用法律和法规，且公司可以接受并予以合理解释。</span>
+106. Menghilangkan dokumen atau data vital dan rahasia.  <br><span lang="zh">销毁重要机密文件或数据。</span>
+107. Membawa orang selain Karyawan untuk masuk ke dalam lingkungan perusahaan tanpa izin dari Pimpinan Perusahaan.  <br><span lang="zh">未经公司领导批准，将员工以外的人员带入公司环境。</span>
+108. Menolak untuk ditugaskan melakukan Perjalanan Dinas tanpa alasan yang dapat diterima.  <br><span lang="zh">拒绝无正当理由被指派出差。</span>
+109. Merubah atau memodifikasi Tanda Pengenal Karyawan sehingga tidak sesuai dengan standar yang telah ditetapkan oleh Perusahaan.  <br><span lang="zh">更改或修改员工身份证，使其不符合公司规定的标准。</span>
+110. Meminjamkan Tanda Pengenal Karyawan kepada orang lain apapun alasannya.  <br><span lang="zh">以任何理由将员工身份证借给他人。</span>
+111. Menggunakan Tanda Pengenal Karyawan milik Karyawan lain.  <br><span lang="zh">使用其他员工的员工身份证。</span>
+112. Meminjamkan seragam kerja ke orang lain yang bukan karyawan untuk digunakan masuk ke dalam lingkungan Perusahaan.  <br><span lang="zh">将工作服借给非员工在公司场所内使用。</span>
+113. Tidak melakukan tindak lanjut/perbaikan atas keluhan/komplain terkait tugas dan tanggungjawabnya dan telah ditegur oleh atasannya atau telah dikomplain oleh pelanggan (user/buyer) atau departemen lain sehingga tetap terjadi teguran/komplain yang berulang dan atau kelalaian tersebut menimbulkan kerugian berat bagi Perusahaan.  <br><span lang="zh">未跟进/修复与其职责相关的投诉/投诉，并受到上级训诫或受到客户（用户/买家）或其他部门投诉，以致屡次警告/投诉不断发生和/或该疏忽给公司造成严重损失。</span>
+114. Bertindak sengaja menurunkan standar produksi dan atau kualitas tanpa alasan yang bisa diterima seperti misalnya bukan karena faktor kerusakan mekanis atau bahan baku yang tidak mencukupi sehingga menimbulkan kerugian sedang bagi Perusahaan.  <br><span lang="zh">故意降低产量和/或质量标准，且无正当理由，如机械损坏或原材料不足，导致公司遭受中度损失。</span>
+115. Mengkaryakan peralatan milik Perusahaan yang dipercayakan kepadanya untuk menghasilkan keuntungan pribadi.  <br><span lang="zh">使用受托的公司设备牟取私利。</span>
+116. Menggunakan peralatan milik Perusahaan untuk melakukan tindakan-tindakan ilegal yang melawan hukum.  <br><span lang="zh">使用公司设备进行违法行为。</span>
+117. Menolak menjalani pelatihan yang diperintahkan oleh Perusahaan.  <br><span lang="zh">拒绝接受公司要求的培训。</span>
+118. Menolak atau tidak memberikan laporan pelatihan yang telah diikuti Karyawan atas perintah dan biaya Perusahaan.  <br><span lang="zh">拒绝或未能提供员工应公司要求参加并由公司承担费用的培训报告。</span>
+119. Menolak mutasi tanpa alasan yang dapat diterima.  <br><span lang="zh">无正当理由拒绝变更。</span>
+120. Menggunakan jabatan/wewenang untuk menutupi pelanggaran peraturan yang  dilakukannya atau dilakukan oleh bawahan dan teman, atau untuk melakukan kesewenang-wenangan terhadap karyawan lain dan bawahan.  <br><span lang="zh">利用职务/职权掩盖下属、朋友所犯或正在犯的违规行为，或辱骂其他员工和下属。</span>
+121. Bersikap tidak pantas seperti mengeluarkan kata-kata kotor, memaki, mengutuk, menghina, menggebrak meja, membanting barang, mengacungkan jari tengah dan tindakan tidak pantas lainnya yang diarahkan ke atasan, Karyawan lain atau tamu Perusahaan.  <br><span lang="zh">行为不当，如对上级、其他员工或公司客人说脏话、咒骂、辱骂、侮辱、拍桌子、摔东西、竖中指等不当行为。</span>
+122. Mengeluarkan pernyataan-pernyataan yang merugikan nama baik Perusahaan baik secara lisan, tulisan, gambar maupun video melalui seluruh platform media.  <br><span lang="zh">通过所有媒体平台发表有损公司声誉的言论，无论是口头、书面、图片还是视频。</span>
+123. Melakukan kegiatan politik selama jam kerja atau di dalam lingkungan Perusahaan, dan menggunakan kedudukannya untuk mempromosikan partai politik atau kepentingan politik.  <br><span lang="zh">在工作时间或公司内部从事政治活动，利用职务之便宣传政党或政治利益。</span>
+124. Melakukan kegiatan usaha sejenis yang dapat menimbulkan benturan kepentingan.  <br><span lang="zh">从事可能引起利益冲突的类似商业活动。</span>
+125. Tidak melaporkan kepada atasan ketika menemukan masalah yang tidak terduga atau menyembunyikan informasinya.  <br><span lang="zh">发现意外问题或隐瞒信息时不向上级报告。</span>
+126. Menganggu ketertiban kegiatan umum yang dilaksanakan oleh perusahaan atau departemen.  <br><span lang="zh">扰乱公司或部门开展公共活动秩序。</span>
+127. Ketidaktaatan kepada manajemen, dengan sengaja menunda pekerjaan atau memperlambat pekerjaan dan mempengaruhi operasi normal perusahaan, menyebabkan kerugian dan efek buruk pada perusahaan.  <br><span lang="zh">不服从管理，故意拖延工作或放慢工作进度，影响公司正常经营，给公司造成损失和不利影响。</span>
+128. Melakukan tindakan-tindakan yang berpotensi menimbulkan keonaran/keributan seperti menyebarkan desas-desus atau hoaks, menghasut atau memprovokasi Karyawan lain untuk melawan hukum atau Perusahaan.  <br><span lang="zh">进行可能引起麻烦/骚乱的行为，例如传播谣言或恶作剧，煽动或挑起其他员工违反法律或公司。</span>
+129. Menyebarluaskan atau mengunggah atau mempublikasikan gambar-gambar atau video-video tentang Perusahaan dan Kawasan IMIP tanpa seizin Pimpinan Perusahaan yang berakibat merugikan Perusahaan.  <br><span lang="zh">未经公司管理层许可，传播、上传或发布有关公司和 IMIP 区域的图片或视频，导致公司受到损害。</span>
+130. Membawa barang selundupan ke dalam lingkungan Perusahaan.  <br><span lang="zh">携带违禁物品进入公司场所。</span>
+131. Meminta atau mengumpulkan sumbangan dalam bentuk apapun di lingkungan Perusahaan tanpa seizin Pimpinan Perusahaan.  <br><span lang="zh">未经公司管理层许可，在公司内部以任何形式索要或收集捐款。</span>
+132. Menyelenggarakan/menghadiri pertemuan atau mengedarkan/menempelkan poster, plakat, surat edaran, selebaran, brosur atau sejenisnya yang tidak ada kaitannya dengan kepentingan Perusahaan di dalam lingkungan Perusahaan.  <br><span lang="zh">在公司内部组织/参加会议或分发/张贴与公司利益无关的海报、标语牌、通告、传单、小册子或类似物品。</span>
+133. Karyawan melakukan pemotretan udara dengan menggunakan drone atau alat sejenis lainnya di dalam lingkungan perusahaan tanpa seizin dari Pimpinan Perusahaan.  <br><span lang="zh">员工未经公司管理层许可，在公司环境中使用无人机或其他类似设备进行航拍。</span>
+134. Menyebarluaskan atau mengunggah atau mempublikasikan rekaman video/gambar atas kejadian kecelakaan kerja dan korban ke media sosial atau media lainnya tanpa seizin Pimpinan Perusahaan.  <br><span lang="zh">未经公司管理层许可，在社交媒体或其他媒体上传播、上传或发布工作事故和受害者的视频记录/图像。</span>
+135. Melakukan aksi pemogokan kerja yang tidak sah atau tidak melalui prosedur/tata cara peraturan sesuai dengan perundang-undangan yang berlaku sehingga mengganggu kegiatan produksi/operasional Perusahaan.  <br><span lang="zh">进行非法罢工或不遵守适用法律规定的监管程序/程序，从而扰乱公司的生产/经营活动。</span>
+
+
+136. Memperjualbelikan seragam kerja dan Alat Pelindung Diri (APD) yang diberikan oleh Perusahaan kepada pihak lain untuk menghasilkan keuntungan pribadi.  <br><span lang="zh">将公司提供的工作服和个人防护设备（PPE）交易给其他方，以获取个人利益。</span>
+137. Menghentikan atau menghambat proses kegiatan produksi/operasional Perusahaan ketika masih dalam proses kegiatan penyelesaian keluhan/pengaduan/saran sehingga merugikan Perusahaan.  <br><span lang="zh">在公司仍在解决投诉/投诉/建议的过程中，停止或妨碍公司的生产/运营活动，从而损害公司的利益。</span>
+138. Kedapatan menyimpan barang milik Perusahaan tanpa alasan yang sah.  <br><span lang="zh">被发现无正当理由存放公司财产。</span>
+139. Tidak mencapai target penjualan minimal dalam jangka waktu yang sudah disepakati.  <br><span lang="zh">未在约定的时间内完成最低销售目标。</span>
+140. Mengemudi kendaraan pribadi masuk ke dalam lingkungan perusahaan tanpa izin dari Perusahaan.  <br><span lang="zh">未经公司许可驾驶私家车进入公司场所。</span>
+141. Menginstruksikan dan atau mengizinkan Karyawan lain untuk mengemudikan unit kendaraan atau alat berat milik Perusahaan apabila Karyawan yang diinstruksikan dan atau diizinkan tidak memiliki Surat Izin Mengemudi Perusahaan (SIMPER) kecuali dalam kondisi darurat.  <br><span lang="zh">除非紧急情况，否则在被指示和/或允许的员工没有公司驾驶执照 (SIMPER) 的情况下，指示和/或允许其他员工驾驶属于公司的车辆或重型设备。</span>
+142. Mengemudikan alat/unit kendaraan milik Perusahaan tanpa memiliki Surat Izin Mengemudi (SIM) dan Surat Izin Mengemudi Perusahaan (SIMPER) dan tanpa wewenang untuk menjalankannya kecuali dalam kondisi darurat.  <br><span lang="zh">未持有驾驶执照 (SIM) 和公司驾驶执照 (SIMPER)，且无权（紧急情况除外）驾驶公司设备/车辆。</span>
+143. Mengendarai kendaraan dengan sambil bermain handphone/tab/laptop tanpa mengakibatkan accident.  <br><span lang="zh">驾驶车辆时玩手机/平板电脑/笔记本电脑，但未造成事故。</span>
+144. Menolak menggunakan alat-alat/perlengkapan Kesehatan dan Keselamatan Kerja sebagaimana mestinya dalam melaksanakan pekerjaannya.  <br><span lang="zh">拒绝在工作中适当使用职业健康安全工具/设备。</span>
+145. Dengan sengaja tidak melakukan tindakan pertolongan saat terjadi kecelakaan kerja meskipun kondisi area telah aman dan terkendali dari potensi bahaya lain di sekitarnya.  <br><span lang="zh">发生工伤事故时故意不采取救援行动，即使该区域安全且周围区域没有其他潜在危险。</span>
+146. Merokok (termasuk mengeluarkan rokok) di area yang berisiko terdapat kebakaran atau ledakan tanpa mengakibatkan accident.  <br><span lang="zh">在有火灾或爆炸风险的区域吸烟（包括取走香烟），但未造成事故。</span>
+147. Membuang limbah Bahan Berbahaya dan Beracun (B3) pada lingkungan ataupun pada Fasilitas Pabrik secara sembarangan tanpa mengakibatkan accident berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">根据调查结论，在环境或工厂设施中随意处置有害和有毒废物 (B3)，未造成事故。</span>
+148. Membuang limbah Non Bahan Berbahaya dan Beracun (Non B3) baik padat maupun cair  pada lingkungan ataupun pada Fasilitas Pabrik secara sembarangan yang mengakibatkan accident berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">在环境或工厂设施中随意处置无害和有毒废物（Non B3）（包括固体和液体），导致调查结论认定的事故。</span>
+149. Tidak mengikuti Standar Prosedur Kerja dalam melaksanakan pekerjaannya yang mengakibatkan accident yang masuk kategori sedang (kelas 2) atau berat (kelas 1) berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">未遵循标准工作程序开展工作，导致调查结论认定的事故为中度（2 级）或严重（1 级）。</span>
+150. Melakukan pekerjaan dengan sambil merokok dan atau mengoperasikan  handphone/tab/laptop yang mengakibatkan accident yang masuk kategori sedang (kelas 2) atau berat (kelas 1) berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">工作时吸烟和/或操作手机/平板电脑/笔记本电脑，导致调查结论认定的事故为中度（2 级）或严重（1 级）。</span>
+151. Melakukan pekerjaan tidak menggunakan Alat Pelindung Diri (APD) yang ditetapkan di lingkungan kerjanya, mengakibatkan accident yang masuk kategori sedang (kelas 2) atau berat (kelas 1) berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">未使用工作环境中规定的个人防护设备 (PPE) 开展工作，导致调查结论认定的事故为中度（2 级）或严重（1 级）。</span>
+152. Memfasilitasi atau mengikuti training alat/unit kendaraan secara ilegal di dalam lingkungan Perusahaan dan atau di luar lingkungan Perusahaan namun menggunakan nama dan fasilitas Perusahaan tanpa izin dari Pimpinan Perusahaan.  <br><span lang="zh">未经公司管理层许可，在公司内部和/或公司外部非法使用公司名称和设施协助或参与车辆设备/单元的培训。</span>
+153. Memberikan tumpangan dan atau menumpang kendaraan atau alat berat yang dilarang membawa penumpang kecuali dalam kondisi darurat.  <br><span lang="zh">提供升降机和/或登上除紧急情况外禁止载客的车辆或重型设备。</span>
+154. Mengoperasikan/menggunakan peralatan teknis yang memiliki risiko terjadinya accident tinggi yang bukan menjadi kewenangannya dan bukan berada di lingkup kerjanya tanpa seizin atasan mengakibatkan accident yang masuk kategori sedang (kelas 2) atau berat (kelas 1) berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">未经上级许可，操作/使用不属于其权限和工作范围的具有高事故风险的技术设备，导致根据调查结果的结论被归类为中度（2 级）或严重（1 级）的事故。</span>
+155. Menghilangkan/merusak Sistem Proteksi/Pengaman (Safety Equipment) pada suatu peralatan Produksi/Pabrik sehingga membuat sistem Proteksi pada peralatan itu terjadi kegagalan atau tidak berfungsi, yang mengakibatkan accident yang masuk kategori ringan (kelas 3) atau sedang (kelas 2) atau berat (kelas 1) berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">拆除/损坏生产/工厂设备上的保护/安全设备（安全设备），导致该设备上的保护系统失效或不起作用，导致事故属于轻度（3 级）或中度（2 级）或重度（1 级）类别，根据调查结果的结论。</span>
+156. Tidak mengikuti Standar Prosedur Kerja dalam melaksanakan pekerjaannya, mengakibatkan accident yang masuk kategori sedang (kelas 2) atau berat (kelas 1) berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">不遵守标准工作程序开展工作，导致根据调查结果结论被归类为中度（2 级）或严重（1 级）事故。</span>
+
+157. Melakukan tindakan tidak aman dan atau membiarkan kondisi tidak aman pada aktivitas pekerjaan yang mengakibatkan kerugian financial atau accident yang masuk kategori sedang (kelas 2) atau berat (kelas 1) berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">在工作活动中采取不安全行为和/或允许不安全条件，导致经济损失或事故，根据调查结果的结论，事故被归类为中等（2 级）或严重（1 级）。</span>
+158. Mengoperasikan alat/unit (mesin-mesin, kendaraan, dan lainnya) dengan kecepatan yang tidak sesuai peraturan yang berlaku dengan kelebihan kecepatan lebih dari 50% (lima puluh persen) berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">根据调查结果的结论，以不符合适用法规的速度操作设备/单元（机器、车辆等），超速超过 50%（百分之五十）。</span>
+159. Tidak menjalankan/melaporkan Pemeriksaan dan Pengecekan Harian (P2H) unit dan atau tidak menindaklanjuti laporan yang diterima terkait kerusakan unit sehingga unit tetap digunakan dalam keadaan rusak yang mengakibatkan accident yang masuk kategori sedang (kelas 2) atau berat (kelas 1) berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">不执行/报告单元的日常检查和检查（P2H）和/或不跟进收到的有关单元损坏的报告，使单元继续在损坏的条件下使用，导致事故，根据调查结果的结论，事故被归类为中等（2 级）或严重（1 级）。</span>
+160. Memaksakan menggunakan unit dan peralatan yang telah dilaporkan rusak yang mengakibatkan accident berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">强制使用已报告损坏的单元和设备，导致事故，根据调查结果的结论。</span>
+161. Melakukan pekerjaan dengan menggunakan peralatan/material/bahan yang tidak tepat yang mengakibatkan accident yang masuk kategori sedang (kelas 2) atau berat (kelas 1) berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">使用不适当的设备/材料/配料进行工作，导致根据调查结果的结论分类为中等（2 级）或严重（1 级）的事故。</span>
+162. Melakukan pemuatan barang/bahan/material yang tidak tepat atau overload tidak sesuai prosedur yang mengakibatkan accident yang masuk kategori sedang (kelas 2) atau berat (kelas 1) berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">不适当装载货物/材料或不按程序超载，导致根据调查结果的结论分类为中等（2 级）或重型（1 级）的事故。</span>
+163. Melakukan pekerjaan lifting/pengangkatan yang tidak benar ataupun tidak sesuai antara spesifikasi alat dengan beban yang diangkat yang mengakibatkan accident yang masuk kategori sedang (kelas 2) atau berat (kelas 1) berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">执行不正确或与设备规格不匹配的起重工作，起重负载导致根据调查结果的结论分类为中等（2 级）或重型（1 级）的事故。</span>
+164. Salah dalam posisi tubuh saat bekerja atau tidak sesuai kaidah ergonomi yang  mengakibatkan accident yang masuk kategori sedang (kelas 2) atau berat (kelas 1) berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">工作时身体姿势错误或不遵守人体工程学规则，导致根据调查结果的结论分类为中等（2 级）或严重（1 级）的事故。</span>
+165. Memasang sambungan atau peralatan listrik ke colokan/sirkuit listrik tanpa izin atasan  yang berwenang yang mengakibatkan accident yang masuk kategori sedang (kelas 2) atau berat (kelas 1) berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">未经授权上级许可，将电气连接或设备安装到电气插头/电路中，导致事故，根据调查结果的结论，事故被归类为中度（2 级）或严重（1 级）。</span>
+166. Lalai dalam melakukan pekerjaan sehingga menyebabkan kecelakaan yang menyebabkan kerugian perusahaan kategori sedang (kelas 2) atau berat (kelas 1) berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">疏忽工作，导致事故，根据调查结论，造成中度（2 级）或重度（1 级）公司损失。</span>
+  <br><a id="pasal-41-pemutusan-hubungan-kerja-dan-alasannya"></a>
+## Pasal 41. Pemutusan Hubungan Kerja dan alasannya
+<a id="第四十一条-终止雇佣合约及原因"></a>
+## 第四十一条 终止雇佣合约及原因
+1. Dalam masa berlakunya Surat Peringatan Ketiga (SP 3) atau Surat Peringatan Pertama dan Terakhir (SPPT) karyawan yang mendapatkan sanksi Surat Peringatan Pertama (SP 1) atau Surat Peringatan Pertama dan Terakhir (SPPT) dapat di putus hubungan kerjanya.  <br><span lang="zh">在第三次警告信 (Surat Peringatan SP-3) 或第一次和最后一次警告信 (SPPT) 有效期内，受到第一次警告信 (Surat Peringatan SP-1) 或第一次和最后一次警告信 (SPPT) 处罚的员工，劳动关系可能被终止。</span>
+2. Karyawan yang mangkir kerja selama 5 (lima) hari kerja atau lebih secara berturut turut dan telah dilakukan pemanggilan sebanyak 2 (dua) kali secara patut dapat diputus hubungan kerjanya sesuai peraturan perundang-undangan yang berlaku.  <br><span lang="zh">连续矿工为5（五）个工作日以上，并被适当传唤 2（两次）次的员工，可根据适用法律法规终止劳动关系。</span>
+3. Karyawan yang melakukan tindakan-tindakan berikut dapat diputus hubungan kerjanya karena alasan mendesak :  <br><span lang="zh">员工有以下行为的，可因紧急原因被终止劳动关系：</span>
+4. Melakukan penipuan, pencurian, atau penggelapan barang dan/atau uang milik Perusahaan, termasuk tidak terbatas pada:  <br><span lang="zh">诈骗、盗窃或侵吞公司财产和/或资金，包括但不限于：</span>
+5. Membawa senjata api, senjata tajam atau barang-barang yang membahayakan ke dalam lingkungan Perusahaan kecuali sebagai alat kerja dan atas seizin Pimpinan Perusahaan.  <br><span lang="zh">携带枪支、利器或危险物品进入公司场所，但作为工作工具并经公司管理层许可的除外。</span>
+6. Menggunakan nama Perusahaan untuk melakukan tindak kejahatan penipuan.  <br><span lang="zh">冒用公司名义实施诈骗犯罪。</span>
+7. Meminjamkan atau menggunakan legalitas atau identitas orang lain untuk bekerja atau melakukan aktivitas pekerjaan di dalam Perusahaan.  <br><span lang="zh">借用或利用他人的合法性或身份在公司内工作或开展工作活动。</span>
+8. Masuk kerja ke perusahaan dengan cara memalsukan kualifikasi akademik, pengalaman, atau dengan metode lain yang tidak benar.  <br><span lang="zh">通过伪造学历、经验或其他不正当手段进入公司工作。</span>
+9. Memalsukan tanda tangan orang lain, yang apabila berdampak sangat serius  terhadap Perusahaan maka bisa dilaporkan ke ranah hukum.  <br><span lang="zh">伪造他人签名，如果对公司造成非常严重的影响，可向法律界报告。</span>
+10. Mengambil barang/uang tanpa hak atau tanpa seizin pemiliknya.  <br><span lang="zh">未经所有者许可或未经权利人许可而拿走货物/资金。</span>
+11. Membawa barang/aset yang berasal dari dalam Perusahaan tanpa adanya izin  tertulis dari Pimpinan Perusahaan.  <br><span lang="zh">未经公司管理层书面许可，将源自公司内部的货物/资产带入公司。</span>
+12. Memindahkan barang milik Perusahaan dari tempatnya dengan niat untuk dimiliki sendiri atau untuk dimiliki oleh orang lain.  <br><span lang="zh">将公司财产从公司场所移走，意图占有或归他人所有。</span>
+13. Mencuri dan atau menjarah/merambah barang/aset milik Perusahaan.  <br><span lang="zh">偷窃和/或抢劫/侵占属于公司的货物/资产。</span>
+14. Melakukan korupsi harta benda milik Perusahaan.  <br><span lang="zh">损坏公司财产。</span>
+15. Menduplikat dan memperbanyak program komputer milik Perusahaan untuk kepentingan diri sendiri atau pihak lain di luar Perusahaan.  <br><span lang="zh">为自己或公司外其他方复制和重制属于公司的计算机程序。</span>
+16. Menerima sejumlah uang dan atau lainnya dari orang lain dengan menjanjikan kepada mereka peluang diterima bekerja di perusahaan-perusahaan yang ada di dalam lingkungan perusahaan.  <br><span lang="zh">通过承诺在公司环境中的公司工作机会而从他人那里收受金钱或其他东西。</span>
+17. Terlibat dalam setiap kegiatan yang bersaing dengan usaha Perusahaan atau yang merugikan kepentingan Perusahaan.  <br><span lang="zh">从事任何与公司业务竞争或有损公司利益的活动。</span>
+18. Memberikan kemudahan kepada pemasok/supplier, kontraktor atau pihak luar  lainnya yang karena kemudahan tersebut dapat menyebabkan kerugian pada Perusahaan.  <br><span lang="zh">为供应商、承包商或其他外部方提供便利，而这些便利可能给公司造成损失。</span>
+19. Meminta atau menerima hadiah komisi atau kupon dalam bentuk apapun atas setiap jenis jasa ataupun kegiatan yang diberikan atau diterima kepada dan oleh pihak manapun sehubungan dengan kegiatan usaha Perusahaan.  <br><span lang="zh">以任何形式索取或接受佣金、礼品或优惠券，以换取任何一方在公司业务活动中提供或接受的任何类型的服务或活动。</span>
+20. Menerima pemberian imbalan jasa dari siapapun sehingga secara langsung maupun tidak langsung merugikan Perusahaan.  <br><span lang="zh">接受任何人的服务报酬，直接或间接损害公司利益。</span>
+21. Menyalahgunakan hak, jabatan dan fasilitas yang diberikan Perusahaan untuk kepentingan dan keuntungan pribadi ataupun pihak ketiga lainnya di luar ketentuan yang berlaku dan dapat merugikan Perusahaan secara langsung maupun tidak langsung.  <br><span lang="zh">滥用公司提供的权利、职位和设施，谋取个人或其他第三方的利益和利润，超出适用条款，并可能直接或间接损害公司利益。</span>
+22. Bekerja untuk dan/atau pada perusahaan lain, baik sebagai tenaga kerja harian, karyawan kontrak, karyawan tetap maupun konsultan.  <br><span lang="zh">为其他公司工作或在其他公司工作，无论是作为日工、合同工、长期员工或顾问。</span>
+23. Bekerja pada pihak lain atau mempunyai usaha sendiri yang dapat mengganggu pelaksanaan tugasnya di Perusahaan.  <br><span lang="zh">为另一方工作或经营自己的业务，这可能会妨碍您在公司履行职责。</span>
+
+24. Memberikan konsultasi atau pelatihan di bidang bisnis dan manajemen kepada pihak lain yang merupakan kompetensi dan atau rahasia Perusahaan tanpa seizin atasan; dan  <br><span lang="zh">未经上级许可，向其他方提供业务和管理领域的咨询或培训，这属于公司的职权范围和/或机密；以及</span>
+25. Melakukan atau membantu dalam kegiatan usaha pribadi dalam lingkungan Perusahaan yang dapat menimbulkan konflik kepentingan.  <br><span lang="zh">在公司内开展或协助可能引起利益冲突的个人商业活动。</span>
+26. Memberikan keterangan palsu atau dipalsukan sehingga merugikan perusahaan, termasuk tidak terbatas pada:  <br><span lang="zh">提供虚假信息或伪造信息，损害公司的利益，包括但不限于：</span>
+27. Memalsukan dokumen pribadi atau dengan cara lain yang tidak dibenarkan untuk masuk kerja ke Perusahaan, baik pemalsuan Ijazah, Identitas Diri, Sertifikat, Surat Izin Mengemudi, Surat Pengalaman Kerja, Isi Pengalaman Kerja yang tidak benar, dan lainnya.  <br><span lang="zh">伪造个人文件或使用其他不允许进入公司工作的方法，包括伪造文凭、个人身份证明、证书、驾驶执照、工作经验证明、不正确的工作经验内容等。</span>
+28. Memanipulasi Laporan Perjalanan Dinas.  <br><span lang="zh">篡改商务旅行报告。</span>
+29. Menuliskan dan/atau mengisikan daftar hadir orang lain atau daftar hadirnya diisikan/dituliskan oleh orang lain dengan sepengetahuannya, baik secara manual maupun dengan menggunakan mesin absensi.  <br><span lang="zh">编写和/或填写他人的出勤名单，或让其他人在知情的情况下填写/编写他们的出勤名单，无论是手动还是使用考勤机。</span>
+30. Memalsukan Surat Keterangan Sakit (SKS).  <br><span lang="zh">伪造疾病证明（SKS）。</span>
+31. Memberikan atau membuat keterangan/laporan/pengakuan palsu untuk tujuan apapun termasuk untuk tujuan menutupi kesalahan atasan atau departemen sehingga berakibat pengaruh buruk terhadap Perusahaan.  <br><span lang="zh">出于任何目的提供或制造虚假信息/报告/供词，包括掩盖上级或部门的错误，从而对公司造成负面影响。</span>
+32. Memfitnah, menghasut, dan menyebarkan rumor yang merugikan Perusahaan.  <br><span lang="zh">诽谤、煽动、散布不利于公司的谣言。</span>
+33. Menyebarluaskan informasi negatif yang berisi tuduhan, fitnah, berita palsu desas-desus/rumor (hoaks) atau bernuansa SARA ke dalam media sosial dan lainnya sehingga berakibat pengaruh buruk terhadap Perusahaan; dan  <br><span lang="zh">在社交媒体和其他媒体上传播包含指控、诽谤、虚假新闻、谣言（恶作剧）或种族歧视的负面信息，从而对公司造成负面影响；以及</span>
+34. Melakukan tindak kebohongan yang menyebabkan Perusahaan atau pihak ketiga menderita kerugian.  <br><span lang="zh">实施说谎行为，导致公司或第三方遭受损失。</span>
+
+35. Membawa, menyimpan, memakai dan/atau mengedarkan narkotika, psikotropika, dan zat adiktif lainnya di lingkungan Perusahaan.  <br><span lang="zh">在公司内携带、储存、使用和/或分发麻醉品、精神药物和其他成瘾物质。</span>
+36. Mabuk atau meminum minuman keras di area kerja, termasuk tidak terbatas pada:  <br><span lang="zh">在工作区域醉酒或饮酒，包括但不限于：</span>
+37. Masuk ke dalam area kerja dalam keadaan mabuk dan atau dalam kondisi lainnya yang membahayakan; dan  <br><span lang="zh">醉酒和/或处于其他危险情况下进入工作区域；和</span>
+38. Bekerja di bawah pengaruh alkohol dan atau obat terlarang.  <br><span lang="zh">在酒精和/或非法药物的影响下工作。</span>
+39. Melakukan perbuatan asusila atau perjudian, termasuk tidak terbatas pada:  <br><span lang="zh">实施不道德行为或赌博，包括但不限于：</span>
+40. Melakukan pelecehan seksual dalam segala bentuknya; dan  <br><span lang="zh">实施一切形式的性骚扰；和</span>
+41. Melakukan segala macam bentuk perjudian termasuk melakukan aktivitas perjudian online di waktu dan lokasi kerja serta di lingkungan Perusahaan.  <br><span lang="zh">进行各种赌博活动，包括在工作时间、地点以及公司环境内进行网上赌博活动。</span>
+42. Menyerang, menganiaya, mengancam, atau mengintimidasi teman sekerja atau pengusaha dilingkungan perusahaan, termasuk tidak terbatas pada :  <br><span lang="zh">攻击、辱骂、威胁或恐吓公司内的同事或雇主，包括但不限于：</span>  <br><span lang="zh">Berbuat onar. 制造麻烦/烦恼。</span>  <br><span lang="zh">Memukul rekan kerja. 打架同事。</span>
+43. Melakukan pemerasan terhadap teman kerja atau Perusahaan atau pihak-pihak lain yang menjadi rekanan Perusahaan.  <br><span lang="zh">勒索同事/公司/企业合作伙伴的其他方。</span>
+44. Membujuk teman sekerja atau orang lain untuk melakukan perbuatan yang bertentangan dengan peraturan perundang-undangan, termasuk tidak terbatas pada:  <br><span lang="zh">诱导同事或其他人做出违反法定规定的行为，包括但不限于：</span>
+45. Menghasut teman sekerja atau atasan/pihak manajemen  untuk melakukan tindakan-tindakan yang merugikan Perusahaan.  <br><span lang="zh">煽动同事或上级/管理层采取不利于公司的行为。</span>
+46. Menghasut dan atau memprovokasi Karyawan lain atau atasan/pihak manajemen untuk melawan hukum dan atau Perusahaan; dan  <br><span lang="zh">煽动和/或挑衅其他员工或上级/管理层违反法律和/或公司；和</span>
+47. Menghasut tindakan mogok kerja secara ilegal yakni mogok kerja yang tidak sesuai dengan persyaratan sebagaimana yang diatur dalam peraturan perundang-undangan yang berlaku.  <br><span lang="zh">煽动非法罢工，即不符合法律、法规规定要求的罢工。</span>
+48. Kekerasan Seksual di tempat kerja, termasuk tidak terbatas pada:  <br><span lang="zh">工作场所的性暴力，包括但不限于：</span>
+49. Melakukan pelecehan psikologis atau emosional seperti pemintaan, atau ajakan rayuan yang berulang-ulang dan tidak diinginkan, atau ajakan kencan yang tidak diharapkan, atau penghinaan atau celaan yang bersifat seksual;  <br><span lang="zh">实施心理或情感虐待，例如反复进行不受欢迎的引诱或挑逗、不受欢迎的约会、或带有性性质的侮辱或侮辱；</span>
+50. Melakukan pelecehan seksual fisik, seperti perbuatan seksual secara fisik  yang  ditujukan  terhadap  tubuh, atau keinginan  seksual, dan/atau  organ  reproduksi  dengan  maksud  merendahkan harkat dan martabat karyawan berdasarkan   seksualitas, antara lain mencium, atau menepuk, atau mencubit, atau menempelkan tubuh penuh nafsu.  <br><span lang="zh">实施身体性骚扰，例如针对身体、性欲和/或生殖器官的身体性行为，意图基于性行为贬低员工的尊严，包括亲吻、拍打、捏捏或热情地触摸身体。</span>
+51. Melakukan perekaman dan/atau mengambil gambar atau tangkapan layar yang bermuatan seksual di  luar kehendak  atau tanpa persetujuan  karyawan yang menjadi objek perekaman atau gambar atau tangkapan layar;  <br><span lang="zh">录制拍摄、拍照或屏幕截图对象员工的意愿或未经其同意，拍摄和/或拍照带有性指控的图像或屏幕截图；</span>
+52. Mentransmisikan informasi elektronik dan/atau dokumen elektronik yang bermuatan  seksual di luar kehendak penerima yang ditujukan terhadap keinginan seksual;  <br><span lang="zh">以性欲为目的，违背接收者意愿传输含有色情内容的电子信息和/或电子文档；</span>
+53. Dengan ceroboh atau sengaja merusak atau membiarkan dalam keadaan bahaya barang milik perusahaan yang menimbulkan kerugian bagi perusahaan termasuk tidak terbatas pada:  <br><span lang="zh">粗心或故意损坏或危害公司财产造成损失，包括但不限于：</span>
+54. Dengan ceroboh atau sengaja membiarkan teman sekerja atau pengusaha dalam keadaan bahaya di tempat kerja.  <br><span lang="zh">粗心或故意让同事或雇主在工作中处于危险情况。</span>
+55. Merokok di area yang berpotensi terjadinya kebakaran atau ledakan yang mengakibatkan accident.  <br><span lang="zh">在可能发生火灾或爆炸而导致事故的区域吸烟。</span>
+56. Dengan sengaja membuat atau menyalakan api di tempat yang ada tanda larangan menyalakan api berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">根据调查结论，故意在设有禁止生火标志的场所生火、带火。</span>
+57. Melakukan pekerjaan dengan sambil merokok dan atau mengoperasikan handphone/tab/laptop dan bercanda yang mengakibatkan accident yang masuk kategori fatality berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">根据调查结论，在工作过程中吸烟或同时操作手机/平板电脑/笔记本电脑，并开玩笑，导致事故属于致命类别。</span>
+58. Tidak mengikuti Standar Prosedur Kerja dalam melaksanakan pekerjaannya yang mengakibatkan accident yang masuk kategori fatality berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">根据调查结论，未遵守工作标准操作程序执行工作，导致事故属于致命类别。</span>
+59. Melakukan pekerjaan tidak mengunakan Alat Pelindung Diri (APD) yang ditetapkan di lingkungan kerjanya yang mengakibatkan accident yang masuk  kategori fatality berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">根据调查结论，在工作环境中未使用规定的个人防护装备（PPE），导致事故属于致命类别。</span>
+60. Memasang sambungan atau peralatan listrik ke colokan/sirkuit listrik tanpa izin atasan yang berwenang yang mengakibatkan accident yang masuk kategori fatality berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">根据调查结论，未经授权向插座/电路安装电气连接或设备，导致事故属于致命类别。</span>
+61. Memakai kendaraan pribadi dalam lingkungan perusahaan tanpa ada Legalitas (SIM dan SIMPER) yang mengakibatkan accident yang masuk kategori fatality berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">根据调查结论，在公司环境内使用私人车辆而未持有合法证件（驾驶证和公司驾驶证），导致事故属于致命类别。</span>
+62. Mengemudikan alat/unit kendaraan milik Perusahaan tanpa memiliki Surat Izin Mengemudi (SIM) dan Surat Izin Mengemudi Perusahaan (SIMPER) dan tanpa wewenang menjalankannya yang mengakibatkan accident yang masuk kategori fatality berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">根据调查结论，未持有公司车辆驾驶证和公司驾驶证，未经授权操作公司设备或车辆，导致事故属于致命类别。</span>
+63. Memfasilitasi atau mengikuti training alat/unit kendaraan secara ilegal di dalam lingkungan perusahaan dan atau di luar lingkungan perusahaan namun menggunakan nama dan fasilitas perusahaan tanpa izin dari Pimpinan Perusahaan yang mengakibatkan accident yang masuk kategori fatality berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">根据调查结论，未经公司领导批准，在公司内外非法使用公司名义和设施进行设备/车辆培训，导致事故属于致命类别。</span>
+64. Menghilangkan/merusak Sistem Proteksi/Pengaman (Safety Equipment) pada suatu peralatan Produksi/Pabrik sehingga membuat sistem Proteksi pada peralatan itu terjadi kegagalan atau tidak berfungsi yang mengakibatkan accident yang masuk kategori fatality berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">根据调查结论，移除/损坏生产/工厂设备的保护/安全系统，导致该设备保护系统失效或不起作用，导致事故属于致命类别。</span>
+65. Melakukan tindakan tidak aman dan atau membiarkan kondisi tidak aman pada aktivitas pekerjaan yang mengakibatkan kerugian perusahaan/accident yang masuk kategori fatality berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">根据调查结论，进行不安全行为或容忍工作活动中的不安全条件，导致公司损失/属于致命类别的事故。</span>
+66. Mengoperasikan alat/unit (mesin-mesin, kendaraan, dan lainnya) dengan kecepatan yang tidak sesuai peraturan yang berlaku dengan kelebihan kecepatan yang mengakibatkan accident yang masuk kategori fatality berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">根据调查结论，以违反规定的速度操作/使用设备/车辆（如机器、车辆等），导致事故属于致命类别。</span>
+67. Tidak menjalankan/melaporkan Pemeriksaan dan Pengecekan Harian (P2H) unit dan atau tidak menindaklanjuti laporan yang diterima terkait kerusakan unit sehingga unit tetap digunakan dalam keadaan rusak yang mengakibatkan accident yang masuk kategori fatality berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">根据调查结论，未执行/报告每日设备检查和评估（P2H），或未跟进有关设备损坏的报告，致使设备继续处于损坏状态并导致事故属于致命类别。</span>
+68. Memaksakan menggunakan unit dan peralatan yang telah dilaporkan rusak yang mengakibatkan accident yang masuk kategori fatality berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">根据调查结论，强行使用已报告损坏的设备和工具，导致事故属于致命类别。</span>
+69. Penggunaan peralatan yang tidak tepat/salah yang mengakibatkan accident yang masuk kategori fatality berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">根据调查结论，使用不正确/错误的设备，导致事故属于致命类别。</span>
+70. Melakukan pekerjaan dengan menggunakan peralatan/material/bahan yang tidak tepat yang mengakibatkan accident yang masuk kategori fatality berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">根据调查结论，使用不适当的设备/材料/物品，导致事故属于致命类别。</span>
+71. Melakukan pemuatan barang/bahan/material yang tidak tepat atau overload tidak sesuai prosedur yang mengakibatkan accident yang masuk kategori fatality berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">根据调查结论，进行不当的货物/材料装载或超载，违反程序，导致事故属于致命类别。</span>
+72. Mengoperasikan/menggunakan peralatan teknis yang memiliki risiko terjadinya accident yang tinggi yang bukan menjadi kewenangannya dan bukan berada di lingkup kerjanya tanpa seizin atasan yang mengakibatkan accident yang masuk kategori fatality berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">根据调查结论，在未经授权的情况下操作其职权范围之外、技术风险高的技术设备，导致事故属于致命类别。</span>
+73. Melakukan pekerjaan lifting/pengangkatan yang tidak benar ataupun tidak sesuai antara spesifikasi alat dengan beban yang diangkat yang mengakibatkan accident yang masuk kategori fatality berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">根据调查结论，进行不正确或未按照设备规格与负载相匹配的提升工作，导致事故属于致命类别。</span>
+74. Salah dalam posisi tubuh saat bekerja atau tidak sesuai kaidah ergonomi yang mengakibatkan accident yang masuk kategori fatality berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">根据调查结论，在工作时身体姿势不正确或未符合人体工程学原则，导致事故属于致命类别。</span>
+75. Lalai dalam melakukan perkerjaan sehingga menyebabkan kecelakaan yang menyebabkan kerugian perusahaan yang masuk kategori fatality berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">根据调查结论，在工作中疏忽大意，导致属于致命类别的事故并造成公司损失。</span>
+76. Membuang limbah Bahan Berbahaya dan Beracun (B3) pada lingkungan ataupun pada Fasilitas Pabrik secara sembarangan yang mengakibatkan accident berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">根据调查结论，在公司环境或工厂设施中随意丢弃有害和有毒废物（B3类物质），导致事故。</span>
+77. Membuang limbah Non Bahan Berbahaya dan Beracun (Non B3) baik padat maupun cair pada lingkungan ataupun pada Fasilitas Pabrik secara sembarangan yang mengakibatkan accident yang masuk kategori fatality berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">根据调查结论，在公司环境或工厂设施中随意丢弃非有害和非有毒（非B3类）固体或液体废物，导致事故属于致命类别。</span>
+78. Bertindak sengaja menurunkan standar produksi dan atau kualitas tanpa alasan yang bisa diterima seperti misalnya bukan karena faktor kerusakan mekanis atau bahan baku yang tidak mencukupi sehingga menimbulkan kerugian berat (kelas 1) bagi Perusahaan.  <br><span lang="zh">故意降低生产标准和/或质量而没有合理理由，例如非由于机械故障或原材料不足等因素，导致公司严重损失（一级损失）。</span>
+79. Membongkar atau membocorkan rahasia perusahaan yang seharusnya dirahasiakan kecuali untuk kepentingan negara atau menyebarkan dan/atau menjual informasi rahasia dan/atau hak paten ke pihak luar Perusahaan.  <br><span lang="zh">拆卸或泄露公司应保密的机密信息，除非出于国家利益，或传播/出售机密信息和/或专利权给外部公司。</span>
+80. Tidak menaati instruksi atau perintah yang layak dari atasan sehingga menimbulkan kerugian berat bagi Perusahaan.  <br><span lang="zh">不遵守合理的上级指令或命令，导致公司严重损失。</span>
+81. Dengan sengaja menunda pekerjaan atau memperlambat pekerjaan dan mempengaruhi kelancaran operasional perusahaan sehingga menimbulkan  kerugian berat bagi  perusahaan.  <br><span lang="zh">故意延迟或减缓工作进度，并影响公司运营顺畅，导致公司严重损失。</span>
+82. Melakukan perbuatan lain di lingkungan perusahaan yang diancam pidana.  <br><span lang="zh">在公司环境内进行其他可能构成刑事犯罪的行为。</span>
+83. Pelanggaran sebagaimana dimaksud di atas harus didukung dengan terpenuhinya salah satu bukti sebagai berikut:  <br><span lang="zh">以上所述的违规行为必须由以下任一证据支持：</span>
+84. Karyawan tertangkap tangan;  <br><span lang="zh">被当场抓获的员工；</span>
+85. Ada pengakuan dari Karyawan; dan atau  <br><span lang="zh">员工的承认；和/或</span>
+86. Bukti lain berupa laporan kejadian yang dibuat oleh pihak yang berwenang di  <br>Perusahaan dan didukung oleh sekurang-kurangnya 2 (dua) bukti dan terpenuhinya unsur-unsur pelanggaran.  <br><span lang="zh">公司授权人员制作的事件报告，并且至少有两份证据支持，并满足违规行为的要素。</span>
+  <br><a id="pasal-42-ganti-rugi"></a>
+### Pasal 42. Ganti Rugi
+<a id="第四十二条-赔偿"></a>
+### 第四十二条 赔偿
+
+1. Sanksi ganti rugi  dikenakan kepada Karyawan karena kesengajaan atau kelalaian Karyawan sehingga melanggar peraturan-peraturan yang telah ditetapkan Perusahaan.  <br><span lang="zh">因员工故意或过失违反公司规定而给予员工赔偿处分。</span>
+2. Perbuatan sengaja atau lalai yang dilakukan Karyawan sehingga menyebabkan kerusakan barang atau kerugian lainnya baik milik Perusahaan maupun milik pihak ketiga dikenai sanksi ganti rugi sesuai dengan peraturan yang berlaku berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">根据调查结果，由于员工故意或过失造成物品损坏或其他损失，无论是公司还是第三方的物品，公司可根据现行的规定要求员工进行赔偿。</span>
+3. Karyawan yang melakukan pembayaran ganti rugi secara angsuran, maka Perusahaan memastikan untuk membayarkan upah pokok + tunjangan tetap karyawan setiap bulannya diatas 50% (lima puluh persen) atau di atasnya.  <br><span lang="zh">对于分期支付赔偿的员工，公司保证支付员工每月基本工资+固定津贴50%（百分之五十）以上。</span>
+4. Karyawan menanggung seluruh kerugian yang ditimbulkannya apabila disebabkan oleh kesengajaan.  <br><span lang="zh">若所造成的损失是有意/故意的，员工承担所有损失金额。</span>
+5. Perhitungan ganti rugi untuk kerugian alat/unit kendaraan akibat kelalaian yang ditanggung Karyawan adalah sebagai berikut:  <br><span lang="zh">员工因疏忽所承担的设备/车辆损失的赔偿计算如下:</span>
+6. Unit kendaraan ringan, bus, truk 6 roda dan kendaraan lainya yang sejenis  sebesar 50% (lima puluh persen) dari total nilai kerugian.  <br><span lang="zh">轻型汽车和六轮卡车及其他类似车辆，承担总损失值的 50％（百分之五十）。</span>
+7. Unit Dump-Truck, Mobile-Trailler, Loader, Excavator , Grader, Bomb Truck, Forklift, Mixer, Dozer, Compact, Hoist Crane dan kendaraan lainya yang sejenis sebesar 40% (empat puluh persen) dari total nilai kerugian.  <br><span lang="zh">后八轮、平板车、铲车、挖掘机、平地机、Bomb Truck、叉车、搅拌机、推土机、Compact、单梁行车承担总损失值的  40％（百分之四十）。</span>
+8. Crane dan Mobile Crane , HD dan kendaraan lainya yang sejenis sebesar 30% (tiga puluh persen) dari total nilai kerugian.  <br><span lang="zh">起重机和吊车、HD及其他类似车辆承担总损失值的 30％（百分之三十)。</span>
+9. Perhitungan ganti rugi untuk kerugian non alat/non unit kendaraan akibat kelalaian adalah 50% (lima puluh persen) dari total nilai kerugian.  <br><span lang="zh">因疏忽导致非设备/车辆损失的赔偿计算为总损失值的 50％（百分之五十）。</span>
+10. Dana ganti rugi digunakan semata-mata untuk perbaikan alat/unit yang mengalami kerusakan.  <br><span lang="zh">赔偿金仅用于维修损坏的设备/车辆。</span>
+11. Perhitungan ganti rugi mengacu pada kerusakan yang diakibatkan karena accident berdasarkan kesimpulan hasil investigasi.  <br><span lang="zh">赔偿计算依据调查结论，针对事故导致的损害进行。</span>
+12. Jika Karyawan telah dikenakan sanksi ganti rugi atas kerugian yang diakibatkannya, maka tidak dikenakan sanksi denda.  <br><span lang="zh">若员工已经对造成的损失进行赔偿，则不再执行罚款。</span>
+13. Dalam kasus dimana Karyawan menggunakan kendaraan pribadi ke dalam lingkungan perusahaan dan kemudian mengakibatkan timbulnya kerugian Perusahaan maka Karyawan harus mengganti 100% (seratus persen) dari jumlah total kerugian yang diakibatkannya.  <br><span lang="zh">如果员工在公司环境中使用私人车，导致公司遭受损失，则该员工必须赔偿所造成损失总额的 100％（百分之百）。</span>
+  <br><a id="pasal-43-skorsing"></a>
+### Pasal 43. Skorsing
+<a id="第四十三条-停职"></a>
+#### 第四十三条 停职
+
+1. Ketika karyawan melakukan tindakan pelanggaran peraturan / pelanggaran hukum dan dalam proses investigasi atau kondisi khusus lainnya, Perusahaan dapat memberlakukan skorsing kepada Karyawan.  <br><span lang="zh">当发生违纪/违法还在调查过程中或其他特殊情形，公司可以将员工进行停职。</span>
+2. Selama Karyawan menjalani skorsing Karyawan tetap mendapatkan upah sesuai dengan peraturan yang berlaku .  <br><span lang="zh">员工被停职期间，仍将根据现行法规计发相应工资。</span>
+3. Apabila Karyawan bekerja untuk dan/atau pada perusahaan lain selama menjalani skorsing, maka Karyawan dianggap mengundurkan diri.  <br><span lang="zh">若员工在停职期间为和/或在另一家公司工作，该员工被视为自动离职。</span>
+  <br><a id="pasal-44-demosi-dan-pemindahan-jabatan"></a>
+### Pasal 44. Demosi dan Pemindahan Jabatan
+<a id="第四十四条-降级降职和异岗"></a>
+#### 第四十四条 降级、降职和异岗
+
+1. Perusahaan berwenang melakukan demosi dan/atau pemindahan jabatan Karyawan yang tidak cakap dalam tugas sesuai dengan jabatan yang diembannya.  <br><span lang="zh">公司有权对于不符满足工作的员工进行降级和/或异岗。</span>
+2. Upah disesuaikan pada perubahan jabatan, namun penurunan upah serendah-rendahnya tidak lebih rendah dari upah minimum yang diatur oleh ketentuan yang berlaku.  <br><span lang="zh">薪资随着岗位调整而变动，但降薪后工资不得低于法定最低工资标准。</span>
+3. Demosi dan atau pemindahan jabatan karyawan diatur melalui Teknis Pelaksanaan.  <br><span lang="zh">员工职位的降级和/或调动通过技术实施进行规范。</span>
+  <br><a id="bab-ix-kompensasi-dan-benefit"></a>
+# BAB IX. KOMPENSASI DAN BENEFIT
+<a id="第九章-薪酬与待遇"></a>
+## 第九章 薪酬与待遇
+
+<a id="pasal-45-ketentuan-umum-tentang-kompensasi-dan-benefit"></a>
+### Pasal 45. Ketentuan Umum Tentang Kompensasi dan Benefit
+<a id="第四十五条-关于薪酬和福利的总则"></a>
+#### 第四十五条 关于薪酬和福利的总则
+
+1. Perusahaan memberikan kompensasi dan benefit kepada Karyawan dengan mengacu pada kemampuan Perusahaan yang diatur dengan mengindahkan ketentuan dalam ketentuan perundang-undangan yang berlaku.  <br><span lang="zh">依据相应法律规定，结合公司经营情况为员工提供薪酬福利。</span>
+2. Perusahaan memberikan kompensasi kepada Karyawan berupa upah dan pendapatan non upah:  <br><span lang="zh">公司以工资和非工资的形式向员工提供报酬：</span>
+3. Upah terdiri dari Upah Pokok, Tunjangan Tetap dan Tunjangan Tidak Tetap.  <br><span lang="zh">工资包括基本工资，固定津贴和不固定津贴。</span>
+4. Pendapatan Non Upah terdiri Tunjangan Hari Raya, Tunjangan Kehadiran Hari Raya, Fasilitas Makan dan Transportasi, Fasilitas pengobatan, BPJS Kesehatan dan BPJS Ketenagakerjaan, Cuti Kunjungan Keluarga (family visit), dan Bonus.  <br><span lang="zh">非工资包括过年津贴（宗教津贴），过年出勤津贴，餐食和交通设施，医疗设施，健康保险和劳动保险，探亲假和奖金。</span>
+  <br><a id="pasal-46-upah"></a>
+### Pasal 46. Upah
+<a id="第四十六条-工资"></a>
+#### 第四十六条 工资
+
+1. Perusahaan membayarkan upah kepada karyawan setiap akhir bulan atau paling lambat tanggal 3 (tiga) bulan berikutnya serta jika ada perubahan akan disampaikan melalui surat pemberitahuan.  <br><span lang="zh">公司于每月底或不迟于次月3日向员工支付工资，并如有变动将以通知函形式。</span>
+2. Komponen Upah meliputi:  <br><span lang="zh">工资结构为：</span>
+3. Upah Pokok  <br><span lang="zh">基本工资</span>
+4. Tunjangan Tetap ：  <br><span lang="zh">固定津贴为</span>
+5. Tunjangan Lokasi,  <br><span lang="zh">地区津贴</span>
+6. Tunjangan Perumahan  <br><span lang="zh">住房津贴</span>
+7. Tunjangan Keluarga  <br><span lang="zh">家庭津贴：</span>
+8. Tunjangan Tidak Tetap ：  <br><span lang="zh">不固定津贴为</span>
+9. Tunjangan Kehadiran,  <br><span lang="zh">出勤津贴</span>
+10. Tunjangan Shift malam  <br><span lang="zh">夜班津贴</span>
+11. Tunjangan Masa Kerja.  <br><span lang="zh">工作年期津贴</span>
+12. Komponen upah kayawan yang dimaksud pada ayat (2) disesuaikan dengan level/tingkatan jabatan Karyawan.  <br><span lang="zh">员工工资结构如第 2（二）段所述是根据员工岗位水平/级别而定。</span>
+13. Perusahaan menetapkan Struktur dan Skala Upah dengan tidak melanggar ketentuan perundang-undangan yang berlaku. Pedoman penetapan struktur skala upah karyawan akan ditetapkan melalui Surat Keputusan Direksi tersendiri.  <br><span lang="zh">公司遵守按照现有法规的情况下确定工资结构和工资标准。工资结构的指导方针将通过单独的董事令确定。</span>
+14. Perusahaan menerapkan prinsip Upah Tidak Dibayar sesuai dengan ketentuan perundang- undangan yang berlaku yakni bagi karyawan yang mangkir kerja dan atau izin di luar ketentuan perundang-undangan.  <br><span lang="zh">若员工旷工或请法律规定外的事假，公司将根据相应法律和规定，不发放旷工或请事假期间的工资。</span>
+  <br><a id="pasal-47-pendapatan-non-upah-dan-fasilitas"></a>
+## Pasal 47. Pendapatan Non Upah dan Fasilitas
+<a id="第四十七条-非工资属入和设施"></a>
+## 第四十七条 非工资属入和设施
+
+1. Pendapatan non-Upah diberikan kepada karyawan tertentu berupa:  <br><span lang="zh">非工资属入给予雇员如下：</span>  <br><span lang="zh">Bonus Kinerja berdasarkan Jabatan. 基于职位的绩效奖金。</span>  <br><span lang="zh">Bonus Kinerja berdasarkan performa kerja. 基于工作表现发放绩效奖金。</span>  <br><span lang="zh">Bonus Produksi.生产奖金。</span>
+2. Perusahaan memberikan Tunjangan Kehadiran di Hari Raya, BPJS Kesehatan dan Ketenagakerjaan, Cuti Kunjungan Keluarga (family visit).  <br><span lang="zh">公司提供节日假期出勤津贴、健康保险和劳动保险、休探亲假。</span>
+
+3. Tunjangan Hari Raya Keagamaan:  <br><span lang="zh">宗教津贴：</span>
+4. Perusahaan memberikan Tunjangan Hari Raya Keagamaan 1 (satu) kali setahun kepada karyawan yang telah mempunyai masa kerja sekurang-kurangnya 1 (satu) bulan yang dibayarkan selambat- lambatnya 7 (tujuh) hari sebelum hari raya keagamaannya.  <br><span lang="zh">公司每年一次给予工作年期至少 1个月的员工提供宗教节日津贴，其津贴最迟在节日 7天前发放。</span>
+5. Besarnya Tunjangan Hari Raya Keagamaan ditetapkan sesuai peraturan perundang-undangan yang berlaku, yakni bagi Karyawan yang telah mempunyai masa kerja 12 (dua belas) bulan atau lebih diberikan tunjangan hari raya yang disebut.  <br><span lang="zh">宗教节日津贴的金额根据现行的法律法规制定，工龄满 12个月及以上的员工，将享有相应的节日津贴。</span>
+6. Bagi karyawan yang masa kerjanya telah mencapai 1 (satu) bulan atau lebih tetapi kurang dari 12 (dua belas) bulan akan diberikan Tunjangan Hari Raya Keagamaan secara proposional.  <br><span lang="zh">对于工作年期已满 1个月或以上而未满 12个月的员工，其所得到的宗教津贴金额按工作年期比例计算。</span>
+7. Karyawan dengan status Perjanjian Kerja Waktu Tertentu (PKWT) yang berakhir hubungan kerjanya sebelum Hari Raya Keagamaan tidak berhak atas Tunjangan Hari Raya Keagamaan.  <br><span lang="zh">宗教假期之前固定期限劳动合同 (PKWT) 终止的员工，无权享受宗教假期津贴。</span>
+8. Karyawan dengan status Perjanjian Kerja Waktu Tidak Tertentu (PKWTT) yang berakhir hubungan kerjanya dalam kurun waktu 30 hari sebelum hari raya keagamaan berhak menerima Tunjangan Hari Raya Keagamaan.  <br><span lang="zh">宗教假期之30天前之内未固定期限劳动合同 (PKWT) 终止的员工，有权享受宗教假期津贴。</span>
+9. Fasilitas Makan dan Transportasi  <br><span lang="zh">食品和交通设施：</span>
+10. Perusahaan memberikan makan untuk setiap hari masuk kerja 1 (satu) kali setiap periode kerja/shift kepada setiap karyawan yang bekerja di site.  <br><span lang="zh">公司给予每天在矿区上班的员工每一班提供一餐。</span>
+11. Perusahaan dapat memberikan fasilitas transportasi dalam lingkungan kerja.  <br><span lang="zh">公司可在工作环境内提供交通设施。</span>
+12. Fasilitas pengobatan:  <br><span lang="zh">医疗设施：</span>
+13. Perusahaan mengikutsertakan karyawan dan anggota keluarganya pada program BPJS Kesehatan.  <br><span lang="zh">公司有义务让员工和其家人参与健康社保。</span>
+14. Perusahaan tidak ikut menanggung untuk biaya pengobatan/perawatan berdasarkan tindakan atau keadaan sebagai berikut：  <br><span lang="zh">在以下的行为或情况下，公司不给予医疗费用报销或护理费：</span>
+15. Percobaan bunuh diri  <br><span lang="zh">试图自杀</span>
+16. Perkelahian dan atau tindak kekerasan yang bertentangan dengan hukum dan ketertiban sosial.
+  <br><span lang="zh">打架，违反法律与社会治安的暴乱行为</span>
+17. Penyakit menular seksual  <br><span lang="zh">性传播疾病</span>
+18. AIDS  <br><span lang="zh">艾滋病</span>
+19. Penggunaan barang selundupan, narkoba, alkohol dan zat adiktif lainnya atau penggunaan obat-obatan tanpa nasihat medis  <br><span lang="zh">使用禁品和毒品，酒类和其他成瘾物质或未经医生指示使用药品</span>
+20. Operasi kecantikan atas keinginan pribadi  <br><span lang="zh">为自身美观做美容手术</span>
+21. Penyakit/kecacatan khusus yang telah ada sebelum masuk kerja  <br><span lang="zh">在未上岗前所患的特定疾病/残疾</span>
+22. Kehamilan di luar nikah  <br><span lang="zh">婚外怀孕</span>
+23. Menolak pengobatan dan perawatan yang diputuskan oleh dokter perusahaan  <br><span lang="zh">拒绝公司医生所决定的治疗与护理</span>
+24. Pemeriksaan kesehatan pribadi (pemeriksaan medis umum) tanpa rekomendasi dari dokter perusahaan.  <br><span lang="zh">未经公司医生的推荐，由他们自己进行健康检查</span>
+25. Karyawan dapat mengajukan Cuti Kunjungan Keluarga (Family Visit) sesuai dengan prosedur dan peraturan yang ditentukan oleh Perusahaan dengan tetap mendapatkan upah.  <br><span lang="zh">员工可根据公司相应制度和流程申请探亲假，探亲假享有相应的工资。</span>
+26. Perusahaan dapat memberikan bonus kepada Karyawan sebagai kebijakan khusus Pimpinan Perusahaan yang ditetapkan tersendiri melalui Surat Keputusan Direksi.  <br><span lang="zh">公司可向员工提供奖金作为公司管理层的一项特殊政策，该政策通过董事令单独制定。</span>
+27. Perusahaan akan melakukan pengurangan Bonus Kinerja dan Bonus Produksi kepada karyawan yang terbukti melakukan Tindakan pelanggaran berdasarkan tingkatan yang diatur dalam ketentuan umum tentang sanksi-sanksi, dengan besaran pemotongan diatur oleh Perusahaan dalam Teknis Pelaksanaan.  <br><span lang="zh">对于违规行为的员工，公司将按照处罚总则规定的等级，减少绩效奖金和生产奖金，扣除数额按公司在技术实施中规定的标准扣除。</span>
+  <br><a id="pasal-48-bantuan-bagi-karyawan"></a>
+### Pasal 48. Bantuan Bagi Karyawan
+<a id="第四十八条-员工辅助"></a>
+#### 第四十八条 员工辅助
+1. Karyawan yang ditahan Pihak Berwajib karena diduga melakukan tindak pidana tidak mendapatkan upah, namun demikian keluarga yang menjadi tanggungan Karyawan yang sah diberikan bantuan dengan ketentuan sebagai berikut:  <br><span lang="zh">因涉嫌犯罪而被当局拘留的员工没有得到报酬，但是员工的合法受抚养的家庭在以下条件下将得到了帮助：</span>
+2. Untuk 1 orang tanggungan diberikan bantuan sebesar 25% (dua puluh lima perseratus) dari upah per bulan  <br><span lang="zh">个家庭成员的员工，给予工资的百分之二十五</span>
+3. Untuk 2 orang tanggungan diberikan bantuan sebesar 35% (tiga puluh lima perseratus) dari upah per bulan  <br><span lang="zh">个家庭成员的员工，给予工资的百分之三十五</span>
+4. Untuk 3 orang tanggungan diberikan bantuan sebesar 45% (empat puluh lima perseratus) dari upah per bulan  <br><span lang="zh">个家庭成员的员工，给予工资的百分之四十五</span>
+5. Untuk 4 orang tanggungan diberikan bantuan sebesar 50% (lima puluh perseratus) dari upah per bulan  <br><span lang="zh">个家庭成员的员工，给予工资的百分之五十</span>
+6. Dasar perhitungan upah adalah Upah Pokok ditambah Tunjangan Tetap  <br><span lang="zh">工资计算的基础是基本工资加固定津贴</span>
+7. Bantuan diberikan untuk jangka waktu paling lama 6 (enam) bulan terhitung sejak dari hari pertama Karyawan ditahan oleh Pihak Berwajib.  <br><span lang="zh">公司将给辅助自从员工被当局拘留的第一天起，最长可提供 6（六个）个月的援助。</span>
+  <br><a id="pasal-49-pemberian-uang-kompensasi-perjanjian-kerja-waktu-tertentu-pkwt"></a>
+## Pasal 49. Pemberian Uang Kompensasi Perjanjian Kerja Waktu Tertentu (PKWT)
+<a id="第-四十九条-固定期限劳动合同-pkwt-提供的补偿金"></a>
+## 第 四十九条 固定期限劳动合同 (PKWT) 提供的补偿金
+
+1. Perusahaan wajib memberikan uang kompensasi kepada karyawan yang hubungan kerjanya berakhir akibat Perjanjian Kerja Waktu Tertentu (PKWT).  <br><span lang="zh">公司有义务向固定期限劳动合同（PKWT）终止雇佣关系的员工提供补偿金。</span>
+2. Perhitungan besaran uang kompensasi dilaksanakan sesuai dengan peraturan perundang-undangan yang berlaku.  <br><span lang="zh">补偿金额的计算按照有关法规的规定执行。</span>
+3. Pemberian uang kompensasi dilaksanakan pada saat berakhirnya Perjanjian Kerja Waktu Tertentu (PKWT).  <br><span lang="zh">在固定期限劳动合同（PKWT）结束时给予补偿金。</span>
+  <br><a id="bab-x-cuti-dan-izin"></a>
+# BAB X. CUTI DAN IZIN
+<a id="第十章-休假与请假"></a>
+## 第十章 休假与请假
+<a id="pasal-50-ketentuan-umum-tentang-cuti-dan-izin"></a>
+### Pasal 50. Ketentuan Umum Tentang Cuti dan Izin
+<a id="第五十条-关于请假与休假的总则"></a>
+#### 第五十条 关于请假与休假的总则
+
+1. Cuti terdiri dari Cuti Tahunan, Cuti Kunjungan Keluarga (family visit), Cuti Haid, Cuti Melahirkan, Cuti Keguguran, Cuti Besar, Cuti Ibadah, dan lainnya.  <br><span lang="zh">休假分别有年假、探亲假、经期假、产假、流产假、长假、朝拜假，以及无带薪假等。</span>
+2. Izin Meninggalkan Pekerjaan adalah izin-izin meninggalkan pekerjaan selain cuti sebagaimana dimaksud ayat 1 (satu) di atas yang terdiri dari Izin Sakit, Izin dengan Upah Dibayar, dan Izin dengan Upah Tidak Dibayar.  <br><span lang="zh">请假是指第 1 款（上文第 1 款）所述的休假以外的请假，包括病假，带薪请假和无薪请假。</span>
+3. Karyawan tidak dibenarkan bekerja pada Perusahaan lain selama menjalankan cuti dan izin meninggalkan pekerjaan.  <br><span lang="zh">员工不允许在休假或请假期间在别的公司工作。</span>  <br><span lang="zh">Cuti Bersama yang ditetapkan oleh Pemerintah yang bersifat fakultatif bagi Perusahaan dapat tidak diberlakukan oleh Perusahaan dengan pertimbangan kepentingan operasional Perusahaan. 公司可以根据公司运营需求决定不执行政府所规定的集体休假。</span>
+4. Perusahaan dapat sewaktu-waktu memanggil bekerja kembali karyawan yang sedang menjalani cuti dan izin apabila Perusahaan mengalami hal darurat.  <br><span lang="zh">公司可以在面临紧急事务时随时召回正在休假和请假的员工。</span>
+5. Ketentuan cuti dan izin diatur lebih detail melalui Teknis Pelaksanaan.  <br><span lang="zh">休假和请假的具体规定将通过规定实施进行详细管理。</span>  <br><a id="pasal-51-cuti-tahunan"></a>
+### Pasal 51. Cuti Tahunan
+<a id="第五十一条-休年假"></a>
+#### 第五十一条 休年假
+
+1. Karyawan yang telah bekerja terus-menerus selama 12 (dua belas) bulan berhak atas Cuti Tahunan selama 12 (dua belas) hari kerja.  <br><span lang="zh">对于已连续工作 12（十二）个月的员工可享有带薪 12（十二）天工作日的年假。</span>
+2. Karyawan tetap mendapatkan upah penuh selama menjalankan Cuti Tahunan.  <br><span lang="zh">员工在休年假期间可获得全额工资。</span>
+3. Pengaturan Cuti Tahunan Karyawan disesuaikan dengan kepentingan operasional Perusahaan.  <br><span lang="zh">员工年假根据公司运营需求调整。</span>
+4. Cuti Tahunan tidak dapat diambil dimuka terlebih dahulu.  <br><span lang="zh">员工不可提前预支年假。</span>
+5. Cuti Tahunan dapat diambil berturut-turut sebanyak-banyaknya 6 (enam) hari kerja jika berdiri sendiri tanpa digabung dengan Cuti Kunjungan Keluarga (Family Visit).  <br><span lang="zh">若单独休年假而不和探亲假一起休的话最多可申请休 6（六）天工作日。</span>
+6. Cuti Tahunan hanya dapat diambil berturut-turut sebanyak-banyaknya 4 (empat) hari kalender jika  digabung dengan Cuti Kunjungan Keluarga (Family Visit).  <br><span lang="zh">休年假最多可以连续取4（四）个日历日，若与探亲假期合并。</span>
+7. Apabila karyawan tidak mengambil hak Cuti Tahunan yang dimilikinya pada tahun berjalan yang penyebabnya bukan atas perintah dari Perusahaan, maka hak Cuti Tahunan di tahun berjalan tersebut dinyatakan hangus.  <br><span lang="zh">若员工由于不是基于公司的命令而没有休完年假且已过年假有效期，剩余年假自动作废。</span>
+8. Apabila karyawan tidak mengambil hak Cuti Tahunan yang dimilikinya pada tahun berjalan  <br><span lang="zh">yang penyebabnya karena perintah Perusahaan, maka hak Cuti Tahunan di tahun berjalan tersebut dapat diundur selambat-lambatnya dalam kurun waktu 6 (bulan) di tahun berikutnya dan atau dikompensasikan dalam bentuk uang rupiah sebesar maksimum 6 (enam) hari kerja. 若员工基于公司的命令而没有休完年假且已过年假有效期，剩余年假可延迟（最长6 个月内）或以最多 6（六）个工作日印尼盾形式补偿。</span>
+  <br><a id="pasal-52-cuti-kunjungan-keluarga-family-visit"></a>
+### Pasal 52. Cuti Kunjungan Keluarga (Family Visit)
+<a id="第五十二条-休探亲假"></a>
+#### 第五十二条 休探亲假
+
+1. Karyawan berhak mendapatkan Cuti Kunjungan Keluarga setelah periode kerja tertentu dan mendapatkan bantuan Akomodasi Cuti yang diatur melalui Teknis Pelaksanaan.  <br><span lang="zh">员工工作一定时间后有权得到休探亲假并根据规定实施获得请假休假补贴。</span>
+2. Karyawan tetap mendapatkan upah penuh selama menjalankan Cuti Kunjungan Keluarga.  <br><span lang="zh">员工进行休探亲假期间仍可获得全额薪酬。</span>
+3. Karyawan yang berakhir hubungan kerjanya dengan Perusahaan tidak berhak atas uang penggantian Cuti Kunjungan Keluarga yang belum diambil.  <br><span lang="zh">与公司终止合同无权报销未休的探亲假。</span>
+4. Demi kelancaran operasional perusahaan, serah terima pekerjaan dapat dilakukan dengan baik, karyawan dalam masa 30 (tiga puluh) hari pengajuan pengunduran diri, tidak dapat melaksanakan Cuti Kunjungan Keluarga.  <br><span lang="zh">为公司运营、工作交接工作能够顺利进行，员工在提出辞职后30天之内不得休探亲假。</span>
+
+
+
+  <br><a id="pasal-53-cuti-haid"></a>
+### Pasal 53. Cuti Haid
+<a id="第五十三条-月经期假"></a>
+#### 第五十三条 月经期假
+
+1. Karyawati perempuan yang kesehatannya terganggu karena haid, tidak diwajibkan bekerja pada hari pertama dan hari kedua waktu haid, namun Karyawan wajib meminta izin secara tertulis kepada penanggung jawab absensi atau atasan langsung untuk diteruskan ke pimpinan departemen sebelum jam kerja dimulai melalui pesan pendek via sms/whatsapp/wechat atau cara lainnya pada hari pertama mengalami sakit haid dan Karyawan menyerahkan surat keterangan dari dokter atau surat keterangan tidak masuk kerja selambat-lambatnya pada hari pertama setelah masuk kerja yang apabila melebihi waktu yang ditentukan tersebut maka akan dianggap sebagai mangkir.  <br><span lang="zh">女职工因月经影响健康，在经期的第一天和第二天可带薪休息。但是，员工必须在经期的第一天通过短信，whatsapp /微信或其他文字编辑方式，告知考勤负责人或直接</span>  <br>主管，转告部门负责人申请请假，并且员工必须在上班后的第一天提交医生开具不能上班的证明，如果超过指定时间，则将其视为旷工。
+2. Karyawan tetap mendapatkan upah selama menjalankan Cuti Haid.  <br><span lang="zh">员工进行经期假时仍可得到薪酬。</span>
+  <br><a id="pasal-54-cuti-melahirkan-dan-cuti-keguguran"></a>
+### Pasal 54. Cuti Melahirkan dan Cuti Keguguran
+<a id="第五十四条-休产假流产假"></a>
+#### 第五十四条 休产假/流产假
+
+1. Karyawan perempuan yang melahirkan berhak atas Cuti Melahirkan selama 1,5 (satu setengah) bulan sebelum melahirkan dan 1,5 (satu setengah) bulan sesudah melahirkan, yang mana perkiraan waktu melahirkan karyawan perempuan yang bersangkutan dibuktikan dengan Surat Keterangan Dokter/Bidan yang sah.  <br><span lang="zh">根据妇产科医生/助产士鉴定的预产期，怀孕的女职工在分娩前后给予休产假各 1.5（一个半）月。</span>
+2. Karyawan perempuan yang mengalami keguguran kandungan yang dibuktikan dengan Surat Keterangan Dokter/Bidan yang sah berhak atas Cuti Keguguran selama maksimal 1,5 (satu setengah) bulan sejak terjadinya keguguran tersebut atau waktu cuti sesuai dengan tanggal pada Surat Keterangan Dokter/Bidan yang sah.  <br><span lang="zh">遭遇流产或因身体健康原因堕胎的女职工须由妇产科医生/助产士出说明书证明，自流产后开始给予最多 1.5（一个半）月的假期或休假时间与产科医生/助产士开具的说明书上的时间相一致。</span>
+3. Karyawan perempuan tetap mendapatkan upah selama menjalankan Cuti Melahirkan dan Cuti Keguguran.  <br><span lang="zh">女职工产假、流产假期间继续领取工资。休产假/流产假仍可获得工资。</span>
+  <br><a id="pasal-55-izin-sakit"></a>
+### Pasal 55. Izin Sakit
+<a id="第五十五条-病假"></a>
+#### 第五十五条 病假
+
+1. Izin Sakit adalah izin meninggalkan pekerjaan karena Karyawan terganggu kesehatannya dan tidak dapat melakukan pekerjaan secara normal atau penyakitnya dinyatakan berbahaya bagi dirinya dan bagi kesehatan orang lain yang diberikan berdasarkan Surat Keterangan yang dikeluarkan oleh dokter atau tenaga kesehatan yang berwenang sesuai peraturan perundang- undangan yang berlaku yang dapat diberikan apabila Karyawan mengajukan izin sakit sesuai ketentuan perusahaan.  <br><span lang="zh">病假是指因为员工的健康受损无法正常履行工作，或其疾病被宣布对自身和他人健康有害，员工须根据现行法律规定由授权的医生或卫生人员出具的诊断证明，按照公司的相关规定申请方可休假。</span>
+2. Karyawan dapat mengajukan izin sakit dengan beberapa ketentuan sebagai berikut:  <br><span lang="zh">员工可遵照以下规定申请病假：</span>
+3. Karyawan wajib meminta izin secara tertulis kepada penanggung jawab absensi atau atasan langsung untuk diteruskan ke pimpinan departemen sebelum jam kerja dimulai melalui pesan pendek via sms/whatsapp/wechat atau cara lainnya pada hari pertama mengalami sakit.  <br><span lang="zh">员工须在生病的第一天，在正常出勤时间之前以短信/whatsapp/微信等文字编辑形式告知考勤负责人或直接领导，转告部门负责人请假。</span>
+4. Karyawan yang berobat di Klinik Perusahaan sudah harus menyerahkan Surat Keterangan Sakit (SKS) dari Klinik Perusahaan dan menyelesaikan prosedur izin sakit selambat- lambatnya 3 (tiga) hari kerja setelah masuk bekerja kembali yang apabila melebihi waktu yang ditentukan tersebut maka akan dianggap tidak mengikuti prosedur dan diberikan sanksi sesuai dengan peraturan yang berlaku.  <br><span lang="zh">在公司诊所就医的员工必须在返岗后的3（三）个工作日内，提交由公司诊所出具的病假单（SKS），并完成请病假手续。如超过规定时间，则视为未按规定操作，将受到相应处罚。</span>
+5. Karyawan yang berobat bukan di Klinik Perusahaan sudah harus menyerahkan dokumen- dokumen yang telah diverifikasi oleh Klinik Perusahaan selambat-lambatnya 3 (tiga) hari kerja setelah masuk bekerja kembali yang apabila melebihi waktu yang ditentukan tersebut maka akan dianggap tidak mengikuti prosedur dan diberikan sanksi sesuai dengan peraturan yang berlaku, dokumen-dokumen yang dimaksud sebagai berikut:  <br><span lang="zh">不在公司诊所就医的员工必须在返岗后的3（三）个工作日内，提交经过公司诊所鉴定的资料。如超过规定时间，则被视为未按规定操作，将受到相应处罚。所需资料包括：</span>
+6. Resep obat.  <br><span lang="zh">处药方。</span>
+7. Diagnosa pasien.  <br><span lang="zh">诊断出的病因。</span>
+8. Surat Keterangan Sakit (SKS) yang ditandatangani dan distempel oleh dokter, yang apabila dokter tidak ada atau tidak di tempat maka boleh diwakili oleh perawat atau bidan yang disertai dengan surat keterangan bahwa tidak ada dokter atau dokter tidak ada di tempat.  <br><span lang="zh">病假单由医生签字及盖章。若医生不在可由护士或助产士代签并附上医生不在的声明函。</span>
+9. Tercatat nomor dokter/perawat/bidan yang dapat dihubungi untuk memastikan Surat Keterangan Sakit (SKS).  <br><span lang="zh">标注可联系的医生/护士/助产士电话号码用于确认。</span>
+10. Laporan hasil pemeriksaan radiologi, laboratorium atau lainnya apabila dilakukan pemeriksaan dengan metode-metode tersebut.  <br><span lang="zh">检查出具的报告或 CT 等拍片成像图（若有进行）。Karyawan yang mengalami sakit berkepanjangan bisa mengajukan Izin Sakit Berkepanjangan dengan mengisi Formulir Izin yang melampirkan Surat Keterangan Dokter Spesialis termasuk bukti hasil pemeriksaan dan rekam medis asli yang menunjukkan diagnosa penyakitnya, dan setelah mendapatkan validasi dari Dokter Klinik Perusahaan maka Izin Sakit Berkepanjangan dapat diberlakukan.|</span>  <br>员工若因个人身体健康因素/工伤事故需长期请假者，需要填写请假单并附上专科医生的说明书，包括疾病检查结果证明和诊断证明的原始医疗记录，经过公司诊所医生确认后，可进行长期病假。
+11. Karyawan yang menjalankan Izin Sakit Berkepanjangan mengikuti ketentuan upah sesuai dengan peraturan perundang-undangan yang berlaku, yaitu:  <br><span lang="zh">病假期间工资按照相关法律进行发放，即：</span>
+12. untuk 4 bulan pertama dibayar 100% (seratus persen) dari upah yakni upah pokok ditambah dengan tunjangan tetap  <br><span lang="zh">前四个月支付工资（基本工资+固定津贴）的 100％（百分之百）</span>
+13. untuk 4 bulan kedua dibayar 75% (tujuh puluh lima persen) dari upah yakni upah pokok ditambah dengan tunjangan tetap  <br><span lang="zh">第二个 4 个月支付（工资基本工资+固定津贴）的 75％（百分之七十五）</span>
+14. untuk 4 bulan ketiga dibayar 50% (lima puluh persen) dari upah yakni upah pokok ditambah dengan tunjangan tetap  <br><span lang="zh">第三个 4 个月支付（工资基本工资+固定津贴）的 50％（百分之五十）</span>
+15. untuk 4 bulan selanjutnya dibayar 25% (dua puluh lima persen) dari upah yakni upah pokok ditambah dengan tunjangan tetap  <br><span lang="zh">接下来的 4 个月支付（工资基本工资+固定津贴）的 25％（百分之二十五）</span>
+16. Karyawan yang akan bekerja kembali setelah sakit berkepanjangan wajib melampirkan Surat Keterangan Sehat dari dokter klinik perusahaan.  <br><span lang="zh">长期患病重返工作的员工，必须附有公司医疗官提出的健康证明。</span>
+  <br><a id="pasal-56-izin-dengan-upah-dibayar"></a>
+### Pasal 56. Izin Dengan Upah Dibayar
+<a id="第五十六条-带薪假"></a>
+#### 第五十六条 带薪假
+
+1. Izin Lain Dengan Upah Dibayar adalah izin meninggalkan pekerjaan di luar cuti dan izin sakit dengan upah tetap dibayar sebagaimana ketentuan yang diatur dalam peraturan perundang- undangan yang berlaku.  <br><span lang="zh">其他带薪的请假是指除了休假和病假之外按法律规定支付固定工资的请假</span>
+2. Karyawan dengan kondisi-kondisi berikut sepanjang menyertakan bukti kepada Perusahaan berhak atas Izin Lain Dengan Upah Dibayar:  <br><span lang="zh">只要符合一下的情况，并附上相关证件给公司员工有权申请带薪请假：</span>
+3. Karyawan menikah diberikan izin 3 (tiga) hari kerja  <br><span lang="zh">员工本人结婚，给予请假 3（三）天工作日。</span>
+4. Karyawan menikahkan anaknya diberikan izin 2 (dua) hari kerja  <br><span lang="zh">员工儿女结婚，给予请假 2（二）天工作日。</span>
+5. Karyawan yang memiliki istri sah melahirkan diberikan izin 2 (dua) hari kerja  <br><span lang="zh">员工的合法妻子生产，给予请假 2（二）天工作日。</span>
+6. Karyawan yang memiliki istri sah keguguran diberikan izin 2 (dua) hari kerja  <br><span lang="zh">员工的合法妻子流产，给予请假 2（二）天工作日。</span>
+7. Karyawan yang memiliki anggota keluarga berupa suami/istri, orangtua/mertua atau anak/anak menantu meninggal dunia diberikan izin 2 (dua) hari kerja  <br><span lang="zh">员工家属去世（丈夫/妻子，父母/岳父母或孩子/孩子配偶），给予请假 2（二</span>  <br>）天工作日。
+8. Karyawan yang memiliki anggota keluarga dalam satu rumah meninggal dunia diberikan izin 1 (satu) hari kerja  <br><span lang="zh">住同一屋子的家属去世，给予请假 1（一）天工作日。</span>
+9. Karyawan mengkhitankan anak diberikan izin 2 (dua) hari kerja  <br><span lang="zh">员工孩子割礼，给予请假 2（二）天工作日</span>
+10. Karyawan membaptis anak diberikan izin 2 (dua) hari kerja  <br><span lang="zh">员工孩子洗礼，给予请假 2（二）天工作日</span>
+
+  <br><a id="pasal-57-izin-dengan-upah-tidak-dibayar"></a>
+### Pasal 57. Izin Dengan Upah Tidak Dibayar
+<a id="第五十七条-无带薪请假"></a>
+#### 第五十七条 无带薪请假
+
+1. Izin Dengan Upah Tidak Dibayar adalah izin meninggalkan pekerjaan dengan alasan di luar yang ditentukan oleh peraturan perundang-undangan dan diberlakukan ketentuan tidak dibayarkan upahnya pada hari izin yang diambil tersebut.  <br><span lang="zh">无带薪请假是指因法定规定以外的原因而请假的将不支付请假日期的工资。</span>
+2. Perhitungan upah tidak dibayar pada izin sebagaimana dimaksud pada ayat (1) tersebut di atas
+  <br>untuk setiap hari izin adalah 7  <br>173  <br>x (Upah Pokok + Tunjangan Tetap)  <br><span lang="zh">7 x（基本工资固定津贴</span>  <br>如第一段所述不发工资的计算方法，其每天为173
+
+  <br>cscZCZcz
+  <br><a id="bab-xi-berakhirnya-hubungan-kerja"></a>
+# BAB XI. BERAKHIRNYA HUBUNGAN KERJA
+<a id="第十一章劳动关系的终止"></a>
+## 第十一章劳动关系的终止
+<a id="pasal-58-pemutusan-dan-berakhirnya-hubungan-kerja"></a>
+### Pasal 58. Pemutusan dan Berakhirnya Hubungan Kerja
+<a id="第五十八条-劳动关系解除与终止"></a>
+#### 第五十八条 劳动关系解除与终止
+
+1. Perusahaan berusaha semaksimal mungkin agar jangan sampai terjadi pemutusan hubungan kerja antara Perusahaan dengan Karyawan.  <br><span lang="zh">公司尽最大的努力不与员工解除劳动关系。</span>
+2. Apabila segala upaya telah ditempuh tetapi pemutusan hubungan kerja tidak dapat dihindarkan, maka Perusahaan akan menyelesaikannya berdasarkan peraturan perundang-undangan yang berlaku.  <br><span lang="zh">若公司已尽一切努力还是无法避免解除劳动关系，公司将根据现行的法律法规处理。</span>
+3. Berakhirnya hubungan kerja antara Karyawan dengan Perusahaan dapat merupakan akibat dari berakhirnya perjanjian kerja, Karyawan mengundurkan diri, Karyawan diputus hubungan kerjanya oleh Perusahaan, Karyawan meninggal dunia, dan Karyawan pensiun.  <br><span lang="zh">员工与公司之间的劳动关系终止是因为劳动合同到期、员工辞职、员工被公司解雇、员工逝世以及员工退休。</span>
+4. Perusahaan wajib memberitahukan pemutusan hubungan kerja yang dibuat dalam bentuk surat pemberitahuan dan disampaikan secara sah dan patut kepada karyawan paling lama 14 (empat belas) hari kerja sebelum pemutusan hubungan kerja.  <br><span lang="zh">公司必须作通知书的形式通知员工解除雇佣关系，并在终止雇佣关系前14天工作日内合法、适当地将其发送给员工。</span>
+5. Karyawan yang berakhir hubungan kerjanya dengan Perusahaan memiliki kewajiban untuk:  <br><span lang="zh">与公司终止劳动关系的员工有义务：</span>
+6. Melunasi hutang kepada Perusahaan apabila memilikinya karena berakhirnya hubungan kerja tidak serta merta membebaskan Karyawan dari kewajiban melunasi hutang tersebut;  <br><span lang="zh">偿还公司债务（若有），因为劳动关系的结束并不能使员工免除偿还债务的义务；</span>
+7. Melunasi denda atau ganti rugi yang masih menjadi tanggungan Karyawan;  <br><span lang="zh">偿还仍由员工承担的罚款或赔偿；</span>  <br><span lang="zh">Menyelesaikan kewajiban kompensasi ikatan dinas yang masih menjadi tanggungan Karyawan sesuai dengan Kontrak Ikatan Dinas yang ditandatangani dengan Perusahaan; 若与公司签订了其他协议，员工应按协议内容进行赔偿；</span>
+8. Melakukan serah terima pekerjaan sesuai dengan prosedur dan ketentuan, serta mengembalikan semua harta benda/asset dan alat perlengkapan kerja milik Perusahaan yang dipercayakan kepadanya;  <br><span lang="zh">员工有义务按相应流程和规定做好工作交接，并交还公司托付的资产和工作设备；</span>
+9. Tetap melaksanakan tugas dan kewajibannya sampai tanggal efektir pengunduran diri dilaksanakan.  <br><span lang="zh">员工应继续履行工作职责和义务，直到辞职之日。</span>
+10. Karyawan yang diputus hubungan kerjanya oleh Perusahaan, akan diberikan Uang Pesangon dan atau Uang Penghargaan Masa Kerja, dan atau Uang Penggantian Hak dan atau Uang Pisah bagi yang memenuhi persyaratan sesuai dengan peraturan perundang-undangan yang berlaku.  <br><span lang="zh">公司与员工解除劳动关系时，将根据适用法律规定计算遣散费，和/或工龄奖金，和/或补偿金，和/或离职金，适用于符合相关法律法规要求的员工。</span>
+11. Uang Pesangon adalah pembayaran berupa uang dari Perusahaan kepada Karyawan sebagai akibat adanya pemutusan hubungan kerja yang diberikan bagi Karyawan yang persyaratan dan jumlahnya diatur sesuai dengan peraturan perundang-undangan yang berlaku dengan ketentuan dasar sebagai berikut:  <br><span lang="zh">遣散费是指公司与员工解除劳动关系后，为符合条件的员工而支付的款项，其金额和条件根据适用的法律规定如下：</span>
+12. Masa kerja kurang dari 1 tahun 1 bulan upah  <br><span lang="zh">工龄低于 1 年 ，可获得 1 个月工资</span>
+13. Masa kerja 1 tahun atau lebih tetapi kurang dari 2 tahun 2 bulan upah  <br><span lang="zh">工龄 1 年及以上但低于 2 年 ，可获得 2 个月工资</span>
+14. Masa kerja 2 tahun atau lebih tetapi kurang dari 3 tahun 3 bulan upah  <br><span lang="zh">工龄 2 年及以上但低于 3 年 ，可获得 3 个月工资</span>
+15. Masa kerja 3 tahun atau lebih tetapi kurang dari 4 tahun 4 bulan upah  <br><span lang="zh">工龄 3 年及以上但低于 4 年 ，可获得 4 个月工资</span>
+16. Masa kerja 4 tahun atau lebih tetapi kurang dari 5 tahun 5 bulan upah  <br><span lang="zh">工龄 4 年及以上但低于 5 年 ，可获得 5 个月工资</span>
+17. Masa kerja 5 tahun atau lebih tetapi kurang dari 6 tahun 6 bulan upah  <br><span lang="zh">工龄 5 年及以上但低于 6 年 ，可获得 6 个月工资</span>
+18. Masa kerja 6 tahun atau lebih tetapi kurang dari 7 tahun 7 bulan upah  <br><span lang="zh">工龄 6 年及以上但低于 7 年 ，可获得 7 个月工资</span>
+19. Masa kerja 7 tahun atau lebih tetapi kurang dari 8 tahun 8 bulan upah  <br><span lang="zh">工龄 7 年及以上但低于 8 年 ，可获得 8 个月工资</span>
+20. Masa kerja 8 tahun atau lebih 9 bulan upah  <br><span lang="zh">工龄 8 年及以上， 可获得 9 个月工资</span>
+21. Uang Penghargaan Masa Kerja adalah uang jasa sebagai penghargaan Perusahaan terkait dengan lamanya masa kerja Karyawan sebagai akibat pemutusan hubungan kerja yang diberikan bagi Karyawan yang persyaratan dan jumlahnya diatur sesuai dengan peraturan perundang-undangan yang berlaku dengan ketentuan dasar sebagai berikut:  <br><span lang="zh">工龄奖金是指公司与员工解除劳动关系后，为符合条件的员工与其工龄长短相关，而支付的酬金，其金额和条件根据适用的法律规定如下：</span>
+22. Masa kerja 3 tahun atau lebih tetapi kurang dari 6 tahun 2 bulan upah  <br><span lang="zh">工龄 3 年及以上但低于 6 年， 可获得 2 个月工资</span>
+23. Masa kerja 6 tahun atau lebih tetapi kurang dari 9 tahun 3 bulan upah  <br><span lang="zh">工龄 6 年及以上但低于 9 年， 可获得 3 个月工资</span>
+24. Masa kerja 9 tahun atau lebih tetapi kurang dari 12 tahun 4 bulan upah  <br><span lang="zh">工龄 9 年及以上但低于 12 年， 可获得 4 个月工资</span>
+25. Masa kerja 12 tahun atau lebih tetapi kurang dari 15 tahun 5 bulan upah  <br><span lang="zh">工龄 12 年及以上但低于 15 年， 可获得 5 个月工资</span>
+26. Masa kerja 15 tahun atau lebih tetapi kurang dari 18 tahun 6 bulan upah  <br><span lang="zh">工龄 15 年及以上但低于 18 年， 可获得 6 个月工资</span>
+27. Masa kerja 18 tahun atau lebih tetapi kurang dari 21 tahun 7 bulan upah  <br><span lang="zh">工龄 18 年及以上但低于 21 年， 可获得 7 个月工资</span>
+28. Masa kerja 21 tahun atau lebih tetapi kurang dari 24 tahun 8 bulan upah  <br><span lang="zh">工龄 21 年及以上但低于 24 年， 可获得 8 个月工资</span>
+29. Masa kerja 24 tahun atau lebih 10 bulan upah  <br><span lang="zh">工龄 24 年及以上， 可获得 10 个月工资</span>
+30. Uang Penggantian Hak adalah uang yang dibayarkan sebagai pengganti hak-hak Karyawan yang belum diambil ketika berakhir hubungan kerjanya dengan Perusahaan sesuai dengan peraturan perundang-undangan yang berlaku yakni berupa:  <br><span lang="zh">补偿金是根据适用的法律规定，当员工与公司的劳动关系终止时，支付给员工作为代替未领取的权利，即如下：</span>
+31. Cuti Tahunan yang belum diambil atau belum hangus dengan perhitungan  <br>1 x (upah pokok+tunjangan tetap) x sisa hari cuti  <br><a id="25"></a>
+#### 25
+未休过并未过期的年假，计算方式为： 1 x(基本工资固定津贴)x剩余假期
+25
+1. Biaya atau ongkos pulang untuk Karyawan dan keluarganya ke tempat dimana karyawan diterima bekerja.  <br><span lang="zh">员工与家人返回录用地点的交通费用。</span>
+2. Besaran nilai Uang Pisah akan ditetapkan lebih lanjut dalam dokumen tersendiri.  <br><span lang="zh">离职金额将在单独文件中进一步确定。</span>
+3. Komponen upah yang menjadi dasar perhitungan Uang Pesangon, Uang Penghargaan Masa Kerja Uang Pisah dan Uang Penggantian Hak adalah Upah Pokok ditambah dengan Tunjangan Tetap.  <br><span lang="zh">基本工资加固定津贴是计算遣散费、工龄奖、离职金和补偿金的依据。</span>
+4. Perusahaan berhak memotong uang hak yang diperoleh Karyawan dari berakhirnya hubungan kerja untuk menyelesaikan kewajiban hutang yang dimiliki Karyawan kepada Perusahaan, dan apabila kewajiban hutang yang dimiliki Karyawan lebih besar daripada uang hak yang diperolehnya maka Karyawan harus melunasi sisanya.  <br><span lang="zh">在做劳动关系终止结算时，公司有权从应支付给员工的各类款项中扣除员工应偿还给公司的债务，如果员工的债务大于应支付给员工的各类款项总额，则员工必须偿还剩余的债务。</span>
+5. Metode pembayaran Uang Pesangon, Uang Penghargaan Masa Kerja, Uang Pisah dan Uang Penggantian Hak adalah dibayarkan satu kali dan sekaligus serta dibayarkan setelah Karyawan menyelesaikan kewajiban serah terima atau kewajiban lainnya.  <br><span lang="zh">遣散费、工龄奖、离职金和补偿金的支付方式是一次性支付，并在员工完成交接或相应义务后支付。</span>
+6. Hubungan kerja antara Karyawan dengan Perusahaan otomatis berakhir ketika Karyawan meninggal dunia.  <br><span lang="zh">若员工离世，员工与公司之间的劳动关系自动终止。</span>
+7. Apabila karyawan meninggal dunia maka Perusahaan memberikan santunan kematian kepada ahli warisnya dengan ketentuan sebagai berikut:  <br><span lang="zh">若员工因意外身亡，公司将按以下规定向其遗属提供丧葬补助：</span>
+8. Upah dalam bulan yang sedang berjalan dibayar penuh.  <br><span lang="zh">当月工资全额支付。</span>
+9. Bantuan ikut duka cita meninggal akibat kecelakaan kerja 10.000.000 Rupiah  <br><span lang="zh">因工作意外导致身亡的哀悼补助为10,000,000印尼盾。</span>
+10. Bantuan ikut duka cita meninggal bukan akibat kecelakaan kerja sebesar 5.000.000 Rupiah  <br><span lang="zh">非工作意外导致身亡的哀悼补助为5,000,000印尼盾。</span>
+11. Bantuan ikut duka cita diberikan kepada karyawan meninggal dunia setelah melampirkan bukti kematian dari pihak terkait.  <br><span lang="zh">提交相关方的死亡证明后才能获得哀悼补助。</span>
+12. Karyawan yang meninggal dunia akibat kecelakaan kerja pengurusannya oleh pihak HSE Perusahaan dan Humas Kawasan.  <br><span lang="zh">因工作意外导致身亡的处理由公司健康安全环境部门和区域公关部门负责。</span>
+13. Perusahaan dapat memberikan kesempatan kerja bagi ahli waris atau yang ditunjuk oleh ahli waris bagi karyawan yang meninggal dunia akibat kecelakaan kerja serta memenuhi syarat.  <br><span lang="zh">公司可以为因工作意外身亡的员工的遗属提供工作机会，前提是遗属符合条件。</span>
+14. Karyawan yang hubungan kerjanya dengan Perusahaan berdasarkan Perjanjian Kerja Waktu Tertentu (PKWT) maka hubungan kerjanya secara otomatis berakhir pada saat berakhirnya masa berlaku perjanjian kerja tersebut.  <br><span lang="zh">与公司的劳动关系基于固定期工作协议（固定期限合同）的员工，则当固定期限劳动合同到期时，劳动关系将自动终止。</span>
+15. Dengan menandatangani Perjanjian Kerja Waktu Tertentu (PKWT) maka Karyawan dianggap sudah mengetahui batas waktu berlakunya perjanjian kerja tersebut sehingga Perusahaan tidak wajib memberitahukan tanggal berakhir perjanjian kerja tersebut kepada Karyawan ketika tiba masanya perjanjian tersebut berakhir.  <br><span lang="zh">员工签署的固定期限劳动合同时，该员工被视为已知合同的有效期，因此公司无义务在合同到期时再通知每位员工的合同到期日。</span>
+16. Karyawan yang berakhir hubungan kerjanya akibat berakhirnya Perjanjian Kerja Waktu Tertentu (PKWT) tidak berhak atas Uang Pesangon, Uang Penghargaan Masa Kerja atau Uang Penggantian Hak dari Perusahaan sesuai dengan peraturan perundang-undangan.  <br><span lang="zh">终止劳动关系因固定期限劳动合同到期的情况下，根据法律法规公司没有义务提供所规定的遣散费，工龄奖金或补偿金。</span>
+17. Usia pensiun dilaksanakan sesuai dengan peraturan perundang-undangan yang berlaku.  <br><span lang="zh">退休年龄按照有关法规执行。</span>
+18. Pengaturan mengenai pensiun diatur sesuai kebijakan perusahaan.  <br><span lang="zh">退休安排根据公司政策进行调整。</span>
+19. Apabila Karyawan yang pensiun masih diperlukan karyanya, maka Karyawan yang bersangkutan dapat dipekerjakan kembali atas dasar suatu kontrak kerja khusus untuk jangka waktu yang ditentukan berdasarkan persetujuan Direksi.  <br><span lang="zh">若公司还需要该员工，经过董事令批准，可根据具体的雇佣合同在指定的时间内再次聘用员工。</span>
+20. Karyawan yang bermaksud mengundurkan diri wajib memberitahukan secara tertulis kepada Perusahaan dalam waktu sekurang-kurangnya 30 (tiga puluh) hari sebelum tanggal efektif pengunduran dirinya dan wajib menyelesaikan kewajiban kepada Perusahaan sebelum tanggal efektif pengunduran diri.  <br><span lang="zh">员工有辞职的意向须在辞职生效日至少 30（三十）天之前以书面形式通知公司，并且在辞职生效日之前完成对公司的义务。</span>
+21. Karyawan yang mengundurkan diri sesuai prosedur berhak atas hak tertentu sesuai dengan yang diatur dalam peraturan perundang-undangan yang berlaku.  <br><span lang="zh">员工按照程序申请辞职，有权根据现行法律法规享有某些权利。</span>
+
+
+
+
+
+
+
+  <br><a id="bab-xii-penutup"></a>
+# BAB XII. PENUTUP
+<a id="第十二章-结语"></a>
+## 第十二章 结语
+
+<a id="pasal-59-penutup"></a>
+### Pasal 59. Penutup
+<a id="第五十九条-结语"></a>
+#### 第五十九条 - 结语
+
+1. Hal-hal yang belum tercantum di dalam peraturan perusahaan ini akan memperhatikan dan mengikuti peraturan perundang-undangan yang berlaku.  <br><span lang="zh">本制度未提到的所有的事项将遵从并按照法律规定执行。</span>
+2. Peraturan perusahaan ini berlaku untuk 2 (dua) tahun terhitung sejak disahkannya oleh Kementerian Ketenagakerjaan atau Dinas  yang menangani bidang ketenagakerjaan setempat.  <br><span lang="zh">本制度有效期为 2 年始从劳动部和负责当地劳动的事务局正式批准生效。</span>
+3. Peraturan perusahaan ini akan diumumkan dan dibagikan kepada seluruh karyawan untuk diketahui dan dilaksanakan sebagaimana mestinya.  <br><span lang="zh">本制度将宣布并发给所有员工，让所有员工得知并如实执行。</span>
+4. Apabila terdapat ketentuan-ketentuan dalam peraturan perusahaan ini kurang/bertentangan dengan peraturan perundang-undangan yang berlaku, maka diberlakukan sesuai dengan peraturan perundang-undangan yang berlaku.  <br><span lang="zh">若本制度的规定有缺少或与适用的法律规定有冲突，则按照相应法律法规执行。</span>
+5. SOP dan Tata Tertib akan dibuat di unit kerja masing-masing.  <br><span lang="zh">各工作单位制定标准操作程序（SOP）和规则。</span>
+6. Hal-hal yang belum diatur dalam Peraturan Perusahaan ini akan diatur terpisah merujuk kepada peraturan perundang-undangan yang berlaku.  <br><span lang="zh">本章程未作规定的事情下，参照有关法规另行规定。</span>

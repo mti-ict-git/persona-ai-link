@@ -256,13 +256,40 @@ router.post('/send-to-n8n', async (req, res, next) => {
       // Add user message to database
       await messageManager.addMessage(sessionId, message.content, 'user');
 
+      // Extract original retrieved text for reference tooltips
+      const originalRetrievedText = responseData.original_retrieved_text || null;
+      
+      console.log('=== WEBHOOK DEBUG INFO ===');
+      console.log('Full N8N Response Data:', JSON.stringify(responseData, null, 2));
+      console.log('Extracted originalRetrievedText:', originalRetrievedText);
+      console.log('Original Text Type:', typeof originalRetrievedText);
+      console.log('Original Text Length:', originalRetrievedText ? originalRetrievedText.length : 'null');
+      if (originalRetrievedText) {
+        console.log('Original Text Preview (first 200 chars):', originalRetrievedText.substring(0, 200));
+        console.log('Original Text Contains Markdown Headers:', originalRetrievedText.includes('#'));
+        console.log('Original Text Contains Bold:', originalRetrievedText.includes('**'));
+        console.log('Original Text Contains Code:', originalRetrievedText.includes('```'));
+      }
+      console.log('AI Message:', aiMessage);
+      console.log('========================');
+
       // Add AI response to database if available
       if (aiMessage) {
+        // Store the AI message without appending reference numbers
+        let processedMessage = aiMessage;
+        
+        const messageMetadata = { 
+          n8n_response: responseData,
+          original_retrieved_text: originalRetrievedText
+        };
+        
+        console.log('Storing message with metadata:', JSON.stringify(messageMetadata, null, 2));
+        
         await messageManager.addMessage(
           sessionId, 
-          aiMessage, 
+          processedMessage, 
           'assistant',
-          { n8n_response: responseData }
+          messageMetadata
         );
       }
 
@@ -271,6 +298,7 @@ router.post('/send-to-n8n', async (req, res, next) => {
         data: {
           message: aiMessage || 'Message processed successfully',
           session_name_update: sessionNameUpdate,
+          original_retrieved_text: originalRetrievedText,
           raw_response: responseData
         },
         n8n_status: response.status

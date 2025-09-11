@@ -20,6 +20,7 @@ const adminRoutes = require('./routes/admin');
 const { router: authRoutes } = require('./routes/auth');
 const ssoRoutes = require('./routes/sso');
 const preferencesRoutes = require('./routes/preferences');
+
 const { initializeDatabase } = require('./utils/database');
 const redisService = require('./services/redisService');
 
@@ -126,6 +127,7 @@ app.use('/api/processing', processingRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/training', trainingRoutes);
 app.use('/api/preferences', preferencesRoutes);
+
 app.use('/api/webhooks', webhookRoutes);
 
 // Error handling middleware

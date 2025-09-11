@@ -1,4 +1,4 @@
-﻿{
+{
   "navigation": {
     "home": "首页",
     "settings": "设置",
@@ -629,6 +629,12 @@
       "finish": "完成导览",
       "close": "关闭"
     }
+  },
+  "originalText": {
+    "title": "原始来源文本",
+    "description": "这是从知识库中检索到的用于生成回复的原始文本。",
+    "noDataAvailable": "没有可用的原始文本。",
+    "viewOriginalText": "查看原始来源文本"
   },
   "languageSelection": {
     "welcome": "欢迎！选择您的语言",

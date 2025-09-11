@@ -217,3 +217,54 @@ All colors MUST be HSL.
     @apply bg-muted;
   }
 }
+
+/* Document Preview Styles */
+@layer components {
+  .document-preview-trigger {
+    @apply relative inline-block;
+  }
+  
+  .document-preview-trigger:hover {
+    @apply text-primary;
+  }
+  
+  /* Line clamp utilities for content truncation */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  /* Preview tooltip animations */
+  .document-preview-tooltip {
+    @apply opacity-0 scale-95 transition-all duration-200 ease-out;
+    transform-origin: bottom center;
+  }
+  
+  .document-preview-tooltip.visible {
+    @apply opacity-100 scale-100;
+  }
+  
+  /* Smooth hover transitions for document links */
+  .document-preview-trigger {
+    @apply transition-colors duration-200;
+  }
+  
+  /* Loading spinner for preview */
+  .preview-loading {
+    @apply animate-pulse;
+  }
+  
+  /* Error state styling */
+  .preview-error {
+    @apply text-destructive;
+  }
+}
