@@ -9,6 +9,8 @@ import {
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
 
 interface OriginalTextModalProps {
   isOpen: boolean;
@@ -22,6 +24,7 @@ const OriginalTextModal: React.FC<OriginalTextModalProps> = ({
   originalText
 }) => {
   const { t } = useLanguage();
+  const isMobile = useIsMobile();
 
   // Helper function to extract and format the original text
   const formatOriginalText = (text: string): string => {
@@ -91,7 +94,10 @@ const OriginalTextModal: React.FC<OriginalTextModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden flex flex-col">
+      <DialogContent className={cn(
+        "max-h-[80vh] overflow-hidden flex flex-col",
+        isMobile ? "max-w-[95vw]" : "max-w-4xl"
+      )}>
         <DialogHeader>
           <DialogTitle>{t('originalText.title') || 'Original Source Text'}</DialogTitle>
           <DialogDescription>

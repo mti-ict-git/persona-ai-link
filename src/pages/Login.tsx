@@ -11,6 +11,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { ApiError } from "@/services/api";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -27,6 +28,7 @@ const Login = () => {
   const { login } = useAuth();
   const { t, i18n } = useTranslation();
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   // Load saved language preference on component mount
   useEffect(() => {
@@ -101,10 +103,10 @@ const Login = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-primary/5 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className={`min-h-screen bg-gradient-to-br from-primary/10 via-background to-primary/5 flex items-center justify-center ${isMobile ? 'p-0 pt-safe pb-safe' : 'p-4'}`}>
+      <div className={`w-full ${isMobile ? 'h-screen flex flex-col' : 'max-w-md'}`}>
         {/* Language Selector */}
-        <div className="flex justify-end mb-4">
+        <div className={`flex justify-end ${isMobile ? 'p-4 pb-2 pt-2' : 'mb-4'}`}>
           <Select value={selectedLanguage} onValueChange={handleLanguageChange}>
             <SelectTrigger className="w-40 bg-card/80 backdrop-blur-sm border-border">
               <div className="flex items-center gap-2">
@@ -125,8 +127,8 @@ const Login = () => {
           </Select>
         </div>
 
-        <Card className="border border-border shadow-elegant bg-card/80 backdrop-blur-sm">
-          <CardHeader className="text-center space-y-4">
+        <Card className={`border border-border shadow-elegant bg-card/80 backdrop-blur-sm ${isMobile ? 'flex-1 rounded-none border-0 bg-background' : ''}`}>
+          <CardHeader className={`text-center space-y-4 ${isMobile ? 'flex-1 flex flex-col justify-center px-6 py-8' : ''}`}>
             {/* Logo */}
             <div className="flex justify-center mb-4">
               <img 
@@ -148,7 +150,7 @@ const Login = () => {
             </CardDescription>
           </CardHeader>
 
-          <CardContent className="space-y-6">
+          <CardContent className={`space-y-6 ${isMobile ? 'px-6 pb-8' : ''}`}>
             {error && (
               <div className="flex items-center gap-2 p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">
                 <AlertCircle className="w-4 h-4" />

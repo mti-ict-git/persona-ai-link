@@ -3,6 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -90,6 +92,7 @@ interface FileData {
 
 const TrainingContent: React.FC = () => {
   const { t } = useLanguage();
+  const isMobile = useIsMobile();
   const [files, setFiles] = useState<FileData[]>([]);
   const [loading, setLoading] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
@@ -718,7 +721,10 @@ const TrainingContent: React.FC = () => {
 
       {/* External Sources Manager Dialog */}
       <Dialog open={externalSourcesOpen} onOpenChange={setExternalSourcesOpen}>
-        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className={cn(
+          "max-h-[80vh] overflow-y-auto",
+          isMobile ? "max-w-[95vw]" : "max-w-4xl"
+        )}>
           <DialogHeader>
             <DialogTitle>Manage External Sources</DialogTitle>
             <DialogDescription>

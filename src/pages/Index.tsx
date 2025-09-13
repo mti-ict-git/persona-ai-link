@@ -10,6 +10,7 @@ import { useSessionManager } from "@/hooks/useSessionManager";
 import { useUserPreferences } from "@/hooks/useUserPreferences";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { useTranslation } from "react-i18next";
 import { apiService } from "@/services/api";
 import { Message as DatabaseMessage } from "@/utils/database";
@@ -52,6 +53,7 @@ const Index = () => {
   const { user, isAuthenticated } = useAuth();
   const { changeLanguage, shouldStartTour, setShouldStartTour } = useLanguage();
   const { t } = useTranslation();
+  const isMobile = useIsMobile();
   
   // Hide suggestions panel for all users
   const showSuggestions = false; // preferences.showFollowUpSuggestions?.value === 'true';
@@ -371,44 +373,70 @@ const Index = () => {
   };
 
   return (
-    <div data-tour="welcome" className="h-screen flex bg-background">
-      {/* Sidebar with conditional rendering and animations */}
-      <div className={`transition-all duration-300 ease-in-out flex-shrink-0 ${
-        showSidebar ? 'w-80 opacity-100' : 'w-0 opacity-0 overflow-hidden'
-      }`}>
-        <ChatSidebar
-          sessions={sessions}
-          onSessionSelect={selectSession}
-          onNewChat={handleNewChat}
-          onDeleteSession={deleteSession}
-          onRenameSession={renameSession}
-          activeSessionId={activeSessionId || undefined}
-          showSidebar={showSidebar}
-          onToggleSidebar={() => setShowSidebar(!showSidebar)}
-        />
-      </div>
-      
-      <ChatMain
-        messages={currentMessages}
-        onSendMessage={handleSendMessage}
-        isLoading={sessionLoading}
-        isTyping={isTyping}
-        sessionId={activeSessionId}
-        showSuggestions={showSuggestions}
-        showSidebar={showSidebar}
-        onToggleSidebar={() => setShowSidebar(!showSidebar)}
-        newMessageIds={newMessageIds}
-        onTypewriterComplete={handleTypewriterComplete}
-      />
-      
-      <div className={`transition-all duration-300 ease-in-out overflow-hidden ${
-        showSuggestions 
-          ? 'opacity-100 max-w-full translate-x-0' 
-          : 'opacity-0 max-w-0 translate-x-full'
-      }`}>
-        <SuggestionsPanel
-          onSuggestionSelect={handleSuggestionSelect}
-        />
+    <div data-tour="welcome" className="h-screen bg-background">
+      {/* Mobile-first layout: stack vertically on mobile, horizontal on desktop */}
+      <div className="h-full flex flex-col md:flex-row">
+        {/* Sidebar - Mobile: overlay drawer, Desktop: fixed sidebar */}
+        {isMobile ? (
+          // Mobile: Sidebar as overlay drawer (will be implemented with Sheet component)
+          showSidebar && (
+            <div className="fixed inset-0 z-50 bg-background">
+              <ChatSidebar
+                sessions={sessions}
+                onSessionSelect={selectSession}
+                onNewChat={handleNewChat}
+                onDeleteSession={deleteSession}
+                onRenameSession={renameSession}
+                activeSessionId={activeSessionId || undefined}
+                showSidebar={showSidebar}
+                onToggleSidebar={() => setShowSidebar(!showSidebar)}
+              />
+            </div>
+          )
+        ) : (
+          // Desktop: Fixed sidebar with animation
+          <div className={`transition-all duration-300 ease-in-out flex-shrink-0 ${
+            showSidebar ? 'w-80 opacity-100' : 'w-0 opacity-0 overflow-hidden'
+          }`}>
+            <ChatSidebar
+              sessions={sessions}
+              onSessionSelect={selectSession}
+              onNewChat={handleNewChat}
+              onDeleteSession={deleteSession}
+              onRenameSession={renameSession}
+              activeSessionId={activeSessionId || undefined}
+              showSidebar={showSidebar}
+              onToggleSidebar={() => setShowSidebar(!showSidebar)}
+            />
+          </div>
+        )}
+        
+        {/* Main content area - takes full width on mobile */}
+        <div className="flex-1 flex flex-col md:flex-row min-h-0">
+          <ChatMain
+            messages={currentMessages}
+            onSendMessage={handleSendMessage}
+            isLoading={sessionLoading}
+            isTyping={isTyping}
+            sessionId={activeSessionId}
+            showSuggestions={showSuggestions}
+            showSidebar={showSidebar}
+            onToggleSidebar={() => setShowSidebar(!showSidebar)}
+            newMessageIds={newMessageIds}
+            onTypewriterComplete={handleTypewriterComplete}
+          />
+          
+          {/* Suggestions Panel - Hidden on mobile, slide-in on desktop */}
+          <div className={`hidden md:block transition-all duration-300 ease-in-out overflow-hidden ${
+            showSuggestions 
+              ? 'opacity-100 max-w-full translate-x-0' 
+              : 'opacity-0 max-w-0 translate-x-full'
+          }`}>
+            <SuggestionsPanel
+              onSuggestionSelect={handleSuggestionSelect}
+            />
+          </div>
+        </div>
       </div>
 
       {/* WebhookConfig hidden - N8N is now configured via environment variables */}

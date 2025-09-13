@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { RefreshCw, Users, FileText, Gift, Shield, UserCheck, Calendar } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
 
 interface Suggestion {
   id: string;
@@ -16,6 +18,7 @@ interface SuggestionsPanelProps {
 
 const SuggestionsPanel = ({ onSuggestionSelect }: SuggestionsPanelProps) => {
   const { t } = useTranslation();
+  const isMobile = useIsMobile();
   
   const suggestions: Suggestion[] = [
     {
@@ -63,7 +66,10 @@ const SuggestionsPanel = ({ onSuggestionSelect }: SuggestionsPanelProps) => {
   ];
 
   return (
-    <div className="w-80 bg-chat-suggestions border-l border-border flex flex-col h-full">
+    <div className={cn(
+      "bg-chat-suggestions border-l border-border flex flex-col h-full",
+      isMobile ? "w-full" : "w-80"
+    )}>
       {/* Header */}
       <div className="p-4 border-b border-border">
         <div className="flex items-center gap-3">

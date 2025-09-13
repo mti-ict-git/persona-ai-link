@@ -5,6 +5,7 @@ import { Send, Paperclip, RefreshCw, PanelRightOpen, PanelRightClose, Menu, X, B
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useIsMobile } from "@/hooks/use-mobile";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import TypingAnimation from "@/components/TypingAnimation";
@@ -46,6 +47,7 @@ interface ChatMainProps {
 
 const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false, sessionId, showSuggestions = true, showSidebar = true, onToggleSidebar, newMessageIds = new Set(), onTypewriterComplete }: ChatMainProps) => {
   const { t } = useLanguage();
+  const isMobile = useIsMobile();
   const [hasWideContent, setHasWideContent] = useState(false);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   
@@ -230,33 +232,57 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
   );
 
   return (
-    <div className="flex-1 flex flex-col bg-chat-main">
+    <div className="flex-1 flex flex-col bg-chat-main h-full">
       {/* Header */}
-      <div className="flex items-center justify-between p-5 border-b border-border/50 bg-gradient-to-r from-background/95 to-background backdrop-blur-sm">
-        <div className="flex items-center gap-4">
+      <div className={cn(
+        "flex items-center justify-between border-b border-border/50 bg-gradient-to-r from-background/95 to-background backdrop-blur-sm flex-shrink-0",
+        isMobile ? "p-3 min-h-[60px]" : "p-5"
+      )}>
+        <div className={cn(
+          "flex items-center",
+          isMobile ? "gap-3" : "gap-4"
+        )}>
           {onToggleSidebar && (
             <Button
               variant="ghost"
               size="sm"
               onClick={onToggleSidebar}
-              className="h-9 w-9 rounded-xl hover:bg-muted/80 transition-all duration-200"
+              className={cn(
+                "rounded-xl hover:bg-muted/80 transition-all duration-200",
+                isMobile ? "h-10 w-10" : "h-9 w-9"
+              )}
               title={showSidebar ? t('sidebar.hideSidebar') : t('sidebar.showSidebar')}
             >
-              {showSidebar ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+              {showSidebar ? <X className={cn(isMobile ? "w-5 h-5" : "w-4 h-4")} /> : <Menu className={cn(isMobile ? "w-5 h-5" : "w-4 h-4")} />}
             </Button>
           )}
           
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-sm">
+          <div className={cn(
+            "flex items-center",
+            isMobile ? "gap-2" : "gap-3"
+          )}>
+            <div className={cn(
+              "rounded-xl flex items-center justify-center shadow-sm",
+              isMobile ? "w-8 h-8" : "w-10 h-10"
+            )}>
               <img 
                 src="/MTI-removebg-preview.png" 
                 alt="MTI Logo" 
-                className="h-8 w-8 object-contain"
+                className={cn(
+                  "object-contain",
+                  isMobile ? "h-6 w-6" : "h-8 w-8"
+                )}
               />
             </div>
             <div>
-              <h1 className="font-bold text-foreground text-lg">{t('brand.smartHRCompanion')}</h1>
-              <p className="text-xs text-muted-foreground/80 font-medium">{getMotivationalMessage()}</p>
+              <h1 className={cn(
+                "font-bold text-foreground",
+                isMobile ? "text-base" : "text-lg"
+              )}>{t('brand.smartHRCompanion')}</h1>
+              <p className={cn(
+                "text-muted-foreground/80 font-medium",
+                isMobile ? "text-xs hidden" : "text-xs"
+              )}>{getMotivationalMessage()}</p>
             </div>
           </div>
         </div>
@@ -281,7 +307,10 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
       {messages.length === 0 ? (
         <WelcomeScreen />
       ) : (
-        <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-6 space-y-6">
+        <div ref={messagesContainerRef} className={cn(
+          "flex-1 overflow-y-auto space-y-4 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent",
+          isMobile ? "p-3 pb-2" : "p-6"
+        )}>
           {messages.map((message, index) => {
             // Find the previous user question for AI responses
             const previousQuestion = message.role === 'assistant' && index > 0 
@@ -290,24 +319,29 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
             
             return (
             <div key={message.id} className={cn(
-              "flex gap-4 transition-all duration-300",
-              hasWideContent ? "max-w-[90%]" : "max-w-4xl",
+              "flex transition-all duration-300",
+              isMobile ? "gap-2 mb-3" : "gap-4",
+              hasWideContent ? "max-w-[90%]" : isMobile ? "max-w-full" : "max-w-4xl",
               message.role === "user" ? "ml-auto flex-row-reverse" : "mr-auto"
             )}>
               <div className={cn(
-                "w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm",
+                "rounded-full flex items-center justify-center flex-shrink-0 shadow-sm",
+                isMobile ? "w-7 h-7 mt-1" : "w-10 h-10",
                 message.role === "user"
                   ? "bg-gradient-to-br from-primary to-primary/80 text-primary-foreground"
                   : "bg-gradient-to-br from-muted to-muted/80 text-muted-foreground border border-border/50"
               )}>
-                <span className="text-sm font-bold">
+                <span className={cn(
+                  "font-bold",
+                  isMobile ? "text-xs" : "text-sm"
+                )}>
                   {message.role === "user" ? "U" : "AI"}
                 </span>
               </div>
               
               <div className={cn(
-                "p-5 rounded-2xl shadow-sm transition-all duration-300",
-                hasWideContent ? "max-w-[95%]" : "max-w-[85%]",
+                "rounded-2xl shadow-sm transition-all duration-300",
+                isMobile ? "p-3 max-w-[80%]" : "p-5 max-w-[85%]",
                 message.role === "user"
                   ? "bg-gradient-to-br from-primary to-primary/90 text-primary-foreground"
                   : "bg-gradient-to-br from-background to-muted/30 text-foreground border border-border/50 backdrop-blur-sm"
@@ -330,31 +364,31 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
                         <ReactMarkdown 
                         remarkPlugins={[remarkGfm]}
                         components={{
-                          p: ({ children }) => <p className="mb-3 last:mb-0 leading-relaxed">{children}</p>,
-                          h1: ({ children }) => <h1 className="text-2xl font-bold mb-4 text-foreground">{children}</h1>,
-                          h2: ({ children }) => <h2 className="text-xl font-semibold mb-3 text-foreground">{children}</h2>,
-                          h3: ({ children }) => <h3 className="text-lg font-medium mb-2 text-foreground">{children}</h3>,
-                          ul: ({ children }) => <ul className="list-disc list-inside mb-3 space-y-1">{children}</ul>,
-                          ol: ({ children }) => <ol className="list-decimal list-inside mb-3 space-y-1">{children}</ol>,
-                          li: ({ children }) => <li className="leading-relaxed">{children}</li>,
+                          p: ({ children }) => <p className={cn("last:mb-0 leading-relaxed", isMobile ? "mb-2 text-sm" : "mb-3")}>{children}</p>,
+                          h1: ({ children }) => <h1 className={cn("font-bold text-foreground", isMobile ? "text-lg mb-3" : "text-2xl mb-4")}>{children}</h1>,
+                          h2: ({ children }) => <h2 className={cn("font-semibold text-foreground", isMobile ? "text-base mb-2" : "text-xl mb-3")}>{children}</h2>,
+                          h3: ({ children }) => <h3 className={cn("font-medium text-foreground", isMobile ? "text-sm mb-2" : "text-lg mb-2")}>{children}</h3>,
+                          ul: ({ children }) => <ul className={cn("list-disc list-inside space-y-1", isMobile ? "mb-2 text-sm" : "mb-3")}>{children}</ul>,
+                          ol: ({ children }) => <ol className={cn("list-decimal list-inside space-y-1", isMobile ? "mb-2 text-sm" : "mb-3")}>{children}</ol>,
+                          li: ({ children }) => <li className={cn("leading-relaxed", isMobile ? "text-sm" : "")}>{children}</li>,
                           blockquote: ({ children }) => (
-                            <blockquote className="border-l-4 border-primary/30 pl-4 py-2 mb-3 bg-muted/30 rounded-r-lg italic">
+                            <blockquote className={cn("border-l-4 border-primary/30 pl-4 py-2 bg-muted/30 rounded-r-lg italic", isMobile ? "mb-2 text-sm" : "mb-3")}>
                               {children}
                             </blockquote>
                           ),
                           code: ({ children, className }) => {
                             const isInline = !className;
                             return isInline ? (
-                              <code className="bg-muted/60 px-1.5 py-0.5 rounded text-sm font-mono text-foreground">
+                              <code className={cn("bg-muted/60 px-1.5 py-0.5 rounded font-mono text-foreground", isMobile ? "text-xs" : "text-sm")}>
                                 {children}
                               </code>
                             ) : (
-                              <code className={`block bg-muted/80 p-3 rounded-lg text-sm font-mono overflow-x-auto whitespace-pre ${className}`}>
+                              <code className={cn(`block bg-muted/80 rounded-lg font-mono overflow-x-auto whitespace-pre ${className}`, isMobile ? "p-2 text-xs" : "p-3 text-sm")}>
                                 {children}
                               </code>
                             );
                           },
-                          pre: ({ children }) => <pre className="mb-3 overflow-x-auto">{children}</pre>,
+                          pre: ({ children }) => <pre className={cn("overflow-x-auto", isMobile ? "mb-2" : "mb-3")}>{children}</pre>,
                           strong: ({ children }) => <strong className="font-semibold text-foreground">{children}</strong>,
                           em: ({ children }) => <em className="italic">{children}</em>,
                           a: ({ href, children }) => {
@@ -418,7 +452,10 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
                     </p>
                   )
                 )}
-                <p className="text-xs opacity-60 mt-3 font-medium">{message.timestamp}</p>
+                <p className={cn(
+                  "opacity-60 font-medium",
+                  isMobile ? "text-xs mt-2" : "text-xs mt-3"
+                )}>{message.timestamp}</p>
               </div>
             </div>
             );
@@ -426,11 +463,18 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
           
           {(isLoading || isTyping) && (
             <div className={cn(
-              "flex gap-4 mr-auto transition-all duration-300",
-              hasWideContent ? "max-w-[90%]" : "max-w-4xl"
+              "flex mr-auto transition-all duration-300",
+              isMobile ? "gap-2 mb-3" : "gap-4",
+              hasWideContent ? "max-w-[90%]" : isMobile ? "max-w-full" : "max-w-4xl"
             )}>
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-muted to-muted/80 flex items-center justify-center shadow-sm border border-border/50">
-                <span className="text-sm font-bold text-muted-foreground">AI</span>
+              <div className={cn(
+                "rounded-full bg-gradient-to-br from-muted to-muted/80 flex items-center justify-center shadow-sm border border-border/50",
+                isMobile ? "w-7 h-7 mt-1" : "w-10 h-10"
+              )}>
+                <span className={cn(
+                  "font-bold text-muted-foreground",
+                  isMobile ? "text-xs" : "text-sm"
+                )}>AI</span>
               </div>
               <div className="bg-gradient-to-br from-background to-muted/30 rounded-2xl border border-border/50 shadow-sm backdrop-blur-sm">
                 <TypingAnimation />
@@ -443,46 +487,70 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
       )}
 
       {/* Input Area */}
-      <div className="p-6 border-t border-border/50 bg-gradient-to-b from-background/80 to-background backdrop-blur-sm">
+      <div className={cn(
+        "border-t border-border/50 bg-gradient-to-b from-background/80 to-background backdrop-blur-sm flex-shrink-0 sticky bottom-0",
+        isMobile ? "p-3 pb-safe" : "p-6"
+      )}>
         <div className={cn(
           "mx-auto transition-all duration-300",
-          hasWideContent ? "max-w-[90%]" : "max-w-4xl"
+          hasWideContent ? "max-w-[90%]" : isMobile ? "max-w-full" : "max-w-4xl"
         )}>
-          <div className="relative bg-background/90 border border-border/60 rounded-2xl shadow-lg backdrop-blur-sm hover:shadow-xl transition-all duration-300">
+          <div className={cn(
+            "relative bg-background/90 border border-border/60 shadow-lg backdrop-blur-sm hover:shadow-xl transition-all duration-300",
+            isMobile ? "rounded-xl" : "rounded-2xl"
+          )}>
             <Textarea
               ref={textareaRef}
               value={inputMessage}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
               placeholder={t('chat.askMeAnything')}
-              className="resize-none border-0 focus:ring-0 focus:outline-none bg-transparent p-5 pr-24 min-h-[64px] max-h-[120px] text-base placeholder:text-muted-foreground/70"
+              className={cn(
+                "resize-none border-0 focus:ring-0 focus:outline-none bg-transparent placeholder:text-muted-foreground/70",
+                isMobile ? "p-4 pr-24 min-h-[52px] max-h-[120px] text-base leading-relaxed" : "p-5 pr-24 min-h-[64px] max-h-[120px] text-base"
+              )}
               rows={1}
             />
             
-            <div className="absolute right-3 bottom-3 flex items-center gap-2">
+            <div className={cn(
+              "absolute flex items-center gap-2",
+              isMobile ? "right-3 bottom-3" : "right-3 bottom-3"
+            )}>
               <Button 
                 variant="ghost" 
                 size="sm" 
-                className="h-9 w-9 p-0 rounded-xl hover:bg-muted/80 transition-all duration-200"
+                className={cn(
+                  "p-0 hover:bg-muted/80 transition-all duration-200",
+                  isMobile ? "h-11 w-11 rounded-xl" : "h-9 w-9 rounded-xl"
+                )}
               >
-                <Paperclip className="w-4 h-4 text-muted-foreground" />
+                <Paperclip className={cn(
+                  "text-muted-foreground",
+                  isMobile ? "w-5 h-5" : "w-4 h-4"
+                )} />
               </Button>
               
               <Button
                 onClick={handleSend}
                 disabled={!inputMessage.trim() || isLoading}
                 size="sm"
-                className="h-9 w-9 p-0 rounded-xl bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary hover:shadow-lg hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                className={cn(
+                  "p-0 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed",
+                  isMobile ? "h-11 w-11 rounded-xl hover:scale-[1.02] disabled:hover:scale-100" : "h-9 w-9 rounded-xl hover:scale-105 disabled:hover:scale-100"
+                )}
               >
-                <Send className="w-4 h-4" />
+                <Send className={cn(isMobile ? "w-5 h-5" : "w-4 h-4")} />
               </Button>
             </div>
           </div>
           
-          <div className="text-xs text-muted-foreground/70 text-center mt-3 space-y-1">
-            <p className="font-medium">{t('footer.aiDisclaimer')}</p>
-            <p>{t('footer.copyright')}</p>
-            <p>{t('footer.support')} <a href={`mailto:${t('footer.supportEmail')}`} className="text-primary hover:underline">{t('footer.supportEmail')}</a></p>
+          <div className={cn(
+            "text-muted-foreground/70 text-center space-y-1",
+            isMobile ? "text-xs mt-2 px-2" : "text-xs mt-3"
+          )}>
+            <p className={cn("font-medium", isMobile ? "text-xs" : "")}>{t('footer.aiDisclaimer')}</p>
+            <p className={cn(isMobile ? "text-xs" : "")}>{t('footer.copyright')}</p>
+            <p className={cn(isMobile ? "text-xs" : "")}>{t('footer.support')} <a href={`mailto:${t('footer.supportEmail')}`} className="text-primary hover:underline">{t('footer.supportEmail')}</a></p>
           </div>
         </div>
       </div>

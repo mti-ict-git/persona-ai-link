@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Search, Plus, MessageCircle, MoreHorizontal, LogOut, Trash2, Edit2, Check, X, Menu, Settings, Shield } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -52,6 +53,7 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const isMobile = useIsMobile();
 
   const filteredSessions = sessions.filter(session => {
     const displayName = session.session_name || session.title;
@@ -110,10 +112,19 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
   };
 
   return (
-    <div data-tour="sidebar" className="w-80 bg-gradient-to-b from-chat-sidebar to-chat-sidebar/95 border-r border-border/50 flex flex-col h-full backdrop-blur-sm">
+    <div data-tour="sidebar" className={cn(
+      "bg-gradient-to-b from-chat-sidebar to-chat-sidebar/95 flex flex-col h-full backdrop-blur-sm",
+      isMobile ? "w-full" : "w-80 border-r border-border/50"
+    )}>
       {/* Header */}
-      <div className="p-5 border-b border-border/50">
-        <div className="flex items-center justify-between mb-5">
+      <div className={cn(
+        "border-b border-border/50",
+        isMobile ? "p-4" : "p-5"
+      )}>
+        <div className={cn(
+          "flex items-center justify-between",
+          isMobile ? "mb-4" : "mb-5"
+        )}>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-sm">
               <img 
@@ -123,7 +134,10 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
               />
             </div>
             <div>
-              <h1 className="font-bold text-foreground text-lg">{t('brand.tsindekaAI')}</h1>
+              <h1 className={cn(
+                "font-bold text-foreground",
+                isMobile ? "text-base" : "text-lg"
+              )}>{t('brand.tsindekaAI')}</h1>
               <p className="text-xs text-muted-foreground/80 font-medium">{t('brand.mtiAIAssistant')}</p>
             </div>
           </div>
@@ -134,17 +148,23 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
                 variant="ghost"
                 size="sm"
                 onClick={onToggleSidebar}
-                className="h-9 w-9 rounded-xl hover:bg-muted/80 transition-all duration-200"
-                title={t('sidebar.hideSidebar')}
+                className={cn(
+                  "rounded-xl hover:bg-muted/80 transition-all duration-200",
+                  isMobile ? "h-10 w-10" : "h-9 w-9"
+                )}
+                title={isMobile ? t('sidebar.closeSidebar') : t('sidebar.hideSidebar')}
               >
-                <Menu className="w-4 h-4" />
+                {isMobile ? <X className="w-5 h-5" /> : <Menu className="w-4 h-4" />}
               </Button>
             )}
           </div>
         </div>
         
         {/* Search */}
-        <div className="relative mb-4">
+        <div className={cn(
+          "relative",
+          isMobile ? "mb-3" : "mb-4"
+        )}>
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground/70" />
           <Input
             placeholder={t('sidebar.searchConversations')}
@@ -157,16 +177,19 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
         {/* New Chat Button */}
         <Button 
           onClick={onNewChat}
-          className="w-full bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary hover:shadow-lg hover:scale-[1.02] transition-all duration-200 rounded-xl font-medium"
+          className={cn(
+            "w-full bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary hover:shadow-lg transition-all duration-200 rounded-xl font-medium",
+            isMobile ? "h-12 text-base hover:scale-[1.01]" : "hover:scale-[1.02]"
+          )}
         >
-          <Plus className="w-4 h-4 mr-2" />
+          <Plus className={cn(isMobile ? "w-5 h-5 mr-3" : "w-4 h-4 mr-2")} />
           {t('sidebar.newChat')}
         </Button>
       </div>
 
       {/* Sessions List */}
       <div className="flex-1 overflow-y-auto">
-        <div className="p-3">
+        <div className={cn(isMobile ? "p-2" : "p-3")}>
           <h3 className="text-sm font-semibold text-muted-foreground/80 px-3 py-3 uppercase tracking-wide">{t('sidebar.recentChats')}</h3>
           {filteredSessions.length === 0 ? (
             <div className="text-center py-12 text-muted-foreground">
@@ -191,27 +214,39 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
                           value={editingName}
                           onChange={(e) => setEditingName(e.target.value)}
                           onKeyDown={handleKeyPress}
-                          className="text-sm h-9 flex-1 rounded-lg bg-background/80 border-border/60"
+                          className={cn(
+                            "flex-1 rounded-lg bg-background/80 border-border/60",
+                            isMobile ? "text-base h-12" : "text-sm h-9"
+                          )}
                           autoFocus
                         />
                         <Button
                           variant="ghost"
                           size="sm"
                           onClick={handleSaveRename}
-                          className="h-9 w-9 p-0 text-green-600 hover:text-green-700 hover:bg-green-50 rounded-lg transition-all duration-200"
+                          className={cn(
+                            "p-0 text-green-600 hover:text-green-700 hover:bg-green-50 rounded-lg transition-all duration-200",
+                            isMobile ? "h-12 w-12" : "h-9 w-9"
+                          )}
                         >
-                          <Check className="w-4 h-4" />
+                          <Check className={cn(isMobile ? "w-5 h-5" : "w-4 h-4")} />
                         </Button>
                         <Button
                           variant="ghost"
                           size="sm"
                           onClick={handleCancelRename}
-                          className="h-9 w-9 p-0 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all duration-200"
+                          className={cn(
+                            "p-0 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all duration-200",
+                            isMobile ? "h-12 w-12" : "h-9 w-9"
+                          )}
                         >
-                          <X className="w-4 h-4" />
+                          <X className={cn(isMobile ? "w-5 h-5" : "w-4 h-4")} />
                         </Button>
                       </div>
-                      <p className="text-xs text-muted-foreground/70 mt-2 font-medium">
+                      <p className={cn(
+                        "text-muted-foreground/70 mt-2 font-medium",
+                        isMobile ? "text-sm" : "text-xs"
+                      )}>
                         {session.timestamp}
                       </p>
                     </div>
@@ -220,10 +255,16 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
                       onClick={() => onSessionSelect(session.id)}
                       className="flex-1 min-w-0 text-left group-hover:scale-[1.01] transition-transform duration-200"
                     >
-                      <h4 className="text-sm font-semibold text-foreground truncate leading-relaxed">
+                      <h4 className={cn(
+                        "font-semibold text-foreground truncate leading-relaxed",
+                        isMobile ? "text-base" : "text-sm"
+                      )}>
                         {session.session_name || session.title}
                       </h4>
-                      <p className="text-xs text-muted-foreground/70 mt-1 font-medium">
+                      <p className={cn(
+                        "text-muted-foreground/70 mt-1 font-medium",
+                        isMobile ? "text-sm" : "text-xs"
+                      )}>
                         {session.timestamp}
                       </p>
                     </button>
@@ -233,17 +274,26 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="opacity-0 group-hover:opacity-100 transition-all duration-200 h-9 w-9 p-0 rounded-lg hover:bg-muted/80"
+                        className={cn(
+                          "opacity-0 group-hover:opacity-100 transition-all duration-200 p-0 rounded-lg hover:bg-muted/80",
+                          isMobile ? "h-12 w-12" : "h-9 w-9"
+                        )}
                       >
-                        <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
+                        <MoreHorizontal className={cn(
+                          "text-muted-foreground",
+                          isMobile ? "w-5 h-5" : "w-4 h-4"
+                        )} />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="rounded-xl border-border/50 shadow-lg">
                       <DropdownMenuItem
                         onClick={() => handleStartRename(session.id, session.session_name || session.title)}
-                        className="rounded-lg"
+                        className={cn(
+                          "rounded-lg",
+                          isMobile ? "text-base py-3" : "text-sm"
+                        )}
                       >
-                        <Edit2 className="w-4 h-4 mr-2" />
+                        <Edit2 className={cn(isMobile ? "w-5 h-5 mr-3" : "w-4 h-4 mr-2")} />
                         {t('common.rename')}
                       </DropdownMenuItem>
                       <DropdownMenuItem
@@ -251,9 +301,12 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
                           setSessionToDelete(session.id);
                           setDeleteDialogOpen(true);
                         }}
-                        className="text-destructive focus:text-destructive rounded-lg"
+                        className={cn(
+                          "text-destructive focus:text-destructive rounded-lg",
+                          isMobile ? "text-base py-3" : "text-sm"
+                        )}
                       >
-                        <Trash2 className="w-4 h-4 mr-2" />
+                        <Trash2 className={cn(isMobile ? "w-5 h-5 mr-3" : "w-4 h-4 mr-2")} />
                         {t('common.delete')}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -266,14 +319,20 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
       </div>
 
       {/* Bottom Navigation */}
-      <div className="p-3 border-t border-border/50 bg-gradient-to-t from-chat-sidebar/50 to-transparent">
+      <div className={cn(
+        "border-t border-border/50 bg-gradient-to-t from-chat-sidebar/50 to-transparent",
+        isMobile ? "p-4" : "p-3"
+      )}>
         <div className="space-y-2">
           <Button
             variant="ghost"
             onClick={() => navigate('/settings')}
-            className="w-full justify-start text-left hover:bg-chat-sidebar-hover/60 transition-all duration-200 rounded-xl"
+            className={cn(
+              "w-full justify-start text-left hover:bg-chat-sidebar-hover/60 transition-all duration-200 rounded-xl",
+              isMobile ? "h-12 text-base" : "h-10"
+            )}
           >
-            <Settings className="w-4 h-4 mr-3" />
+            <Settings className={cn(isMobile ? "w-5 h-5 mr-4" : "w-4 h-4 mr-3")} />
             {t('sidebar.settings')}
           </Button>
           
@@ -281,9 +340,12 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
             <Button
               variant="ghost"
               onClick={() => navigate('/admin')}
-              className="w-full justify-start text-left hover:bg-chat-sidebar-hover/60 transition-all duration-200 rounded-xl text-primary hover:text-primary"
+              className={cn(
+                "w-full justify-start text-left hover:bg-chat-sidebar-hover/60 transition-all duration-200 rounded-xl text-primary hover:text-primary",
+                isMobile ? "h-12 text-base" : "h-10"
+              )}
             >
-              <Shield className="w-4 h-4 mr-3" />
+              <Shield className={cn(isMobile ? "w-5 h-5 mr-4" : "w-4 h-4 mr-3")} />
               {user?.role === 'superadmin' ? t('sidebar.superAdminPanel') : t('sidebar.adminPanel')}
             </Button>
           )}
@@ -291,9 +353,12 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
           <Button
             variant="ghost"
             onClick={logout}
-            className="w-full justify-start text-left hover:bg-destructive/10 hover:text-destructive transition-all duration-200 rounded-xl"
+            className={cn(
+              "w-full justify-start text-left hover:bg-destructive/10 hover:text-destructive transition-all duration-200 rounded-xl",
+              isMobile ? "h-12 text-base" : "h-10"
+            )}
           >
-            <LogOut className="w-4 h-4 mr-3" />
+            <LogOut className={cn(isMobile ? "w-5 h-5 mr-4" : "w-4 h-4 mr-3")} />
             {t('sidebar.logout')}
           </Button>
         </div>

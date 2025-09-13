@@ -18,6 +18,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface MessageFeedbackProps {
   messageId: string;
@@ -170,6 +171,7 @@ const MessageFeedback: React.FC<MessageFeedbackProps> = ({
   originalText = ''
 }) => {
   const { t } = useLanguage();
+  const isMobile = useIsMobile();
   const [feedback, setFeedback] = useState<FeedbackType>(null);
   const [showModal, setShowModal] = useState(false);
   const [feedbackText, setFeedbackText] = useState('');
@@ -311,7 +313,8 @@ const MessageFeedback: React.FC<MessageFeedbackProps> = ({
                 // Ensure it sits above the sidebar
                 className={cn(
                   'prose prose-sm dark:prose-invert',
-                  'w-auto min-w-[500px] max-w-[800px] max-h-96 overflow-y-auto',
+                  'w-auto max-h-96 overflow-y-auto',
+                  isMobile ? 'min-w-[280px] max-w-[90vw]' : 'min-w-[500px] max-w-[800px]',
                   'p-4 z-[1000] bg-popover border border-border shadow-lg'
                 )}
               >
