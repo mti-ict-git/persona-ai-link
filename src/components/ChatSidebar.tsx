@@ -17,13 +17,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Search, Plus, MessageCircle, MoreHorizontal, LogOut, Trash2, Edit2, Check, X, Menu, Settings, Shield } from "lucide-react";
+import { Search, Plus, MessageCircle, MoreHorizontal, LogOut, Trash2, Edit2, Check, X, Menu, Settings, Shield, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import AppFeedback from "@/components/AppFeedback";
 
 interface ChatSession {
   id: string;
@@ -50,6 +51,7 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
   const [sessionToDelete, setSessionToDelete] = useState<string | null>(null);
   const [editingSessionId, setEditingSessionId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState("");
+  const [feedbackDialogOpen, setFeedbackDialogOpen] = useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -352,6 +354,18 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
           
           <Button
             variant="ghost"
+            onClick={() => setFeedbackDialogOpen(true)}
+            className={cn(
+              "w-full justify-start text-left hover:bg-chat-sidebar-hover/60 transition-all duration-200 rounded-xl",
+              isMobile ? "h-12 text-base" : "h-10"
+            )}
+          >
+            <MessageSquare className={cn(isMobile ? "w-5 h-5 mr-4" : "w-4 h-4 mr-3")} />
+            {t('feedback.appFeedback')}
+          </Button>
+          
+          <Button
+            variant="ghost"
             onClick={logout}
             className={cn(
               "w-full justify-start text-left hover:bg-destructive/10 hover:text-destructive transition-all duration-200 rounded-xl",
@@ -389,6 +403,12 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* App Feedback Dialog */}
+      <AppFeedback 
+        open={feedbackDialogOpen} 
+        onOpenChange={setFeedbackDialogOpen} 
+      />
     </div>
   );
 };

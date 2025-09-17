@@ -139,7 +139,7 @@ const Login = () => {
             </div>
             
             <CardTitle className="text-2xl font-bold text-foreground">
-              Tsindeka AI
+              Tsindeka AI (Beta Version)
             </CardTitle>
             <CardDescription className="text-sm text-muted-foreground font-medium">
               {t('auth.companyName')}

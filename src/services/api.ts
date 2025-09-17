@@ -162,6 +162,13 @@ class ApiService {
       const data = await response.json();
       return data;
     } catch (error) {
+      console.error('API request failed:', {
+        url: `${API_BASE_URL}${endpoint}`,
+        method: options.method || 'GET',
+        error: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : 'No stack trace',
+        response: error instanceof ApiError ? error.status : 'No response data'
+      });
       if (error instanceof ApiError) {
         throw error;
       }
@@ -444,6 +451,25 @@ class ApiService {
     return this.request('/feedback/message', {
       method: 'POST',
       body: JSON.stringify(feedback),
+    });
+  }
+
+  // App feedback method (uses same endpoint as message feedback)
+  async submitFeedback(feedback: {
+    messageId: string;
+    sessionId: string;
+    feedbackType: 'positive' | 'negative';
+    comment: string;
+    messageContent: string;
+    previousQuestion?: string;
+  }): Promise<{ success: boolean; id?: string }> {
+    return this.request('/feedback/message', {
+      method: 'POST',
+      body: JSON.stringify({
+        ...feedback,
+        previousQuestion: feedback.previousQuestion || '', // App feedback doesn't have previous question
+        timestamp: new Date().toISOString(),
+      }),
     });
   }
 

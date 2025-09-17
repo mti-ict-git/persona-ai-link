@@ -48,10 +48,23 @@ const RetrievedTextTooltip: React.FC<RetrievedTextTooltipProps> = ({
       let parsedRetrievedData: { content?: string; text?: string; original_retrieved_text?: string; [key: string]: unknown }[] = [];
       
       try {
+        console.log('RetrievedTextTooltip: Attempting to parse JSON:', {
+          dataType: typeof retrievedText,
+          dataLength: retrievedText?.length,
+          firstChars: retrievedText?.substring(0, 100),
+          lastChars: retrievedText?.substring(Math.max(0, retrievedText.length - 100))
+        });
         // Try to parse as JSON array first
         parsedRetrievedData = JSON.parse(retrievedText);
+        console.log('RetrievedTextTooltip: JSON parse successful:', { parsedType: typeof parsedRetrievedData, isArray: Array.isArray(parsedRetrievedData) });
         console.log('Successfully parsed retrieved text as JSON:', parsedRetrievedData);
       } catch (parseError) {
+        console.error('RetrievedTextTooltip: JSON parse failed:', {
+          error: parseError.message,
+          dataType: typeof retrievedText,
+          dataLength: retrievedText?.length,
+          sampleData: retrievedText?.substring(0, 200)
+        });
         // If not JSON, treat as single text block
         console.log('Failed to parse as JSON, treating as single text block. Error:', parseError);
         parsedRetrievedData = [{ content: retrievedText }];

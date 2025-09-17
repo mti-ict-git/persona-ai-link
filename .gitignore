@@ -169,3 +169,7 @@ pnpm-lock.yaml
 
 # Documentation build
 docs/build/
+
+# Capacitor generated files
+android/
+ios/

@@ -196,7 +196,7 @@ const ChatMain = ({ messages, onSendMessage, isLoading = false, isTyping = false
             className="w-12 h-12 object-contain"
           />
           <h2 className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-            Tsindeka AI
+            Tsindeka AI (Beta Version)
           </h2>
         </div>
         <p className="text-muted-foreground mb-12">

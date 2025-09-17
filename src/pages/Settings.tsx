@@ -219,7 +219,7 @@ const Settings: React.FC = () => {
                   <Label htmlFor="assistant-name">{t('settings.assistantName')}</Label>
                   <Input 
                     id="assistant-name" 
-                    value="Tsindeka AI" 
+                    value="Tsindeka AI (Beta Version)" 
                     className="mt-1" 
                     disabled 
                   />

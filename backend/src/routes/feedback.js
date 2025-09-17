@@ -81,6 +81,30 @@ router.post('/message', authenticateToken, async (req, res) => {
         message: 'Feedback updated successfully'
       });
     } else {
+      // For app feedback, ensure the special session exists
+      if (sessionId === 'app_feedback_session') {
+        const sessionCheckRequest = pool.request();
+        sessionCheckRequest.input('sessionId', sql.NVarChar(50), sessionId);
+        
+        const sessionExists = await sessionCheckRequest.query(
+          'SELECT id FROM sessions WHERE id = @sessionId'
+        );
+        
+        if (sessionExists.recordset.length === 0) {
+          // Create the special app feedback session
+          const createSessionRequest = pool.request();
+          createSessionRequest.input('sessionId', sql.NVarChar(50), sessionId);
+          createSessionRequest.input('title', sql.NVarChar(500), 'App Feedback Session');
+          createSessionRequest.input('sessionName', sql.NVarChar(255), 'General App Feedback');
+          createSessionRequest.input('status', sql.NVarChar(20), 'active');
+          
+          await createSessionRequest.query(`
+            INSERT INTO sessions (id, title, session_name, status, user_id)
+            VALUES (@sessionId, @title, @sessionName, @status, NULL)
+          `);
+        }
+      }
+      
       // Insert new feedback
       const insertRequest = pool.request();
       insertRequest.input('messageId', sql.NVarChar(50), messageId);

@@ -487,7 +487,37 @@
     "whatWentWrong": "出了什么问题？",
     "describeProblem": "请描述此回复有什么问题...",
     "submitting": "提交中...",
-    "submitFeedback": "提交反馈"
+    "submitFeedback": "提交反馈",
+    "appFeedback": "应用反馈",
+    "appFeedbackTitle": "应用反馈",
+    "appFeedbackDescription": "分享您对应用的想法",
+    "sendFeedback": "发送反馈",
+    "shareYourThoughts": "分享您对应用的想法",
+    "feedbackType": "反馈类型",
+    "type": "类型",
+    "positive": "积极",
+    "negative": "消极",
+    "suggestion": "建议",
+    "category": "类别",
+    "general": "一般",
+    "ui": "用户界面",
+    "performance": "性能",
+    "feature": "功能请求",
+    "bug": "错误报告",
+    "comment": "评论",
+    "commentPlaceholder": "告诉我们您的想法...",
+    "commentRequired": "请提供评论",
+    "success": "成功",
+    "error": "错误",
+    "cancel": "取消",
+    "submit": "提交",
+    "categories": {
+      "general": "一般",
+      "bugReport": "错误报告",
+      "featureRequest": "功能请求",
+      "uiUx": "用户界面/体验",
+      "performance": "性能"
+    }
   },
   "external": {
     "addExternalSource": "添加外部源",
@@ -583,7 +613,7 @@
   },
   "onboarding": {
     "welcome": {
-      "title": "欢迎使用 Tsindeka AI",
+      "title": "欢迎使用 Tsindeka AI (Beta Version)",
       "content": "您的智能人力资源AI之旅从这里开始。让我们探索将改变您HR体验的强大功能。"
     },
     "sidebar": {

@@ -26,6 +26,39 @@ const OriginalTextModal: React.FC<OriginalTextModalProps> = ({
   const { t } = useLanguage();
   const isMobile = useIsMobile();
 
+  const extractContent = (text: string): string => {
+    try {
+      console.log('OriginalTextModal: Attempting to parse JSON:', {
+        dataType: typeof text,
+        dataLength: text?.length,
+        firstChars: text?.substring(0, 100),
+        lastChars: text?.substring(Math.max(0, text.length - 100))
+      });
+      const parsed = JSON.parse(text);
+      console.log('OriginalTextModal: JSON parse successful:', { parsedType: typeof parsed, isArray: Array.isArray(parsed) });
+      
+      if (Array.isArray(parsed)) {
+        return parsed.map(item => 
+          typeof item === 'object' && item !== null 
+            ? item.content || item.text || item.original_retrieved_text || JSON.stringify(item)
+            : String(item)
+        ).join('\n\n');
+      } else if (typeof parsed === 'object' && parsed !== null) {
+        return parsed.content || parsed.text || parsed.original_retrieved_text || JSON.stringify(parsed);
+      }
+      
+      return String(parsed);
+    } catch (error) {
+      console.error('OriginalTextModal: JSON parse failed:', {
+        error: error.message,
+        dataType: typeof text,
+        dataLength: text?.length,
+        sampleData: text?.substring(0, 200)
+      });
+      return text;
+    }
+  };
+
   // Helper function to extract and format the original text
   const formatOriginalText = (text: string): string => {
     console.log('=== OriginalTextModal Debug ===');
@@ -37,27 +70,7 @@ const OriginalTextModal: React.FC<OriginalTextModalProps> = ({
     }
 
     // First, try to extract content from JSON if it's JSON
-    let extractedContent = text;
-    
-    try {
-      const parsed = JSON.parse(text);
-      console.log('Parsed JSON:', parsed);
-      
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        // Extract the first item's content
-        const firstItem = parsed[0];
-        if (typeof firstItem === 'string') {
-          extractedContent = firstItem;
-        } else if (firstItem && typeof firstItem === 'object') {
-          extractedContent = firstItem.content || firstItem.text || firstItem.original_retrieved_text || text;
-        }
-      } else if (parsed && typeof parsed === 'object') {
-        extractedContent = parsed.content || parsed.text || parsed.original_retrieved_text || text;
-      }
-    } catch (error) {
-      console.log('JSON parsing failed, using raw text:', error);
-      // Use the original text if JSON parsing fails
-    }
+    const extractedContent = extractContent(text);
     
     console.log('Extracted content:', extractedContent);
     console.log('Content includes |:', extractedContent.includes('|'));

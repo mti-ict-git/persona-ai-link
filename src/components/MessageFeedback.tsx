@@ -53,7 +53,14 @@ const formatOriginalText = (text: string): string => {
   // 1) Extract content if JSON-ish
   let raw = t(text).trim();
   try {
+    console.log('MessageFeedback: Attempting to parse JSON:', {
+      dataType: typeof text,
+      dataLength: text?.length,
+      firstChars: text?.substring(0, 100),
+      lastChars: text?.substring(Math.max(0, text.length - 100))
+    });
     const parsed = JSON.parse(raw);
+    console.log('MessageFeedback: JSON parse successful:', { parsedType: typeof parsed, isArray: Array.isArray(parsed) });
     if (Array.isArray(parsed) && parsed.length > 0) {
       const first = parsed[0];
       if (typeof first === 'string') raw = first;
@@ -65,7 +72,13 @@ const formatOriginalText = (text: string): string => {
       const parsedContent = parsed as ParsedContent;
       raw = t(parsedContent.content || parsedContent.text || parsedContent.original_retrieved_text || raw);
     }
-  } catch {
+  } catch (error) {
+    console.error('MessageFeedback: JSON parse failed:', {
+      error: error.message,
+      dataType: typeof text,
+      dataLength: text?.length,
+      sampleData: text?.substring(0, 200)
+    });
     /* not JSON – keep raw */
   }
 
