@@ -1,5 +1,51 @@
 # Development Journal
 
+## 2025-09-18 05:54:12 - Fixed UI Freezing Issues After Feedback Submission and Session Deletion
+
+**Context**: User reported that the main page freezes after submitting feedback or deleting a chat session until refreshed.
+
+**Problem**: 
+- UI was freezing after feedback submission and chat session deletion
+- Investigation revealed that `TOAST_REMOVE_DELAY` was set to 1,000,000 milliseconds (~16.7 minutes)
+- Toasts were not being properly cleaned up from memory, causing UI performance issues
+- Long-lived toast timeouts were accumulating and potentially causing memory leaks
+
+**Root Cause Analysis**:
+1. **AppFeedback Component**: Uses toast notifications after successful feedback submission
+2. **ChatSidebar Deletion**: Uses toast notifications after successful session deletion  
+3. **Toast Hook Issue**: `TOAST_REMOVE_DELAY = 1000000` was preventing proper cleanup
+4. **Memory Accumulation**: Toasts staying in memory for 16+ minutes caused performance degradation
+
+**Solution**:
+- Changed `TOAST_REMOVE_DELAY` from `1000000` to `5000` milliseconds (5 seconds)
+- This allows toasts to be properly cleaned up after a reasonable display time
+- Prevents memory accumulation and UI freezing issues
+
+**Files Modified**:
+- `src/hooks/use-toast.ts` - Fixed TOAST_REMOVE_DELAY constant
+
+**Code Changes**:
+```typescript
+// Before
+const TOAST_REMOVE_DELAY = 1000000
+
+// After  
+const TOAST_REMOVE_DELAY = 5000
+```
+
+**Expected Result**:
+- Toasts now disappear after 5 seconds instead of 16+ minutes
+- UI no longer freezes after feedback submission or session deletion
+- Better memory management and performance
+- No need to refresh page after these operations
+
+**Testing**:
+1. Submit feedback and verify UI remains responsive
+2. Delete a chat session and verify UI remains responsive  
+3. Confirm toasts appear and disappear properly after 5 seconds
+
+---
+
 ## 2025-01-11 17:39:29 - Added Portal Support to Tooltip Component
 
 **Context**: User reported that the tooltip in MessageFeedback.tsx was being overlayed by ChatMain.tsx, indicating z-index stacking issues. The tooltip was not using a portal to render outside the normal DOM hierarchy.
