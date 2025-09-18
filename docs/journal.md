@@ -129,6 +129,63 @@ const isCustomTextFile = (file: FileData) => {
 
 **Result**: ✅ File edit validation mismatch resolved. Edit buttons now only appear for files that can actually be edited by the backend, preventing 400 Bad Request errors. Users will no longer see edit buttons for non-editable files.
 
+## 2025-09-19 00:17:32
+
+### Context
+Fixed "newFilename is not defined" error in backend PUT request when updating custom text files.
+
+### What was done
+1. **Identified the error**: Backend was referencing removed `newFilename` variable in response object
+2. **Updated response object**: Changed `filename: newFilename` to `filename: file.filename` in `/api/files/:id/content` PUT endpoint
+3. **Preserved filename behavior**: Ensured original filename is maintained when editing files
+
+### Code changes
+- **File**: `backend/src/routes/files.js`
+- **Change**: Updated response data to use `file.filename` instead of undefined `newFilename`
+
+### Next steps
+- Test editing custom text files to confirm no errors and unchanged filenames
+
+---
+
+## 2025-09-19 00:22:18
+
+### Context
+Fixed content synchronization issue where edited file content wasn't being displayed after updates. The problem was that GET endpoint reads from SFTP first, but PUT endpoint only updated local files.
+
+### What was done
+1. **Root cause analysis**: 
+   - GET endpoint: Reads from SFTP server first, falls back to local file
+   - PUT endpoint: Only writes to local file, doesn't upload to SFTP
+   - Result: Updated content in local file but old content still on SFTP
+
+2. **Added SFTP upload to PUT endpoint**:
+   - Imported `uploadBufferToSftp` function from SFTP utils
+   - Added SFTP upload logic after local file write
+   - Uses existing SFTP path from metadata or generates new one
+   - Converts content to buffer and uploads to SFTP server
+   - Updates metadata with SFTP upload timestamp
+
+3. **Error handling**: SFTP upload failures don't block the operation, file is still updated locally
+
+### Code changes
+- **File**: `backend/src/routes/files.js`
+- **Import**: Added `uploadBufferToSftp` to SFTP imports
+- **PUT endpoint**: Added SFTP upload logic after local file write
+- **Metadata**: Added `sftpUploadedAt` timestamp tracking
+
+### Technical details
+```javascript
+// Upload updated content to SFTP server
+const sftpPath = (file.metadata && file.metadata.sftpPath) || generateRemoteFilePath(file.filename);
+const contentBuffer = Buffer.from(content, 'utf8');
+await uploadBufferToSftp(contentBuffer, sftpPath, file.filename);
+```
+
+### Next steps
+- Test editing custom text files to confirm content updates are immediately visible
+- Verify both local and SFTP content are synchronized
+
 ---
 
 ## 2025-09-18 23:15:08 - Fixed Custom Text Filename Prefix Duplication Issue

@@ -5,7 +5,7 @@ const path = require('path');
 const axios = require('axios');
 const https = require('https');
 const { processedFilesManager } = require('../utils/processedFilesManager');
-const { deleteFileFromSftp, downloadFileFromSftp, generateRemoteFilePath } = require('../utils/sftp');
+const { deleteFileFromSftp, downloadFileFromSftp, generateRemoteFilePath, uploadBufferToSftp } = require('../utils/sftp');
 const { authenticateToken } = require('./auth');
 const router = express.Router();
 
@@ -753,11 +753,28 @@ router.put('/:id/content', async (req, res) => {
     // Write updated content to file
     fs.writeFileSync(filePath, content, 'utf8');
 
+    // Upload updated content to SFTP server
+    let sftpUploadSuccess = false;
+    try {
+      // Check if file has SFTP path in metadata, otherwise generate one
+      const sftpPath = (file.metadata && file.metadata.sftpPath) || generateRemoteFilePath(file.filename);
+      
+      // Upload the updated content to SFTP
+      const contentBuffer = Buffer.from(content, 'utf8');
+      await uploadBufferToSftp(contentBuffer, sftpPath, file.filename);
+      sftpUploadSuccess = true;
+      console.log(`Updated content uploaded to SFTP: ${sftpPath}`);
+    } catch (sftpError) {
+      console.error('SFTP upload failed for updated content:', sftpError.message);
+      // Continue without SFTP - file is still updated locally
+    }
+
     // When editing existing files, NEVER change the filename - only update content and metadata
     const updatedMetadata = {
       ...file.metadata,
       originalTitle: title.trim(),
-      lastModified: new Date().toISOString()
+      lastModified: new Date().toISOString(),
+      sftpUploadedAt: sftpUploadSuccess ? new Date().toISOString() : file.metadata?.sftpUploadedAt
     };
     
     // Update only the metadata, keep the original filename unchanged
