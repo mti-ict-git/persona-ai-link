@@ -126,7 +126,8 @@ class LDAPService {
 
     async createOrUpdateLocalUser(ldapUserData) {
         try {
-            const pool = require('../config/database');
+            const { dbManager } = require('../utils/database');
+            const pool = await dbManager.getConnection();
 
             // Validate and sanitize input data
             const sanitizedData = {
@@ -134,8 +135,13 @@ class LDAPService {
                 email: (ldapUserData.email || '').toString().trim(),
                 firstName: (ldapUserData.firstName || '').toString().trim(),
                 lastName: (ldapUserData.lastName || '').toString().trim(),
-                employeeId: (ldapUserData.employeeId || '').toString().trim()
+                employeeId: ldapUserData.employeeId ? ldapUserData.employeeId.toString().trim() : null
             };
+
+            // Ensure employeeId satisfies CHECK constraint: must be NULL or non-empty string
+            if (sanitizedData.employeeId === '') {
+                sanitizedData.employeeId = null;
+            }
 
             // Validate required fields
             if (!sanitizedData.username) {
