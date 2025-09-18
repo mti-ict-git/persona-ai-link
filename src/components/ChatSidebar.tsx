@@ -62,11 +62,31 @@ const ChatSidebar = ({ sessions, onSessionSelect, onNewChat, onDeleteSession, on
     return displayName.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
-  const handleDeleteSession = () => {
+  const handleDeleteSession = async () => {
+    console.log('🔥 [ChatSidebar] handleDeleteSession called', { sessionToDelete });
+    
     if (sessionToDelete) {
-      onDeleteSession(sessionToDelete);
-      setDeleteDialogOpen(false);
-      setSessionToDelete(null);
+      try {
+        console.log('🔥 [ChatSidebar] Starting deletion for session:', sessionToDelete);
+        console.time('session-deletion');
+        
+        await onDeleteSession(sessionToDelete);
+        
+        console.timeEnd('session-deletion');
+        console.log('🔥 [ChatSidebar] Deletion successful, closing dialog');
+        
+        setDeleteDialogOpen(false);
+        setSessionToDelete(null);
+        
+        console.log('🔥 [ChatSidebar] Dialog closed and state reset');
+      } catch (error) {
+        console.timeEnd('session-deletion');
+        console.error('🔥 [ChatSidebar] Delete session failed:', error);
+        // Error is already handled in the deleteSession function
+        // Just keep the dialog open so user can try again
+      }
+    } else {
+      console.warn('🔥 [ChatSidebar] handleDeleteSession called but no sessionToDelete');
     }
   };
 

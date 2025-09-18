@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Trash2, Edit, Users, MessageSquare, BarChart3, Upload, FileText, ArrowLeft, Settings, UserPlus, KeyRound } from 'lucide-react';
-import { toast } from 'sonner';
+import { useToast } from '@/hooks/use-toast';
 import { apiService } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -64,6 +64,7 @@ const Admin: React.FC = () => {
   const { user: currentUser } = useAuth();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { toast } = useToast();
   const [users, setUsers] = useState<User[]>([]);
   const [stats, setStats] = useState<SystemStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -101,7 +102,11 @@ const Admin: React.FC = () => {
       setUsers(response.data.users || []);
     } catch (error: unknown) {
       console.error('Error fetching users:', error);
-      toast.error('Error fetching users');
+      toast({
+        title: "Error",
+        description: "Error fetching users",
+        variant: "destructive",
+      });
     }
   }, [canManageUsers]);
 
@@ -111,7 +116,11 @@ const Admin: React.FC = () => {
       setStats(response.data);
     } catch (error: unknown) {
       console.error('Error fetching statistics:', error);
-      toast.error('Error fetching statistics');
+      toast({
+        title: "Error",
+        description: "Error fetching statistics",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -129,13 +138,20 @@ const Admin: React.FC = () => {
   const handleUpdateUser = async (userId: string, updates: Partial<User>) => {
     try {
       await apiService.put<{ message: string }>(`/admin/users/${userId}`, updates);
-      toast.success(t('admin.userUpdatedSuccessfully'));
+      toast({
+        title: "Success",
+        description: t('admin.userUpdatedSuccessfully'),
+      });
       fetchUsers();
       setIsEditDialogOpen(false);
       setEditingUser(null);
     } catch (error: unknown) {
       console.error('Error updating user:', error);
-      toast.error(t('admin.errorUpdatingUser'));
+      toast({
+        title: "Error",
+        description: t('admin.errorUpdatingUser'),
+        variant: "destructive",
+      });
     }
   };
 
@@ -146,19 +162,29 @@ const Admin: React.FC = () => {
 
     try {
       await apiService.delete<{ message: string }>(`/admin/users/${userId}`);
-      toast.success(t('admin.userDeletedSuccessfully'));
+      toast({
+        title: "Success",
+        description: t('admin.userDeletedSuccessfully'),
+      });
       fetchUsers();
       fetchStats();
     } catch (error: unknown) {
       console.error('Error deleting user:', error);
-      toast.error(t('admin.errorDeletingUser'));
+      toast({
+        title: "Error",
+        description: t('admin.errorDeletingUser'),
+        variant: "destructive",
+      });
     }
   };
 
   const handleCreateUser = async () => {
     try {
       await apiService.post<{ message: string }>('/admin/users', newUser);
-      toast.success(t('admin.userCreatedSuccessfully'));
+      toast({
+        title: "Success",
+        description: t('admin.userCreatedSuccessfully'),
+      });
       setNewUser({ username: '', email: '', password: '', role: 'user' });
       setIsCreateDialogOpen(false);
       fetchUsers();
@@ -171,7 +197,11 @@ const Admin: React.FC = () => {
         'error' in error.response.data
         ? String(error.response.data.error)
         : t('admin.errorCreatingUser');
-      toast.error(errorMessage);
+      toast({
+        title: "Error",
+        description: errorMessage,
+        variant: "destructive",
+      });
     }
   };
 
@@ -180,7 +210,10 @@ const Admin: React.FC = () => {
       await apiService.post<{ message: string }>(`/admin/users/${resetUserId}/reset-password`, {
         newPassword: resetPassword
       });
-      toast.success(t('admin.passwordResetSuccessfully'));
+      toast({
+        title: "Success",
+        description: t('admin.passwordResetSuccessfully'),
+      });
       setResetPassword('');
       setResetUserId(null);
       setIsResetPasswordDialogOpen(false);
@@ -192,7 +225,11 @@ const Admin: React.FC = () => {
         'error' in error.response.data
         ? String(error.response.data.error)
         : t('admin.errorResettingPassword');
-      toast.error(errorMessage);
+      toast({
+        title: "Error",
+        description: errorMessage,
+        variant: "destructive",
+      });
     }
   };
 
@@ -242,10 +279,17 @@ const Admin: React.FC = () => {
       link.parentNode?.removeChild(link);
       window.URL.revokeObjectURL(url);
       
-      toast.success('Feedback data exported successfully!');
+      toast({
+        title: "Success",
+        description: "Feedback data exported successfully!",
+      });
     } catch (error) {
       console.error('Export failed:', error);
-      toast.error('Failed to export feedback data');
+      toast({
+        title: "Error",
+        description: "Failed to export feedback data",
+        variant: "destructive",
+      });
     }
   };
 

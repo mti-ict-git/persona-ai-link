@@ -47,7 +47,7 @@ const AppFeedback: React.FC<AppFeedbackProps> = ({ className, open = false, onOp
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const { toast } = useToast();
-  const { language } = useLanguage();
+  const { currentLanguage } = useLanguage();
   const isMobile = useIsMobile();
   const { t } = useTranslation();
 

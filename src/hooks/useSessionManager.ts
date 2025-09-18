@@ -3,14 +3,14 @@ import { v4 as uuidv4 } from 'uuid';
 import { Session, Message } from '../utils/database';
 import { apiService, ApiError } from '../services/api';
 import { useN8NWebhook } from './useN8NWebhook';
-import { toast } from 'sonner';
+import { useToast } from './use-toast';
 
 interface SessionCreationResponse {
   success: boolean;
   session_id: string;
   session_name?: string;
   message?: string;
-  metadata?: any;
+  metadata?: Record<string, unknown>;
   error?: string;
 }
 
@@ -37,6 +37,7 @@ export function useSessionManager(): UseSessionManagerReturn {
   const [error, setError] = useState<string | null>(null);
   const [hasInitiallySelected, setHasInitiallySelected] = useState(false);
   const { sendToN8N } = useN8NWebhook();
+  const { toast } = useToast();
 
   // Get active session
   const activeSession = sessions.find(session => session.id === activeSessionId) || null;
@@ -52,7 +53,11 @@ export function useSessionManager(): UseSessionManagerReturn {
       console.error('Failed to load sessions:', err);
       const errorMessage = err instanceof ApiError ? err.message : 'Failed to load chat sessions';
       setError(errorMessage);
-      toast.error(errorMessage);
+      toast({
+        title: "Error",
+        description: errorMessage,
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -93,14 +98,21 @@ export function useSessionManager(): UseSessionManagerReturn {
       }
       
       // Session created successfully - N8N integration will happen when messages are sent
-      toast.success('New session created');
+      toast({
+        title: "Success",
+        description: "New session created",
+      });
       
       return newSession.id;
     } catch (err) {
       console.error('Failed to create session:', err);
       const errorMessage = err instanceof ApiError ? err.message : 'Failed to create new session';
       setError(errorMessage);
-      toast.error(errorMessage);
+      toast({
+        title: "Error",
+        description: errorMessage,
+        variant: "destructive",
+      });
       throw err;
     } finally {
       setIsLoading(false);
@@ -122,12 +134,19 @@ export function useSessionManager(): UseSessionManagerReturn {
           ? { ...session, session_name: sessionName }
           : session
       ));
-      toast.success('Session name updated');
+      toast({
+        title: "Success",
+        description: "Session name updated",
+      });
     } catch (err) {
       console.error('Failed to update session name:', err);
       const errorMessage = err instanceof ApiError ? err.message : 'Failed to update session name';
       setError(errorMessage);
-      toast.error(errorMessage);
+      toast({
+        title: "Error",
+        description: errorMessage,
+        variant: "destructive",
+      });
       throw err;
     }
   }, []);
@@ -169,7 +188,11 @@ export function useSessionManager(): UseSessionManagerReturn {
       console.error('Failed to add message:', err);
       const errorMessage = err instanceof ApiError ? err.message : 'Failed to save message';
       setError(errorMessage);
-      toast.error(errorMessage);
+      toast({
+        title: "Error",
+        description: errorMessage,
+        variant: "destructive",
+      });
       throw err;
     }
   }, []);
@@ -182,33 +205,68 @@ export function useSessionManager(): UseSessionManagerReturn {
       console.error('Failed to get session messages:', err);
       const errorMessage = err instanceof ApiError ? err.message : 'Failed to load messages';
       setError(errorMessage);
-      toast.error(errorMessage);
+      toast({
+        title: "Error",
+        description: errorMessage,
+        variant: "destructive",
+      });
       return [];
     }
   }, []);
 
   // Delete session
   const deleteSession = useCallback(async (sessionId: string): Promise<void> => {
+    console.log('🚀 [useSessionManager] deleteSession called', { 
+      sessionId, 
+      activeSessionId, 
+      currentSessionsCount: sessions.length 
+    });
+    
     try {
+      console.log('🚀 [useSessionManager] Calling API deleteSession');
+      console.time('api-delete-session');
+      
       await apiService.deleteSession(sessionId);
       
+      console.timeEnd('api-delete-session');
+      console.log('🚀 [useSessionManager] API call successful, updating state');
+      
       // Update sessions list first
-      setSessions(prev => prev.filter(session => session.id !== sessionId));
+      console.log('🚀 [useSessionManager] Filtering sessions list');
+      setSessions(prev => {
+        const filtered = prev.filter(session => session.id !== sessionId);
+        console.log('🚀 [useSessionManager] Sessions updated', { 
+          before: prev.length, 
+          after: filtered.length 
+        });
+        return filtered;
+      });
       
       // If we're deleting the active session, clear it
       if (activeSessionId === sessionId) {
+        console.log('🚀 [useSessionManager] Clearing active session');
         setActiveSessionId(null);
       }
       
-      toast.success('Session deleted');
+      console.log('🚀 [useSessionManager] Showing success toast');
+      toast({
+        title: "Success",
+        description: "Session deleted successfully",
+      });
+      console.log('🚀 [useSessionManager] deleteSession completed successfully');
     } catch (err) {
-      console.error('Failed to delete session:', err);
+      console.timeEnd('api-delete-session');
+      console.error('🚀 [useSessionManager] Failed to delete session:', err);
       const errorMessage = err instanceof ApiError ? err.message : 'Failed to delete session';
       setError(errorMessage);
-      toast.error(errorMessage);
+      toast({
+        title: "Error",
+        description: errorMessage,
+        variant: "destructive",
+      });
       throw err;
     }
-  }, [activeSessionId]);
+  }, [activeSessionId, sessions.length]);
 
 
 

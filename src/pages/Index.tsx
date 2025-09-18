@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import ChatSidebar from "@/components/ChatSidebar";
 import ChatMain from "@/components/ChatMain";
 import SuggestionsPanel from "@/components/SuggestionsPanel";
@@ -39,7 +39,11 @@ interface ChatSession {
 }
 
 const Index = () => {
-  const [sessions, setSessions] = useState<ChatSession[]>([]);
+  // Debug: Track renders
+  const renderCount = React.useRef(0);
+  renderCount.current += 1;
+  console.log('🏠 [Index] Render #', renderCount.current);
+
   const [currentMessages, setCurrentMessages] = useState<Message[]>([]);
   // const [isConfigOpen, setIsConfigOpen] = useState(false); // Removed - WebhookConfig hidden
   const [isTyping, setIsTyping] = useState(false);
@@ -83,17 +87,14 @@ const Index = () => {
 
 
 
-  // Convert database sessions to UI format
-  useEffect(() => {
-    const uiSessions: ChatSession[] = dbSessions.map(session => ({
-      id: session.id,
-      title: session.session_name || session.title,
-      session_name: session.session_name,
-      timestamp: new Date(session.updated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      messages: [] // Messages loaded separately
-    }));
-    setSessions(uiSessions);
-  }, [dbSessions]);
+  // Convert database sessions to UI format for ChatSidebar
+  const uiSessions: ChatSession[] = dbSessions.map(session => ({
+    id: session.id,
+    title: session.session_name || session.title,
+    session_name: session.session_name,
+    timestamp: new Date(session.updated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    messages: [] // Messages loaded separately
+  }));
 
   // Check if user should see language selection dialog (first priority)
   useEffect(() => {
@@ -372,6 +373,27 @@ const Index = () => {
     }
   };
 
+  // Wrapper for deleteSession to add debugging
+  const handleDeleteSession = async (sessionId: string) => {
+    console.log('🏠 [Index] handleDeleteSession called', { 
+      sessionId, 
+      activeSessionId,
+      currentSessionsCount: uiSessions.length,
+      renderCount: renderCount.current
+    });
+    
+    try {
+      console.time('index-delete-session');
+      await deleteSession(sessionId);
+      console.timeEnd('index-delete-session');
+      console.log('🏠 [Index] handleDeleteSession completed successfully');
+    } catch (error) {
+      console.timeEnd('index-delete-session');
+      console.error('🏠 [Index] handleDeleteSession failed:', error);
+      throw error;
+    }
+  };
+
   return (
     <div data-tour="welcome" className="h-screen bg-background">
       {/* Mobile-first layout: stack vertically on mobile, horizontal on desktop */}
@@ -382,10 +404,10 @@ const Index = () => {
           showSidebar && (
             <div className="fixed inset-0 z-50 bg-background">
               <ChatSidebar
-                sessions={sessions}
+                sessions={uiSessions}
                 onSessionSelect={selectSession}
                 onNewChat={handleNewChat}
-                onDeleteSession={deleteSession}
+                onDeleteSession={handleDeleteSession}
                 onRenameSession={renameSession}
                 activeSessionId={activeSessionId || undefined}
                 showSidebar={showSidebar}
@@ -399,10 +421,10 @@ const Index = () => {
             showSidebar ? 'w-80 opacity-100' : 'w-0 opacity-0 overflow-hidden'
           }`}>
             <ChatSidebar
-              sessions={sessions}
+              sessions={uiSessions}
               onSessionSelect={selectSession}
               onNewChat={handleNewChat}
-              onDeleteSession={deleteSession}
+              onDeleteSession={handleDeleteSession}
               onRenameSession={renameSession}
               activeSessionId={activeSessionId || undefined}
               showSidebar={showSidebar}

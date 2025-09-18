@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { toast } from 'sonner';
+import { useToast } from '../components/ui/use-toast';
 import { apiService, ApiError } from '../services/api';
 
 interface WebhookResponse {
@@ -12,6 +12,7 @@ interface WebhookResponse {
 export const useN8NWebhook = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { toast } = useToast();
 
   const sendToN8N = useCallback(async (payload: {
     event_type: string;
@@ -72,9 +73,16 @@ export const useN8NWebhook = () => {
       const result = await apiService.testWebhook();
       
       if (result.success) {
-        toast.success('N8N server connection successful!');
+        toast({
+          title: "Success",
+          description: "N8N server connection successful!",
+        });
       } else {
-        toast.error(`N8N server test failed: ${result.error}`);
+        toast({
+          title: "Error",
+          description: `N8N server test failed: ${result.error}`,
+          variant: "destructive",
+        });
       }
       
       return result;
@@ -82,7 +90,11 @@ export const useN8NWebhook = () => {
       const errorMessage = err instanceof ApiError ? err.message : 'Unknown error occurred';
       console.error('N8N server test error:', errorMessage);
       setError(errorMessage);
-      toast.error(`N8N server test failed: ${errorMessage}`);
+      toast({
+        title: "Error",
+        description: `N8N server test failed: ${errorMessage}`,
+        variant: "destructive",
+      });
       
       return {
         success: false,

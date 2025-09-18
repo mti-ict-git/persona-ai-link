@@ -293,9 +293,22 @@ class ApiService {
   }
 
   async deleteSession(sessionId: string): Promise<void> {
-    return this.request<void>(`/sessions/${sessionId}`, {
-      method: 'DELETE',
-    });
+    console.log('🌐 [API] deleteSession called', { sessionId });
+    console.time('api-request-delete');
+    
+    try {
+      const result = await this.request<void>(`/sessions/${sessionId}`, {
+        method: 'DELETE',
+      });
+      
+      console.timeEnd('api-request-delete');
+      console.log('🌐 [API] deleteSession completed successfully');
+      return result;
+    } catch (error) {
+      console.timeEnd('api-request-delete');
+      console.error('🌐 [API] deleteSession failed:', error);
+      throw error;
+    }
   }
 
   // Message Management

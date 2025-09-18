@@ -67,17 +67,27 @@ class LDAPService {
                 throw new Error('Invalid credentials');
             }
 
-            // Extract user information
+            // Extract user information with proper validation
             const userData = {
-                username: userEntry.sAMAccountName || username,
-                email: userEntry.mail || `${username}@mbma.com`,
-                displayName: userEntry.displayName || userEntry.givenName + ' ' + userEntry.sn,
-                firstName: userEntry.givenName || '',
-                lastName: userEntry.sn || '',
+                username: (userEntry.sAMAccountName || username || '').toString().trim(),
+                email: (userEntry.mail || `${username}@mbma.com` || '').toString().trim(),
+                displayName: (userEntry.displayName || 
+                    ((userEntry.givenName || '') + ' ' + (userEntry.sn || '')).trim() || 
+                    username || '').toString().trim(),
+                firstName: (userEntry.givenName || '').toString().trim(),
+                lastName: (userEntry.sn || '').toString().trim(),
                 employeeId: this.extractEmployeeId(userEntry),
                 groups: Array.isArray(userEntry.memberOf) ? userEntry.memberOf : [userEntry.memberOf].filter(Boolean),
-                distinguishedName: userEntry.distinguishedName
+                distinguishedName: (userEntry.distinguishedName || '').toString().trim()
             };
+
+            // Validate required fields
+            if (!userData.username) {
+                throw new Error('Username is required but not found in LDAP');
+            }
+            if (!userData.email || !userData.email.includes('@')) {
+                userData.email = `${userData.username}@mbma.com`;
+            }
 
             // Check if user exists in local database, if not create them
             const localUser = await this.createOrUpdateLocalUser(userData);
@@ -116,13 +126,31 @@ class LDAPService {
 
     async createOrUpdateLocalUser(ldapUserData) {
         try {
-            const pool = await sql.connect();
-            
+            const pool = require('../config/database');
+
+            // Validate and sanitize input data
+            const sanitizedData = {
+                username: (ldapUserData.username || '').toString().trim(),
+                email: (ldapUserData.email || '').toString().trim(),
+                firstName: (ldapUserData.firstName || '').toString().trim(),
+                lastName: (ldapUserData.lastName || '').toString().trim(),
+                employeeId: (ldapUserData.employeeId || '').toString().trim()
+            };
+
+            // Validate required fields
+            if (!sanitizedData.username) {
+                throw new Error('Username is required for database operation');
+            }
+            if (!sanitizedData.email || !sanitizedData.email.includes('@')) {
+                throw new Error('Valid email is required for database operation');
+            }
+
+            console.log('Creating/updating user with sanitized data:', JSON.stringify(sanitizedData, null, 2));
 
             // Check if user exists
             const existingUserResult = await pool.request()
-                .input('username', sql.NVarChar, ldapUserData.username)
-                .input('email', sql.NVarChar, ldapUserData.email)
+                .input('username', sql.NVarChar, sanitizedData.username)
+                .input('email', sql.NVarChar, sanitizedData.email)
                 .query(`
                     SELECT id, username, email, role, authMethod, createdAt, updatedAt 
                     FROM chat_Users 
@@ -138,10 +166,10 @@ class LDAPService {
                 
                 await pool.request()
                     .input('id', sql.NVarChar, user.id.toString())
-                    .input('email', sql.NVarChar, ldapUserData.email)
-                    .input('firstName', sql.NVarChar, ldapUserData.firstName)
-                    .input('lastName', sql.NVarChar, ldapUserData.lastName)
-                    .input('employeeId', sql.NVarChar, ldapUserData.employeeId)
+                    .input('email', sql.NVarChar, sanitizedData.email)
+                    .input('firstName', sql.NVarChar, sanitizedData.firstName)
+                    .input('lastName', sql.NVarChar, sanitizedData.lastName)
+                    .input('employeeId', sql.NVarChar, sanitizedData.employeeId)
                     .query(`
                         UPDATE chat_Users 
                         SET email = @email, 
@@ -157,11 +185,11 @@ class LDAPService {
             } else {
                 // Create new user
                 const insertResult = await pool.request()
-                    .input('username', sql.NVarChar, ldapUserData.username)
-                    .input('email', sql.NVarChar, ldapUserData.email)
-                    .input('firstName', sql.NVarChar, ldapUserData.firstName)
-                    .input('lastName', sql.NVarChar, ldapUserData.lastName)
-                    .input('employeeId', sql.NVarChar, ldapUserData.employeeId)
+                    .input('username', sql.NVarChar, sanitizedData.username)
+                    .input('email', sql.NVarChar, sanitizedData.email)
+                    .input('firstName', sql.NVarChar, sanitizedData.firstName)
+                    .input('lastName', sql.NVarChar, sanitizedData.lastName)
+                    .input('employeeId', sql.NVarChar, sanitizedData.employeeId)
                     .input('passwordHash', sql.NVarChar, await bcrypt.hash('ldap_user', 10)) // Placeholder password
                     .input('role', sql.NVarChar, 'user') // Default role
                     .input('authMethod', sql.NVarChar, 'ldap')
