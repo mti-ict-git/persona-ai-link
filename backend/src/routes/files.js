@@ -5,7 +5,7 @@ const path = require('path');
 const axios = require('axios');
 const https = require('https');
 const { processedFilesManager } = require('../utils/processedFilesManager');
-const { deleteFileFromSftp, generateRemoteFilePath } = require('../utils/sftp');
+const { deleteFileFromSftp, downloadFileFromSftp, generateRemoteFilePath } = require('../utils/sftp');
 const { authenticateToken } = require('./auth');
 const router = express.Router();
 
@@ -597,6 +597,190 @@ router.delete('/:id/sources/:sourceId', authenticateToken, async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Failed to remove external source',
+      message: error.message
+    });
+  }
+});
+
+// GET /api/files/:id/content - Get file content for editing
+router.get('/:id/content', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Get file record
+    const file = await processedFilesManager.getFileById(id);
+    if (!file) {
+      return res.status(404).json({
+        success: false,
+        error: 'File not found'
+      });
+    }
+
+    // Check if it's an editable text file
+    const isEditableText = file.filename.startsWith('custom_text_') || 
+                          (file.metadata && file.metadata.customText) ||
+                          (file.metadata && file.metadata.source === 'manual_input') ||
+                          file.filename.toLowerCase().endsWith('.txt');
+
+    if (!isEditableText) {
+      return res.status(400).json({
+        success: false,
+        error: 'File is not editable',
+        message: 'Only text files can be edited'
+      });
+    }
+
+    // Read file content from SFTP server
+    let content;
+    try {
+      // Check if file has SFTP path in metadata
+      const sftpPath = file.metadata && file.metadata.sftpPath;
+      
+      if (sftpPath) {
+        // Download from SFTP using stored path
+        console.log(`Reading file from SFTP: ${sftpPath}`);
+        const fileBuffer = await downloadFileFromSftp(sftpPath);
+        content = fileBuffer.toString('utf8');
+      } else {
+        // Fallback: generate SFTP path and try to download
+        const remotePath = generateRemoteFilePath(file.filename);
+        console.log(`Attempting to read file from generated SFTP path: ${remotePath}`);
+        const fileBuffer = await downloadFileFromSftp(remotePath);
+        content = fileBuffer.toString('utf8');
+      }
+    } catch (sftpError) {
+      console.error('SFTP download failed, trying local fallback:', sftpError.message);
+      
+      // Fallback to local file if SFTP fails
+      const filename = file.file_path ? file.file_path.replace('/uploads/', '') : file.filename;
+      const filePath = path.join(__dirname, '../../uploads', filename);
+      
+      if (!fs.existsSync(filePath)) {
+        return res.status(404).json({
+          success: false,
+          error: 'File content not found on SFTP server or local disk',
+          details: `SFTP Error: ${sftpError.message}`
+        });
+      }
+      
+      content = fs.readFileSync(filePath, 'utf8');
+      console.log('Successfully read file from local fallback');
+    }
+    
+    // Extract title from filename (remove custom_text_ prefix and .txt extension)
+    let title = file.filename;
+    if (title.startsWith('custom_text_')) {
+      title = title.replace('custom_text_', '').replace('.txt', '');
+    } else if (title.endsWith('.txt')) {
+      title = title.replace('.txt', '');
+    }
+
+    // Set cache-busting headers to ensure fresh content
+    res.set({
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0'
+    });
+
+    res.json({
+      success: true,
+      data: {
+        id: file.id,
+        title: title,
+        content: content,
+        filename: file.filename,
+        metadata: file.metadata
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching file content:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch file content',
+      message: error.message
+    });
+  }
+});
+
+// PUT /api/files/:id/content - Update custom text file content
+router.put('/:id/content', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { content, title } = req.body;
+
+    if (!content || !title) {
+      return res.status(400).json({
+        success: false,
+        error: 'Validation error',
+        message: 'Both content and title are required'
+      });
+    }
+
+    // Get file record
+    const file = await processedFilesManager.getFileById(id);
+    if (!file) {
+      return res.status(404).json({
+        success: false,
+        error: 'File not found'
+      });
+    }
+
+    // Check if it's an editable text file
+    const isEditableText = file.filename.startsWith('custom_text_') || 
+                          (file.metadata && file.metadata.customText) ||
+                          (file.metadata && file.metadata.source === 'manual_input') ||
+                          file.filename.toLowerCase().endsWith('.txt');
+
+    if (!isEditableText) {
+      return res.status(400).json({
+        success: false,
+        error: 'File is not editable',
+        message: 'Only text files can be edited'
+      });
+    }
+
+    // Update file content on disk
+    const filename = file.file_path ? file.file_path.replace('/uploads/', '') : file.filename;
+    const filePath = path.join(__dirname, '../../uploads', filename);
+    
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({
+        success: false,
+        error: 'File not found on disk'
+      });
+    }
+
+    // Write updated content to file
+    fs.writeFileSync(filePath, content, 'utf8');
+
+    // When editing existing files, NEVER change the filename - only update content and metadata
+    const updatedMetadata = {
+      ...file.metadata,
+      originalTitle: title.trim(),
+      lastModified: new Date().toISOString()
+    };
+    
+    // Update only the metadata, keep the original filename unchanged
+    await processedFilesManager.updateProcessedStatus(id, file.processed, updatedMetadata);
+
+    // Mark file as unprocessed since content changed
+    await processedFilesManager.updateProcessedStatus(id, false, updatedMetadata);
+
+    res.json({
+      success: true,
+      message: 'File content updated successfully',
+      data: {
+        id: id,
+        filename: file.filename,
+        title: title.trim(),
+        lastModified: updatedMetadata.lastModified
+      }
+    });
+  } catch (error) {
+    console.error('Error updating file content:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to update file content',
       message: error.message
     });
   }

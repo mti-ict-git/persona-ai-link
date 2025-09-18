@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
@@ -19,6 +21,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
@@ -32,6 +35,9 @@ import {
   AlertTriangle,
   RotateCcw,
   Link,
+  PenTool,
+  RefreshCw,
+  Plus,
 } from 'lucide-react';
 import { apiService } from '@/services/api';
 import ExternalSourcesManager from '@/components/ExternalSourcesManager';
@@ -57,6 +63,9 @@ interface FileMetadata {
   uploadedAt?: string;
   lastModified?: number;
   externalSources?: ExternalSource[];
+  customText?: boolean;
+  source?: string;
+  originalTitle?: string;
 }
 
 interface ApiResponse {
@@ -71,6 +80,19 @@ interface FileApiResponse {
     data: FileData[];
     count: number;
   };
+}
+
+interface FileContentResponse {
+  success: boolean;
+  data?: {
+    id: string;
+    title: string;
+    content: string;
+    filename: string;
+    metadata?: FileMetadata;
+  };
+  message?: string;
+  error?: string;
 }
 
 interface ApiError {
@@ -105,6 +127,15 @@ const TrainingContent: React.FC = () => {
   const [externalSourcesOpen, setExternalSourcesOpen] = useState(false);
   const [selectedFileForSources, setSelectedFileForSources] = useState<FileData | null>(null);
   const [externalSources, setExternalSources] = useState<ExternalSource[]>([]);
+  
+  // Custom text training modal state
+  const [customTextModalOpen, setCustomTextModalOpen] = useState(false);
+  const [customTextTitle, setCustomTextTitle] = useState('');
+  const [customTextContent, setCustomTextContent] = useState('');
+  const [isSubmittingCustomText, setIsSubmittingCustomText] = useState(false);
+  const [editingFile, setEditingFile] = useState<FileData | null>(null);
+  const [isLoadingFileContent, setIsLoadingFileContent] = useState(false);
+  
   const { toast } = useToast();
 
   const fetchFiles = useCallback(async () => {
@@ -391,6 +422,82 @@ const TrainingContent: React.FC = () => {
     }
   };
 
+  const handleCloseCustomTextModal = () => {
+    setCustomTextModalOpen(false);
+    setCustomTextTitle('');
+    setCustomTextContent('');
+    setEditingFile(null);
+  };
+
+  const handleSubmitCustomText = async () => {
+    if (!customTextTitle.trim() || !customTextContent.trim()) {
+      toast({
+        title: "Validation Error",
+        description: "Please provide both title and content for the custom text.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmittingCustomText(true);
+    try {
+      if (editingFile) {
+        // Update existing file
+        const response = await apiService.put(`/files/${editingFile.id}/content`, {
+          content: customTextContent,
+          title: customTextTitle.trim()
+        }) as ApiResponse;
+
+        if (response.success) {
+          toast({
+            title: "Custom Text Updated",
+            description: `Successfully updated "${customTextTitle}".`,
+          });
+          
+          // Reset form and close modal
+          handleCloseCustomTextModal();
+          
+          // Refresh files list
+          fetchFiles();
+        } else {
+          throw new Error(response.message || 'Failed to update custom text');
+        }
+      } else {
+        // Create new file
+        const textBlob = new Blob([customTextContent], { type: 'text/plain' });
+        const formData = new FormData();
+        formData.append('file', textBlob, `${customTextTitle}.txt`);
+
+        const response = await apiService.post('/upload', formData) as ApiResponse;
+
+        if (response.success) {
+          toast({
+            title: "Custom Text Added",
+            description: `Successfully added "${customTextTitle}" to training data.`,
+          });
+          
+          // Reset form and close modal
+          handleCloseCustomTextModal();
+          
+          // Refresh files list
+          fetchFiles();
+        } else {
+          throw new Error(response.message || 'Failed to upload custom text');
+        }
+      }
+    } catch (error: unknown) {
+      const apiError = error as ApiError;
+      console.error('Custom text operation error:', error);
+      toast({
+        title: editingFile ? "Update Failed" : "Upload Failed",
+        description: apiError.response?.data?.message || apiError.message || `Failed to ${editingFile ? 'update' : 'add'} custom text. Please try again.`,
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmittingCustomText(false);
+    }
+  };
+
   const getFileSize = (metadata: FileMetadata | undefined) => {
     if (metadata?.size) {
       const sizeInKB = metadata.size / 1024;
@@ -405,6 +512,78 @@ const TrainingContent: React.FC = () => {
 
   const getFileType = (filename: string) => {
     return filename.split('.').pop()?.toUpperCase() || 'Unknown';
+  };
+
+  // Check if a file is a custom text file (created via the custom text feature)
+  const isCustomTextFile = (file: FileData) => {
+    const filename = file.filename;
+    
+    // Check if it's a custom text file by filename pattern
+    if (filename.startsWith('custom_text_')) {
+      return true;
+    }
+    
+    // Check if it has custom text metadata
+    if (file.metadata?.customText) {
+      return true;
+    }
+    
+    // Check if it was created via manual input
+    if (file.metadata?.source === 'manual_input') {
+      return true;
+    }
+    
+    // Allow editing of all .txt files for now (backend will validate)
+    // This provides better UX - users can see edit button for text files
+    if (filename.toLowerCase().endsWith('.txt')) {
+      return true;
+    }
+    
+    return false;
+  };
+
+  // Handle editing a custom text file
+  const handleEditCustomText = async (file: FileData) => {
+    setIsLoadingFileContent(true);
+    setEditingFile(file);
+    
+    try {
+      // Fetch the file content from the server
+      const response = await apiService.get<{
+        success: boolean;
+        data: {
+          id: string;
+          title: string;
+          content: string;
+          filename: string;
+          metadata?: FileMetadata;
+        };
+      }>(`/files/${file.id}/content`);
+      
+      if (response.success && response.data) {
+        // Extract title from filename (remove custom_text_ prefix and timestamp suffix)
+        let title = file.filename.replace('.txt', '');
+        if (title.startsWith('custom_text_')) {
+          title = title.replace('custom_text_', '').replace(/_\d+$/, '').replace(/_/g, ' ');
+        }
+        
+        setCustomTextTitle(title);
+        setCustomTextContent(response.data.data?.content || '');
+        setCustomTextModalOpen(true);
+      } else {
+        throw new Error('Failed to load file content');
+      }
+    } catch (error: unknown) {
+      const apiError = error as ApiError;
+      console.error('Error loading file content:', error);
+      toast({
+        title: "Load Failed",
+        description: apiError.response?.data?.message || apiError.message || "Failed to load file content for editing.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoadingFileContent(false);
+    }
   };
 
   const processedFilesCount = Array.isArray(files) ? files.filter(f => f.processed).length : 0;
@@ -474,6 +653,19 @@ const TrainingContent: React.FC = () => {
                 <p>• Supported formats: PDF, DOCX, TXT, DOC</p>
                 <p>• Files will be processed automatically</p>
                 <p className="text-xs text-muted-foreground/70">Files exceeding 20MB will be rejected</p>
+              </div>
+
+              {/* Custom Text Training Button */}
+              <div className="pt-4 border-t border-border/50">
+                <Button
+                  onClick={() => setCustomTextModalOpen(true)}
+                  variant="outline"
+                  className="w-full"
+                  disabled={isUploading}
+                >
+                  <Plus className="mr-2 h-4 w-4" />
+                  Training custom text / data
+                </Button>
               </div>
             </div>
           </CardContent>
@@ -599,6 +791,22 @@ const TrainingContent: React.FC = () => {
                       >
                         <Link className="h-4 w-4" />
                       </Button>
+                      {isCustomTextFile(file) && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleEditCustomText(file)}
+                          disabled={isLoadingFileContent}
+                          className="bg-orange-50 hover:bg-orange-100 dark:bg-orange-900/20 dark:hover:bg-orange-900/30"
+                          title="Edit Custom Text"
+                        >
+                          {isLoadingFileContent && editingFile?.id === file.id ? (
+                            <Brain className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <PenTool className="h-4 w-4" />
+                          )}
+                        </Button>
+                      )}
                       <Button
                         variant="ghost"
                         size="sm"
@@ -739,6 +947,79 @@ const TrainingContent: React.FC = () => {
               onClose={handleCloseExternalSources}
             />
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Custom Text Training Modal */}
+      <Dialog open={customTextModalOpen} onOpenChange={handleCloseCustomTextModal}>
+        <DialogContent className="sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <PenTool className="h-5 w-5 text-primary" />
+              {editingFile ? 'Edit Custom Text' : 'Training custom text / data'}
+            </DialogTitle>
+            <DialogDescription>
+              {editingFile 
+                ? 'Edit the custom text content and update your training data.'
+                : 'Add custom text content to train your AI model. This text will be processed and included in the training data.'
+              }
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="custom-text-title">Title</Label>
+              <Input
+                id="custom-text-title"
+                placeholder="Enter a title for this training content..."
+                value={customTextTitle}
+                onChange={(e) => setCustomTextTitle(e.target.value)}
+                disabled={isSubmittingCustomText}
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="custom-text-content">Content</Label>
+              <Textarea
+                id="custom-text-content"
+                placeholder="Enter the text content you want to train the AI model with..."
+                value={customTextContent}
+                onChange={(e) => setCustomTextContent(e.target.value)}
+                disabled={isSubmittingCustomText}
+                rows={10}
+                className="resize-none"
+              />
+              <p className="text-xs text-muted-foreground">
+                Provide detailed, relevant content that you want the AI to learn from.
+              </p>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={handleCloseCustomTextModal}
+              disabled={isSubmittingCustomText}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSubmitCustomText}
+              disabled={isSubmittingCustomText || !customTextTitle.trim() || !customTextContent.trim()}
+            >
+              {isSubmittingCustomText ? (
+                <>
+                  <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                  {editingFile ? 'Updating...' : 'Adding...'}
+                </>
+              ) : (
+                <>
+                  <PenTool className="mr-2 h-4 w-4" />
+                  {editingFile ? 'Update Training Data' : 'Add to Training Data'}
+                </>
+              )}
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

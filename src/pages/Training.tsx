@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Upload, FileText, Trash2, Brain, ArrowLeft, AlertTriangle, Play, PlayCircle, ChevronDown, ChevronRight, RefreshCw, Link } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Upload, FileText, Trash2, Brain, ArrowLeft, AlertTriangle, Play, PlayCircle, ChevronDown, ChevronRight, RefreshCw, Link, PenTool } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
 import {
@@ -19,6 +21,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
@@ -45,6 +48,9 @@ interface FileMetadata {
   uploadedAt?: string;
   lastModified?: number;
   externalSources?: ExternalSource[];
+  customText?: boolean;
+  source?: string;
+  originalTitle?: string;
 }
 
 interface TrainingFile {
@@ -70,6 +76,12 @@ const Training = () => {
   const [duplicateFile, setDuplicateFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(true);
   const [expandedFiles, setExpandedFiles] = useState<Set<string>>(new Set());
+  
+  // Custom text training modal state
+  const [customTextModalOpen, setCustomTextModalOpen] = useState(false);
+  const [customTextTitle, setCustomTextTitle] = useState('');
+  const [customTextContent, setCustomTextContent] = useState('');
+  const [isSubmittingCustomText, setIsSubmittingCustomText] = useState(false);
 
   // Fetch files from backend
   const fetchFiles = async () => {
@@ -465,6 +477,98 @@ const Training = () => {
     return filename.split('.').pop()?.toUpperCase() || t('common.unknown');
   };
 
+  // Handle custom text training submission
+  const handleCustomTextSubmit = async () => {
+    if (!customTextTitle.trim() || !customTextContent.trim()) {
+      toast({
+        title: t('common.error'),
+        description: 'Please provide both title and content for the training data.',
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmittingCustomText(true);
+    try {
+      // Create a filename based on the title
+      const sanitizedTitle = customTextTitle.trim().replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '_');
+      const filename = `custom_text_${sanitizedTitle}_${Date.now()}.txt`;
+      
+      // Create a text blob
+      const textBlob = new Blob([customTextContent], { type: 'text/plain' });
+      const formData = new FormData();
+      formData.append('file', textBlob, filename);
+
+      // Upload the text as a file
+      const uploadResponse = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (uploadResponse.ok) {
+        const uploadData = await uploadResponse.json();
+        
+        // Send to n8n webhook for processing with custom metadata
+        const webhookResponse = await fetch('/api/webhooks/upload', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            filename: filename,
+            file_path: uploadData.data.file_path,
+            metadata: {
+              size: textBlob.size,
+              type: 'text/plain',
+              lastModified: Date.now(),
+              storedFilename: uploadData.data.storedFilename,
+              customText: true,
+              title: customTextTitle.trim(),
+              source: 'manual_input'
+            },
+            success: true
+          })
+        });
+
+        if (webhookResponse.ok) {
+          toast({
+            title: 'Custom Text Added',
+            description: `Training data "${customTextTitle}" has been successfully added and will be processed.`,
+          });
+          
+          // Reset form and close modal
+          setCustomTextTitle('');
+          setCustomTextContent('');
+          setCustomTextModalOpen(false);
+          
+          // Refresh file list to show the new entry
+          fetchFiles();
+        } else {
+          toast({
+            title: t('training.uploadFailed'),
+            description: 'Failed to process the custom text. Please try again.',
+            variant: "destructive",
+          });
+        }
+      } else {
+        toast({
+          title: t('training.uploadFailed'),
+          description: 'Failed to save the custom text. Please try again.',
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Custom text submission error:', error);
+      toast({
+        title: t('training.uploadFailed'),
+        description: 'An error occurred while submitting the custom text.',
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmittingCustomText(false);
+    }
+  };
+
   const processedFilesCount = files.filter(f => f.processed).length;
 
   return (
@@ -543,6 +647,22 @@ const Training = () => {
                   <p>• {t('training.supportedFormatsDetail')}</p>
                   <p>• {t('training.autoProcess')}</p>
                   <p className="text-xs text-muted-foreground/70">{t('training.fileSizeRejection')}</p>
+                </div>
+
+                {/* Custom Text Training Button */}
+                <div className="pt-4 border-t border-border">
+                  <Button
+                    onClick={() => setCustomTextModalOpen(true)}
+                    variant="outline"
+                    className="w-full bg-secondary/50 hover:bg-secondary/70 border-primary/30"
+                    disabled={isUploading || isSubmittingCustomText}
+                  >
+                    <PenTool className="mr-2 h-4 w-4" />
+                    Training custom text / data
+                  </Button>
+                  <p className="text-xs text-muted-foreground mt-2 text-center">
+                    Add custom knowledge directly as text
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -804,6 +924,72 @@ const Training = () => {
                 </div>
               </DialogDescription>
             </DialogHeader>
+          </DialogContent>
+        </Dialog>
+
+        {/* Custom Text Training Modal */}
+        <Dialog open={customTextModalOpen} onOpenChange={setCustomTextModalOpen}>
+          <DialogContent className="sm:max-w-2xl">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <PenTool className="h-5 w-5 text-primary" />
+                Training custom text / data
+              </DialogTitle>
+              <DialogDescription>
+                Add custom knowledge directly as text. This will be processed and added to your training data.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="custom-text-title">Title</Label>
+                <Input
+                  id="custom-text-title"
+                  placeholder="Enter a title for this knowledge..."
+                  value={customTextTitle}
+                  onChange={(e) => setCustomTextTitle(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="custom-text-content">Content</Label>
+                <Textarea
+                  id="custom-text-content"
+                  placeholder="Enter your custom knowledge content here..."
+                  value={customTextContent}
+                  onChange={(e) => setCustomTextContent(e.target.value)}
+                  rows={10}
+                  className="resize-none"
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setCustomTextModalOpen(false);
+                  setCustomTextTitle('');
+                  setCustomTextContent('');
+                }}
+                disabled={isSubmittingCustomText}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleCustomTextSubmit}
+                disabled={isSubmittingCustomText || !customTextTitle.trim() || !customTextContent.trim()}
+              >
+                {isSubmittingCustomText ? (
+                  <>
+                    <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                    Training...
+                  </>
+                ) : (
+                  <>
+                    <Brain className="mr-2 h-4 w-4" />
+                    Train custom knowledge
+                  </>
+                )}
+              </Button>
+            </DialogFooter>
           </DialogContent>
         </Dialog>
       </div>

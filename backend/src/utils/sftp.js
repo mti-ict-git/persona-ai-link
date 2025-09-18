@@ -115,6 +115,43 @@ async function uploadBufferToSftp(source, remoteFilePath, originalFilename) {
 }
 
 /**
+ * Download file from SFTP server
+ * @param {string} remoteFilePath - Remote file path on SFTP server
+ * @returns {Promise<Buffer>} File content as buffer
+ */
+async function downloadFileFromSftp(remoteFilePath) {
+  let sftp = null;
+  try {
+    // Create SFTP connection
+    sftp = await createSftpConnection();
+
+    // Check if remote file exists
+    try {
+      await sftp.stat(remoteFilePath);
+    } catch (statError) {
+      throw new Error(`Remote file does not exist: ${remoteFilePath}`);
+    }
+
+    // Download file as buffer
+    const fileBuffer = await sftp.get(remoteFilePath);
+    console.log(`File downloaded successfully from SFTP: ${remoteFilePath}`);
+    
+    return fileBuffer;
+  } catch (error) {
+    console.error('SFTP download failed:', error.message);
+    throw error;
+  } finally {
+    if (sftp) {
+      try {
+        await sftp.end();
+      } catch (closeError) {
+        console.error('Error closing SFTP connection:', closeError.message);
+      }
+    }
+  }
+}
+
+/**
  * Test SFTP connection
  * @returns {Promise<boolean>} Connection test result
  */
@@ -191,6 +228,7 @@ function generateRemoteFilePath(filename) {
 module.exports = {
   uploadFileToSftp,
   uploadBufferToSftp,
+  downloadFileFromSftp,
   deleteFileFromSftp,
   testSftpConnection,
   generateRemoteFilePath,

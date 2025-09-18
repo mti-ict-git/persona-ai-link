@@ -111,19 +111,22 @@ const AppFeedback: React.FC<AppFeedbackProps> = ({ className, open = false, onOp
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <DialogTrigger asChild>
-        <Button
-          variant="ghost"
-          className={cn(
-            "w-full justify-start text-left hover:bg-accent/50 transition-all duration-200 rounded-xl",
-            isMobile ? "h-12 text-base" : "h-10",
-            className
-          )}
-        >
-          <MessageSquare className={cn(isMobile ? "w-5 h-5 mr-4" : "w-4 h-4 mr-3")} />
-          {t('feedback.sendFeedback')}
-        </Button>
-      </DialogTrigger>
+      {/* Only render DialogTrigger when not in controlled mode */}
+      {!onOpenChange && (
+        <DialogTrigger asChild>
+          <Button
+            variant="ghost"
+            className={cn(
+              "w-full justify-start text-left hover:bg-accent/50 transition-all duration-200 rounded-xl",
+              isMobile ? "h-12 text-base" : "h-10",
+              className
+            )}
+          >
+            <MessageSquare className={cn(isMobile ? "w-5 h-5 mr-4" : "w-4 h-4 mr-3")} />
+            {t('feedback.sendFeedback')}
+          </Button>
+        </DialogTrigger>
+      )}
       
       <DialogContent className={cn("sm:max-w-md", isMobile && "mx-4")}>
         <DialogHeader>

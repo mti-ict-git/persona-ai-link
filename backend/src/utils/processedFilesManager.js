@@ -150,6 +150,47 @@ class ProcessedFilesManager {
     }
   }
 
+  // Update file record (filename, file_path, metadata)
+  async updateFile(fileId, updates) {
+    try {
+      const pool = await this.db.getConnection();
+      const request = pool.request();
+      request.input('fileId', sql.Int, fileId);
+
+      let query = `UPDATE ProcessedFiles SET `;
+      const setParts = [];
+
+      if (updates.filename !== undefined) {
+        request.input('filename', sql.NVarChar(255), updates.filename);
+        setParts.push('FileName = @filename');
+      }
+
+      if (updates.file_path !== undefined) {
+        request.input('file_path', sql.NVarChar(500), updates.file_path);
+        setParts.push('FilePath = @file_path');
+      }
+
+      if (updates.metadata !== undefined) {
+        request.input('metadata', sql.NVarChar(sql.MAX), 
+          updates.metadata ? JSON.stringify(updates.metadata) : null);
+        setParts.push('metadata = @metadata');
+      }
+
+      if (setParts.length === 0) {
+        throw new Error('No valid fields to update');
+      }
+
+      query += setParts.join(', ') + ' WHERE Id = @fileId';
+
+      await request.query(query);
+
+      return await this.getFileById(fileId);
+    } catch (error) {
+      console.error('Error updating file:', error);
+      throw error;
+    }
+  }
+
   // Delete a file record
   async deleteFile(fileId) {
     try {
