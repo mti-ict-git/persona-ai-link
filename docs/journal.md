@@ -35,6 +35,29 @@ async submitFeedback(feedback: {
 
 ---
 
+## 2025-12-31 11:32:41 - JWT Sign Typing Fix in LDAP Service
+
+### Context
+TypeScript error at backend `ldapService.ts` line 173: "No overload matches this call" when calling `jwt.sign(...)`. The error indicated the options object was being interpreted as a callback and the secret argument had a mismatched type.
+
+### Changes
+- Switched import to `import * as jwt from 'jsonwebtoken'` for correct typings
+- Enforced presence of `JWT_SECRET` and removed insecure fallback
+- Properly typed `expiresIn` as `jwt.StringValue | number`, parsing numeric values when provided
+- Used `jwt.SignOptions` for options to satisfy the function overload
+
+### Code Reference
+- Updated file: [ldapService.ts](file:///c:/Scripts/Projects/persona-ai-link/backend/src/services/ldapService.ts#L1-L20)
+- Token generation: [generateToken](file:///c:/Scripts/Projects/persona-ai-link/backend/src/services/ldapService.ts#L166-L176)
+
+### Verification
+- TypeScript diagnostics: no errors in `ldapService.ts`
+- Integrity check: `npx tsc --noEmit` completed with exit code 0
+
+### Result
+JWT token generation now type-checks correctly and fails fast if `JWT_SECRET` is not configured, improving security and reliability.
+
+---
 ## 2025-09-18 22:48:12 - UI FIX: Duplicate Feedback Buttons Resolved
 
 **Context**: User reported duplicate feedback buttons appearing in the interface. Investigation revealed that the AppFeedback component was rendering both a DialogTrigger button ("Send Feedback") and being controlled externally by ChatSidebar with its own "App Feedback" button.
@@ -145,6 +168,56 @@ Fixed "newFilename is not defined" error in backend PUT request when updating cu
 
 ### Next steps
 - Test editing custom text files to confirm no errors and unchanged filenames
+
+---
+
+## 2025-09-19 06:26:22 - Debug Logging Cleanup
+
+### Context
+Removed debug console.log statements that were causing logs to appear every time the user typed in the chat input. These logs were cluttering the browser console during development and providing no value to end users.
+
+### Root Cause Analysis
+- **Primary Issue**: Render tracking log in Index.tsx (line 45) fired on every component re-render
+- **Secondary Issue**: Tour-related debug logs in useEffect (lines 112-131) potentially triggered during state changes
+- **Trigger**: Typing in chat input caused state updates → component re-renders → debug logs fired
+
+### Actions Taken
+
+1. **Commented Out Render Tracking Log**
+   ```javascript
+   // Before:
+   console.log('🏠 [Index] Render #', renderCount.current);
+   
+   // After:
+   // console.log('🏠 [Index] Render #', renderCount.current);
+   ```
+
+2. **Commented Out Tour Debug Logs**
+   ```javascript
+   // Commented out all console.log statements in the tour useEffect:
+   // - Tour effect triggered log with detailed state info
+   // - Opening onboarding tour log
+   // - Tour already showing log
+   // - shouldStartTour is FALSE log
+   // - No tour action needed log
+   ```
+
+### Technical Details
+- **File**: `src/pages/Index.tsx`
+- **Lines Modified**: 45, 113-131
+- **Impact**: Eliminates console spam during typing
+- **Functionality**: No functional changes, only debug output removed
+
+### Benefits
+- Clean browser console during development
+- Better user experience when debugging other issues
+- Reduced console noise for end users
+- Preserved debug code structure for future debugging needs
+
+### Next Steps
+- Consider using React DevTools instead of console.logs for render debugging
+- Implement proper logging levels (dev vs production)
+- Review other components for similar debug logging cleanup
 
 ---
 
@@ -880,3 +953,40 @@ department: getStringValue(ldapEntry.department) || undefined,
 - Consider implementing additional error handling for edge cases
 - Review other services for similar type safety improvements
 - Consider extracting common LDAP processing utilities
+
+## 2025-12-31 11:35:14 - JWT expiresIn Type Fix
+
+### Context
+- IDE reported: Namespace '@types/jsonwebtoken' has no exported member 'StringValue'.
+- Location: backend/src/services/ldapService.ts line 179.
+
+### Change
+- Replaced `jwt.StringValue | number` with `jwt.SignOptions["expiresIn"]` for `expiresIn` variable.
+- Ensures correct union (`string | number`) per jsonwebtoken v9 typings.
+
+### Verification
+- Ran TypeScript check: `npx tsc --noEmit backend/src/services/ldapService.ts` → exit code 0.
+- IDE diagnostics show no errors for ldapService.ts.
+
+### Files Modified
+- backend/src/services/ldapService.ts
+
+### Notes
+- No runtime behavior change; default remains `'24h'` when JWT_EXPIRES_IN is unset.
+
+## 2026-02-12 11:34:53 - Remove jsonwebtoken type references
+
+### Context
+- Type resolution in IDE showed `Secret` and `SignOptions` as unresolved under jsonwebtoken namespace due to module typing differences.
+
+### Change
+- Avoided referencing jsonwebtoken types directly in ldapService.ts.
+- Used `string | number` for `expiresIn` and `string` for `secret`.
+- Options now typed as `{ expiresIn: string | number }`.
+
+### Verification
+- File compiles: `npx tsc --noEmit backend/src/services/ldapService.ts` → exit code 0.
+- IDE diagnostics: no errors in ldapService.ts.
+
+### Files Modified
+- backend/src/services/ldapService.ts

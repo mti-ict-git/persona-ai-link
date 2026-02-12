@@ -1,5 +1,5 @@
 import { Client } from 'ldapts';
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 import { dbManager } from '../utils/database';
 
 export interface LDAPUser {
@@ -170,9 +170,21 @@ class LDAPService {
       email: user.email
     };
 
-    return jwt.sign(payload, process.env.JWT_SECRET || 'your-secret-key', {
-      expiresIn: process.env.JWT_EXPIRES_IN || '24h'
-    });
+    const secret = process.env.JWT_SECRET as string;
+    if (!secret || String(secret).trim().length === 0) {
+      throw new Error('JWT_SECRET is not configured');
+    }
+
+    const expiresEnv = process.env.JWT_EXPIRES_IN;
+    let expiresIn: string | number;
+    if (expiresEnv && /^\d+$/.test(expiresEnv)) {
+      expiresIn = Number(expiresEnv);
+    } else {
+      expiresIn = (expiresEnv && expiresEnv.trim().length > 0) ? expiresEnv : '24h';
+    }
+
+    const options: { expiresIn: string | number } = { expiresIn };
+    return jwt.sign(payload, secret, options);
   }
 
   /**

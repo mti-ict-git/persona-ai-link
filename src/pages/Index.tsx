@@ -42,7 +42,7 @@ const Index = () => {
   // Debug: Track renders
   const renderCount = React.useRef(0);
   renderCount.current += 1;
-  console.log('🏠 [Index] Render #', renderCount.current);
+  // console.log('🏠 [Index] Render #', renderCount.current);
 
   const [currentMessages, setCurrentMessages] = useState<Message[]>([]);
   // const [isConfigOpen, setIsConfigOpen] = useState(false); // Removed - WebhookConfig hidden
@@ -109,32 +109,32 @@ const Index = () => {
 
   // Check if user should see onboarding tour (using shouldStartTour from LanguageContext)
   useEffect(() => {
-    console.log('🏠 Index.tsx tour effect triggered:', {
-      shouldStartTour,
-      showOnboardingTour,
-      isAuthenticated,
-      user: user ? { id: user.id, role: user.role } : null,
-      preferences: {
-        firstTimeLogin: preferences.firstTimeLogin?.value,
-        onboardingCompleted: preferences.onboardingCompleted?.value,
-        language: preferences.language?.value
-      },
-      loading: preferencesLoading
-    });
+    // console.log('🏠 Index.tsx tour effect triggered:', {
+    //   shouldStartTour,
+    //   showOnboardingTour,
+    //   isAuthenticated,
+    //   user: user ? { id: user.id, role: user.role } : null,
+    //   preferences: {
+    //     firstTimeLogin: preferences.firstTimeLogin?.value,
+    //     onboardingCompleted: preferences.onboardingCompleted?.value,
+    //     language: preferences.language?.value
+    //   },
+    //   loading: preferencesLoading
+    // });
     
     if (shouldStartTour && !showOnboardingTour) {
-      console.log('🚀 Index.tsx: Opening onboarding tour because shouldStartTour is TRUE');
+      // console.log('🚀 Index.tsx: Opening onboarding tour because shouldStartTour is TRUE');
       // Small delay to ensure the page is fully loaded
       const timer = setTimeout(() => {
         setShowOnboardingTour(true);
       }, 1000);
       return () => clearTimeout(timer);
     } else if (shouldStartTour && showOnboardingTour) {
-      console.log('🎪 Index.tsx: Tour already showing, shouldStartTour is TRUE');
+      // console.log('🎪 Index.tsx: Tour already showing, shouldStartTour is TRUE');
     } else if (!shouldStartTour && showOnboardingTour) {
-      console.log('🔄 Index.tsx: shouldStartTour is FALSE but tour is showing');
+      // console.log('🔄 Index.tsx: shouldStartTour is FALSE but tour is showing');
     } else {
-      console.log('⏸️ Index.tsx: No tour action needed - shouldStartTour:', shouldStartTour, 'showOnboardingTour:', showOnboardingTour);
+      // console.log('⏸️ Index.tsx: No tour action needed - shouldStartTour:', shouldStartTour, 'showOnboardingTour:', showOnboardingTour);
     }
   }, [shouldStartTour, showOnboardingTour, user]);
 
